@@ -27,11 +27,10 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#portfolio">Job</a></li>
                         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#store">Store</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('getTeam') }}">Team</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -40,9 +39,10 @@
         @yield('content')
         <!-- Footer -->
         <footer class="footer py-4">
+            <div class="divider2"></div>
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-start" style="color: white">Copyright &copy; Your Website 2023</div>
+                    <div class="col-lg-4 text-lg-start" style="color: white">Copyright &copy; 2024 Expat. Roasters</div>
                     <div class="col-lg-4 my-3 my-lg-0">
                         <a class="btn btn-primary btn-social mx-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-primary btn-social mx-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>

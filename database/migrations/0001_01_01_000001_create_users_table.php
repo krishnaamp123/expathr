@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('id_city');
+            $table->string('employee_id')->nullable();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('fullname');
+            $table->string('nickname');
+            $table->string('phone');
+            $table->string('address');
+            $table->string('profile_pict')->nullable();
+            $table->string('link')->nullable();
+            $table->enum('role',['super_admin','hiring_manager','recruiter','applicant']);
             $table->timestamps();
+
+            $table->foreign('id_city')->references('id')->on('cities');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
