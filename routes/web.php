@@ -12,10 +12,7 @@ Route::get('/', function () {
 //AUTH
 Route::get('/login',[AuthController::class,'getLogin'])->name('getLogin');
 Route::post('/login',[AuthController::class,'postLogin'])->name('postLogin');
-Route::get('/register',[AuthController::class,'getRegister'])->name('getRegister');
-Route::post('/register',[AuthController::class,'postRegister'])->name('postRegister');
 
-
-Route::get('/user',[DashboardUserController::class,'getUser'])->name('getUser');
+Route::get('/user',[DashboardUserController::class,'getUser'])->name('getUserr');
 Route::get('/team',[DashboardUserController::class,'getTeam'])->name('getTeam');
 Route::get('/admin',[DashboardAdminController::class,'getAdmin'])->name('getAdmin');

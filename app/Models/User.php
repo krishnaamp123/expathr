@@ -20,15 +20,78 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'id_city',
+        'employee_id',
         'email',
         'password',
+        'fullname',
+        'nickname',
+        'phone',
+        'address',
+        'profile_pict',
+        'link',
+        'role',
     ];
 
-    // public function company()
-    // {
-    //     return $this->belongsTo(Company::class, 'id_group');
-    // }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'id_city');
+    }
+
+    public function workLocation()
+    {
+        return $this->hasMany(WorkLocation::class, 'id_user');
+    }
+
+    public function workField()
+    {
+        return $this->hasMany(WorkField::class, 'id_user');
+    }
+
+    public function skill()
+    {
+        return $this->hasMany(Skill::class, 'id_user');
+    }
+
+    public function emergency()
+    {
+        return $this->hasMany(Emergency::class, 'id_user');
+    }
+
+    public function education()
+    {
+        return $this->hasMany(Education::class, 'id_user');
+    }
+
+    public function language()
+    {
+        return $this->hasMany(Language::class, 'id_user');
+    }
+
+    public function project()
+    {
+        return $this->hasMany(Project::class, 'id_user');
+    }
+
+    public function organization()
+    {
+        return $this->hasMany(Organization::class, 'id_user');
+    }
+
+    public function certification()
+    {
+        return $this->hasMany(Certification::class, 'id_user');
+    }
+
+    public function experience()
+    {
+        return $this->hasMany(Experience::class, 'id_user');
+    }
+
+    public function volunteer()
+    {
+        return $this->hasMany(Volunteer::class, 'id_user');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
