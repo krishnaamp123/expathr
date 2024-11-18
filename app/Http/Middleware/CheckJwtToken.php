@@ -17,10 +17,10 @@ class CheckJwtToken
             $token = $request->cookie('jwt_token');
             JWTAuth::setToken($token);
             if (!JWTAuth::authenticate()) {
-                return redirect()->route('getLogin')->with('error', 'Please log in to continue.');
+                return redirect()->route('login')->with('error', 'Please log in to continue.');
             }
         } catch (Exception $e) {
-            return redirect()->route('getLogin')->with('error', 'Please log in to continue.');
+            return redirect()->route('login')->with('error', 'Please log in to continue.');
         }
 
         return $next($request);

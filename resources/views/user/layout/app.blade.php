@@ -31,6 +31,16 @@
                         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="#store">Store</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('getTeam') }}">Team</a></li>
+                        @auth
+                        <li class="nav-item">
+                            <form id="logout-form" action="{{ route('postLogout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <a class="nav-link" href="{{ route('postLogout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                    @endauth
                     </ul>
                 </div>
             </div>

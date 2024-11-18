@@ -6,12 +6,12 @@ use App\Http\Controllers\Api\CityApiController;
 
 
 //AUTH
-Route::post('register', [AuthApiController::class,'register']);
-Route::post('login', [AuthApiController::class,'login'])->name('login');
-Route::post('logout', [AuthApiController::class,'logout']);
-Route::post('refresh', [AuthApiController::class,'refresh']);
-Route::post('me', [AuthApiController::class,'me']);
-Route::post('changePassword', [AuthApiController::class,'changePassword']);
+Route::post('registerapi', [AuthApiController::class,'registerapi']);
+Route::post('loginapi', [AuthApiController::class,'loginapi'])->name('loginapi');
+Route::post('logoutapi', [AuthApiController::class,'logoutapi']);
+Route::post('refreshapi', [AuthApiController::class,'refreshapi']);
+Route::post('meapi', [AuthApiController::class,'meapi']);
+Route::post('changePasswordapi', [AuthApiController::class,'changePasswordapi']);
 
 //MASTER City
 Route::get('city', [CityApiController::class,'index']);

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('profile_pict')->nullable();
             $table->string('link')->nullable();
             $table->enum('role',['super_admin','hiring_manager','recruiter','applicant'])->default('applicant');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
             $table->timestamps();
 
             $table->foreign('id_city')->references('id')->on('cities');

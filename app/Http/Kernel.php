@@ -52,11 +52,11 @@ class Kernel extends HttpKernel
      *
      * @var array<string, class-string|string>
      */
-    protected $middlewareAliases = [
+    protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'check.jwt' => \App\Http\Middleware\CheckJwtToken::class,
+        // 'applicantauth' => \App\Http\Middleware\ApplicantAuthMiddleware::class,
         // 'admin' => \App\Http\Middleware\AdminApiMiddleware::class,
-        // 'adminweb' => \App\Http\Middleware\AdminMiddleware::class,
         // 'retail' => \App\Http\Middleware\RetailApiMiddleware::class,
         // 'supermarket' => \App\Http\Middleware\SupermarketApiMiddleware::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

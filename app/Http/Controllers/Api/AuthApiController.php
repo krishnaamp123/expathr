@@ -18,7 +18,7 @@ class AuthApiController extends Controller
      * @return void
      */
 
-    public function register()
+    public function registerapi()
     {
         $validator = Validator::make(request()->all(),[
             'id_city' => 'required',
@@ -59,26 +59,26 @@ class AuthApiController extends Controller
         }
     }
 
-    public function index()
+    public function indexapi()
     {
         $user = User::all();
         // return response()->json(['data' => $user]);
         return UserResource::collection($user);
     }
 
-    public function indexretail()
+    public function indexapplicantapi()
     {
-        $users = User::where('role', 'retail')->get();
+        $users = User::where('role', 'applicant')->get();
         return UserResource::collection($users);
     }
 
-    public function show($id)
+    public function showapi($id)
     {
         $user = User::findOrFail($id);
         return new UserResource($user);
     }
 
-    public function update(Request $request, $id)
+    public function updateapi(Request $request, $id)
     {
         $validated = $request->validate([
             'id_city' => 'required',
@@ -104,7 +104,7 @@ class AuthApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function changePassword(Request $request)
+    public function changePasswordapi(Request $request)
     {
         // Validasi input untuk memastikan password baru disediakan
         $validated = $request->validate([
@@ -128,7 +128,7 @@ class AuthApiController extends Controller
         return response()->json(['message' => 'Password successfully changed']);
     }
 
-    public function destroy($id)
+    public function destroyapi($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
@@ -140,7 +140,7 @@ class AuthApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function loginapi()
     {
         $credentials = request(['email', 'password']);
 
@@ -157,7 +157,7 @@ class AuthApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function meapi()
     {
         $user = auth()->user();
         if (empty($user)) {
@@ -171,7 +171,7 @@ class AuthApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logoutapi()
     {
         auth()->logout();
 
@@ -183,7 +183,7 @@ class AuthApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refreshapi()
     {
         return $this->respondWithToken(auth()->refresh());
     }

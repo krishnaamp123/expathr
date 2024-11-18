@@ -42,14 +42,17 @@
                                 <div class="p-4">
                                     <hr class="my-5">
                                     <div class="text-center">
-                                    @if(session('error'))
-                                        <div class="text-danger text-center" style="color: #c03535;">{{ session('error') }}</div>
-                                    @endif
                                     @if(session('success'))
-                                        <div class="text-success text-center">{{session('success')}}</div>
+                                        <div class="alert alert-success" role="alert">
+                                            {{ session('success') }}
+                                        </div>
+                                    @endif
+                                    @if(session('error'))
+                                        <div class="alert alert-danger" role="alert">
+                                            {{ session('error') }}
+                                        </div>
                                     @endif
                                     <p class="login-box-msg">Sign in to start your session</p>
-                                        {{-- <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1> --}}
                                     </div>
                                     <form class="user" action="{{ route('postLogin') }}" method="post">
                                     @csrf
@@ -71,7 +74,10 @@
                                     <hr class="sidebar-divider">
                                         <button type="submit" class="btn btn-user btn-block" style="background-color: #72A28A; color: white;">Sign In</button>
                                     </form>
-
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="{{route('getRegister')}}" style="color: #72A28A;">Create an Account!</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

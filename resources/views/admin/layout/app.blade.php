@@ -47,6 +47,11 @@
             height: 40px; /* Mengubah tinggi dari panah dropdown */
         }
 
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: #72A28A !important; /* Your desired hover color */
+            color: white; /* Text color when hovered */
+        }
+
         .sidebar .nav-item.active .nav-link {
             background-color: #000; /* Warna hijau untuk latar belakang */
             color: #72A28A; /* Warna teks putih */
@@ -81,14 +86,6 @@
             background-color: #72A28A; /* Warna latar belakang untuk halaman aktif */
             color: white; /* Warna teks halaman aktif */
             border-color: #72A28A; /* Warna border halaman aktif */
-        }
-
-
-
-        /* Change the hover color of the dropdown items in Select2 */
-        .select2-results__option--highlighted[aria-selected] {
-            background-color: #72A28A !important; /* Your desired hover color */
-            color: white; /* Text color when hovered */
         }
 
         .custom-checkbox {
@@ -156,7 +153,6 @@
                 <div class="sidebar-brand-icon rotate-n-10">
                     <img src="{{ asset('storage/image/expatlogo.png') }}" alt="Brand Icon" style="">
                 </div>
-                {{-- <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div> --}}
             </a>
             <hr class="my-2">
             <!-- Divider -->
@@ -172,6 +168,13 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
+
+            <li class="nav-item {{ Request::routeIs('getUser') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getUser') }}">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>User</span>
+                </a>
+            </li>
 
             {{-- <!-- Heading -->
             <div class="sidebar-heading">
