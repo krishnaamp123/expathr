@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\City;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -26,20 +30,21 @@ class AuthController extends Controller
         }
 
         // Check the authenticated user's role and redirect accordingly
-    switch (auth()->user()->role) {
-        case 'applicant':
+        $user = auth()->user();
+
+        if ($user->role === 'applicant') {
             cookie()->queue(cookie('token', $token, null));
             return redirect()->route('getTest');
-        // case 'hiring_manager':
+        // } elseif ($user->role === 'hiring_manager') {
         //     cookie()->queue(cookie('token', $token, null));
         //     return redirect()->route('hiring_manager.dashboard');
-        // case 'applicant':
-        //     cookie()->queue(cookie('token', $token, null));
-        //     return redirect()->route('applicant.dashboard');
-        // case 'recruiter':
+        // } elseif ($user->role === 'recruiter') {
         //     cookie()->queue(cookie('token', $token, null));
         //     return redirect()->route('recruiter.dashboard');
-        default:
+        // } elseif ($user->role === 'super_admin') {
+        //     cookie()->queue(cookie('token', $token, null));
+        //     return redirect()->route('super_admin.dashboard');
+        } else {
             auth()->logout();
             return redirect()->route('login')->with('error', 'Access denied.');
         }
@@ -90,11 +95,14 @@ class AuthController extends Controller
             return redirect()->route('verification.notice')->with('success', 'Registration successful. Please check your email to verify your account.');
     }
 
-    public function postLogout()
+    public function postLogout(Request $request)
     {
+        // Hapus JWT (gunakan library atau mekanisme yang Anda pakai)
         auth()->logout();
 
-        return view('auth.login')->with('success', 'Successfully Logged Out');
+        // Hapus cookie
+        return response()->redirectToRoute('login')
+                        ->withCookie(cookie()->forget('token'));
     }
 
     public function getUser()

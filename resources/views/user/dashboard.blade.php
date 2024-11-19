@@ -8,7 +8,7 @@
             <div class="container">
                 <div class="masthead-subheading">Expat. Roasters</div>
                 <div class="masthead-heading text-uppercase">Good Coffe All Around</div>
-                <a class="btn btn-primary btn-xl text-uppercase" href="#services">Find Job</a>
+                <a class="btn btn-primary btn-xl text-uppercase" href="#portfolio">Find Job</a>
             </div>
         </header>
         <!-- Portfolio Grid-->

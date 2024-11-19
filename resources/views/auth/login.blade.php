@@ -78,6 +78,9 @@
                                     <div class="text-center">
                                         <a class="small" href="{{route('getRegister')}}" style="color: #72A28A;">Create an Account!</a>
                                     </div>
+                                    <div class="text-center">
+                                        <a class="small" href="{{route('password.request')}}" style="color: #72A28A;">Forgot Password?</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
