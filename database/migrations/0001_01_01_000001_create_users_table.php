@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('nickname');
             $table->string('phone');
             $table->string('address');
+            $table->date('birth_date');
+            $table->enum('gender',['male','female']);
             $table->string('profile_pict')->nullable();
             $table->string('link')->nullable();
             $table->enum('role',['super_admin','hiring_manager','recruiter','applicant'])->default('applicant');

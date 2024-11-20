@@ -11,11 +11,21 @@
 
     <title>Register</title>
 
+
     <!-- Custom styles for this template -->
     <link href="{{asset('template-admin/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
    <!-- Include Select2 CSS -->
    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+   <!-- Include jQuery (required for Select2) -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+   <!-- Include Select2 JS -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
    <!-- Include jQuery (required for Select2) -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -29,10 +39,15 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="{{asset('template-admin/css/sb-admin-2.min.css')}}" rel="stylesheet">
-
     <style>
+        /* Gaya khusus untuk halaman register */
+        .register-select2 .select2-selection--single {
+            background-color: #f8f9fc;
+            border: 1px solid #d1d3e2;
+            border-radius: 0.35rem;
+            padding: 8px;
+        }
+
         .select2-container .select2-selection--single {
             display: block;
             width: 100%;
@@ -75,6 +90,23 @@
         .custom-text-danger {
             font-size: 0.8rem; /* Adjust the font size as needed */
             color: #e74a3b; /* Ensure the color is still red */
+        }
+
+        .datepicker table tr td,
+        .datepicker table tr td:hover {
+            background-color: #fff !important;
+            color: #231f20 !important;
+        }
+
+        .datepicker table tr td.today,
+        .datepicker table tr td.today:hover {
+
+            color: white !important;
+        }
+
+        .datepicker table tr td.active,
+        .datepicker table tr td.active:hover {
+            color: white !important;
         }
 
     </style>
@@ -174,6 +206,26 @@
                                         @enderror
                                     </div>
 
+                                    <div class="form-group">
+                                        <input name="birth_date" type="text" class="form-control form-control-user"
+                                               id="datepicker" placeholder="Birth Date">
+                                        @error('birth_date')
+                                            <div class="custom-text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <select name="gender" class="form-control select2 register-select2">
+                                            <option value="">Select Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                        @error('gender')
+                                            <div class="custom-text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+
                                     <hr class="sidebar-divider">
                                         <button type="submit" class="btn btn-user btn-block" style="background-color: #72A28A; color: white;">Sign Up</button>
 
@@ -203,14 +255,46 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $('select[name="id_city"]').select2();
+            $('select.register-select2').select2();
         });
     </script>
 
     <!-- Custom scripts for all pages-->
     <script src="{{asset('template-admin/js/sb-admin-2.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            // Menambahkan gaya kustom ketika datepicker muncul
+            $('#datepicker').on('show', function () {
+                $('.datepicker').css({
+                    'background-color': '#fff',
+                    'color': '#72A28A',
+                    'border-radius': '8px'
+                });
+            });
+
+             // Ensure the date is in the correct format before submitting
+            $('#datepicker').on('changeDate', function (e) {
+                var formattedDate = e.format('yyyy-mm-dd');
+                $('#datepicker').val(formattedDate); // Update the input field value with the correct format
+            });
+        });
+    </script>
+
+
 
 </body>
 

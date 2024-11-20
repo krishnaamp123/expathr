@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\City;
+use App\Models\WorkLocation;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileUserController extends Controller
@@ -14,8 +15,9 @@ class ProfileUserController extends Controller
     {
         $user = auth()->user()->load('city');
         $cities = City::all();
+        $worklocation = WorkLocation::where('id_user', $user->id)->get();
 
-        return view('user.profile.index', compact('user', 'cities'));
+        return view('user.profile.index', compact('user', 'cities', 'worklocation'));
     }
 
     public function editProfile($id)
@@ -23,7 +25,7 @@ class ProfileUserController extends Controller
         $user = User::findOrFail($id);
         $cities = City::all();
 
-        return view('user.profile.update', compact('user', 'cities'));
+        return view('user.profile.profileuser.update', compact('user', 'cities'));
     }
 
     public function updateProfile(Request $request, $id)
@@ -36,6 +38,8 @@ class ProfileUserController extends Controller
             'nickname' => 'required|string|max:100',
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:500',
+            'birth_date' => 'required',
+            'gender' => 'required|in:male,female',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'link' => 'nullable|url',
         ]);
@@ -76,7 +80,9 @@ class ProfileUserController extends Controller
         $user->nickname = $validated['nickname'];
         $user->phone = $validated['phone'];
         $user->address = $validated['address'];
-        $user->link = $validated['link'] ?? $user->link;
+        $user->birth_date = $validated['birth_date'];
+        $user->gender = $validated['gender'];
+        $user->link = $validated['link'];
 
         $user->save();
 

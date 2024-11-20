@@ -67,6 +67,8 @@ class AuthController extends Controller
             'nickname' => 'required|string|max:100',
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:500',
+            'birth_date' => 'required',
+            'gender' => 'required|in:male,female',
             'profile_pict' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'link' => 'nullable|url',
             'role' => 'nullable|in:super_admin,hiring_manager,recruiter,applicant'
@@ -83,6 +85,8 @@ class AuthController extends Controller
                 'nickname' => $request->nickname,
                 'phone' => $request->phone,
                 'address' => $request->address,
+                'birth_date' => $request->birth_date,
+                'gender' => $request->gender,
                 'profile_pict' => $request->profile_pict,
                 'link' => $request->link,
                 'role' => $role,

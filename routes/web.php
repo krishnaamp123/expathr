@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\ProfileUserController;
-use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\User\WorkLocationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,9 +33,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/test', [DashboardUserController::class, 'getTest'])->name('getTest');
         Route::get('/team', [DashboardUserController::class, 'getTeam'])->name('getTeam');
         Route::post('/logout',[AuthController::class,'postLogout'])->name('postLogout');
+
+        //PROFILE
         Route::get('/profile', [ProfileUserController::class, 'getProfile'])->name('getProfile');
-        Route::get('/profile/edit/{id}', [ProfileUserController::class, 'editProfile'])->name('editProfile');
-        Route::put('/profile/update/{id}', [ProfileUserController::class, 'updateProfile'])->name('updateProfile');
+
+        //PROFILE USER
+        Route::get('/profile/profileuser/edit/{id}', [ProfileUserController::class, 'editProfile'])->name('editProfile');
+        Route::put('/profile/profileuser/update/{id}', [ProfileUserController::class, 'updateProfile'])->name('updateProfile');
+
+        //WORK LOCATION
+        Route::get('/profile/worklocation/add', [WorkLocationController::class, 'addWorkLocation'])->name('addWorkLocation');
+        Route::post('/profile/worklocation/store', [WorkLocationController::class, 'storeWorkLocation'])->name('storeWorkLocation');
+        Route::get('/profile/worklocation/edit/{id}', [WorkLocationController::class, 'editWorkLocation'])->name('editWorkLocation');
+        Route::put('/profile/worklocation/update/{id}', [WorkLocationController::class, 'updateWorkLocation'])->name('updateWorkLocation');
+        Route::delete('/profile/worklocation/destroy/{id}', [WorkLocationController::class, 'destroyWorkLocation'])->name('destroyWorkLocation');
     });
 });
 

@@ -3,16 +3,16 @@
     @method('PUT')
 
     <div class="form-group">
-        <label>Current Image</label><br>
+        <label class="kaem-subheading">Current Image</label><br>
         @if ($user->profile_pict)
-            <img src="{{ asset($user->profile_pict) }}" alt="User Image" width="100" height="100">
+            <img src="{{ asset($user->profile_pict) }}" alt="User Image" class="profile-picture-edit">
         @else
             <span>No Image Available</span>
         @endif
     </div>
 
     <div class="form-group">
-        <label>New Image</label>
+        <label class="kaem-subheading">New Image</label>
         <input type="file" name="file" class="form-control">
         @error('file')
             <div class="text-danger">{{ $message }}</div>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="form-group">
-        <label>City</label>
+        <label class="kaem-subheading">City</label>
         <select name="id_city" class="form-control select2" id="id_city" required>
             <option value="">Select City</option>
             @foreach($cities as $city)
@@ -35,7 +35,7 @@
     </div>
 
     <div class="form-group">
-        <label for="fullname">Fullname</label>
+        <label for="fullname" class="kaem-subheading">Fullname</label>
         <input type="text" class="form-control" id="fullname" name="fullname" value="{{ $user->fullname }}" required>
         @error('fullname')
             <span class="text-danger">{{ $message }}</span>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="form-group">
-        <label for="nickname">Nickname</label>
+        <label for="nickname" class="kaem-subheading">Nickname</label>
         <input type="text" class="form-control" id="nickname" name="nickname" value="{{ $user->nickname }}" required>
         @error('nickname')
             <span class="text-danger">{{ $message }}</span>
@@ -51,7 +51,7 @@
     </div>
 
     <div class="form-group">
-        <label for="phone">Phone</label>
+        <label for="phone" class="kaem-subheading">Phone</label>
         <input type="text" class="form-control" id="phone" name="phone" value="{{ $user->phone }}" required>
         @error('phone')
             <span class="text-danger">{{ $message }}</span>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="form-group">
-        <label for="address">Address</label>
+        <label for="address" class="kaem-subheading">Address</label>
         <input type="text" class="form-control" id="address" name="address" value="{{ $user->address }}" required>
         @error('address')
             <span class="text-danger">{{ $message }}</span>
@@ -67,12 +67,32 @@
     </div>
 
     <div class="form-group">
-        <label for="link">Link</label>
+        <label for="birth_date" class="kaem-subheading">Birth Date</label>
+        <input type="text" class="form-control" id="datepicker" name="birth_date" value="{{ $user->birth_date }}" required>
+        @error('birth_date')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="gender" class="kaem-subheading">Gender</label>
+        <select name="gender" class="form-control select2 register-select2">
+            <option value="">Select Gender</option>
+            <option value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>Male</option>
+            <option value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>Female</option>
+        </select>
+        @error('gender')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <div class="form-group">
+        <label for="link" class="kaem-subheading">Link</label>
         <input type="url" class="form-control" id="link" name="link" value="{{ $user->link }}">
         @error('link')
             <span class="text-danger">{{ $message }}</span>
         @enderror
     </div>
 
-    <button type="submit" class="btn btn-primary">Update Profile</button>
+    <button type="submit" class="btn btn-primary kaem-subheading">Update Profile</button>
 </form>
