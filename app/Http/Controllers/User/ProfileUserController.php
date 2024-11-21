@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\City;
 use App\Models\WorkLocation;
+use App\Models\Emergency;
+use App\Models\About;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileUserController extends Controller
@@ -16,8 +18,10 @@ class ProfileUserController extends Controller
         $user = auth()->user()->load('city');
         $cities = City::all();
         $worklocation = WorkLocation::where('id_user', $user->id)->get();
+        $emergency = Emergency::where('id_user', $user->id)->get();
+        $about = About::where('id_user', $user->id)->get();
 
-        return view('user.profile.index', compact('user', 'cities', 'worklocation'));
+        return view('user.profile.index', compact('user', 'cities', 'worklocation', 'emergency', 'about'));
     }
 
     public function editProfile($id)

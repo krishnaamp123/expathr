@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\ProfileUserController;
 use App\Http\Controllers\User\WorkLocationController;
+use App\Http\Controllers\User\EmergencyController;
+use App\Http\Controllers\User\AboutController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -47,6 +49,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/worklocation/edit/{id}', [WorkLocationController::class, 'editWorkLocation'])->name('editWorkLocation');
         Route::put('/profile/worklocation/update/{id}', [WorkLocationController::class, 'updateWorkLocation'])->name('updateWorkLocation');
         Route::delete('/profile/worklocation/destroy/{id}', [WorkLocationController::class, 'destroyWorkLocation'])->name('destroyWorkLocation');
+
+        //EMERGENCY
+        Route::get('/profile/emergency/add', [EmergencyController::class, 'addEmergency'])->name('addEmergency');
+        Route::post('/profile/emergency/store', [EmergencyController::class, 'storeEmergency'])->name('storeEmergency');
+        Route::get('/profile/emergency/edit/{id}', [EmergencyController::class, 'editEmergency'])->name('editEmergency');
+        Route::put('/profile/emergency/update/{id}', [EmergencyController::class, 'updateEmergency'])->name('updateEmergency');
+        Route::delete('/profile/emergency/destroy/{id}', [EmergencyController::class, 'destroyEmergency'])->name('destroyEmergency');
+
+        //ABOUT
+        Route::get('/profile/about/add', [AboutController::class, 'addAbout'])->name('addAbout');
+        Route::post('/profile/about/store', [AboutController::class, 'storeAbout'])->name('storeAbout');
+        Route::get('/profile/about/edit/{id}', [AboutController::class, 'editAbout'])->name('editAbout');
+        Route::put('/profile/about/update/{id}', [AboutController::class, 'updateAbout'])->name('updateAbout');
+        Route::delete('/profile/about/destroy/{id}', [AboutController::class, 'destroyAbout'])->name('destroyAbout');
     });
 });
 

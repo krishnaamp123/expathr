@@ -1,4 +1,3 @@
-<div class="col-lg-6 mb-4">
     <div class="card">
         <div class="card-header" style="color: white;">{{ __('Profile') }}</div>
         <div class="card-body">
@@ -8,10 +7,10 @@
                     @if ($user->profile_pict)
                         <img src="{{ asset($user->profile_pict) }}" alt="Profile Picture" class="img-fluid profile-picture">
                     @else
-                        <span>No Picture</span>
+                        <span>Add Your Picture</span>
                     @endif
 
-                    <div class="text-center mt-4">
+                    <div class="text-center mt-4 mb-4">
                         <button type="button" class="btn btn-primary kaem-subheading" data-toggle="modal" data-target="#editProfileModal">
                             Edit Profile
                         </button>
@@ -46,13 +45,16 @@
                     </div>
                     <div class="mb-3 kaem-text">
                         <strong>Link:</strong>
-                        <p>{{ $user->link }}</p>
+                        @if(!empty($user->link))
+                            <p>{{ $user->link }}</p>
+                        @else
+                            <p>Add Your link</p>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <!-- Modal Edit Profile -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">

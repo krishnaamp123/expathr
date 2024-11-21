@@ -7,7 +7,7 @@
         @if ($user->profile_pict)
             <img src="{{ asset($user->profile_pict) }}" alt="User Image" class="profile-picture-edit">
         @else
-            <span>No Image Available</span>
+            <span class="kaem-text">No Image Available</span>
         @endif
     </div>
 
@@ -21,14 +21,14 @@
 
     <div class="form-group">
         <label class="kaem-subheading">City</label>
-        <select name="id_city" class="form-control select2" id="id_city" required>
-            <option value="">Select City</option>
-            @foreach($cities as $city)
+            <select name="id_city" class="form-control select2">
+                <option value="">Select City</option>
+                @foreach($cities as $city)
                 <option value="{{ $city->id }}" {{ $city->id == $user->id_city ? 'selected' : '' }}>
                     {{ $city->city_name }}
                 </option>
-            @endforeach
-        </select>
+                @endforeach
+            </select>
         @error('id_city')
             <div class="text-danger">{{ $message }}</div>
         @enderror
@@ -76,7 +76,7 @@
 
     <div class="form-group">
         <label for="gender" class="kaem-subheading">Gender</label>
-        <select name="gender" class="form-control select2 register-select2">
+        <select name="gender" class="form-control select2">
             <option value="">Select Gender</option>
             <option value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>Male</option>
             <option value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>Female</option>

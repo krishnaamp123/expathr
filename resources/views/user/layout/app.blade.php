@@ -6,9 +6,20 @@
             <meta name="description" content="" />
             <meta name="author" content="" />
             <title>@yield('title')</title>
+
             <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+            <!-- Include Select2 CSS -->
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+            <!-- Include jQuery (required for Select2) -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+            <!-- Include Select2 JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+            <!-- Core theme CSS (includes Bootstrap)-->
+            <link href="{{ asset('template-user/css/styles.css') }}" rel="stylesheet" />
 
             <!-- Bootstrap CSS -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
@@ -20,17 +31,6 @@
             <!-- Google fonts-->
             <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
             <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-            <!-- Core theme CSS (includes Bootstrap)-->
-            <link href="{{ asset('template-user/css/styles.css') }}" rel="stylesheet" />
-
-             <!-- Include Select2 CSS -->
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-            <!-- Include jQuery (required for Select2) -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-            <!-- Include Select2 JS -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 
             <style>
@@ -42,6 +42,7 @@
                 .select2-dropdown {
                     z-index: 99999;
                 }
+
                 .select2-container .select2-selection--single {
                     height: 40px; /* Mengubah tinggi dari select */
                     padding: 8px; /* Mengatur padding agar lebih proporsional */
@@ -205,20 +206,6 @@
                     $('#datepicker').on('changeDate', function (e) {
                         var formattedDate = e.format('yyyy-mm-dd');
                         $('#datepicker').val(formattedDate); // Update the input field value with the correct format
-                    });
-                });
-            </script>
-
-            <script>
-                $(document).ready(function () {
-                    $('#editWorkLocationModal').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget); // Button that triggered the modal
-                        var id = button.data('id');
-                        var city = button.data('city');
-
-                        var modal = $(this);
-                        modal.find('#editWorkLocationForm').attr('action', '/worklocation/update/' + id);
-                        modal.find('#edit_id_city').val(city).trigger('change');
                     });
                 });
             </script>

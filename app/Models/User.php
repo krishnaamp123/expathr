@@ -55,6 +55,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany(Skill::class, 'id_user');
     }
 
+    public function about()
+    {
+        return $this->hasMany(About::class, 'id_user');
+    }
+
     public function emergency()
     {
         return $this->hasMany(Emergency::class, 'id_user');

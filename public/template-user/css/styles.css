@@ -4835,9 +4835,9 @@ textarea.form-control-lg {
   position: relative;
   display: block;
   padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
-  color: var(--bs-list-group-color);
+  color: #fff;
   text-decoration: none;
-  background-color: var(--bs-list-group-bg);
+  background-color: #323030;
   border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
 }
 .list-group-item:first-child {
@@ -5357,6 +5357,7 @@ textarea.form-control-lg {
 .modal-title {
   margin-bottom: 0;
   line-height: var(--bs-modal-title-line-height);
+  font-size: 1em;
   color: #72A28A;
 }
 
