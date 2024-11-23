@@ -8,6 +8,10 @@ use App\Http\Controllers\User\ProfileUserController;
 use App\Http\Controllers\User\WorkLocationController;
 use App\Http\Controllers\User\EmergencyController;
 use App\Http\Controllers\User\AboutController;
+use App\Http\Controllers\User\LanguageController;
+use App\Http\Controllers\User\WorkFieldController;
+use App\Http\Controllers\User\EducationController;
+use App\Http\Controllers\User\ProjectController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -63,6 +67,34 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/about/edit/{id}', [AboutController::class, 'editAbout'])->name('editAbout');
         Route::put('/profile/about/update/{id}', [AboutController::class, 'updateAbout'])->name('updateAbout');
         Route::delete('/profile/about/destroy/{id}', [AboutController::class, 'destroyAbout'])->name('destroyAbout');
+
+        //LANGUAGE
+        Route::get('/profile/language/add', [LanguageController::class, 'addLanguage'])->name('addLanguage');
+        Route::post('/profile/language/store', [LanguageController::class, 'storeLanguage'])->name('storeLanguage');
+        Route::get('/profile/language/edit/{id}', [LanguageController::class, 'editLanguage'])->name('editLanguage');
+        Route::put('/profile/language/update/{id}', [LanguageController::class, 'updateLanguage'])->name('updateLanguage');
+        Route::delete('/profile/language/destroy/{id}', [LanguageController::class, 'destroyLanguage'])->name('destroyLanguage');
+
+        //WORK FIELD
+        Route::get('/profile/workfield/add', [WorkFieldController::class, 'addWorkField'])->name('addWorkField');
+        Route::post('/profile/workfield/store', [WorkFieldController::class, 'storeWorkField'])->name('storeWorkField');
+        Route::get('/profile/workfield/edit/{id}', [WorkFieldController::class, 'editWorkField'])->name('editWorkField');
+        Route::put('/profile/workfield/update/{id}', [WorkFieldController::class, 'updateWorkField'])->name('updateWorkField');
+        Route::delete('/profile/workfield/destroy/{id}', [WorkFieldController::class, 'destroyWorkField'])->name('destroyWorkField');
+
+        //EDUCATION
+        Route::get('/profile/education/add', [EducationController::class, 'addEducation'])->name('addEducation');
+        Route::post('/profile/education/store', [EducationController::class, 'storeEducation'])->name('storeEducation');
+        Route::get('/profile/education/edit/{id}', [EducationController::class, 'editEducation'])->name('editEducation');
+        Route::put('/profile/education/update/{id}', [EducationController::class, 'updateEducation'])->name('updateEducation');
+        Route::delete('/profile/education/destroy/{id}', [EducationController::class, 'destroyEducation'])->name('destroyEducation');
+
+        //PROJECT
+        Route::get('/profile/project/add', [ProjectController::class, 'addProject'])->name('addProject');
+        Route::post('/profile/project/store', [ProjectController::class, 'storeProject'])->name('storeProject');
+        Route::get('/profile/project/edit/{id}', [ProjectController::class, 'editProject'])->name('editProject');
+        Route::put('/profile/project/update/{id}', [ProjectController::class, 'updateProject'])->name('updateProject');
+        Route::delete('/profile/project/destroy/{id}', [ProjectController::class, 'destroyProject'])->name('destroyProject');
     });
 });
 

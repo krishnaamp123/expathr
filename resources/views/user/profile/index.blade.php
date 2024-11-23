@@ -17,6 +17,18 @@
             <div class="col-lg-6 mb-3">
                 @include('user.profile.emergency.index', ['emergency' => $emergency])
             </div>
+            <div class="col-lg-3 mb-3">
+                @include('user.profile.language.index', ['language' => $language])
+            </div>
+            <div class="col-lg-3 mb-3">
+                @include('user.profile.workfield.index', ['workfield' => $workfield, 'fields' => $fields])
+            </div>
+            <div class="col-lg-6 mb-3">
+                @include('user.profile.education.index', ['education' => $education])
+            </div>
+            <div class="col-lg-6 mb-3">
+                @include('user.profile.project.index', ['project' => $project])
+            </div>
         </div>
     </div>
 </section>

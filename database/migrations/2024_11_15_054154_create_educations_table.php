@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('university');
             $table->string('degree');
             $table->string('major');
-            $table->datetime('start_date');
-            $table->datetime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');

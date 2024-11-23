@@ -88,6 +88,10 @@
                     color: white !important;
                 }
 
+                .datepicker-input {
+                    padding-left: 10px; /* Sesuaikan nilai padding sesuai kebutuhan */
+                }
+
                 .city-item {
                     position: relative;
                     overflow: hidden;
@@ -187,6 +191,32 @@
 
             <script>
                 $(document).ready(function () {
+                    // Inisialisasi datepicker untuk semua input dengan class .datepicker
+                    $('.datepicker').datepicker({
+                        format: 'yyyy-mm-dd',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                    // Menambahkan gaya kustom ketika datepicker muncul
+                    $('.datepicker').on('show', function () {
+                        $('.datepicker').css({
+                            'background-color': '#fff',
+                            'color': '#231f20',
+                            'border-radius': '8px'
+                        });
+                    });
+
+                    // Ensure the date is in the correct format before submitting
+                    $('.datepicker').on('changeDate', function (e) {
+                        var formattedDate = e.format('yyyy-mm-dd');
+                        $(this).val(formattedDate); // Update the input field value with the correct format
+                    });
+                });
+            </script>
+
+            {{-- <script>
+                $(document).ready(function () {
                     $('#datepicker').datepicker({
                         format: 'yyyy-mm-dd',
                         autoclose: true,
@@ -208,7 +238,7 @@
                         $('#datepicker').val(formattedDate); // Update the input field value with the correct format
                     });
                 });
-            </script>
+            </script> --}}
             @yield('scripts')
         </body>
     </html>

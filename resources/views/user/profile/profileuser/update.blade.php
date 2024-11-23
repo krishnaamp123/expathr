@@ -68,7 +68,7 @@
 
     <div class="form-group">
         <label for="birth_date" class="kaem-subheading">Birth Date</label>
-        <input type="text" class="form-control" id="datepicker" name="birth_date" value="{{ $user->birth_date }}" required>
+        <input type="text" class="form-control datepicker datepicker-input" id="birth_date" name="birth_date" value="{{ $user->birth_date }}" required>
         @error('birth_date')
             <span class="text-danger">{{ $message }}</span>
         @enderror

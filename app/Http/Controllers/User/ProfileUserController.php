@@ -6,9 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\City;
+use App\Models\Field;
 use App\Models\WorkLocation;
 use App\Models\Emergency;
 use App\Models\About;
+use App\Models\Language;
+use App\Models\WorkField;
+use App\Models\Education;
+use App\Models\Project;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileUserController extends Controller
@@ -17,11 +22,16 @@ class ProfileUserController extends Controller
     {
         $user = auth()->user()->load('city');
         $cities = City::all();
+        $fields = Field::all();
         $worklocation = WorkLocation::where('id_user', $user->id)->get();
         $emergency = Emergency::where('id_user', $user->id)->get();
         $about = About::where('id_user', $user->id)->get();
+        $language = Language::where('id_user', $user->id)->get();
+        $workfield = WorkField::where('id_user', $user->id)->get();
+        $education = Education::where('id_user', $user->id)->get();
+        $project = Project::where('id_user', $user->id)->get();
 
-        return view('user.profile.index', compact('user', 'cities', 'worklocation', 'emergency', 'about'));
+        return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education', 'project'));
     }
 
     public function editProfile($id)
