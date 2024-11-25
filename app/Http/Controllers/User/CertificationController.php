@@ -5,24 +5,27 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Project;
+use App\Models\Certification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
-class ProjectController extends Controller
+class CertificationController extends Controller
 {
-    public function addProject()
+    public function addCertification()
     {
-        return view('user.profile.project.store');
+        return view('user.profile.certification.store');
     }
 
-    public function storeProject(Request $request)
+    public function storeCertification(Request $request)
     {
         $validated = $request->validate([
-            'project_name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'lisence_name' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'id_credentials' => 'nullable|string|max:255',
+            'url_credentials' => 'nullable|string|max:255',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string|max:1000',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
         ]);
@@ -42,36 +45,42 @@ class ProjectController extends Controller
             $request->file('file')->move($destinationPath, $filename . '.' . $extension);
         }
 
-        Project::create([
+        Certification::create([
             'id_user' => Auth::id(),
-            'project_name' => $validated['project_name'],
-            'description' => $validated['description'],
+            'lisence_name' => $validated['lisence_name'],
+            'organization' => $validated['organization'],
+            'id_credentials' => $validated['id_credentials'],
+            'url_credentials' => $validated['url_credentials'],
             'media' => $mediaName,
+            'description' => $validated['description'],
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
         ]);
 
-        return redirect()->route('getProfile')->with('message', 'Project Added Successfully');
+        return redirect()->route('getProfile')->with('message', 'Certification Added Successfully');
     }
 
 
-    public function editProject($id)
+    public function editCertification($id)
     {
-        $project = Project::findOrFail($id);
+        $certification = Certification::findOrFail($id);
 
-        return view('user.profile.project.update', compact('project'));
+        return view('user.profile.certification.update', compact('certification'));
     }
 
-    public function updateProject(Request $request, $id)
+    public function updateCertification(Request $request, $id)
     {
-        $project = Project::findOrFail($id);
+        $certification = Certification::findOrFail($id);
 
         $validated = $request->validate([
-            'project_name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'lisence_name' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'id_credentials' => 'nullable|string|max:255',
+            'url_credentials' => 'nullable|string|max:255',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'description' => 'nullable|string|max:1000',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
         ]);
 
         // Perbarui gambar jika ada
@@ -93,24 +102,27 @@ class ProjectController extends Controller
             $request->file('file')->move($destinationPath, $mediaName);
 
             // Hapus file lama jika ada
-            if ($project->media) {
-                $oldFilePath = public_path($project->media);
+            if ($certification->media) {
+                $oldFilePath = public_path($certification->media);
                 if (file_exists($oldFilePath)) {
                     unlink($oldFilePath);
                 }
             }
 
             // Simpan nama file ke database
-            $project->media = 'storage/images/' . $mediaName;
+            $certification->media = 'storage/images/' . $mediaName;
         }
 
-        $project->project_name = $validated['project_name'];
-        $project->description = $validated['description'];
-        $project->start_date = $validated['start_date'];
-        $project->end_date = $validated['end_date'];
-        $project->save();
+        $certification->lisence_name = $validated['lisence_name'];
+        $certification->organization = $validated['organization'];
+        $certification->id_credentials = $validated['id_credentials'];
+        $certification->url_credentials = $validated['url_credentials'];
+        $certification->description = $validated['description'];
+        $certification->start_date = $validated['start_date'];
+        $certification->end_date = $validated['end_date'];
+        $certification->save();
 
-        return redirect()->route('getProfile')->with('message', 'Project Updated Successfully');
+        return redirect()->route('getProfile')->with('message', 'Certification Updated Successfully');
     }
 
     // Helper method to generate a random string for the file name
@@ -127,11 +139,11 @@ class ProjectController extends Controller
         return $randomString;
     }
 
-    public function destroyProject($id)
+    public function destroyCertification($id)
     {
-        $project = Project::findOrFail($id);
-        $project->delete();
+        $certification = Certification::findOrFail($id);
+        $certification->delete();
 
-        return redirect()->back()->with('success', 'Project deleted successfully.');
+        return redirect()->back()->with('success', 'Certification deleted successfully.');
     }
 }

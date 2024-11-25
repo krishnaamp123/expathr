@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('position');
             $table->string('associated');
             $table->text('description')->nullable();
-            $table->datetime('start_date');
-            $table->datetime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');

@@ -1,4 +1,4 @@
-<form action="{{ route('storeProject') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('storeVolunteer') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
         <div class="form-group">
@@ -10,10 +10,28 @@
         </div>
 
         <div class="form-group">
-            <label for="project_name" class="kaem-subheading">Name</label>
-            <input name="project_name" type="text" class="form-control form-control-user"
-                id="exampleInputProjectName">
-            @error('project_name')
+            <label for="organization" class="kaem-subheading">Organization</label>
+            <input name="organization" type="text" class="form-control form-control-user"
+                id="exampleInputOrganizationName">
+            @error('organization')
+                <div class="text-danger">{{$message}}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="role" class="kaem-subheading">Role</label>
+            <input name="role" type="text" class="form-control form-control-user"
+                id="exampleInputRoleName">
+            @error('role')
+                <div class="text-danger">{{$message}}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="issue" class="kaem-subheading">Issue</label>
+            <input name="issue" type="text" class="form-control form-control-user"
+                id="exampleInputIssueName">
+            @error('issue')
                 <div class="text-danger">{{$message}}</div>
             @enderror
         </div>

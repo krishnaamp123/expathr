@@ -10899,6 +10899,12 @@ p {
     font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+.profile-project {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
 .profile-picture {
     width: 150px;
     height: 150px;

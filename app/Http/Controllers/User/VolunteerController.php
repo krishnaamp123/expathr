@@ -5,22 +5,24 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Project;
+use App\Models\Volunteer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 
-class ProjectController extends Controller
+class VolunteerController extends Controller
 {
-    public function addProject()
+    public function addVolunteer()
     {
-        return view('user.profile.project.store');
+        return view('user.profile.volunteer.store');
     }
 
-    public function storeProject(Request $request)
+    public function storeVolunteer(Request $request)
     {
         $validated = $request->validate([
-            'project_name' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'issue' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'start_date' => 'required|date',
@@ -42,36 +44,40 @@ class ProjectController extends Controller
             $request->file('file')->move($destinationPath, $filename . '.' . $extension);
         }
 
-        Project::create([
+        Volunteer::create([
             'id_user' => Auth::id(),
-            'project_name' => $validated['project_name'],
+            'organization' => $validated['organization'],
+            'role' => $validated['role'],
+            'issue' => $validated['issue'],
             'description' => $validated['description'],
             'media' => $mediaName,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
         ]);
 
-        return redirect()->route('getProfile')->with('message', 'Project Added Successfully');
+        return redirect()->route('getProfile')->with('message', 'Volunteer Added Successfully');
     }
 
 
-    public function editProject($id)
+    public function editVolunteer($id)
     {
-        $project = Project::findOrFail($id);
+        $volunteer = Volunteer::findOrFail($id);
 
-        return view('user.profile.project.update', compact('project'));
+        return view('user.profile.volunteer.update', compact('volunteer'));
     }
 
-    public function updateProject(Request $request, $id)
+    public function updateVolunteer(Request $request, $id)
     {
-        $project = Project::findOrFail($id);
+        $volunteer = Volunteer::findOrFail($id);
 
         $validated = $request->validate([
-            'project_name' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'issue' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
         ]);
 
         // Perbarui gambar jika ada
@@ -93,24 +99,26 @@ class ProjectController extends Controller
             $request->file('file')->move($destinationPath, $mediaName);
 
             // Hapus file lama jika ada
-            if ($project->media) {
-                $oldFilePath = public_path($project->media);
+            if ($volunteer->media) {
+                $oldFilePath = public_path($volunteer->media);
                 if (file_exists($oldFilePath)) {
                     unlink($oldFilePath);
                 }
             }
 
             // Simpan nama file ke database
-            $project->media = 'storage/images/' . $mediaName;
+            $volunteer->media = 'storage/images/' . $mediaName;
         }
 
-        $project->project_name = $validated['project_name'];
-        $project->description = $validated['description'];
-        $project->start_date = $validated['start_date'];
-        $project->end_date = $validated['end_date'];
-        $project->save();
+        $volunteer->organization = $validated['organization'];
+        $volunteer->role = $validated['role'];
+        $volunteer->issue = $validated['issue'];
+        $volunteer->description = $validated['description'];
+        $volunteer->start_date = $validated['start_date'];
+        $volunteer->end_date = $validated['end_date'];
+        $volunteer->save();
 
-        return redirect()->route('getProfile')->with('message', 'Project Updated Successfully');
+        return redirect()->route('getProfile')->with('message', 'Volunteer Updated Successfully');
     }
 
     // Helper method to generate a random string for the file name
@@ -127,11 +135,11 @@ class ProjectController extends Controller
         return $randomString;
     }
 
-    public function destroyProject($id)
+    public function destroyVolunteer($id)
     {
-        $project = Project::findOrFail($id);
-        $project->delete();
+        $volunteer = Volunteer::findOrFail($id);
+        $volunteer->delete();
 
-        return redirect()->back()->with('success', 'Project deleted successfully.');
+        return redirect()->back()->with('success', 'Volunteer deleted successfully.');
     }
 }

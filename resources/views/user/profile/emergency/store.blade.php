@@ -5,7 +5,7 @@
             <input name="emergency_name" type="text" class="form-control form-control-user"
                 id="exampleInputEmergencyName">
             @error('emergency_name')
-                <div class="custom-text-danger">{{$message}}</div>
+                <div class="text-danger">{{$message}}</div>
             @enderror
         </div>
 
@@ -14,7 +14,7 @@
             <input name="emergency_relation" type="text" class="form-control form-control-user"
                 id="exampleInputEmergencyRelation">
             @error('emergency_relation')
-                <div class="custom-text-danger">{{$message}}</div>
+                <div class="text-danger">{{$message}}</div>
             @enderror
         </div>
 
@@ -23,7 +23,7 @@
             <input name="emergency_phone" type="number" class="form-control form-control-user"
                 id="exampleInputEmergencyPhone">
             @error('emergency_phone')
-                <div class="custom-text-danger">{{$message}}</div>
+                <div class="text-danger">{{$message}}</div>
             @enderror
         </div>
     <button type="submit" class="btn btn-primary kaem-subheading">Add</button>

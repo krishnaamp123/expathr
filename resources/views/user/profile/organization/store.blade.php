@@ -1,26 +1,34 @@
-<form action="{{ route('storeEducation') }}" method="POST">
+<form action="{{ route('storeOrganization') }}" method="POST">
     @csrf
         <div class="form-group">
-            <label for="university" class="kaem-subheading">Institution</label>
-            <input name="university" type="text" class="form-control form-control-user"
-                id="exampleInputUniversity">
-            @error('university')
+            <label for="organization" class="kaem-subheading">Organization</label>
+            <input name="organization" type="text" class="form-control form-control-user"
+                id="exampleInputOrganization">
+            @error('organization')
                 <div class="text-danger">{{$message}}</div>
             @enderror
         </div>
         <div class="form-group">
-            <label for="degree" class="kaem-subheading">Degree</label>
-            <input name="degree" type="text" class="form-control form-control-user"
-                id="exampleInputDegree">
-            @error('degree')
+            <label for="position" class="kaem-subheading">Position</label>
+            <input name="position" type="text" class="form-control form-control-user"
+                id="exampleInputPosition">
+            @error('position')
                 <div class="text-danger">{{$message}}</div>
             @enderror
         </div>
         <div class="form-group">
-            <label for="major" class="kaem-subheading">Major</label>
-            <input name="major" type="text" class="form-control form-control-user"
-                id="exampleInputMajor">
-            @error('major')
+            <label for="associated" class="kaem-subheading">Associated</label>
+            <input name="associated" type="text" class="form-control form-control-user"
+                id="exampleInputAssociated">
+            @error('associated')
+                <div class="text-danger">{{$message}}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="description" class="kaem-subheading">Description</label>
+            <textarea name="description" class="form-control form-control-user" id="exampleInputDescription" rows="5"></textarea>
+            @error('description')
                 <div class="text-danger">{{$message}}</div>
             @enderror
         </div>

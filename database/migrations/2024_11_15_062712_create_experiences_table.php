@@ -21,8 +21,8 @@ return new class extends Migration
             $table->enum('location_type',['on_site','hybrid','remote']);
             $table->text('responsibility')->nullable();
             $table->text('job_report')->nullable();
-            $table->datetime('start_date');
-            $table->datetime('end_date');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users');

@@ -14,6 +14,11 @@ use App\Models\Language;
 use App\Models\WorkField;
 use App\Models\Education;
 use App\Models\Project;
+use App\Models\Organization;
+use App\Models\Volunteer;
+use App\Models\Experience;
+use App\Models\Certification;
+use App\Models\Skill;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileUserController extends Controller
@@ -30,8 +35,14 @@ class ProfileUserController extends Controller
         $workfield = WorkField::where('id_user', $user->id)->get();
         $education = Education::where('id_user', $user->id)->get();
         $project = Project::where('id_user', $user->id)->get();
+        $organization = Organization::where('id_user', $user->id)->get();
+        $volunteer = Volunteer::where('id_user', $user->id)->get();
+        $experience = Experience::where('id_user', $user->id)->get();
+        $certification = Certification::where('id_user', $user->id)->get();
+        $skill = Skill::where('id_user', $user->id)->get();
 
-        return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education', 'project'));
+        return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language',
+        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skill'));
     }
 
     public function editProfile($id)

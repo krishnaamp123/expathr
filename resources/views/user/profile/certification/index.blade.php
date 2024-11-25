@@ -1,0 +1,171 @@
+    <div class="card">
+        <div class="card-header" style="color: white;">Certification</div>
+        <div class="card-body">
+            <div class="">
+
+                @if ($certification->isNotEmpty())
+                    <ul class="list-group">
+                        @foreach ($certification as $certificationn)
+                        <li class="list-group-item city-item position-relative">
+                            <div class="row">
+                                @if ($certificationn->media)
+                                    <div class="col-md-3">
+                                        <img src="{{ asset($certificationn->media) }}" alt="Certification Picture" class="img-fluid profile-project">
+                                    </div>
+                                    <div class="col-md-9">
+                                @else
+                                    <div class="col-md-12">
+                                @endif
+                                <span class="kaem-heading">{{ $certificationn->lisence_name ?? 'Unknown Certification' }}</span><br>
+                                <span class="kaem-subheading">{{ $certificationn->organization }}</span><br>
+                                @if (!empty($certificationn->description))
+                                    <span class="kaem-text">{{ $certificationn->description }}</span><br>
+                                @endif
+                                <span class="kaem-text">{{ $certificationn->start_date }} - {{ $certificationn->end_date }}</span><br>
+                                @if (!empty($certificationn->id_credentials))
+                                    <span class="kaem-text">{{ $certificationn->id_credentials }}</span><br>
+                                @endif
+                                @if (!empty($certificationn->url_credentials))
+                                    <span class="kaem-text">{{ $certificationn->url_credentials }}</span>
+                                @endif
+                                </div>
+                            </div>
+                            <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
+
+                                <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editCertificationModal{{ $certificationn->id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <form action="{{ route('destroyCertification', $certificationn->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="kaem-subheading">No certification added yet.</p>
+                @endif
+
+            <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addCertificationModal">
+                Add Certification
+            </button>
+        </div>
+        </div>
+    </div>
+
+@foreach ($certification as $certificationn)
+<!-- Modal Edit Certification -->
+<div class="modal fade" id="editCertificationModal{{ $certificationn->id }}" tabindex="-1" role="dialog" aria-labelledby="editCertificationLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCertificationLabel">Edit Certification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editCertificationForm" method="POST" action="{{ route('updateCertification', $user->id) }}" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label class="kaem-subheading">Current Image</label><br>
+                        @if ($certificationn->media)
+                            <img src="{{ asset($certificationn->media) }}" alt="Certification Image" class="profile-picture-edit">
+                        @else
+                            <span class="kaem-text">No Image Available</span>
+                        @endif
+                    </div>
+
+                    <div class="form-group">
+                        <label class="kaem-subheading">New Image</label>
+                        <input type="file" name="file" class="form-control">
+                        @error('file')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lisence_name" class="kaem-subheading">Lisence Name</label>
+                        <input type="text" class="form-control" id="lisence_name" name="lisence_name"  value="{{ $certificationn->lisence_name }}" required>
+                        @error('lisence_name')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="organization" class="kaem-subheading">Organization</label>
+                        <input type="text" class="form-control" id="organization" name="organization"  value="{{ $certificationn->organization }}" required>
+                        @error('organization')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_credentials" class="kaem-subheading">Id Credentials</label>
+                        <input type="text" class="form-control" id="id_credentials" name="id_credentials"  value="{{ $certificationn->id_credentials }}" required>
+                        @error('id_credentials')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url_credentials" class="kaem-subheading">Url Credentials</label>
+                        <input type="text" class="form-control" id="url_credentials" name="url_credentials"  value="{{ $certificationn->url_credentials }}" required>
+                        @error('url_credentials')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="kaem-subheading">Description</label>
+                        <textarea name="description" class="form-control" id="description" rows="5" required>{{ $certificationn->description }}</textarea>
+                        @error('description')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start_date" class="kaem-subheading">Start Date</label>
+                        <input type="text" class="form-control datepicker datepicker-input" id="start_date" name="start_date" value="{{ $certificationn->start_date }}" required>
+                        @error('start_date')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="end_date" class="kaem-subheading">End Date</label>
+                        <input type="text" class="form-control datepicker datepicker-input" id="end_date" name="end_date" value="{{ $certificationn->end_date }}" required>
+                        @error('end_date')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary kaem-subheading">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+<!-- Modal Add Work Location -->
+<div class="modal fade" id="addCertificationModal" tabindex="-1" role="dialog" aria-labelledby="addCertificationLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCertificationLabel">Add Certification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @include('user.profile.certification.store')
+            </div>
+        </div>
+    </div>
+</div>

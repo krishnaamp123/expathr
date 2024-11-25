@@ -12,6 +12,11 @@ use App\Http\Controllers\User\LanguageController;
 use App\Http\Controllers\User\WorkFieldController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\ProjectController;
+use App\Http\Controllers\User\OrganizationController;
+use App\Http\Controllers\User\VolunteerController;
+use App\Http\Controllers\User\ExperienceController;
+use App\Http\Controllers\User\CertificationController;
+use App\Http\Controllers\User\SkillController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -95,6 +100,41 @@ Route::middleware('auth')->group(function () {
         Route::get('/profile/project/edit/{id}', [ProjectController::class, 'editProject'])->name('editProject');
         Route::put('/profile/project/update/{id}', [ProjectController::class, 'updateProject'])->name('updateProject');
         Route::delete('/profile/project/destroy/{id}', [ProjectController::class, 'destroyProject'])->name('destroyProject');
+
+        //ORGANIZATION
+        Route::get('/profile/organization/add', [OrganizationController::class, 'addOrganization'])->name('addOrganization');
+        Route::post('/profile/organization/store', [OrganizationController::class, 'storeOrganization'])->name('storeOrganization');
+        Route::get('/profile/organization/edit/{id}', [OrganizationController::class, 'editOrganization'])->name('editOrganization');
+        Route::put('/profile/organization/update/{id}', [OrganizationController::class, 'updateOrganization'])->name('updateOrganization');
+        Route::delete('/profile/organization/destroy/{id}', [OrganizationController::class, 'destroyOrganization'])->name('destroyOrganization');
+
+        //VOLUNTEER
+        Route::get('/profile/volunteer/add', [VolunteerController::class, 'addVolunteer'])->name('addVolunteer');
+        Route::post('/profile/volunteer/store', [VolunteerController::class, 'storeVolunteer'])->name('storeVolunteer');
+        Route::get('/profile/volunteer/edit/{id}', [VolunteerController::class, 'editVolunteer'])->name('editVolunteer');
+        Route::put('/profile/volunteer/update/{id}', [VolunteerController::class, 'updateVolunteer'])->name('updateVolunteer');
+        Route::delete('/profile/volunteer/destroy/{id}', [VolunteerController::class, 'destroyVolunteer'])->name('destroyVolunteer');
+
+        //EXPERIENCE
+        Route::get('/profile/experience/add', [ExperienceController::class, 'addExperience'])->name('addExperience');
+        Route::post('/profile/experience/store', [ExperienceController::class, 'storeExperience'])->name('storeExperience');
+        Route::get('/profile/experience/edit/{id}', [ExperienceController::class, 'editExperience'])->name('editExperience');
+        Route::put('/profile/experience/update/{id}', [ExperienceController::class, 'updateExperience'])->name('updateExperience');
+        Route::delete('/profile/experience/destroy/{id}', [ExperienceController::class, 'destroyExperience'])->name('destroyExperience');
+
+        //CERTIFICATION
+        Route::get('/profile/certification/add', [CertificationController::class, 'addCertification'])->name('addCertification');
+        Route::post('/profile/certification/store', [CertificationController::class, 'storeCertification'])->name('storeCertification');
+        Route::get('/profile/certification/edit/{id}', [CertificationController::class, 'editCertification'])->name('editCertification');
+        Route::put('/profile/certification/update/{id}', [CertificationController::class, 'updateCertification'])->name('updateCertification');
+        Route::delete('/profile/certification/destroy/{id}', [CertificationController::class, 'destroyCertification'])->name('destroyCertification');
+
+        //SKILL
+        Route::get('/profile/skill/add', [SkillController::class, 'addSkill'])->name('addSkill');
+        Route::post('/profile/skill/store', [SkillController::class, 'storeSkill'])->name('storeSkill');
+        Route::get('/profile/skill/edit/{id}', [SkillController::class, 'editSkill'])->name('editSkill');
+        Route::put('/profile/skill/update/{id}', [SkillController::class, 'updateSkill'])->name('updateSkill');
+        Route::delete('/profile/skill/destroy/{id}', [SkillController::class, 'destroySkill'])->name('destroySkill');
     });
 });
 

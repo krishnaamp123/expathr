@@ -20,7 +20,7 @@ class LanguageController extends Controller
     {
         $validated = $request->validate([
             'language' => 'required|string|max:100',
-            'skill' => 'nullable|in:basic,intermediate,profesional,advanced_profesional,native',
+            'skill' => 'required|in:basic,intermediate,profesional,advanced_profesional,native',
         ]);
 
         // Jika tidak ada, tambahkan data baru
