@@ -12,25 +12,42 @@
                     <form action="{{ route('storeUser') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label>Company ID</label>
-                            <select name="id_group" class="form-control select2">
-                                <option value="">Select Company</option>
-                                @foreach($groups as $group)
-                                    <option value="{{ $group->id }}">{{ $group->company_name }}</option>
-                                @endforeach
-                            </select>
-                            @error('id_group')
+                            <label>Image</label>
+                            <input type="file" name="file" class="form-control">
+                            @error('file')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" name="username" class="form-control">
-                            @error('username')
+                            <label>City</label>
+                            <select name="id_city" class="form-control select2">
+                                <option value="">Select City</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->city_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_city')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label>Employee ID</label>
+                            <input type="text" name="employee_id" class="form-control">
+                            @error('employee_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control">
+                            @error('email')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="form-group">
                             <label>Password</label>
                             <input type="password" name="password" class="form-control">
@@ -38,27 +55,31 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="form-group">
-                            <label>Customer Name</label>
-                            <input type="text" name="customer_name" class="form-control">
-                            @error('customer_name')
+                            <label>Fullname</label>
+                            <input type="text" name="fullname" class="form-control">
+                            @error('fullname')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="form-group">
-                            <label>PIC Name</label>
-                            <input type="text" name="pic_name" class="form-control">
-                            @error('pic_name')
+                            <label>Nickname</label>
+                            <input type="text" name="nickname" class="form-control">
+                            @error('nickname')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="form-group">
-                            <label>PIC Phone</label>
-                            <input type="number" name="pic_phone" class="form-control">
-                            @error('pic_phone')
+                            <label>Phone</label>
+                            <input type="number" name="phone" class="form-control">
+                            @error('phone')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="form-group">
                             <label>Address</label>
                             <input type="text" name="address" class="form-control">
@@ -66,15 +87,45 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label>Birth Date</label>
+                            <input type="date" name="birth_date" class="form-control">
+                            @error('birth_date')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select name="gender" class="form-control select2">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            @error('gender')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <div class="form-group">
                             <label>Role</label>
-                            <select name="role" class="form-control">
+                            <select name="role" class="form-control select2">
                                 <option value="">Select Role</option>
-                                <option value="admin">Admin</option>
-                                <option value="retail">Retail</option>
-                                <option value="supermarket">Supermarket</option>
+                                <option value="super_admin">Super Admin</option>
+                                <option value="hiring_manager">Hiring Manager</option>
+                                <option value="recruiter">Recruiter</option>
+                                <option value="applicant">Applicant</option>
                             </select>
                             @error('role')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Verified</label>
+                            <input type="date" name="email_verified_at" class="form-control">
+                            @error('email_verified_at')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

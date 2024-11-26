@@ -14,49 +14,65 @@
                         @method('PUT')
 
                         <div class="form-group">
-                            <label>Group ID</label>
-                            <input type="number" name="id_group" class="form-control" value="{{ old('id_group', $user->id_group) }}">
-                            @error('id_group')
+                            <label>Current Image</label><br>
+                            @if ($user->profile_pict)
+                            <img src="{{ asset($user->profile_pict) }}" alt="Profile Image" class="profile-user">
+                            @else
+                                <span>No Image Available</span>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Image</label>
+                            <input type="file" name="file" class="form-control">
+                            @error('file')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}">
-                            @error('username')
+                            <label>City</label>
+                            <select name="id_city" class="form-control select2">
+                                <option value="">Select City</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city->id }}" {{ $city->id == $user->id_city ? 'selected' : '' }}>
+                                        {{ $city->city_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_city')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" name="password" class="form-control" value="{{ old('password', $user->password) }}">
-                            @error('password')
+                            <label>Employee ID</label>
+                            <input type="text" name="employee_id" class="form-control" value="{{ old('employee_id', $user->employee_id) }}">
+                            @error('employee_id')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>Customer Name</label>
-                            <input type="text" name="customer_name" class="form-control" value="{{ old('customer_name', $user->customer_name) }}">
-                            @error('customer_name')
+                            <label>Fullname</label>
+                            <input type="text" name="fullname" class="form-control" value="{{ old('fullname', $user->fullname) }}">
+                            @error('fullname')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>PIC Name</label>
-                            <input type="text" name="pic_name" class="form-control" value="{{ old('pic_name', $user->pic_name) }}">
-                            @error('pic_name')
+                            <label>Nickname</label>
+                            <input type="text" name="nickname" class="form-control" value="{{ old('nickname', $user->nickname) }}">
+                            @error('nickname')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>PIC Phone</label>
-                            <input type="number" name="pic_phone" class="form-control" value="{{ old('pic_phone', $user->pic_phone) }}">
-                            @error('pic_phone')
+                            <label>Phone</label>
+                            <input type="number" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}">
+                            @error('phone')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
@@ -70,15 +86,44 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="birth_date" class="kaem-subheading">Birth Date</label>
+                            <input type="text" class="form-control datepicker datepicker-input" id="birth_date" name="birth_date" value="{{ $user->birth_date }}" required>
+                            @error('birth_date')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select name="gender" class="form-control select2">
+                                <option value="">Select Gender</option>
+                                <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
+                                <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
+                            </select>
+                            @error('gender')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Role</label>
-                            <select name="role" class="form-control">
+                            <select name="role" class="form-control select2">
                                 <option value="">Select Role</option>
-                                <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="retail" {{ old('role', $user->role) == 'retail' ? 'selected' : '' }}>Retail</option>
-                                <option value="supermarket" {{ old('role', $user->role) == 'supermarket' ? 'selected' : '' }}>Supermarket</option>
+                                <option value="super_admin" {{ old('role', $user->role) == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                                <option value="hiring_manager" {{ old('role', $user->role) == 'hiring_manager' ? 'selected' : '' }}>Hiring Manager</option>
+                                <option value="recruiter" {{ old('role', $user->role) == 'recruiter' ? 'selected' : '' }}>Recruiter</option>
+                                <option value="applicant" {{ old('role', $user->role) == 'applicant' ? 'selected' : '' }}>Applicant</option>
                             </select>
                             @error('role')
                                 <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email_verified_at" class="kaem-subheading">Email Verified</label>
+                            <input type="text" class="form-control datepicker datepicker-input" id="email_verified_at" name="email_verified_at" value="{{ $user->email_verified_at }}" required>
+                            @error('email_verified_at')
+                                <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
 

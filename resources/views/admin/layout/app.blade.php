@@ -32,6 +32,9 @@
     <!-- Include Select2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
+    <!-- Include Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
     <style>
         .select2-container .select2-selection--single {
             height: 40px; /* Mengubah tinggi dari select */
@@ -128,6 +131,33 @@
             color: white; /* Warna ikon */
             font-size: 14px; /* Ukuran ikon */
         }
+
+        .profile-user {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .datepicker table tr td,
+        .datepicker table tr td:hover {
+            background-color: #fff !important;
+            color: #231f20 !important;
+        }
+
+        .datepicker table tr td.today,
+        .datepicker table tr td.today:hover {
+            color: white !important;
+        }
+
+        .datepicker table tr td.active,
+        .datepicker table tr td.active:hover {
+            color: white !important;
+        }
+
+        .datepicker-input {
+            padding-left: 10px; /* Sesuaikan nilai padding sesuai kebutuhan */
+        }
+
 
 
 
@@ -384,6 +414,35 @@
 
     <!-- Page level custom scripts -->
     <script src="{{asset('template-admin/js/demo/datatables-demo.js')}}"></script>
+
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Inisialisasi datepicker untuk semua input dengan class .datepicker
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            // Menambahkan gaya kustom ketika datepicker muncul
+            $('.datepicker').on('show', function () {
+                $('.datepicker').css({
+                    'background-color': '#fff',
+                    'color': '#231f20',
+                    'border-radius': '8px'
+                });
+            });
+
+            // Ensure the date is in the correct format before submitting
+            $('.datepicker').on('changeDate', function (e) {
+                var formattedDate = e.format('yyyy-mm-dd');
+                $(this).val(formattedDate); // Update the input field value with the correct format
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {

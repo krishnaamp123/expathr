@@ -17,6 +17,7 @@ use App\Http\Controllers\User\VolunteerController;
 use App\Http\Controllers\User\ExperienceController;
 use App\Http\Controllers\User\CertificationController;
 use App\Http\Controllers\User\SkillController;
+use App\Http\Controllers\Admin\UserAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -141,12 +142,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/dashboardadmin', [DashboardAdminController::class, 'getDashboardAdmin'])->name('getDashboardAdmin');
 
             // USER
-            Route::get('/user', [AuthController::class, 'getUser'])->name('getUser');
-            Route::get('/user/create', [AuthController::class, 'addUser'])->name('addUser');
-            Route::post('/user/create', [AuthController::class, 'storeUser'])->name('storeUser');
-            Route::get('/user/update/{id}', [AuthController::class, 'editUser'])->name('editUser');
-            Route::put('/user/update/{id}', [AuthController::class, 'updateUser'])->name('updateUser');
-            Route::delete('/user/destroy/{id}', [AuthController::class, 'destroyUser'])->name('destroyUser');
+            Route::get('/user', [UserAdminController::class, 'getUser'])->name('getUser');
+            Route::get('/user/create', [UserAdminController::class, 'addUser'])->name('addUser');
+            Route::post('/user/create', [UserAdminController::class, 'storeUser'])->name('storeUser');
+            Route::get('/user/update/{id}', [UserAdminController::class, 'editUser'])->name('editUser');
+            Route::put('/user/update/{id}', [UserAdminController::class, 'updateUser'])->name('updateUser');
+            Route::delete('/user/destroy/{id}', [UserAdminController::class, 'destroyUser'])->name('destroyUser');
+            Route::get('/user/{id}/pdf', [UserAdminController::class, 'generatePdf'])->name('profile.pdf');
+
 
         });
     });

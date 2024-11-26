@@ -62,7 +62,7 @@ class AuthController extends Controller
             'id_city' => 'required|exists:cities,id',
             'employee_id' => 'nullable|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
+            'password' => 'required|min:6',
             'fullname' => 'required|string|max:255',
             'nickname' => 'required|string|max:100',
             'phone' => 'required|string|max:15',
@@ -107,90 +107,6 @@ class AuthController extends Controller
         // Hapus cookie
         return response()->redirectToRoute('login')
                         ->withCookie(cookie()->forget('token'));
-    }
-
-    public function getUser()
-    {
-        $users = User::with('city')->get(); // Eager load the group data
-        return view('admin.user.index', compact('users'));
-    }
-
-    public function addUser()
-    {
-        $groups = Company::all();
-        return view('admin.user.store', compact('groups'));
-    }
-
-    public function storeUser(Request $request)
-    {
-        $validated = $request->validate([
-            'id_group' => 'required',
-            'username' =>'required|unique:users',
-            'password' => 'required',
-            'customer_name' =>'required',
-            'pic_name' => 'required',
-            'pic_phone' => 'required',
-            'address' => 'required',
-            'role' => "required|in:admin,retail,supermarket"
-        ]);
-
-        User::create([
-            'id_group' => $request->id_group,
-            'username' =>$request->username,
-            'password' =>$request->password,
-            'customer_name' =>$request->customer_name,
-            'pic_name' =>$request->pic_name,
-            'pic_phone' =>$request->pic_phone,
-            'address' =>$request->address,
-            'role' => $request->role,
-        ]);
-
-        return redirect()->route('getUser')->with('message', 'Data Added Successfully');
-    }
-
-    public function editUser($id)
-    {
-        $user = User::findOrFail($id);
-
-        return view('admin.user.update', compact('user'));
-    }
-
-    public function updateUser(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        $validated = $request->validate([
-            'id_group' => 'required',
-            'username' =>'required',
-            'password' => 'required',
-            'customer_name' =>'required',
-            'pic_name' => 'required',
-            'pic_phone' => 'required',
-            'address' => 'required',
-            'role' => "required|in:admin,retail,supermarket"
-        ]);
-
-        $user->id_group = $request->id_group;
-        $user->username = $request->username;
-        $user->password = $request->password;
-        $user->customer_name = $request->customer_name;
-        $user->pic_name = $request->pic_name;
-        $user->pic_phone = $request->pic_phone;
-        $user->address = $request->address;
-        $user->role = $request->role;
-
-        $user->save();
-
-        return redirect()->route('getUser')->with('message', 'User Updated Successfully');
-    }
-
-    public function destroyUser($id)
-    {
-        $user = User::findOrFail($id);
-
-        $user->delete();
-
-        return redirect()->route('getUser')->with('message', 'User deleted successfully');
     }
 
     // Show the email verification notice
@@ -249,7 +165,7 @@ class AuthController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:6|confirmed',
         ]);
 
         $status = Password::reset(

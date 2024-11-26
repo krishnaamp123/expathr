@@ -21,7 +21,7 @@ class EducationController extends Controller
         $validated = $request->validate([
             'university' => 'required|string|max:255',
             'degree' => 'required|string|max:255',
-            'major' => 'required|string|max:15',
+            'major' => 'required|string|max:255',
             'start_date' => 'required',
             'end_date' => 'required',
         ]);
@@ -54,7 +54,7 @@ class EducationController extends Controller
         $validated = $request->validate([
             'university' => 'required|string|max:255',
             'degree' => 'required|string|max:255',
-            'major' => 'required|string|max:15',
+            'major' => 'required|string|max:255',
             'start_date' => 'required',
             'end_date' => 'required',
         ]);
