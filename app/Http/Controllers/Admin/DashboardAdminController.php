@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class DashboardAdminController extends Controller
 {
-    public function getAdmin()
+    public function getDashboardAdmin()
     {
         return view('admin.layout.app');
     }

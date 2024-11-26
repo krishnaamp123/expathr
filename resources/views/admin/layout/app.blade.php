@@ -302,6 +302,17 @@
                             </a>
                         </li>
 
+                        @auth
+                            <li class="nav-item">
+                                <form id="logout-form" action="{{ route('postLogout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                                <a class="nav-link" href="{{ route('postLogout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </a>
+                            </li>
+                        @endauth
+
                     </ul>
 
                 </nav>

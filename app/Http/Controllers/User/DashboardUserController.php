@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class DashboardUserController extends Controller
 {
-    public function getTest()
+    public function getDashboardUser()
     {
         return view('user.dashboard');
     }
