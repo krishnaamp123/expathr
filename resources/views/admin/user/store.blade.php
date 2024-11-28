@@ -90,7 +90,7 @@
 
                         <div class="form-group">
                             <label>Birth Date</label>
-                            <input type="date" name="birth_date" class="form-control">
+                            <input type="text" name="birth_date" class="form-control datepicker datepicker-input">
                             @error('birth_date')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -124,7 +124,7 @@
 
                         <div class="form-group">
                             <label>Email Verified</label>
-                            <input type="date" name="email_verified_at" class="form-control">
+                            <input type="text" name="email_verified_at" class="form-control datepicker datepicker-input">
                             @error('email_verified_at')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

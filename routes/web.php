@@ -18,6 +18,10 @@ use App\Http\Controllers\User\ExperienceController;
 use App\Http\Controllers\User\CertificationController;
 use App\Http\Controllers\User\SkillController;
 use App\Http\Controllers\Admin\UserAdminController;
+use App\Http\Controllers\Admin\QuestionAdminController;
+use App\Http\Controllers\Admin\HrJobCategoryAdminController;
+use App\Http\Controllers\Admin\HrJobAdminController;
+use App\Http\Controllers\Admin\FormAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -150,6 +154,37 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/user/destroy/{id}', [UserAdminController::class, 'destroyUser'])->name('destroyUser');
             Route::get('/user/{id}/pdf', [UserAdminController::class, 'generatePdf'])->name('profile.pdf');
 
+            // QUESTION
+            Route::get('/question', [QuestionAdminController::class, 'getQuestion'])->name('getQuestion');
+            Route::get('/question/create', [QuestionAdminController::class, 'addQuestion'])->name('addQuestion');
+            Route::post('/question/create', [QuestionAdminController::class, 'storeQuestion'])->name('storeQuestion');
+            Route::get('/question/update/{id}', [QuestionAdminController::class, 'editQuestion'])->name('editQuestion');
+            Route::put('/question/update/{id}', [QuestionAdminController::class, 'updateQuestion'])->name('updateQuestion');
+            Route::delete('/question/destroy/{id}', [QuestionAdminController::class, 'destroyQuestion'])->name('destroyQuestion');
+
+            // JOB CATEGORY
+            Route::get('/jobcategory', [HrjobCategoryAdminController::class, 'getHrjobCategory'])->name('getHrjobCategory');
+            Route::get('/jobcategory/create', [HrjobCategoryAdminController::class, 'addHrjobCategory'])->name('addHrjobCategory');
+            Route::post('/jobcategory/create', [HrjobCategoryAdminController::class, 'storeHrjobCategory'])->name('storeHrjobCategory');
+            Route::get('/jobcategory/update/{id}', [HrjobCategoryAdminController::class, 'editHrjobCategory'])->name('editHrjobCategory');
+            Route::put('/jobcategory/update/{id}', [HrjobCategoryAdminController::class, 'updateHrjobCategory'])->name('updateHrjobCategory');
+            Route::delete('/jobcategory/destroy/{id}', [HrjobCategoryAdminController::class, 'destroyHrjobCategory'])->name('destroyHrjobCategory');
+
+            // JOB
+            Route::get('/job', [HrjobAdminController::class, 'getHrjob'])->name('getHrjob');
+            Route::get('/job/create', [HrjobAdminController::class, 'addHrjob'])->name('addHrjob');
+            Route::post('/job/create', [HrjobAdminController::class, 'storeHrjob'])->name('storeHrjob');
+            Route::get('/job/update/{id}', [HrjobAdminController::class, 'editHrjob'])->name('editHrjob');
+            Route::put('/job/update/{id}', [HrjobAdminController::class, 'updateHrjob'])->name('updateHrjob');
+            Route::delete('/job/destroy/{id}', [HrjobAdminController::class, 'destroyHrjob'])->name('destroyHrjob');
+
+            // FORM
+            Route::get('/form', [FormAdminController::class, 'getForm'])->name('getForm');
+            Route::get('/form/create', [FormAdminController::class, 'addForm'])->name('addForm');
+            Route::post('/form/create', [FormAdminController::class, 'storeForm'])->name('storeForm');
+            Route::get('/form/update/{id}', [FormAdminController::class, 'editForm'])->name('editForm');
+            Route::put('/form/update/{id}', [FormAdminController::class, 'updateForm'])->name('updateForm');
+            Route::delete('/form/destroy/{id}', [FormAdminController::class, 'destroyForm'])->name('destroyForm');
 
         });
     });

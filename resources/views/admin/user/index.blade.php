@@ -13,7 +13,7 @@
       </div>
     @endif
 
-    <p class="mb-3">Master data user retail app</p>
+    <p class="mb-3">Master data user</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">

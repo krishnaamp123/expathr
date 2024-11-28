@@ -199,6 +199,10 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
+            <div class="sidebar-heading">
+                Master
+            </div>
+
             <li class="nav-item {{ Request::routeIs('getUser') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getUser') }}">
                     <i class="fas fa-fw fa-user"></i>
@@ -206,17 +210,42 @@
                 </a>
             </li>
 
-            {{-- <!-- Heading -->
-            <div class="sidebar-heading">
-                Master
-            </div>
-
-            <li class="nav-item {{ Request::routeIs('getCompany') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getCompany') }}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Company</span>
+            <li class="nav-item {{ Request::routeIs('getHrjobCategory') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getHrjobCategory') }}">
+                    <i class="fas fa-fw fa-cubes "></i>
+                    <span>Job Category</span>
                 </a>
             </li>
+
+            <li class="nav-item {{ Request::routeIs('getQuestion') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getQuestion') }}">
+                    <i class="fas fa-fw fa-question-circle "></i>
+                    <span>Question</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ Request::routeIs('getHrjob') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getHrjob') }}">
+                    <i class="fas fa-fw fa-suitcase"></i>
+                    <span>Job</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ Request::routeIs('getForm') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getForm') }}">
+                    <i class="fas fa-fw fa-clipboard "></i>
+                    <span>Form</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">
+                Main
+            </div>
+
+            {{-- <!-- Heading -->
 
             <li class="nav-item {{ Request::routeIs('getUser') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getUser') }}">
@@ -239,8 +268,6 @@
                 </a>
             </li> --}}
 
-             <!-- Divider -->
-             <hr class="sidebar-divider">
 
              {{-- <!-- Heading -->
              <div class="sidebar-heading">
