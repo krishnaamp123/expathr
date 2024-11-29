@@ -164,7 +164,7 @@ class HrjobAdminController extends Controller
 
         $hrjob->save();
 
-        return redirect()->route('getHrjob')->with('message', 'Job Category Updated Successfully');
+        return redirect()->route('getHrjob')->with('message', 'Job Updated Successfully');
     }
 
     public function destroyHrjob($id)
@@ -173,7 +173,7 @@ class HrjobAdminController extends Controller
 
         $hrjob->delete();
 
-        return redirect()->route('getHrjob')->with('message', 'Job Category deleted successfully');
+        return redirect()->route('getHrjob')->with('message', 'Job deleted successfully');
     }
 
     function generateRandomString($length = 30)

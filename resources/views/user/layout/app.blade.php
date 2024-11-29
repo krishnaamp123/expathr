@@ -129,6 +129,7 @@
                             <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                             <li class="nav-item"><a class="nav-link" href="#store">Store</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('getTeam') }}">Team</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('getVacancy') }}">Vacancy</a></li>
                             @auth
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('getProfile') }}">
@@ -136,11 +137,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <form id="logout-form" action="{{ route('postLogout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                                <a class="nav-link" href="{{ route('postLogout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt" style="color: #fff;"> Logout</i>
                                 </a>
                             </li>
                         @endauth
@@ -168,6 +166,31 @@
                     </div>
                 </div>
             </footer>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+                            <button class="close" style="color: white" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <form id="logout-form" action="{{ route('postLogout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Bootstrap core JS-->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->

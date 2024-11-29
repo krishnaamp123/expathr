@@ -24,7 +24,7 @@
   --white: #fff;
   --gray: #858796;
   --gray-dark: #5a5c69;
-  --primary: #4e73df;
+  --primary: #72A28A;
   --secondary: #858796;
   --success: #1cc88a;
   --info: #36b9cc;
@@ -2357,21 +2357,21 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #72A28A;
+  border-color: #72A28A;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+  background-color: #658f7a;
+  border-color: #658f7a;
 }
 
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
-  box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
+  background-color: #658f7a;
+  border-color: #658f7a;
+  box-shadow: 0 0 0 0.2rem rgba(101, 143, 122, 0.5);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -2909,7 +2909,7 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #4e73df;
+  color: #72A28A;
   text-decoration: none;
 }
 
@@ -4070,6 +4070,17 @@ input[type="button"].btn-block {
   border-top-right-radius: 0;
 }
 
+.custom-nav .nav-link {
+    background-color: #fff; /* Warna latar belakang */
+    color: #72A28A; /* Warna teks */
+    font-size: 1rem; /* Ukuran font */
+    padding: 2px; /* Padding */
+}
+
+.custom-nav .nav-link:hover {
+    color: #658f7a;
+}
+
 .nav-pills .nav-link {
   border-radius: 0.35rem;
 }
@@ -4077,7 +4088,7 @@ input[type="button"].btn-block {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #4e73df;
+  background-color: #72A28A;
 }
 
 .nav-fill > .nav-link,
@@ -10406,7 +10417,7 @@ a:focus {
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-item.active,
 .sidebar .nav-item .collapsing .collapse-inner .collapse-item.active {
-  color: #4e73df;
+  color: #72A28A;
   font-weight: 700;
 }
 

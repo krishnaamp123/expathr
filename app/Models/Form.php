@@ -23,4 +23,9 @@ class Form extends Model
     {
         return $this->belongsTo(Question::class, 'id_question');
     }
+
+    public function answer()
+    {
+        return $this->hasMany(Answer::class, 'id_user');
+    }
 }

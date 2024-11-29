@@ -3,7 +3,7 @@
 @section('content')
     <h1 class="h3 mb-2 text-gray-800">Job</h1>
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Job Form</h6>
@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label>Job Type</label>
                             <select name="job_type" class="form-control select2">
-                                <option value="">Select job_type</option>
+                                <option value="">Select Job Type</option>
                                 <option value="full_time" {{ old('job_type', $hrjob->job_type) == 'full_time' ? 'selected' : '' }}>Full Time</option>
                                 <option value="part_time" {{ old('job_type', $hrjob->job_type) == 'part_time' ? 'selected' : '' }}>Part Time</option>
                                 <option value="self_employed" {{ old('job_type', $hrjob->job_type) == 'self_employed' ? 'selected' : '' }}>Self Employed</option>

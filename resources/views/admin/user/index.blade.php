@@ -64,8 +64,8 @@
                             <td>{{$row->phone}}</td>
                             <td>{{$row->address}}</td>
                             <td>{{$row->birth_date}}</td>
-                            <td>{{$row->gender}}</td>
-                            <td>{{$row->role}}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $row->gender)) }}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $row->role)) }}</td>
                             <td>{{$row->email_verified_at}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>

@@ -18,7 +18,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{{asset('template-admin/css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link href="{{asset('template-admin/css/sb-admin-2.css')}}" rel="stylesheet">
 
     <!-- Custom styles for this page -->
     <link href="{{asset('template-admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
@@ -245,77 +245,22 @@
                 Main
             </div>
 
-            {{-- <!-- Heading -->
-
-            <li class="nav-item {{ Request::routeIs('getUser') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getUser') }}">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>User</span>
+            <li class="nav-item {{ Request::routeIs('getUserHrjob') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getUserHrjob') }}">
+                    <i class="fas fa-fw fa-handshake"></i>
+                    <span>User Job</span>
                 </a>
             </li>
 
-            <li class="nav-item {{ Request::routeIs('getPackaging') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getPackaging') }}">
-                    <i class="fas fa-fw fa-box"></i>
-                    <span>Packaging</span>
+            <li class="nav-item {{ Request::routeIs('getAnswer') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getAnswer') }}">
+                    <i class="fas fa-fw fa-handshake"></i>
+                    <span>Answer</span>
                 </a>
             </li>
-
-            <li class="nav-item {{ Request::routeIs('getProduct') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getProduct') }}">
-                    <i class="fas fa-fw fa-shopping-bag"></i>
-                    <span>Product</span>
-                </a>
-            </li> --}}
-
-
-             {{-- <!-- Heading -->
-             <div class="sidebar-heading">
-                 Main
-             </div>
-
-             <li class="nav-item {{ Request::routeIs('getCustomerProduct') ? 'active' : '' }}">
-                 <a class="nav-link" href="{{ route('getCustomerProduct') }}">
-                     <i class="fas fa-fw fa-tags"></i>
-                     <span>CustomerProduct</span>
-                 </a>
-             </li>
-
-             <li class="nav-item {{ Request::routeIs('getComplaint') ? 'active' : '' }}">
-                 <a class="nav-link" href="{{ route('getComplaint') }}">
-                     <i class="fas fa-fw fa-exclamation-triangle"></i>
-                     <span>Complaint</span>
-                 </a>
-             </li>
-
-             <li class="nav-item {{ Request::routeIs('getOrder') ? 'active' : '' }}">
-                 <a class="nav-link" href="{{ route('getOrder') }}">
-                     <i class="fas fa-fw fa-credit-card"></i>
-                     <span>Order</span>
-                 </a>
-             </li> --}}
 
              <!-- Divider -->
              <hr class="sidebar-divider">
-
-             {{-- <!-- Heading -->
-             <div class="sidebar-heading">
-                 Supermarket
-             </div>
-
-             <li class="nav-item {{ Request::routeIs('getStock') ? 'active' : '' }}">
-                 <a class="nav-link" href="{{ route('getStock') }}">
-                     <i class="fas fa-fw fa-cubes"></i>
-                     <span>Stock</span>
-                 </a>
-             </li>
-
-             <li class="nav-item {{ Request::routeIs('getDetailStock') ? 'active' : '' }}">
-                 <a class="nav-link" href="{{ route('getDetailStock') }}">
-                     <i class="fas fa-fw fa-history"></i>
-                     <span>Detail Stock</span>
-                 </a>
-             </li> --}}
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -338,34 +283,21 @@
                 <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow" style="background-color: #fff; color: black;" >
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <form class="form-inline">
+                    <div class="form-inline">
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
-                    </form>
+                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{ asset('storage/image/adminicon.png') }}">
-                            </a>
-                        </li>
-
                         @auth
                             <li class="nav-item">
-                                <form id="logout-form" action="{{ route('postLogout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                                <a class="nav-link" href="{{ route('postLogout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt"></i>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt" style="color: #5a5c69;"> Logout</i>
                                 </a>
                             </li>
                         @endauth
@@ -406,20 +338,24 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">
+                    Select "Logout" below if you are ready to end your current session.
+                </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form id="logout-form" action="{{ route('postLogout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </form>
                 </div>
             </div>
         </div>

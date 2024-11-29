@@ -59,12 +59,12 @@
                             </td>
                             <td>{{$row->category->category_name ?? 'No Category'}}</td>
                             <td>{{$row->job_name}}</td>
-                            <td>{{$row->job_type}}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $row->job_type)) }}</td>
                             <td>{{$row->job_report}}</td>
-                            <td>{{$row->price}}</td>
+                            <td data-job="{{ $row->price }}">Rp {{ number_format($row->price, 0, ',', '.') }}</td>
                             <td>{{$row->description}}</td>
                             <td>{{$row->qualification}}</td>
-                            <td>{{$row->location_type}}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td>
                             <td>{{$row->location}}</td>
                             <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>

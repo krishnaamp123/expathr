@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Admin\DashboardAdminController;
+// USER
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\ProfileUserController;
 use App\Http\Controllers\User\WorkLocationController;
@@ -17,11 +17,16 @@ use App\Http\Controllers\User\VolunteerController;
 use App\Http\Controllers\User\ExperienceController;
 use App\Http\Controllers\User\CertificationController;
 use App\Http\Controllers\User\SkillController;
+use App\Http\Controllers\User\VacancyController;
+// ADMIN
+use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\QuestionAdminController;
 use App\Http\Controllers\Admin\HrJobCategoryAdminController;
 use App\Http\Controllers\Admin\HrJobAdminController;
 use App\Http\Controllers\Admin\FormAdminController;
+use App\Http\Controllers\Admin\UserHrjobAdminController;
+use App\Http\Controllers\Admin\AnswerAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -139,6 +144,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/profile/skill/edit/{id}', [SkillController::class, 'editSkill'])->name('editSkill');
             Route::put('/profile/skill/update/{id}', [SkillController::class, 'updateSkill'])->name('updateSkill');
             Route::delete('/profile/skill/destroy/{id}', [SkillController::class, 'destroySkill'])->name('destroySkill');
+
+            //SKILL
+            Route::get('/user/job/get', [VacancyController::class, 'getVacancy'])->name('getVacancy');
+            Route::get('/user/job/add', [VacancyController::class, 'addVacancy'])->name('addVacancy');
+            Route::post('/user/job/store', [VacancyController::class, 'storeVacancy'])->name('storeVacancy');
+            Route::delete('/user/job/destroy/{id}', [VacancyController::class, 'destroyVacancy'])->name('destroyVacancy');
         });
 
 
@@ -185,6 +196,22 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/form/update/{id}', [FormAdminController::class, 'editForm'])->name('editForm');
             Route::put('/form/update/{id}', [FormAdminController::class, 'updateForm'])->name('updateForm');
             Route::delete('/form/destroy/{id}', [FormAdminController::class, 'destroyForm'])->name('destroyForm');
+
+            // USERHRJOB
+            Route::get('/userjob', [UserHrjobAdminController::class, 'getUserHrjob'])->name('getUserHrjob');
+            Route::get('/userjob/create', [UserHrjobAdminController::class, 'addUserHrjob'])->name('addUserHrjob');
+            Route::post('/userjob/create', [UserHrjobAdminController::class, 'storeUserHrjob'])->name('storeUserHrjob');
+            Route::get('/userjob/update/{id}', [UserHrjobAdminController::class, 'editUserHrjob'])->name('editUserHrjob');
+            Route::put('/userjob/update/{id}', [UserHrjobAdminController::class, 'updateUserHrjob'])->name('updateUserHrjob');
+            Route::delete('/userjob/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjob'])->name('destroyUserHrjob');
+
+            // ANSWER
+            Route::get('/answer', [AnswerAdminController::class, 'getAnswer'])->name('getAnswer');
+            Route::get('/answer/create', [AnswerAdminController::class, 'addAnswer'])->name('addAnswer');
+            Route::post('/answer/create', [AnswerAdminController::class, 'storeAnswer'])->name('storeAnswer');
+            Route::get('/answer/update/{id}', [AnswerAdminController::class, 'editAnswer'])->name('editAnswer');
+            Route::put('/answer/update/{id}', [AnswerAdminController::class, 'updateAnswer'])->name('updateAnswer');
+            Route::delete('/answer/destroy/{id}', [AnswerAdminController::class, 'destroyAnswer'])->name('destroyAnswer');
 
         });
     });
