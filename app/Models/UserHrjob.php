@@ -26,4 +26,9 @@ class UserHrjob extends Model
     {
         return $this->belongsTo(Hrjob::class, 'id_job');
     }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class, 'id_user_job');
+    }
 }

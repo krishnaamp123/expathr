@@ -110,6 +110,63 @@
                     opacity: 1;
                 }
 
+                .container.d-flex {
+                    display: flex;
+                    flex-direction: row;
+                }
+
+                .filter-section {
+                    flex: 0 0 20%; /* Atur lebar sidebar */
+                    max-width: 20%;
+                }
+
+                .content-section {
+                    flex: 1; /* Ambil sisa ruang */
+                    text-align: left;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .custom-nav {
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    padding: 10px;
+                }
+
+                .custom-nav .nav-item {
+                    margin-bottom: 5px;
+                }
+
+                .custom-nav .nav-link {
+                    color: #fff;
+                    text-align: left;
+                    padding: 8px 15px;
+                    border: 1px solid transparent;
+                    border-radius: 4px;
+                }
+
+                .custom-nav .nav-link.active {
+                    background-color: #72A28A;
+                    color: white;
+                    border-color: #72A28A;
+                }
+
+                @media (max-width: 768px) {
+                .container.d-flex {
+                    flex-direction: column;
+                }
+
+                .filter-section {
+                    max-width: 100%;
+                    flex: none;
+                    margin-bottom: 15px;
+                }
+
+                .content-section {
+                    max-width: 100%;
+                }
+            }
+
 
             </style>
 
@@ -130,6 +187,7 @@
                             <li class="nav-item"><a class="nav-link" href="#store">Store</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('getTeam') }}">Team</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('getVacancy') }}">Vacancy</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('getMyVacancy') }}">My Vacancy</a></li>
                             @auth
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('getProfile') }}">
@@ -200,14 +258,6 @@
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-            <script>
-                $(document).ready(function() {
-                    $('.select2').select2({
-                        placeholder: "Select",
-                        allowClear: false
-                    });
-                });
-            </script>
 
             <!-- Bootstrap Datepicker JS -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -234,6 +284,18 @@
                     $('.datepicker').on('changeDate', function (e) {
                         var formattedDate = e.format('yyyy-mm-dd');
                         $(this).val(formattedDate); // Update the input field value with the correct format
+                    });
+                });
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    $('.select2').each(function () {
+                        $(this).select2({
+                            placeholder: "Select an option",
+                            allowClear: false,
+                            dropdownParent: $(this).closest('.modal')
+                        });
                     });
                 });
             </script>

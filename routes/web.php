@@ -145,11 +145,12 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/profile/skill/update/{id}', [SkillController::class, 'updateSkill'])->name('updateSkill');
             Route::delete('/profile/skill/destroy/{id}', [SkillController::class, 'destroySkill'])->name('destroySkill');
 
-            //SKILL
+            //VACANCY
             Route::get('/user/job/get', [VacancyController::class, 'getVacancy'])->name('getVacancy');
-            Route::get('/user/job/add', [VacancyController::class, 'addVacancy'])->name('addVacancy');
             Route::post('/user/job/store', [VacancyController::class, 'storeVacancy'])->name('storeVacancy');
             Route::delete('/user/job/destroy/{id}', [VacancyController::class, 'destroyVacancy'])->name('destroyVacancy');
+            Route::get('/user/myjob/get', [VacancyController::class, 'getMyVacancy'])->name('getMyVacancy');
+            Route::post('/user/myjob/store-answers', [VacancyController::class, 'storeMyAnswer'])->name('storeMyAnswer');
         });
 
 

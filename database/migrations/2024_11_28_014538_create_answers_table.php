@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_user_job')->references('id')->on('user_hrjobs');
-            $table->foreign('id_form')->references('id')->on('forms');
+            $table->foreign('id_form')->references('id')->on('forms')->onDelete('cascade');
         });
     }
 
