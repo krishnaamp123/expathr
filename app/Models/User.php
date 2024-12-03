@@ -100,6 +100,16 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany(Volunteer::class, 'id_user');
     }
 
+    public function userHrjobs()
+    {
+        return $this->hasMany(UserHrjob::class, 'id_user');
+    }
+
+    public function hasAppliedFor($jobId)
+    {
+        return $this->userHrjobs()->where('id_job', $jobId)->exists();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

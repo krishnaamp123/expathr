@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\HrJobAdminController;
 use App\Http\Controllers\Admin\FormAdminController;
 use App\Http\Controllers\Admin\UserHrjobAdminController;
 use App\Http\Controllers\Admin\AnswerAdminController;
+use App\Http\Controllers\Admin\InterviewAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -54,7 +55,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['verified'])->group(function () {
         Route::middleware(['applicant'])->group(function () {
             Route::get('/dashboarduser', [DashboardUserController::class, 'getDashboardUser'])->name('getDashboardUser');
-            Route::get('/team', [DashboardUserController::class, 'getTeam'])->name('getTeam');
 
             //PROFILE USER
             Route::get('/profile', [ProfileUserController::class, 'getProfile'])->name('getProfile');
@@ -213,6 +213,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/answer/update/{id}', [AnswerAdminController::class, 'editAnswer'])->name('editAnswer');
             Route::put('/answer/update/{id}', [AnswerAdminController::class, 'updateAnswer'])->name('updateAnswer');
             Route::delete('/answer/destroy/{id}', [AnswerAdminController::class, 'destroyAnswer'])->name('destroyAnswer');
+
+            // INTERVIEW
+            Route::get('/interview', [InterviewAdminController::class, 'getInterview'])->name('getInterview');
+            Route::get('/interview/create', [InterviewAdminController::class, 'addInterview'])->name('addInterview');
+            Route::post('/interview/create', [InterviewAdminController::class, 'storeInterview'])->name('storeInterview');
+            Route::get('/interview/update/{id}', [InterviewAdminController::class, 'editInterview'])->name('editInterview');
+            Route::put('/interview/update/{id}', [InterviewAdminController::class, 'updateInterview'])->name('updateInterview');
+            Route::delete('/interview/destroy/{id}', [InterviewAdminController::class, 'destroyInterview'])->name('destroyInterview');
 
         });
     });

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('hrjobs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_category');
+            $table->unsignedBigInteger('id_city');
             $table->string('job_name');
             $table->string('job_image')->nullable();
             $table->enum('job_type',['full_time','part_time','self_employed','freelancer','contract','internship','seasonal']);
@@ -22,7 +23,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('qualification')->nullable();
             $table->enum('location_type',['on_site','hybrid','remote']);
-            $table->string('location');
             $table->string('experience_min');
             $table->string('education_min');
             $table->date('expired');
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_category')->references('id')->on('hrjob_categories');
+            $table->foreign('id_city')->references('id')->on('cities');
         });
     }
 

@@ -6,26 +6,29 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Hrjob;
 use App\Models\HrjobCategory;
+use App\Models\City;
 use Illuminate\Support\Facades\Storage;
 
 class HrjobAdminController extends Controller
 {
     public function getHrjob()
     {
-        $hrjobs = Hrjob::with('category')->get();
+        $hrjobs = Hrjob::with('category', 'city')->get();
         return view('admin.hrjob.index', compact('hrjobs'));
     }
 
     public function addHrjob()
     {
         $hrjobcategories = HrjobCategory::all();
-        return view('admin.hrjob.store', compact('hrjobcategories'));
+        $cities = City::all();
+        return view('admin.hrjob.store', compact('hrjobcategories', 'cities'));
     }
 
     public function storeHrjob(Request $request)
     {
         $validated = $request->validate([
             'id_category' => 'required|exists:hrjob_categories,id',
+            'id_city' => 'required|exists:cities,id',
             'job_name' => 'required|string|max:255',
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
             'job_report' => 'nullable|string|max:1000',
@@ -33,7 +36,6 @@ class HrjobAdminController extends Controller
             'description' => 'nullable|string|max:1000',
             'qualification' => 'nullable|string|max:1000',
             'location_type' => 'required|in:on_site,hybrid,remote',
-            'location' => 'required|string|max:255',
             'experience_min' => 'required|string|max:255',
             'education_min' => 'required|string|max:255',
             'expired' => 'required',
@@ -68,6 +70,7 @@ class HrjobAdminController extends Controller
         }
 
         $hrjob->id_category = $validated['id_category'];
+        $hrjob->id_city = $validated['id_city'];
         $hrjob->job_name = $validated['job_name'];
         $hrjob->job_type = $validated['job_type'];
         $hrjob->job_report = $validated['job_report'];
@@ -75,7 +78,6 @@ class HrjobAdminController extends Controller
         $hrjob->description = $validated['description'];
         $hrjob->qualification = $validated['qualification'];
         $hrjob->location_type = $validated['location_type'];
-        $hrjob->location = $validated['location'];
         $hrjob->experience_min = $validated['experience_min'];
         $hrjob->education_min = $validated['education_min'];
         $hrjob->expired = $validated['expired'];
@@ -91,8 +93,9 @@ class HrjobAdminController extends Controller
     {
         $hrjob = Hrjob::findOrFail($id);
         $hrjobcategories = HrjobCategory::all();
+        $cities = City::all();
 
-        return view('admin.hrjob.update', compact('hrjob', 'hrjobcategories'));
+        return view('admin.hrjob.update', compact('hrjob', 'hrjobcategories', 'cities'));
     }
 
     public function updateHrjob(Request $request, $id)
@@ -101,6 +104,7 @@ class HrjobAdminController extends Controller
 
         $validated = $request->validate([
             'id_category' => 'required|exists:hrjob_categories,id',
+            'id_city' => 'required|exists:cities,id',
             'job_name' => 'required|string|max:255',
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
             'job_report' => 'nullable|string|max:1000',
@@ -108,7 +112,6 @@ class HrjobAdminController extends Controller
             'description' => 'nullable|string|max:1000',
             'qualification' => 'nullable|string|max:1000',
             'location_type' => 'required|in:on_site,hybrid,remote',
-            'location' => 'required|string|max:255',
             'experience_min' => 'required|string|max:255',
             'education_min' => 'required|string|max:255',
             'expired' => 'required',
@@ -148,6 +151,7 @@ class HrjobAdminController extends Controller
         }
 
         $hrjob->id_category = $validated['id_category'];
+        $hrjob->id_city = $validated['id_city'];
         $hrjob->job_name = $validated['job_name'];
         $hrjob->job_type = $validated['job_type'];
         $hrjob->job_report = $validated['job_report'];
@@ -155,7 +159,6 @@ class HrjobAdminController extends Controller
         $hrjob->description = $validated['description'];
         $hrjob->qualification = $validated['qualification'];
         $hrjob->location_type = $validated['location_type'];
-        $hrjob->location = $validated['location'];
         $hrjob->experience_min = $validated['experience_min'];
         $hrjob->education_min = $validated['education_min'];
         $hrjob->expired = $validated['expired'];

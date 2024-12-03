@@ -104,8 +104,13 @@
 
                         <div class="form-group">
                             <label>Location</label>
-                            <input type="text" name="location" class="form-control">
-                            @error('location')
+                            <select name="id_city" class="form-control select2">
+                                <option value="">Select Location</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->city_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_city')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

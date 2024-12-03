@@ -13,8 +13,8 @@
                 </button>
             </div>
         @endif
-        <h2 class="section-heading text-uppercase">My Job Vacancy</h2>
-        <h3 class="section-subheading">Here are our latest job userhrjobs!</h3>
+        <h2 class="section-heading text-uppercase">My Job</h2>
+        <h3 class="section-subheading mb-5">Here are all your applications!</h3>
     </div>
     <div class="container d-flex">
         <!-- Filter Status (Kiri) -->
@@ -37,9 +37,9 @@
                 @foreach ($userhrjobs as $vacancy)
                     <div class="col-lg-6 mb-4">
                         <div class="portfolio-item">
-                            <a class="portfolio-link {{ $vacancy->status === 'applicant' ? '' : 'disabled' }}"
+                            <a class="portfolio-link {{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '' : 'disabled' }}"
                                data-bs-toggle="modal"
-                               href="{{ $vacancy->status === 'applicant' ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'shortlist' ? '#shortlistModal' . $vacancy->id : '#') }}">
+                               href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : '#' }}">
                                  <div class="portfolio-hover">
                                      <div class="portfolio-hover-content"></div>
                                  </div>
@@ -54,7 +54,7 @@
                                         <div class="portfolio-caption-price">Rp {{ number_format($vacancy->hrjob->price, 0, ',', '.') }}</div>
                                     </div>
                                 </div>
-                                <div class="portfolio-caption-location">{{ $vacancy->hrjob->location }}</div>
+                                <div class="portfolio-caption-location">{{ $vacancy->hrjob->city->city_name }}</div>
                                 <div class="row">
                                     <div class="col-6">
                                         <p class="kaem-jobtext text-muted mb-0">{{ $vacancy->hrjob->category->category_name ?? 'No Category' }}</p>
@@ -92,7 +92,6 @@
 
 @foreach ($userhrjobs as $vacancy)
     @if ($vacancy->status === 'applicant' && isset($formsByJob[$vacancy->id_job]))
-        <!-- Portfolio Modal for Applicant -->
         <div class="modal fade" id="portfolioModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -109,16 +108,16 @@
                             @foreach ($formsByJob[$vacancy->id_job] as $form)
                                 <div class="form-group">
                                     <label class="kaem-subheading" for="answer_{{ $form->id }}">{{ $form->question->question }}</label>
-                                    <input type="hidden" name="answers[{{ $loop->index }}][id_form]" value="{{ $form->id }}">
                                     <div class="form-check">
-                                        @foreach ([1 => 'Sangat Tidak Baik', 2 => 'Tidak Baik', 3 => 'Netral', 4 => 'Baik', 5 => 'Sangat Baik'] as $value => $label)
-                                            <div class="form-check form-check-inline">
+                                        @foreach ([5 => 'Sangat Baik', 4 => 'Baik', 3 => 'Netral', 2 => 'Tidak Baik', 1 => 'Sangat Tidak Baik'] as $value => $label)
+                                            <div class="form-check">
                                                 <input class="form-check-input"
                                                     type="radio"
                                                     id="answer_{{ $form->id }}_{{ $value }}"
-                                                    name="answers[{{ $loop->index }}][answer]"
+                                                    name="answers[{{ $loop->parent->index }}][answer]"
                                                     value="{{ $value }}"
                                                     required>
+                                                <input type="hidden" name="answers[{{ $loop->parent->index }}][id_form]" value="{{ $form->id }}">
                                                 <label class="form-check-label" for="answer_{{ $form->id }}_{{ $value }}">{{ $label }}</label>
                                             </div>
                                         @endforeach
@@ -154,7 +153,7 @@
                             </li>
                             <li class="d-flex align-items-center mb-1">
                                 <i class="fas fa-map-marker-alt" style="width: 20px;"></i>
-                                <span class="kaem-jobtext ms-2">{{ $vacancy->hrjob->location }}</span>
+                                <span class="kaem-jobtext ms-2">{{ $vacancy->hrjob->city->city_name  }}</span>
                             </li>
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Description :</strong>

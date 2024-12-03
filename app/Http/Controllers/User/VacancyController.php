@@ -16,8 +16,9 @@ class VacancyController extends Controller
 {
     public function getVacancy()
     {
-        $vacancies = Hrjob::with('category')
+        $vacancies = Hrjob::with('category', 'city')
                           ->where('is_active', 'yes')
+                          ->orderBy('created_at', 'desc')
                           ->get();
         return view('user.vacancy.index', compact('vacancies'));
     }
@@ -58,9 +59,18 @@ class VacancyController extends Controller
             'availability' => 'required|in:immediately,<1_month_notice,1_month_notice,>1_month_notice',
         ]);
 
+        $userId = auth()->id();
+        $jobId = $validated['id_job'];
+
+        // Cek apakah pengguna telah melamar pekerjaan ini
+        if (UserHrjob::hasApplied($userId, $jobId)) {
+            return redirect()->route('getVacancy')->with('message', 'You have already applied for this job.');
+        }
+
+        // Buat aplikasi baru jika belum melamar
         UserHrjob::create([
-            'id_user' => auth()->id(),
-            'id_job' => $validated['id_job'],
+            'id_user' => $userId,
+            'id_job' => $jobId,
             'salary_expectation' => $validated['salary_expectation'],
             'availability' => $validated['availability'],
         ]);
@@ -70,6 +80,7 @@ class VacancyController extends Controller
 
     public function storeMyAnswer(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'id_user_job' => 'required|exists:user_hrjobs,id',
             'answers.*.id_form' => 'required|exists:forms,id',

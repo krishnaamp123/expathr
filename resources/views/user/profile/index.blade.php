@@ -4,6 +4,18 @@
 @section('content')
 <section class="page-section">
     <div class="container">
+        <div class="text-center">
+            @if (session('message'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{session('message')}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
+            <h2 class="section-heading text-uppercase">Profile</h2>
+            <h3 class="section-subheading mb-5">Complete your profile first before applying!</h3>
+        </div>
         <div class="row">
             <!-- Include Profile Section -->
             <div class="col-lg-6 mb-3">

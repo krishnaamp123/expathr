@@ -14,13 +14,51 @@
                 </button>
             </div>
             @endif
-            <h2 class="section-heading text-uppercase">Job Vacancy</h2>
-            <h3 class="section-subheading">Here are our latest job vacancies!</h3>
+            <h2 class="section-heading text-uppercase">All Job</h2>
+            <h3 class="section-subheading">Here are all our job openings!</h3>
+            <h3 class="section-subheading-kaem mb-5">Make sure you have completed your profile first!</h3>
         </div>
+
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <label for="cityFilter" class="kaem-subheading">City</label>
+                <select id="cityFilter" class="form-control select2">
+                    <option value="">Select City</option>
+                    @foreach ($vacancies as $vacancy)
+                        @if ($vacancy->city)
+                            <option value="{{ $vacancy->city->id }}">{{ $vacancy->city->city_name }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3 mb-4">
+                <label for="categoryFilter" class="kaem-subheading">Category</label>
+                <select id="categoryFilter" class="form-control select2">
+                    <option value="">Select Category</option>
+                    @foreach ($vacancies as $vacancy)
+                        @if ($vacancy->category)
+                            <option value="{{ $vacancy->category->id }}">{{ $vacancy->category->category_name }}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6 mb-4">
+                <label for="searchBar" class="kaem-subheading">Search</label>
+                <div class="input-group-kaem">
+                    <!-- Ikon Pencarian -->
+                    <span class="input-icon-kaem">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <!-- Input Pencarian -->
+                    <input type="text" id="searchBar" class="form-control-kaem" placeholder="Search jobs...">
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             @foreach ($vacancies as $vacancy)
                 <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
+                    <div class="portfolio-item" data-city-id="{{ $vacancy->id_city }}" data-category-id="{{ $vacancy->id_category }}">
                         <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal{{ $vacancy->id }}">
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"></div>
@@ -50,7 +88,7 @@
                                     <div class="portfolio-caption-type">{{ $vacancy->experience_min }} Year</div>
                                 </div>
                             </div>
-                            <div class="portfolio-caption-location">{{ $vacancy->location }}</div>
+                            <div class="portfolio-caption-location">{{ $vacancy->city->city_name }}</div>
                             <div class="divider"></div>
                             <div class="portfolio-caption-date">Expired: {{ $vacancy->expired }}</div>
                         </div>
@@ -63,7 +101,6 @@
 
 <!-- Portfolio Modals -->
 @foreach ($vacancies as $vacancy)
-<!-- Modal Edit Work Location -->
 <div class="modal fade" id="portfolioModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -78,8 +115,17 @@
             <h2 class="kaem-jobtitle">{{ $vacancy->job_name }}</h2>
             <p class="kaem-jobtext text-muted">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
             <img class="img-fluid d-block mx-auto mb-3" src="{{ $vacancy->job_image ? asset($vacancy->job_image) : asset('storage/image/logopersegi.png') }}" alt="{{ $vacancy->job_name }}" />
-            <button class="btn btn-primary kaem-subheading mb-3" data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}">
-                Apply for Job
+            <button class="btn btn-primary kaem-subheading mb-3"
+                @if (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
+                    disabled
+                @else
+                    data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}"
+                @endif>
+                @if (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
+                    Already Applied
+                @else
+                    Apply for Job
+                @endif
             </button>
             <ul class="list-inline">
                 <li class="d-flex align-items-center mb-1">
@@ -88,7 +134,7 @@
                 </li>
                 <li class="d-flex align-items-center mb-1">
                     <i class="fas fa-map-marker-alt" style="width: 20px;"></i>
-                    <span class="kaem-jobtext ms-2">{{ ucwords(str_replace('_', ' ', $vacancy->location_type)) }} - {{ $vacancy->location }}</span>
+                    <span class="kaem-jobtext ms-2">{{ ucwords(str_replace('_', ' ', $vacancy->location_type)) }} - {{ $vacancy->city->city_name }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-1">
                     <i class="fas fa-graduation-cap" style="width: 20px;"></i>

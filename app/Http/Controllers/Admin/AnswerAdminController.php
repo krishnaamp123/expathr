@@ -14,7 +14,8 @@ class AnswerAdminController extends Controller
     public function getAnswer()
     {
         $answers = Answer::with('userHrjob', 'form')->get();
-        return view('admin.answer.index', compact('answers'));
+        $groupedAnswers = $answers->groupBy(['userhrjob.id', 'form.id']);
+        return view('admin.answer.index', compact('answers', 'groupedAnswers'));
     }
 
     public function addAnswer()

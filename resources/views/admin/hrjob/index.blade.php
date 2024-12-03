@@ -65,7 +65,7 @@
                             <td>{{$row->description}}</td>
                             <td>{{$row->qualification}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td>
-                            <td>{{$row->location}}</td>
+                            <td>{{$row->city->city_name ?? 'No City'}}</td>
                             <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>
                             <td>{{$row->expired}}</td>

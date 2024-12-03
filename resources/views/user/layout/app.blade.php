@@ -35,13 +35,13 @@
 
             <style>
                 .select2-container {
-                    z-index: 10000 !important;
+                    /* z-index: 10000 !important; */
                     width: 100% !important;
                 }
 
-                .select2-dropdown {
+                /* .select2-dropdown {
                     z-index: 99999;
-                }
+                } */
 
                 .select2-container .select2-selection--single {
                     height: 40px; /* Mengubah tinggi dari select */
@@ -182,15 +182,15 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarResponsive">
                         <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="#portfolio">Job</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#store">Store</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('getTeam') }}">Team</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('getVacancy') }}">Vacancy</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('getMyVacancy') }}">My Vacancy</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('getVacancy') ? 'active' : '' }}" href="{{ route('getVacancy') }}">Job</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('getMyVacancy') ? 'active' : '' }}" href="{{ route('getMyVacancy') }}">My Job</a>
+                            </li>
                             @auth
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('getProfile') }}">
+                                <a class="nav-link {{ request()->routeIs('getProfile') ? 'active' : '' }}" href="{{ route('getProfile') }}">
                                     <i class="fas fa-user"></i>
                                 </a>
                             </li>
@@ -298,32 +298,36 @@
                         });
                     });
                 });
-            </script>
-
-            {{-- <script>
                 $(document).ready(function () {
-                    $('#datepicker').datepicker({
-                        format: 'yyyy-mm-dd',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                    // Menambahkan gaya kustom ketika datepicker muncul
-                    $('#datepicker').on('show', function () {
-                        $('.datepicker').css({
-                            'background-color': '#fff',
-                            'color': '#72A28A',
-                            'border-radius': '8px'
-                        });
-                    });
-
-                    // Ensure the date is in the correct format before submitting
-                    $('#datepicker').on('changeDate', function (e) {
-                        var formattedDate = e.format('yyyy-mm-dd');
-                        $('#datepicker').val(formattedDate); // Update the input field value with the correct format
+                    $('#cityFilter, #categoryFilter').select2({
+                        placeholder: "Select an option",
+                        allowClear: false
                     });
                 });
-            </script> --}}
+            </script>
+
+                <script>
+                    $(document).ready(function () {
+                        // Filter and Search Functionality
+                        $('#cityFilter, #categoryFilter, #searchBar').on('change keyup', function () {
+                            const selectedCity = $('#cityFilter').val();
+                            const selectedCategory = $('#categoryFilter').val();
+                            const searchText = $('#searchBar').val().toLowerCase();
+
+                            $('.portfolio-item').each(function () {
+                                const cityId = $(this).data('city-id');
+                                const categoryId = $(this).data('category-id');
+                                const jobName = $(this).find('.portfolio-caption-heading').text().toLowerCase();
+
+                                const matchesCity = selectedCity === '' || cityId == selectedCity;
+                                const matchesCategory = selectedCategory === '' || categoryId == selectedCategory;
+                                const matchesSearch = searchText === '' || jobName.includes(searchText);
+
+                                $(this).toggle(matchesCity && matchesCategory && matchesSearch);
+                            });
+                        });
+                    });
+                </script>
             @yield('scripts')
         </body>
     </html>

@@ -254,8 +254,15 @@
 
             <li class="nav-item {{ Request::routeIs('getAnswer') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getAnswer') }}">
-                    <i class="fas fa-fw fa-handshake"></i>
+                    <i class="fas fa-fw fa-file"></i>
                     <span>Answer</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ Request::routeIs('getInterview') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getInterview') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Interview</span>
                 </a>
             </li>
 

@@ -13,6 +13,7 @@ class Hrjob extends Model
 
     protected $fillable = [
         'id_category',
+        'id_city',
         'job_name',
         'job_image',
         'job_type',
@@ -21,7 +22,6 @@ class Hrjob extends Model
         'description',
         'qualification',
         'location_type',
-        'location',
         'experience_min',
         'education_min',
         'expired',
@@ -32,5 +32,10 @@ class Hrjob extends Model
     public function category()
     {
         return $this->belongsTo(HrjobCategory::class, 'id_category');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'id_city');
     }
 }

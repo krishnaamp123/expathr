@@ -140,7 +140,6 @@
                                         <div class="text-success text-center">{{session('success')}}</div>
                                     @endif
                                     <p class="login-box-msg">Sign up to start your session</p>
-                                        {{-- <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1> --}}
                                     </div>
                                     <form class="user" action="{{ route('postRegister') }}" method="post">
                                     @csrf

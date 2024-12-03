@@ -31,4 +31,12 @@ class UserHrjob extends Model
     {
         return $this->hasMany(Answer::class, 'id_user_job');
     }
+
+    // Tambahkan metode untuk memeriksa apakah pengguna telah melamar pekerjaan tertentu
+    public static function hasApplied($userId, $jobId)
+    {
+        return self::where('id_user', $userId)
+                   ->where('id_job', $jobId)
+                   ->exists();
+    }
 }
