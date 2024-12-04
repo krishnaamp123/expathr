@@ -92,7 +92,8 @@ class AuthController extends Controller
                 'role' => $role,
             ]);
 
-            event(new Registered($user));
+            // event(new Registered($user));
+            $user->sendEmailVerificationNotification();
 
             auth()->login($user);
 
