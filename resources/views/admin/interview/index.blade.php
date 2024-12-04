@@ -32,6 +32,8 @@
                             <th>Time</th>
                             <th>Rating</th>
                             <th>Comment</th>
+                            <th>Location</th>
+                            <th>Link</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
@@ -47,14 +49,17 @@
                             <td>{{$row->time}}</td>
                             <td>{{$row->rating ?? 'No Rating'}}</td>
                             <td>{{$row->comment ?? 'No Comment'}}</td>
+                            <td>{{$row->location ?? 'No Location'}}</td>
+                            <td>{{$row->link ?? 'No Link'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
                                 <a href="{{ route('editInterview', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
+                                <a href="{{ route('editRating', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i> Rating</a>
                                 <form action="{{ route('destroyInterview', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i> Delete</button>
+                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i> Delete</button>
                                 </form>
                             </td>
                         </tr>

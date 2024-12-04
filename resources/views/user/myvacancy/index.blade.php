@@ -4,17 +4,19 @@
 @section('content')
 
 <section class="page-section" id="portfolio">
-    <div class="text-center">
-        @if (session('message'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('message') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-        <h2 class="section-heading text-uppercase">My Job</h2>
-        <h3 class="section-subheading mb-5">Here are all your applications!</h3>
+    <div class="container">
+        <div class="text-center">
+            @if (session('message'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('message') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+            <h2 class="section-heading text-uppercase">My Job</h2>
+            <h3 class="section-subheading mb-5">Here are all your applications!</h3>
+        </div>
     </div>
     <div class="container d-flex">
         <!-- Filter Status (Kiri) -->
@@ -37,14 +39,18 @@
                 @foreach ($userhrjobs as $vacancy)
                     <div class="col-lg-6 mb-4">
                         <div class="portfolio-item">
-                            <a class="portfolio-link {{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '' : 'disabled' }}"
-                               data-bs-toggle="modal"
-                               href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : '#' }}">
-                                 <div class="portfolio-hover">
-                                     <div class="portfolio-hover-content"></div>
-                                 </div>
-                                 <img class="img-fluid" src="{{ $vacancy->hrjob->job_image ? asset($vacancy->hrjob->job_image) : asset('storage/image/logopersegi.png') }}" alt="{{ $vacancy->hrjob->job_name }}" />
-                             </a>
+                             <a class="portfolio-link
+                                {{ ($vacancy->status === 'applicant' && $vacancy->answers->isEmpty()) || $vacancy->status === 'hr_interview' ? '' : 'disabled' }}"
+                                data-bs-toggle="modal"
+                                href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'hr_interview' ? '#hrinterviewModal' . $vacancy->id : '#') }}">
+
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"></div>
+                                </div>
+                                <img class="img-fluid"
+                                    src="{{ $vacancy->hrjob->job_image ? asset($vacancy->hrjob->job_image) : asset('storage/image/logopersegi.png') }}"
+                                    alt="{{ $vacancy->hrjob->job_name }}" />
+                            </a>
                             <div class="portfolio-caption">
                                 <div class="row">
                                     <div class="col-7">
@@ -110,7 +116,7 @@
                                     <label class="kaem-subheading" for="answer_{{ $form->id }}">{{ $form->question->question }}</label>
                                     <div class="form-check">
                                         @foreach ([5 => 'Sangat Baik', 4 => 'Baik', 3 => 'Netral', 2 => 'Tidak Baik', 1 => 'Sangat Tidak Baik'] as $value => $label)
-                                            <div class="form-check">
+                                            <div class="form-check kaem-text">
                                                 <input class="form-check-input"
                                                     type="radio"
                                                     id="answer_{{ $form->id }}_{{ $value }}"
@@ -130,37 +136,45 @@
                 </div>
             </div>
         </div>
-    @elseif ($vacancy->status === 'shortlist')
-        <!-- Portfolio Modal for Shortlist -->
-        <div class="modal fade" id="shortlistModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    @elseif ($vacancy->status === 'hr_interview')
+        <!-- Portfolio Modal for hrinterview -->
+        <div class="modal fade" id="hrinterviewModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Shortlisted Job</h5>
+                        <h5 class="modal-title">HR Interview</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    @foreach ($interviews as $interview)
                     <div class="modal-body">
-                        <!-- Job details for Shortlist -->
-                        <h2 class="kaem-jobtitle">{{ $vacancy->hrjob->job_name }}</h2>
-                        <p class="kaem-jobtext text-muted">{{ $vacancy->hrjob->category->category_name ?? 'No Category' }}</p>
-                        <img class="img-fluid d-block mx-auto mb-3" src="{{ $vacancy->hrjob->job_image ? asset($vacancy->hrjob->job_image) : asset('storage/image/logopersegi.png') }}" alt="{{ $vacancy->hrjob->job_name }}" />
+                        <!-- Job details for hrinterview -->
+                        {{-- <h2 class="kaem-jobtitle">{{ $interview->time }}</h2> --}}
                         <ul class="list-inline">
-                            <li class="d-flex align-items-center mb-1">
-                                <i class="fas fa-briefcase" style="width: 20px;"></i>
-                                <span class="kaem-jobtext ms-2">{{ ucwords(str_replace('_', ' ', $vacancy->hrjob->job_type)) }}</span>
-                            </li>
-                            <li class="d-flex align-items-center mb-1">
-                                <i class="fas fa-map-marker-alt" style="width: 20px;"></i>
-                                <span class="kaem-jobtext ms-2">{{ $vacancy->hrjob->city->city_name  }}</span>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Interviewer :</strong>
+                                <p>{{ $interview->user->fullname }}</p>
                             </li>
                             <li class="mb-2 kaem-jobtext">
-                                <strong>Description :</strong>
-                                <p>{{ $vacancy->hrjob->description }}</p>
+                                <strong>Applicant :</strong>
+                                <p>{{ $interview->userhrjob->user->fullname }}</p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Date | Time :</strong>
+                                <p>{{ $interview->interview_date }} | {{ $interview->time }} </p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Location :</strong>
+                                <p>{{ $interview->location ?? 'Please Wait For Location' }}</p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Link :</strong>
+                                <p>{{ $interview->link ?? 'Please Wait For Link'}}</p>
                             </li>
                         </ul>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>

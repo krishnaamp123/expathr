@@ -4,11 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\UserHrjob;
 use App\Models\Hrjob;
 use App\Models\HrjobCategory;
 use App\Models\Answer;
 use App\Models\Form;
+use App\Models\Interview;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,7 +50,15 @@ class VacancyController extends Controller
             'offering', 'rejected', 'hired'
         ];
 
-        return view('user.myvacancy.index', compact('userhrjobs', 'statuses', 'status', 'formsByJob'));
+        // Tambahkan logika untuk mendapatkan interviews
+        $userId = Auth::id();
+        $interviews = Interview::whereHas('userHrjob', function ($query) use ($userId) {
+                $query->where('id_user', $userId);
+            })
+            ->with('userHrjob.hrjob')
+            ->get();
+
+        return view('user.myvacancy.index', compact('userhrjobs', 'statuses', 'status', 'formsByJob', 'interviews'));
     }
 
     public function storeVacancy(Request $request)

@@ -24,10 +24,8 @@
                 <label for="cityFilter" class="kaem-subheading">City</label>
                 <select id="cityFilter" class="form-control select2">
                     <option value="">Select City</option>
-                    @foreach ($vacancies as $vacancy)
-                        @if ($vacancy->city)
-                            <option value="{{ $vacancy->city->id }}">{{ $vacancy->city->city_name }}</option>
-                        @endif
+                    @foreach ($vacancies->pluck('city')->unique('id')->filter() as $city)
+                        <option value="{{ $city->id }}">{{ $city->city_name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -35,10 +33,8 @@
                 <label for="categoryFilter" class="kaem-subheading">Category</label>
                 <select id="categoryFilter" class="form-control select2">
                     <option value="">Select Category</option>
-                    @foreach ($vacancies as $vacancy)
-                        @if ($vacancy->category)
-                            <option value="{{ $vacancy->category->id }}">{{ $vacancy->category->category_name }}</option>
-                        @endif
+                    @foreach ($vacancies->pluck('category')->unique('id')->filter() as $category)
+                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                     @endforeach
                 </select>
             </div>

@@ -11290,7 +11290,7 @@ header.masthead .masthead-heading {
   color: white;
   border: 7px solid #e9ecef;
   border-radius: 100%;
-  background-color: #ffc800;
+  background-color: #72A28A;
 }
 .timeline > li .timeline-image h4, .timeline > li .timeline-image .h4 {
   font-size: 10px;
@@ -11323,6 +11323,7 @@ header.masthead .masthead-heading {
 }
 .timeline .timeline-heading h4.subheading, .timeline .timeline-heading .subheading.h4 {
   text-transform: none;
+  color: #72A28A;
 }
 .timeline .timeline-body > ul,
 .timeline .timeline-body > p {

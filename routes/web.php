@@ -151,6 +151,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/user/job/destroy/{id}', [VacancyController::class, 'destroyVacancy'])->name('destroyVacancy');
             Route::get('/user/myjob/get', [VacancyController::class, 'getMyVacancy'])->name('getMyVacancy');
             Route::post('/user/myjob/store-answers', [VacancyController::class, 'storeMyAnswer'])->name('storeMyAnswer');
+            Route::get('/user/myjob/interview', [VacancyController::class, 'getIntervieww'])->name('getIntervieww');
         });
 
 
@@ -221,6 +222,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/interview/update/{id}', [InterviewAdminController::class, 'editInterview'])->name('editInterview');
             Route::put('/interview/update/{id}', [InterviewAdminController::class, 'updateInterview'])->name('updateInterview');
             Route::delete('/interview/destroy/{id}', [InterviewAdminController::class, 'destroyInterview'])->name('destroyInterview');
+            Route::get('/interview/update/rating/{id}', [InterviewAdminController::class, 'editRating'])->name('editRating');
+            Route::put('/interview/update/rating/{id}', [InterviewAdminController::class, 'updateRating'])->name('updateRating');
 
         });
     });

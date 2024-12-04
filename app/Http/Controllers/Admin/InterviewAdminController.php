@@ -32,6 +32,8 @@ class InterviewAdminController extends Controller
             'id_user' => 'required',
             'interview_date' => 'required',
             'time' => 'required',
+            'location' => 'nullable',
+            'link' => 'nullable',
         ]);
 
         Interview::create([
@@ -39,6 +41,8 @@ class InterviewAdminController extends Controller
             'id_user' => $request->id_user,
             'interview_date' => $request->interview_date,
             'time' => $request->time,
+            'location' => $request->location,
+            'link' => $request->link,
         ]);
 
         return redirect()->route('getInterview')->with('message', 'Data Added Successfully');
@@ -62,17 +66,46 @@ class InterviewAdminController extends Controller
             'id_user' => 'required',
             'interview_date' => 'required',
             'time' => 'required',
+            'location' => 'nullable',
+            'link' => 'nullable',
+
         ]);
 
         $interview->id_user_job = $request->id_user_job;
         $interview->id_user = $request->id_user;
         $interview->interview_date = $request->interview_date;
         $interview->time = $request->time;
+        $interview->location = $request->location;
+        $interview->link = $request->link;
 
         $interview->save();
 
         return redirect()->route('getInterview')->with('message', 'Interview Updated Successfully');
     }
+
+    public function editRating($id)
+    {
+        $interview = Interview::findOrFail($id);
+        return view('admin.interview.rating', compact('interview'));
+    }
+
+    public function updateRating(Request $request, $id)
+    {
+        $interview = Interview::findOrFail($id);
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $interview->rating = $validated['rating'];
+        $interview->comment = $validated['comment'];
+
+        $interview->save();
+
+        return redirect()->route('getInterview')->with('message', 'Rating Updated Successfully');
+    }
+
 
     public function destroyInterview($id)
     {

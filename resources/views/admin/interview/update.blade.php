@@ -60,6 +60,22 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" name="location" class="form-control" value="{{ old('location', $interview->location) }}">
+                            @error('location')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Link</label>
+                            <input type="text" name="link" class="form-control" value="{{ old('link', $interview->link) }}">
+                            @error('link')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Rating</label>
                             <input type="number" name="rating" class="form-control" value="{{ old('rating', $interview->rating) }}">
                             @error('rating')
