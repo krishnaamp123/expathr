@@ -75,6 +75,6 @@ class WorkLocationController extends Controller
         $workLocation = WorkLocation::findOrFail($id);
         $workLocation->delete();
 
-        return redirect()->back()->with('success', 'Work location deleted successfully.');
+        return redirect()->back()->with('message', 'Work location deleted successfully.');
     }
 }

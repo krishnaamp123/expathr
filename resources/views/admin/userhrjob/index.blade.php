@@ -60,7 +60,18 @@
                                     <td>{{ $row->id }}</td>
                                     <td>{{ $row->hrjob->job_name ?? 'No Job' }}</td>
                                     <td>{{ $row->user->fullname ?? 'No Applicant' }}</td>
-                                    <td>{{ ucwords(str_replace('_', ' ', $row->status)) }}</td>
+                                    <td>
+                                        <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                            @csrf
+                                            <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                                                @foreach ($statuses as $availableStatus)
+                                                    <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                        {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </form>
+                                    </td>
                                     <td data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
                                     <td>{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
                                     <td>{{ $row->created_at }}</td>

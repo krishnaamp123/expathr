@@ -75,6 +75,6 @@ class WorkFieldController extends Controller
         $workfield = WorkField::findOrFail($id);
         $workfield->delete();
 
-        return redirect()->back()->with('success', 'Work field deleted successfully.');
+        return redirect()->back()->with('message', 'Work field deleted successfully.');
     }
 }

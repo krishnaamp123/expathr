@@ -206,6 +206,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/userjob/update/{id}', [UserHrjobAdminController::class, 'editUserHrjob'])->name('editUserHrjob');
             Route::put('/userjob/update/{id}', [UserHrjobAdminController::class, 'updateUserHrjob'])->name('updateUserHrjob');
             Route::delete('/userjob/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjob'])->name('destroyUserHrjob');
+            Route::post('/userjob/update-status/{id}', [UserHrjobAdminController::class, 'updateStatus'])->name('updateStatus');
+
 
             // ANSWER
             Route::get('/answer', [AnswerAdminController::class, 'getAnswer'])->name('getAnswer');

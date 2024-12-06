@@ -13,6 +13,15 @@
       </div>
     @endif
 
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{session('error')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @endif
+
     <p class="mb-3">Master data user</p>
 
     <!-- DataTales Example -->
@@ -80,9 +89,11 @@
                                         <i class="fas fa-trash"></i> Delete
                                     </button>
                                 </form>
-                                <a href="{{ route('profile.pdf', $row->id) }}" class="btn btn-sm my-1" style="background-color: #4CAF50; color: white;">
+                                @if ($row->role === 'applicant')
+                                <a href="{{ route('profile.pdf', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
                                     <i class="fas fa-file-pdf"></i> PDF
                                 </a>
+    @endif
                             </td>
                         </tr>
                         @endforeach

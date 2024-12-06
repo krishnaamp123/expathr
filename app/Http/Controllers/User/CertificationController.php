@@ -144,6 +144,6 @@ class CertificationController extends Controller
         $certification = Certification::findOrFail($id);
         $certification->delete();
 
-        return redirect()->back()->with('success', 'Certification deleted successfully.');
+        return redirect()->back()->with('message', 'Certification deleted successfully.');
     }
 }

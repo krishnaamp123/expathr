@@ -58,6 +58,6 @@ class SkillController extends Controller
         $skill = Skill::findOrFail($id);
         $skill->delete();
 
-        return redirect()->back()->with('success', 'Skill deleted successfully.');
+        return redirect()->back()->with('message', 'Skill deleted successfully.');
     }
 }

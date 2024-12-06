@@ -18,12 +18,15 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Check if the user is authenticated and has the 'admin' role
-        if (Auth::check() && Auth::user()->role === 'super_admin') {
+        // List of roles that are allowed access
+        $allowedRoles = ['super_admin', 'hiring_manager', 'recruiter'];
+
+        // Check if the user is authenticated and has one of the allowed roles
+        if (Auth::check() && in_array(Auth::user()->role, $allowedRoles)) {
             return $next($request);
         }
 
-        // If the user is not an admin, redirect to the login page with an error message
-        return redirect()->route('login')->with('error', 'Access denied. Admins only.');
+        // If the user is not authorized, redirect to the login page with an error message
+        return redirect()->route('login')->with('error', 'Access denied. You do not have the required permissions.');
     }
 }

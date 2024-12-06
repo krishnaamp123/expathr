@@ -45,7 +45,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editWorkLocationForm" method="POST" action="{{ route('updateWorkLocation', $user->id) }}">
+                <form id="editWorkLocationForm" method="POST" action="{{ route('updateWorkLocation', $location->id) }}">
                     @csrf
                     @method('PUT')
                     <div class="form-group">

@@ -62,6 +62,6 @@ class LanguageController extends Controller
         $language = Language::findOrFail($id);
         $language->delete();
 
-        return redirect()->back()->with('success', 'Language deleted successfully.');
+        return redirect()->back()->with('message', 'Language deleted successfully.');
     }
 }

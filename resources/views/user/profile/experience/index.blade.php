@@ -8,7 +8,7 @@
                         @foreach ($experience as $experiencee)
                         <li class="list-group-item city-item position-relative">
                             <span class="kaem-heading">{{ $experiencee->position ?? 'Unknown Experience' }}</span><br>
-                            <span class="kaem-subheading">{{ $experiencee->position }} - {{ ucwords(str_replace('_', ' ', $experiencee->job_type)) }}</span><br>
+                            <span class="kaem-subheading">{{ $experiencee->company_name }} - {{ ucwords(str_replace('_', ' ', $experiencee->job_type)) }}</span><br>
                             <span class="kaem-text">{{ $experiencee->start_date }} - {{ $experiencee->end_date }}</span><br>
                             <span class="kaem-text">
                                 @if (!empty($experiencee->location))
@@ -61,7 +61,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editExperienceForm" method="POST" action="{{ route('updateExperience', $user->id) }}">
+                <form id="editExperienceForm" method="POST" action="{{ route('updateExperience', $experiencee->id) }}">
                     @csrf
                     @method('PUT')
                     <div class="form-group">

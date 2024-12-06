@@ -90,6 +90,6 @@ class ExperienceController extends Controller
         $experience = Experience::findOrFail($id);
         $experience->delete();
 
-        return redirect()->back()->with('success', 'Experience deleted successfully.');
+        return redirect()->back()->with('message', 'Experience deleted successfully.');
     }
 }

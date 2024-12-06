@@ -140,6 +140,6 @@ class VolunteerController extends Controller
         $volunteer = Volunteer::findOrFail($id);
         $volunteer->delete();
 
-        return redirect()->back()->with('success', 'Volunteer deleted successfully.');
+        return redirect()->back()->with('message', 'Volunteer deleted successfully.');
     }
 }

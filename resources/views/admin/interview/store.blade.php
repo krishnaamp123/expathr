@@ -16,7 +16,7 @@
                             <select name="id_user_job" class="form-control select2">
                                 <option value="">Select Applicant</option>
                                 @foreach($userhrjobs as $applicant)
-                                    <option value="{{ $applicant->id }}">{{ $applicant->user->fullname }}</option>
+                                    <option value="{{ $applicant->id }}">{{ $applicant->user->fullname }} | {{ $applicant->hrjob->job_name }}</option>
                                 @endforeach
                             </select>
                             @error('id_user_job')
@@ -69,9 +69,18 @@
                             @enderror
                         </div>
 
+                        <!-- Rating -->
                         <div class="form-group">
                             <label>Rating</label>
-                            <input type="number" name="rating" class="form-control">
+                            <div class="rating-stars">
+                                @for ($i = 5; $i >= 1; $i--)
+                                    <input
+                                        type="radio"
+                                        id="star-{{ $i }}"
+                                        name="rating">
+                                    <label for="star-{{ $i }}" class="star">&#9733;</label>
+                                @endfor
+                            </div>
                             @error('rating')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -91,4 +100,29 @@
             </div>
         </div>
     </div>
+    <!-- Custom CSS -->
+    <style>
+        .rating-stars {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+
+        .star:hover,
+        .star:hover ~ .star,
+        input[type="radio"]:checked ~ .star {
+            color: #ffc107;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+    </style>
 @endsection

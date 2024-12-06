@@ -30,18 +30,32 @@ class UserAdminController extends Controller
 {
     public function getUser()
     {
-        $users = User::with('city')->get();
+        $users = User::with('city')
+            ->when(Auth::user()->role !== 'super_admin', function ($query) {
+                $query->where('role', '!=', 'super_admin');
+            })
+            ->when(Auth::user()->role === 'recruiter', function ($query) {
+                $query->where('role', '!=', 'hiring_manager');
+            })
+            ->get();
+
         return view('admin.user.index', compact('users'));
     }
 
     public function addUser()
     {
+
         $cities = City::all();
         return view('admin.user.store', compact('cities'));
     }
 
     public function storeUser(Request $request)
     {
+        if ((Auth::user()->role === 'recruiter' && $request->role === 'hiring_manager') ||
+        (Auth::user()->role !== 'super_admin' && $request->role === 'super_admin')) {
+        return redirect()->route('getUser')->with('error', 'You are not authorized to create this type of user.');
+    }
+
         $validated = $request->validate([
             'id_city' => 'required|exists:cities,id',
             'employee_id' => 'nullable|string',
@@ -105,14 +119,25 @@ class UserAdminController extends Controller
     public function editUser($id)
     {
         $user = User::findOrFail($id);
-        $cities = City::all();
 
+        if ((Auth::user()->role === 'recruiter' && $user->role === 'hiring_manager') ||
+        (Auth::user()->role !== 'super_admin' && $user->role === 'super_admin')) {
+        return redirect()->route('getUser')->with('error', 'You are not authorized to edit this user.');
+    }
+
+        $cities = City::all();
         return view('admin.user.update', compact('user', 'cities'));
     }
 
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
+        if ((Auth::user()->role === 'recruiter' && ($user->role === 'hiring_manager' || $request->role === 'hiring_manager')) ||
+            (Auth::user()->role !== 'super_admin' && $request->role === 'super_admin')) {
+            return redirect()->route('getUser')->with('error', 'You are not authorized to update this user.');
+        }
+
 
         $validated = $request->validate([
             'id_city' => 'required|exists:cities,id',
@@ -178,8 +203,13 @@ class UserAdminController extends Controller
     public function destroyUser($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
 
+        if ((Auth::user()->role === 'recruiter' && $user->role === 'hiring_manager') ||
+            (Auth::user()->role !== 'super_admin' && $user->role === 'super_admin')) {
+            return redirect()->route('getUser')->with('error', 'You are not authorized to delete this user.');
+        }
+
+        $user->delete();
         return redirect()->back()->with('success', 'User deleted successfully.');
     }
 
@@ -199,34 +229,15 @@ class UserAdminController extends Controller
 
     public function generatePdf($id)
     {
-        $user = User::with('city')->findOrFail($id);
-        $worklocation = WorkLocation::where('id_user', $id)->get();
-        $emergency = Emergency::where('id_user', $id)->get();
-        $about = About::where('id_user', $id)->first();
-        $language = Language::where('id_user', $id)->get();
-        $workfield = WorkField::where('id_user', $id)->get();
-        $education = Education::where('id_user', $id)->get();
-        $project = Project::where('id_user', $id)->get();
-        $organization = Organization::where('id_user', $id)->get();
-        $volunteer = Volunteer::where('id_user', $id)->get();
-        $experience = Experience::where('id_user', $id)->get();
-        $certification = Certification::where('id_user', $id)->get();
-        $skill = Skill::where('id_user', $id)->get();
+        $user = User::with(['city', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education',
+            'project', 'organization', 'volunteer', 'experience', 'certification', 'skill'])->findOrFail($id);
+
+        if ($user->role !== 'applicant') {
+        return redirect()->route('getUser')->with('error', 'PDF can only be generated for applicants.');
+        }
 
         $pdf = Pdf::loadView('admin.user.pdf', compact(
             'user',
-            'worklocation',
-            'emergency',
-            'about',
-            'language',
-            'workfield',
-            'education',
-            'project',
-            'organization',
-            'volunteer',
-            'experience',
-            'certification',
-            'skill'
         ));
 
         return $pdf->download('CV - ' . $user->fullname . '.pdf');

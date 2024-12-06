@@ -78,6 +78,6 @@ class OrganizationController extends Controller
         $organization = Organization::findOrFail($id);
         $organization->delete();
 
-        return redirect()->back()->with('success', 'Organization deleted successfully.');
+        return redirect()->back()->with('message', 'Organization deleted successfully.');
     }
 }

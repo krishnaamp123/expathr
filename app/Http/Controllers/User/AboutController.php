@@ -58,6 +58,6 @@ class AboutController extends Controller
         $about = About::findOrFail($id);
         $about->delete();
 
-        return redirect()->back()->with('success', 'About deleted successfully.');
+        return redirect()->back()->with('message', 'About deleted successfully.');
     }
 }

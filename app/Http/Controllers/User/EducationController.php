@@ -74,6 +74,6 @@ class EducationController extends Controller
         $education = Education::findOrFail($id);
         $education->delete();
 
-        return redirect()->back()->with('success', 'Education deleted successfully.');
+        return redirect()->back()->with('message', 'Education deleted successfully.');
     }
 }

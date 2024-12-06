@@ -63,7 +63,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editVolunteerForm" method="POST" action="{{ route('updateVolunteer', $user->id) }}" enctype="multipart/form-data">
+                <form id="editVolunteerForm" method="POST" action="{{ route('updateVolunteer', $volunteerr->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">

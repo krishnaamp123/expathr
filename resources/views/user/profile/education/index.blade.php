@@ -49,7 +49,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editEducationForm" method="POST" action="{{ route('updateEducation', $user->id) }}">
+                <form id="editEducationForm" method="POST" action="{{ route('updateEducation', $educationn->id) }}">
                     @csrf
                     @method('PUT')
                     <div class="form-group">

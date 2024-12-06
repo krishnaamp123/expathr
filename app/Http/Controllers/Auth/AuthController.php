@@ -35,12 +35,12 @@ class AuthController extends Controller
         if ($user->role === 'applicant') {
             cookie()->queue(cookie('token', $token, null));
             return redirect()->route('getDashboardUser');
-        // } elseif ($user->role === 'hiring_manager') {
-        //     cookie()->queue(cookie('token', $token, null));
-        //     return redirect()->route('hiring_manager.dashboard');
-        // } elseif ($user->role === 'recruiter') {
-        //     cookie()->queue(cookie('token', $token, null));
-        //     return redirect()->route('recruiter.dashboard');
+        } elseif ($user->role === 'hiring_manager') {
+            cookie()->queue(cookie('token', $token, null));
+            return redirect()->route('getDashboardAdmin');
+        } elseif ($user->role === 'recruiter') {
+            cookie()->queue(cookie('token', $token, null));
+            return redirect()->route('getDashboardAdmin');
         } elseif ($user->role === 'super_admin') {
             cookie()->queue(cookie('token', $token, null));
             return redirect()->route('getDashboardAdmin');

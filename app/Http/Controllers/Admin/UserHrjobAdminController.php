@@ -93,6 +93,20 @@ class UserHrjobAdminController extends Controller
         return redirect()->route('getUserHrjob')->with('message', 'User Job Updated Successfully');
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:applicant,shortlist,phone_screen,hr_interview,user_interview,skill_test,reference_check,offering,rejected,hired',
+        ]);
+
+        $userhrjob = UserHrjob::findOrFail($id);
+
+        $userhrjob->status = $request->status;
+        $userhrjob->save();
+
+        return redirect()->route('getUserHrjob')->with('message', 'Status updated successfully');
+    }
+
     public function destroyUserHrjob($id)
     {
         $userhrjob = UserHrjob::findOrFail($id);

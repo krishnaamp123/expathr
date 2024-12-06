@@ -69,7 +69,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editCertificationForm" method="POST" action="{{ route('updateCertification', $user->id) }}" enctype="multipart/form-data">
+                <form id="editCertificationForm" method="POST" action="{{ route('updateCertification', $certificationn->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">

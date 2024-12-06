@@ -48,7 +48,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editLanguageForm" method="POST" action="{{ route('updateLanguage', $user->id) }}">
+                <form id="editLanguageForm" method="POST" action="{{ route('updateLanguage', $languagee->id) }}">
                     @csrf
                     @method('PUT')
 

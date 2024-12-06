@@ -13,6 +13,15 @@
       </div>
     @endif
 
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{session('error')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @endif
+
     <p class="mb-3">Pairing recruiters with applicants for interviews and providing assessments of interview results</p>
 
     <!-- DataTales Example -->
@@ -26,6 +35,7 @@
                     <thead>
                         <tr class="fa-sm text-center">
                             <th>ID</th>
+                            <th>Job</th>
                             <th>Applicant</th>
                             <th>Interviewer</th>
                             <th>Date</th>
@@ -43,6 +53,7 @@
                         @foreach ($interviews as $row)
                         <tr class="fa-sm">
                             <td>{{$row->id}}</td>
+                            <td>{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
                             <td>{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
                             <td>{{$row->user->fullname ?? 'No Interviewer'}}</td>
                             <td>{{$row->interview_date}}</td>

@@ -66,6 +66,6 @@ class EmergencyController extends Controller
         $emergency = Emergency::findOrFail($id);
         $emergency->delete();
 
-        return redirect()->back()->with('success', 'Emergency deleted successfully.');
+        return redirect()->back()->with('message', 'Emergency deleted successfully.');
     }
 }

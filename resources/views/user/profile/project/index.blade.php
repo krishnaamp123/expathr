@@ -62,7 +62,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editProjectForm" method="POST" action="{{ route('updateProject', $user->id) }}" enctype="multipart/form-data">
+                <form id="editProjectForm" method="POST" action="{{ route('updateProject', $projectt->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
