@@ -16,10 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_category');
             $table->unsignedBigInteger('id_city');
             $table->string('job_name');
-            $table->string('job_image')->nullable();
             $table->enum('job_type',['full_time','part_time','self_employed','freelancer','contract','internship','seasonal']);
             $table->text('job_report')->nullable();
-            $table->bigInteger('price')->unsigned();
+            $table->bigInteger('price')->nullable();
             $table->text('description')->nullable();
             $table->text('qualification')->nullable();
             $table->enum('location_type',['on_site','hybrid','remote']);

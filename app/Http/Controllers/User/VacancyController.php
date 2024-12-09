@@ -22,7 +22,14 @@ class VacancyController extends Controller
                           ->where('is_active', 'yes')
                           ->orderBy('created_at', 'desc')
                           ->get();
-        return view('user.vacancy.index', compact('vacancies'));
+
+        // Cek kelengkapan profil pengguna
+        $user = auth()->user();
+        $isProfileComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
+                        $user->skill->count() > 0 && $user->workField->count() > 0 &&
+                        $user->education->count() > 0 && $user->experience->count() > 0;
+
+        return view('user.vacancy.index', compact('vacancies', 'isProfileComplete'));
     }
 
     public function getMyVacancy(Request $request)
@@ -70,23 +77,34 @@ class VacancyController extends Controller
         ]);
 
         $userId = auth()->id();
-        $jobId = $validated['id_job'];
 
-        // Cek apakah pengguna telah melamar pekerjaan ini
-        if (UserHrjob::hasApplied($userId, $jobId)) {
-            return redirect()->route('getVacancy')->with('message', 'You have already applied for this job.');
+        // Cek apakah data pengguna lengkap
+        $user = User::findOrFail($userId);
+
+        $isDataComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
+                        $user->skill->count() > 0 && $user->workField->count() > 0 &&
+                        $user->education->count() > 0 && $user->experience->count() > 0;
+
+        if (!$isDataComplete) {
+            return redirect()->route('getVacancy')->with('error', 'Please complete your profile before applying for a job.');
         }
 
-        // Buat aplikasi baru jika belum melamar
+        // Cek apakah pengguna telah melamar pekerjaan ini
+        if (UserHrjob::where('id_user', $userId)->where('id_job', $validated['id_job'])->exists()) {
+            return redirect()->route('getVacancy')->with('error', 'You have already applied for this job.');
+        }
+
+        // Buat aplikasi baru jika data lengkap
         UserHrjob::create([
             'id_user' => $userId,
-            'id_job' => $jobId,
+            'id_job' => $validated['id_job'],
             'salary_expectation' => $validated['salary_expectation'],
             'availability' => $validated['availability'],
         ]);
 
         return redirect()->route('getVacancy')->with('message', 'Job application submitted successfully.');
     }
+
 
     public function storeMyAnswer(Request $request)
     {

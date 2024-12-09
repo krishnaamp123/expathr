@@ -1,13 +1,5 @@
-<form action="{{ route('storeProject') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('storeProject') }}" method="POST">
     @csrf
-
-        <div class="form-group">
-            <label class="kaem-subheading">New Image</label>
-            <input type="file" name="file" class="form-control">
-            @error('file')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
 
         <div class="form-group">
             <label for="project_name" class="kaem-subheading">Name</label>

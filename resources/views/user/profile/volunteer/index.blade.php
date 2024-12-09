@@ -7,23 +7,12 @@
                     <ul class="list-group">
                         @foreach ($volunteer as $volunteerr)
                         <li class="list-group-item city-item position-relative">
-                            <div class="row">
-                                @if ($volunteerr->media)
-                                    <div class="col-md-3">
-                                        <img src="{{ asset($volunteerr->media) }}" alt="Volunteer Picture" class="img-fluid profile-project">
-                                    </div>
-                                    <div class="col-md-9">
-                                @else
-                                    <div class="col-md-12">
-                                @endif
                                     <span class="kaem-heading">{{ $volunteerr->organization ?? 'Unknown Volunteer' }}</span><br>
                                     <span class="kaem-subheading">{{ $volunteerr->role }} - {{ $volunteerr->issue }}</span><br>
                                     @if (!empty($volunteerr->description))
                                     <span class="kaem-text">{{ $volunteerr->description }}</span><br>
                                     @endif
                                     <span class="kaem-text">{{ $volunteerr->start_date }} - {{ $volunteerr->end_date }}</span>
-                                </div>
-                            </div>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
                                 <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editVolunteerModal{{ $volunteerr->id }}">
@@ -44,10 +33,10 @@
                     <p class="kaem-subheading">No volunteer added yet.</p>
                 @endif
 
-            <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addVolunteerModal">
-                Add Volunteer
-            </button>
-        </div>
+                <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addVolunteerModal">
+                    Add Volunteer
+                </button>
+            </div>
         </div>
     </div>
 
@@ -63,26 +52,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editVolunteerForm" method="POST" action="{{ route('updateVolunteer', $volunteerr->id) }}" enctype="multipart/form-data">
+                <form id="editVolunteerForm" method="POST" action="{{ route('updateVolunteer', $volunteerr->id) }}">
                     @csrf
                     @method('PUT')
-                    <div class="form-group">
-                        <label class="kaem-subheading">Current Image</label><br>
-                        @if ($volunteerr->media)
-                            <img src="{{ asset($volunteerr->media) }}" alt="Volunteer Image" class="profile-picture-edit">
-                        @else
-                            <span class="kaem-text">No Image Available</span>
-                        @endif
-                    </div>
-
-                    <div class="form-group">
-                        <label class="kaem-subheading">New Image</label>
-                        <input type="file" name="file" class="form-control">
-                        @error('file')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     <div class="form-group">
                         <label for="organization" class="kaem-subheading">Organization</label>
                         <input type="text" class="form-control" id="organization" name="organization"  value="{{ $volunteerr->organization }}" required>

@@ -27,25 +27,46 @@
                     <h3 class="section-subheading">Here are our latest job!</h3>
                     <h3 class="section-subheading-kaem mb-5">Make sure you have completed your profile first!</h3>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <label for="cityFilter" class="kaem-subheading">Search by City</label>
+                        <select id="cityFilter" class="form-control select2">
+                            <option value="">Select City</option>
+                            @foreach ($davacancies->pluck('city')->unique('id')->filter() as $city)
+                                <option value="{{ $city->id }}">{{ $city->city_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <label for="categoryFilter" class="kaem-subheading">Search by Category</label>
+                        <select id="categoryFilter" class="form-control select2">
+                            <option value="">Select Category</option>
+                            @foreach ($davacancies->pluck('category')->unique('id')->filter() as $category)
+                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-1 mb-4">
+                        <label for="button" class="kaem-subheading">&nbsp;</label>
+                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">&nbsp;&nbsp;&nbsp;Clear&nbsp;&nbsp;&nbsp;</button>
+                    </div>
+                    <div class="col-md-5 mb-4">
+                        <label for="searchBar" class="kaem-subheading">Search by Position</label>
+                        <div class="input-group-kaem">
+                            <span class="input-icon-kaem">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" id="searchBar" class="form-control-kaem" placeholder="Search jobs...">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     @foreach ($davacancies as $vacancy)
-                        <div class="col-lg-4 col-sm-6 mb-4">
-                            <div class="portfolio-item">
-                                <a class="portfolio-link" data-bs-toggle="modal" href="#portfolioModal{{ $vacancy->id }}">
-                                    <div class="portfolio-hover">
-                                        <div class="portfolio-hover-content"></div>
-                                    </div>
-                                    <img class="img-fluid" src="{{ $vacancy->job_image ? asset($vacancy->job_image) : asset('storage/image/logopersegi.png') }}" alt="{{ $vacancy->job_name }}" />
-                                </a>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-4 portfolio-item mb-4" data-city-id="{{ $vacancy->id_city }}" data-category-id="{{ $vacancy->id_category }}" data-bs-toggle="modal" href="#portfolioModal{{ $vacancy->id }}">
                                 <div class="portfolio-caption">
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <div class="portfolio-caption-heading">{{ $vacancy->job_name }}</div>
-                                        </div>
-                                        <div class="col-5 text-end">
-                                            <div class="portfolio-caption-price">Rp {{ number_format($vacancy->price, 0, ',', '.') }}</div>
-                                        </div>
-                                    </div>
+                                    <div class="portfolio-caption-heading">{{ $vacancy->job_name }}</div>
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="portfolio-caption-type">{{ ucwords(str_replace('_', ' ', $vacancy->job_type)) }}</div>
@@ -65,7 +86,6 @@
                                     <div class="portfolio-caption-date">Expired: {{ $vacancy->expired }}</div>
                                 </div>
                             </div>
-                        </div>
                     @endforeach
                 </div>
                 <div class="text-center mt-4">
@@ -220,15 +240,19 @@
             <div class="modal-body">
                 <!-- Job details -->
                 <h2 class="kaem-jobtitle">{{ $vacancy->job_name }}</h2>
-                <p class="kaem-jobtext text-muted">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
-                <img class="img-fluid d-block mx-auto mb-3" src="{{ $vacancy->job_image ? asset($vacancy->job_image) : asset('storage/image/logopersegi.png') }}" alt="{{ $vacancy->job_name }}" />
+                <p class="kaem-jobtext text-muted mb-1">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
                 <button class="btn btn-primary kaem-subheading mb-3"
-                    @if (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
+                    @if (!$isProfileComplete)
+                        disabled
+                        title="Please complete your profile to apply for this job."
+                    @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
                         disabled
                     @else
                         data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}"
                     @endif>
-                    @if (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
+                    @if (!$isProfileComplete)
+                        Complete Your Profile
+                    @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
                         Already Applied
                     @else
                         Apply for Job
@@ -253,7 +277,13 @@
                     </li>
                     <li class="d-flex align-items-center mb-1">
                         <i class="fas fa-money-bill-wave" style="width: 20px;"></i>
-                        <span class="kaem-jobtext ms-2">Rp {{ number_format($vacancy->price, 0, ',', '.') }}</span>
+                        <span class="kaem-jobtext ms-2">
+                            @if (!empty($vacancy->price))
+                                Rp {{ number_format($vacancy->price, 0, ',', '.') }}
+                            @else
+                                -
+                            @endif
+                        </span>
                     </li>
                     <li class="d-flex align-items-center mb-1">
                         <i class="fas fa-calendar-alt" style="width: 20px;"></i>
@@ -306,9 +336,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="availability" class="kaem-subheading">Job Type</label>
-                        <select name="availability" id="availability" class="form-control select2">
-                            <option value="">Select Job Type</option>
+                        <label for="availability" class="kaem-subheading">Availability</label>
+                        <select name="availability" class="form-control select2">
+                            <option value="">Select Availability</option>
                             <option value="immediately">Immediately</option>
                             <option value="<1_month_notice">< 1 Month Notice</option>
                             <option value="1_month_notice">1 Month Notice</option>
@@ -325,4 +355,11 @@
     </div>
 </div>
 @endforeach
+
+<style>
+    .portfolio-item {
+        cursor: pointer; /* Mengubah kursor menjadi pointer saat berada di atas elemen portfolio-item */
+    }
+</style>
+
 </html>

@@ -1,13 +1,5 @@
-<form action="{{ route('storeCertification') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('storeCertification') }}" method="POST">
     @csrf
-
-        <div class="form-group">
-            <label class="kaem-subheading">New Image</label>
-            <input type="file" name="file" class="form-control">
-            @error('file')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
 
         <div class="form-group">
             <label for="lisence_name" class="kaem-subheading">Lisence Name</label>

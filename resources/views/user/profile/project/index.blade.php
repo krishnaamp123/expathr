@@ -7,22 +7,11 @@
                     <ul class="list-group">
                         @foreach ($project as $projectt)
                         <li class="list-group-item city-item position-relative">
-                            <div class="row">
-                                @if ($projectt->media)
-                                    <div class="col-md-3">
-                                        <img src="{{ asset($projectt->media) }}" alt="Project Picture" class="img-fluid profile-project">
-                                    </div>
-                                    <div class="col-md-9">
-                                @else
-                                    <div class="col-md-12">
-                                @endif
                                     <span class="kaem-heading">{{ $projectt->project_name ?? 'Unknown Project' }}</span><br>
                                     @if (!empty($projectt->description))
                                     <span class="kaem-text">{{ $projectt->description }}</span><br>
                                     @endif
                                     <span class="kaem-text">{{ $projectt->start_date }} - {{ $projectt->end_date }}</span>
-                                </div>
-                            </div>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
                                 <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editProjectModal{{ $projectt->id }}">
@@ -43,10 +32,10 @@
                     <p class="kaem-subheading">No project added yet.</p>
                 @endif
 
-            <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addProjectModal">
-                Add Project
-            </button>
-        </div>
+                <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addProjectModal">
+                    Add Project
+                </button>
+            </div>
         </div>
     </div>
 
@@ -62,25 +51,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editProjectForm" method="POST" action="{{ route('updateProject', $projectt->id) }}" enctype="multipart/form-data">
+                <form id="editProjectForm" method="POST" action="{{ route('updateProject', $projectt->id) }}">
                     @csrf
                     @method('PUT')
-                    <div class="form-group">
-                        <label class="kaem-subheading">Current Image</label><br>
-                        @if ($projectt->media)
-                            <img src="{{ asset($projectt->media) }}" alt="Project Image" class="profile-picture-edit">
-                        @else
-                            <span class="kaem-text">No Image Available</span>
-                        @endif
-                    </div>
-
-                    <div class="form-group">
-                        <label class="kaem-subheading">New Image</label>
-                        <input type="file" name="file" class="form-control">
-                        @error('file')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
 
                     <div class="form-group">
                         <label for="project_name" class="kaem-subheading">Name</label>

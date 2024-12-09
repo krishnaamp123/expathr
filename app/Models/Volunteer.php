@@ -16,7 +16,6 @@ class Volunteer extends Model
         'organization',
         'role',
         'issue',
-        'media',
         'description',
         'start_date',
         'end_date',

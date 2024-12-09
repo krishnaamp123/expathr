@@ -9,26 +9,9 @@
                     <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Job Form</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('updateHrjob', $hrjob->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('updateHrjob', $hrjob->id) }}" method="post">
                         @csrf
                         @method('PUT')
-
-                        <div class="form-group">
-                            <label>Current Image</label><br>
-                            @if ($hrjob->job_image)
-                            <img src="{{ asset($hrjob->job_image) }}" alt="Job Image" class="profile-user">
-                            @else
-                                <span>No Image Available</span>
-                            @endif
-                        </div>
-
-                        <div class="form-group">
-                            <label>New Image</label>
-                            <input type="file" name="file" class="form-control">
-                            @error('file')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <div class="form-group">
                             <label>Job Category</label>
@@ -46,7 +29,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Job Name</label>
+                            <label>Job Title</label>
                             <input type="text" name="job_name" class="form-control" value="{{ old('job_name', $hrjob->job_name) }}">
                             @error('job_name')
                                 <div class="text-danger">{{ $message }}</div>
@@ -79,7 +62,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Price</label>
+                            <label>Salary</label>
                             <input type="number" name="price" class="form-control" value="{{ old('price', $hrjob->price) }}">
                             @error('price')
                                 <div class="text-danger">{{ $message }}</div>

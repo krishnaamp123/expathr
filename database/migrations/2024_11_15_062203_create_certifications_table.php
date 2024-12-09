@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('organization');
             $table->string('id_credentials')->nullable();
             $table->string('url_credentials')->nullable();
-            $table->string('media')->nullable();
             $table->text('description')->nullable();
             $table->date('start_date');
             $table->date('end_date');

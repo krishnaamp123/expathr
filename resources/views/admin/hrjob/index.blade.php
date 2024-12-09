@@ -25,13 +25,12 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr class="fa-sm text-center">
-                            <th>ID</th>
-                            <th>Image</th>
+                            <th>ID</th>>
                             <th>Job Category</th>
-                            <th>Job Name</th>
+                            <th>Job Title</th>
                             <th>Job Type</th>
                             <th>Job Report</th>
-                            <th>Price</th>
+                            <th>Salary</th>
                             <th>Description</th>
                             <th>Qualification</th>
                             <th>Location Type</th>
@@ -50,13 +49,6 @@
                         @foreach ($hrjobs as $row)
                         <tr class="fa-sm">
                             <td>{{$row->id}}</td>
-                            <td class="text-center">
-                                @if ($row->job_image)
-                                    <img src="{{ asset($row->job_image) }}" alt="Job Image" class="profile-user">
-                                @else
-                                    <span>No Image</span>
-                                @endif
-                            </td>
                             <td>{{$row->category->category_name ?? 'No Category'}}</td>
                             <td>{{$row->job_name}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->job_type)) }}</td>

@@ -9,15 +9,8 @@
                     <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Add Job Form</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('storeHrjob') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('storeHrjob') }}" method="post">
                         @csrf
-                        <div class="form-group">
-                            <label>Image</label>
-                            <input type="file" name="file" class="form-control">
-                            @error('file')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <div class="form-group">
                             <label>Job Category</label>
@@ -33,7 +26,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Job Name</label>
+                            <label>Job Title</label>
                             <input type="text" name="job_name" class="form-control">
                             @error('job_name')
                                 <div class="text-danger">{{ $message }}</div>
@@ -66,7 +59,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Price</label>
+                            <label>Salary</label>
                             <input type="number" name="price" class="form-control">
                             @error('price')
                                 <div class="text-danger">{{ $message }}</div>

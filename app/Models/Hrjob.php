@@ -15,7 +15,6 @@ class Hrjob extends Model
         'id_category',
         'id_city',
         'job_name',
-        'job_image',
         'job_type',
         'job_report',
         'price',

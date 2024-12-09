@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->string('project_name');
             $table->text('description')->nullable();
-            $table->string('media')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

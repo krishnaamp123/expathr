@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('organization');
             $table->string('role');
             $table->string('issue');
-            $table->string('media')->nullable();
             $table->text('description')->nullable();
             $table->date('start_date');
             $table->date('end_date');

@@ -15,7 +15,6 @@ class Project extends Model
         'id_user',
         'project_name',
         'description',
-        'media',
         'start_date',
         'end_date',
     ];

@@ -7,15 +7,6 @@
                     <ul class="list-group">
                         @foreach ($certification as $certificationn)
                         <li class="list-group-item city-item position-relative">
-                            <div class="row">
-                                @if ($certificationn->media)
-                                    <div class="col-md-3">
-                                        <img src="{{ asset($certificationn->media) }}" alt="Certification Picture" class="img-fluid profile-project">
-                                    </div>
-                                    <div class="col-md-9">
-                                @else
-                                    <div class="col-md-12">
-                                @endif
                                 <span class="kaem-heading">{{ $certificationn->lisence_name ?? 'Unknown Certification' }}</span><br>
                                 <span class="kaem-subheading">{{ $certificationn->organization }}</span><br>
                                 @if (!empty($certificationn->description))
@@ -28,8 +19,6 @@
                                 @if (!empty($certificationn->url_credentials))
                                     <span class="kaem-text">{{ $certificationn->url_credentials }}</span>
                                 @endif
-                                </div>
-                            </div>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
                                 <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editCertificationModal{{ $certificationn->id }}">
@@ -50,10 +39,10 @@
                     <p class="kaem-subheading">No certification added yet.</p>
                 @endif
 
-            <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addCertificationModal">
-                Add Certification
-            </button>
-        </div>
+                <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addCertificationModal">
+                    Add Certification
+                </button>
+            </div>
         </div>
     </div>
 
@@ -69,25 +58,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editCertificationForm" method="POST" action="{{ route('updateCertification', $certificationn->id) }}" enctype="multipart/form-data">
+                <form id="editCertificationForm" method="POST" action="{{ route('updateCertification', $certificationn->id) }}">
                     @csrf
                     @method('PUT')
-                    <div class="form-group">
-                        <label class="kaem-subheading">Current Image</label><br>
-                        @if ($certificationn->media)
-                            <img src="{{ asset($certificationn->media) }}" alt="Certification Image" class="profile-picture-edit">
-                        @else
-                            <span class="kaem-text">No Image Available</span>
-                        @endif
-                    </div>
-
-                    <div class="form-group">
-                        <label class="kaem-subheading">New Image</label>
-                        <input type="file" name="file" class="form-control">
-                        @error('file')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
 
                     <div class="form-group">
                         <label for="lisence_name" class="kaem-subheading">Lisence Name</label>

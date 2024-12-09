@@ -32,7 +32,7 @@ class HrjobAdminController extends Controller
             'job_name' => 'required|string|max:255',
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
             'job_report' => 'nullable|string|max:1000',
-            'price' => 'required',
+            'price' => 'nullable',
             'description' => 'nullable|string|max:1000',
             'qualification' => 'nullable|string|max:1000',
             'location_type' => 'required|in:on_site,hybrid,remote',
@@ -41,33 +41,10 @@ class HrjobAdminController extends Controller
             'expired' => 'required',
             'number_hired' => 'required',
             'is_active' => 'required|in:yes,no',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Buat instance hrjob baru
         $hrjob = new Hrjob();
-
-        // Periksa dan simpan file gambar jika ada
-        if ($request->hasFile('file')) {
-            // Generate nama file unik
-            $filename = $this->generateRandomString();
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $jobImageName = $filename . '.' . $extension;
-
-            // Tentukan lokasi penyimpanan di public/storage/images
-            $destinationPath = public_path('storage/job_images');
-
-            // Buat folder jika belum ada
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-
-            // Pindahkan file ke lokasi tujuan
-            $request->file('file')->move($destinationPath, $jobImageName);
-
-            // Simpan nama file ke database
-            $hrjob->job_image = 'storage/job_images/' . $jobImageName;
-        }
 
         $hrjob->id_category = $validated['id_category'];
         $hrjob->id_city = $validated['id_city'];
@@ -108,7 +85,7 @@ class HrjobAdminController extends Controller
             'job_name' => 'required|string|max:255',
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
             'job_report' => 'nullable|string|max:1000',
-            'price' => 'required',
+            'price' => 'nullable',
             'description' => 'nullable|string|max:1000',
             'qualification' => 'nullable|string|max:1000',
             'location_type' => 'required|in:on_site,hybrid,remote',
@@ -117,38 +94,7 @@ class HrjobAdminController extends Controller
             'expired' => 'required',
             'number_hired' => 'required',
             'is_active' => 'required|in:yes,no',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        // Perbarui gambar jika ada
-        if ($request->hasFile('file')) {
-            // Generate nama file unik
-            $filename = $this->generateRandomString();
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $jobImageName = $filename . '.' . $extension;
-
-            // Tentukan lokasi penyimpanan di public/storage/images
-            $destinationPath = public_path('storage/job_images');
-
-            // Buat folder jika belum ada
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-
-            // Pindahkan file ke lokasi tujuan
-            $request->file('file')->move($destinationPath, $jobImageName);
-
-            // Hapus file lama jika ada
-            if ($hrjob->job_image) {
-                $oldFilePath = public_path($hrjob->job_image);
-                if (file_exists($oldFilePath)) {
-                    unlink($oldFilePath);
-                }
-            }
-
-            // Simpan nama file ke database
-            $hrjob->job_image = 'storage/job_images/' . $jobImageName;
-        }
 
         $hrjob->id_category = $validated['id_category'];
         $hrjob->id_city = $validated['id_city'];
@@ -178,18 +124,4 @@ class HrjobAdminController extends Controller
 
         return redirect()->route('getHrjob')->with('message', 'Job deleted successfully');
     }
-
-    function generateRandomString($length = 30)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-
-        return $randomString;
-    }
-
 }

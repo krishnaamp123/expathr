@@ -35,6 +35,7 @@
     </div>
 
 <!-- Modal Edit Work Location -->
+@foreach ($worklocation as $location)
 <div class="modal fade" id="editWorkLocationModal" tabindex="-1" role="dialog" aria-labelledby="editWorkLocationLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -63,6 +64,7 @@
         </div>
     </div>
 </div>
+@endforeach
 
 <!-- Modal Add Work Location -->
 <div class="modal fade" id="addWorkLocationModal" tabindex="-1" role="dialog" aria-labelledby="addWorkLocationLabel" aria-hidden="true">

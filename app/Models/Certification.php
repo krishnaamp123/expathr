@@ -17,7 +17,6 @@ class Certification extends Model
         'organization',
         'id_credentials',
         'url_credentials',
-        'media',
         'description',
         'start_date',
         'end_date',

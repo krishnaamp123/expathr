@@ -152,20 +152,25 @@
                 }
 
                 @media (max-width: 768px) {
-                .container.d-flex {
-                    flex-direction: column;
+                    .container.d-flex {
+                        flex-direction: column;
+                    }
+
+                    .filter-section {
+                        max-width: 100%;
+                        flex: none;
+                        margin-bottom: 15px;
+                    }
+
+                    .content-section {
+                        max-width: 100%;
+                    }
                 }
 
-                .filter-section {
-                    max-width: 100%;
-                    flex: none;
-                    margin-bottom: 15px;
+                .d-none {
+                    display: none !important;
                 }
 
-                .content-section {
-                    max-width: 100%;
-                }
-            }
 
 
             </style>
@@ -305,28 +310,41 @@
                 });
             </script>
 
-                <script>
-                    $(document).ready(function () {
-                        // Filter and Search Functionality
-                        $('#cityFilter, #categoryFilter, #searchBar').on('change keyup', function () {
-                            const selectedCity = $('#cityFilter').val();
-                            const selectedCategory = $('#categoryFilter').val();
-                            const searchText = $('#searchBar').val().toLowerCase();
+            <script>
+                $(document).ready(function () {
+                    // Filter and Search Functionality
+                    $('#cityFilter, #categoryFilter, #searchBar').on('change keyup', function () {
+                        const selectedCity = $('#cityFilter').val();
+                        const selectedCategory = $('#categoryFilter').val();
+                        const searchText = $('#searchBar').val().toLowerCase();
 
-                            $('.portfolio-item').each(function () {
-                                const cityId = $(this).data('city-id');
-                                const categoryId = $(this).data('category-id');
-                                const jobName = $(this).find('.portfolio-caption-heading').text().toLowerCase();
+                        $('.portfolio-item').each(function () {
+                            const cityId = $(this).data('city-id');
+                            const categoryId = $(this).data('category-id');
+                            const jobName = $(this).find('.portfolio-caption-heading').text().toLowerCase();
 
-                                const matchesCity = selectedCity === '' || cityId == selectedCity;
-                                const matchesCategory = selectedCategory === '' || categoryId == selectedCategory;
-                                const matchesSearch = searchText === '' || jobName.includes(searchText);
+                            const matchesCity = selectedCity === '' || cityId == selectedCity;
+                            const matchesCategory = selectedCategory === '' || categoryId == selectedCategory;
+                            const matchesSearch = searchText === '' || jobName.includes(searchText);
 
-                                $(this).toggle(matchesCity && matchesCategory && matchesSearch);
-                            });
+                            if (matchesCity && matchesCategory && matchesSearch) {
+                                $(this).addClass('active-item').show();
+                            } else {
+                                $(this).removeClass('active-item').hide();
+                            }
                         });
                     });
-                </script>
+                });
+
+                function resetFilters() {
+                    $('#cityFilter').val('');
+                    $('#categoryFilter').val('');
+                    $('#searchBar').val('');
+                    $('#cityFilter, #categoryFilter, #searchBar').trigger('change');
+                }
+            </script>
+
+
             @yield('scripts')
         </body>
     </html>
