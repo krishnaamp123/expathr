@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Interview extends Model
+class UserInterview extends Model
 {
-    protected $table = 'interviews';
+    protected $table = 'user_interviews';
 
     protected $fillable = [
         'id_user_job',

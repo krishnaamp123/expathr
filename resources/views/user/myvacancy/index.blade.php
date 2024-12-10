@@ -38,28 +38,12 @@
             <div class="row">
                 @foreach ($userhrjobs as $vacancy)
                     <div class="col-lg-6 mb-4">
-                        <div class="portfolio-item">
-                             <a class="portfolio-link
+                        <div class="portfolio-item"
                                 {{ ($vacancy->status === 'applicant' && $vacancy->answers->isEmpty()) || $vacancy->status === 'hr_interview' ? '' : 'disabled' }}"
                                 data-bs-toggle="modal"
                                 href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'hr_interview' ? '#hrinterviewModal' . $vacancy->id : '#') }}">
-
-                                <div class="portfolio-hover">
-                                    <div class="portfolio-hover-content"></div>
-                                </div>
-                                <img class="img-fluid"
-                                    src="{{ $vacancy->hrjob->job_image ? asset($vacancy->hrjob->job_image) : asset('storage/image/logopersegi.png') }}"
-                                    alt="{{ $vacancy->hrjob->job_name }}" />
-                            </a>
                             <div class="portfolio-caption">
-                                <div class="row">
-                                    <div class="col-7">
-                                        <div class="portfolio-caption-heading">{{ $vacancy->hrjob->job_name }}</div>
-                                    </div>
-                                    <div class="col-5 text-end">
-                                        <div class="portfolio-caption-price">Rp {{ number_format($vacancy->hrjob->price, 0, ',', '.') }}</div>
-                                    </div>
-                                </div>
+                                <div class="portfolio-caption-heading">{{ $vacancy->hrjob->job_name }}</div>
                                 <div class="portfolio-caption-location">{{ $vacancy->hrjob->city->city_name }}</div>
                                 <div class="row">
                                     <div class="col-6">
@@ -147,10 +131,8 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    @foreach ($interviews as $interview)
+                    @foreach ($vacancy->interviews as $interview)
                     <div class="modal-body">
-                        <!-- Job details for hrinterview -->
-                        {{-- <h2 class="kaem-jobtitle">{{ $interview->time }}</h2> --}}
                         <ul class="list-inline">
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Interviewer :</strong>
@@ -180,5 +162,11 @@
         </div>
     @endif
 @endforeach
+
+<style>
+    .portfolio-item {
+        cursor: pointer; /* Mengubah kursor menjadi pointer saat berada di atas elemen portfolio-item */
+    }
+</style>
 
 @endsection

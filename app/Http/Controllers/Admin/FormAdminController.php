@@ -29,15 +29,18 @@ class FormAdminController extends Controller
     {
         $validated = $request->validate([
             'id_job' => 'required',
-            'id_question' => 'required',
+            'id_question' => 'required|array', // Ensure id_question is an array
+            'id_question.*' => 'required|exists:questions,id', // Validate each question ID
         ]);
 
-        Form::create([
-            'id_job' => $request->id_job,
-            'id_question' => $request->id_question,
-        ]);
+        foreach ($request->id_question as $questionId) {
+            Form::create([
+                'id_job' => $request->id_job,
+                'id_question' => $questionId,
+            ]);
+        }
 
-        return redirect()->route('getForm')->with('message', 'Data Added Successfully');
+        return redirect()->route('getForm')->with('message', 'Questions added successfully to the job.');
     }
 
     public function editForm($id)

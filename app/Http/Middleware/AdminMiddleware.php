@@ -18,6 +18,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->ajax()) {
+            // Tangani permintaan AJAX
+        }
         // List of roles that are allowed access
         $allowedRoles = ['super_admin', 'hiring_manager', 'recruiter'];
 

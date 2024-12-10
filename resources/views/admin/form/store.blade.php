@@ -25,9 +25,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Question</label>
-                            <select name="id_question" class="form-control select2">
-                                <option value="">Select Question</option>
+                            <label>Questions</label>
+                            <select name="id_question[]" class="form-control select2 ml-3" multiple>
                                 @foreach($questions as $question)
                                     <option value="{{ $question->id }}">{{ $question->question }}</option>
                                 @endforeach
@@ -35,9 +34,14 @@
                             @error('id_question')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
+                            @error('id_question.*')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-save"></i> Save</button>
+                        <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;">
+                            <i class="fas fa-save"></i> Save
+                        </button>
                     </form>
                 </div>
             </div>

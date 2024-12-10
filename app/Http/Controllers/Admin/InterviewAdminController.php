@@ -62,8 +62,8 @@ class InterviewAdminController extends Controller
         $validated = $request->validate([
             'id_user_job' => 'required',
             'id_user' => 'required',
-            'interview_date' => 'required',
-            'time' => 'required',
+            'interview_date' => 'nullable',
+            'time' => 'nullable',
             'location' => 'nullable',
             'link' => 'nullable',
         ]);
@@ -77,7 +77,7 @@ class InterviewAdminController extends Controller
             'link' => $request->link,
         ]);
 
-        return redirect()->route('getInterview')->with('message', 'Data Added Successfully');
+        return redirect()->route('getInterview')->with('message', 'Interview Scheduled Successfully');
     }
 
     public function editInterview($id)
@@ -111,8 +111,8 @@ class InterviewAdminController extends Controller
         $validated = $request->validate([
             'id_user_job' => 'required',
             'id_user' => 'required',
-            'interview_date' => 'required',
-            'time' => 'required',
+            'interview_date' => 'nullable',
+            'time' => 'nullable',
             'location' => 'nullable',
             'link' => 'nullable',
 

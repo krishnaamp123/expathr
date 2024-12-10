@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\FormAdminController;
 use App\Http\Controllers\Admin\UserHrjobAdminController;
 use App\Http\Controllers\Admin\AnswerAdminController;
 use App\Http\Controllers\Admin\InterviewAdminController;
+use App\Http\Controllers\Admin\UserInterviewAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -208,6 +209,21 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/userjob/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjob'])->name('destroyUserHrjob');
             Route::post('/userjob/update-status/{id}', [UserHrjobAdminController::class, 'updateStatus'])->name('updateStatus');
 
+            Route::get('/userjob/interview/create', [UserHrjobAdminController::class, 'addUserHrjobInterview'])->name('addUserHrjobInterview');
+            Route::post('/userjob/interview/create', [UserHrjobAdminController::class, 'storeUserHrjobInterview'])->name('storeUserHrjobInterview');
+            Route::get('/userjob/interview/update/{id}', [UserHrjobAdminController::class, 'editUserHrjobInterview'])->name('editUserHrjobInterview');
+            Route::put('/userjob/interview/update/{id}', [UserHrjobAdminController::class, 'updateUserHrjobInterview'])->name('updateUserHrjobInterview');
+            Route::delete('/userjob/interview/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjobInterview'])->name('destroyUserHrjobInterview');
+            Route::get('/userjob/interview/update/rating/{id}', [UserHrjobAdminController::class, 'editUserHrjobRating'])->name('editUserHrjobRating');
+            Route::put('/userjob/interview/update/rating/{id}', [UserHrjobAdminController::class, 'updateUserHrjobRating'])->name('updateUserHrjobRating');
+
+            Route::get('/userjob/userinterview/create', [UserHrjobAdminController::class, 'addUserHrjobUserInterview'])->name('addUserHrjobUserInterview');
+            Route::post('/userjob/userinterview/create', [UserHrjobAdminController::class, 'storeUserHrjobUserInterview'])->name('storeUserHrjobUserInterview');
+            Route::get('/userjob/userinterview/update/{id}', [UserHrjobAdminController::class, 'editUserHrjobUserInterview'])->name('editUserHrjobUserInterview');
+            Route::put('/userjob/userinterview/update/{id}', [UserHrjobAdminController::class, 'updateUserHrjobUserInterview'])->name('updateUserHrjobUserInterview');
+            Route::delete('/userjob/userinterview/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjobUserInterview'])->name('destroyUserHrjobUserInterview');
+            Route::get('/userjob/userinterview/update/rating/{id}', [UserHrjobAdminController::class, 'editUserHrjobUserRating'])->name('editUserHrjobUserRating');
+            Route::put('/userjob/userinterview/update/rating/{id}', [UserHrjobAdminController::class, 'updateUserHrjobUserRating'])->name('updateUserHrjobUserRating');
 
             // ANSWER
             Route::get('/answer', [AnswerAdminController::class, 'getAnswer'])->name('getAnswer');
@@ -226,6 +242,16 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/interview/destroy/{id}', [InterviewAdminController::class, 'destroyInterview'])->name('destroyInterview');
             Route::get('/interview/update/rating/{id}', [InterviewAdminController::class, 'editRating'])->name('editRating');
             Route::put('/interview/update/rating/{id}', [InterviewAdminController::class, 'updateRating'])->name('updateRating');
+
+            // USER INTERVIEW
+            Route::get('/userinterview', [UserInterviewAdminController::class, 'getUserInterview'])->name('getUserInterview');
+            Route::get('/userinterview/create', [UserInterviewAdminController::class, 'addUserInterview'])->name('addUserInterview');
+            Route::post('/userinterview/create', [UserInterviewAdminController::class, 'storeUserInterview'])->name('storeUserInterview');
+            Route::get('/userinterview/update/{id}', [UserInterviewAdminController::class, 'editUserInterview'])->name('editUserInterview');
+            Route::put('/userinterview/update/{id}', [UserInterviewAdminController::class, 'updateUserInterview'])->name('updateUserInterview');
+            Route::delete('/userinterview/destroy/{id}', [UserInterviewAdminController::class, 'destroyUserInterview'])->name('destroyUserInterview');
+            Route::get('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'editUserRating'])->name('editUserRating');
+            Route::put('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'updateUserRating'])->name('updateUserRating');
 
         });
     });

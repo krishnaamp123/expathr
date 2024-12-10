@@ -75,6 +75,7 @@
                                 </div>
                             </div>
                             <div class="portfolio-caption-location">{{ $vacancy->city->city_name }}</div>
+                            <p class="kaem-jobtext text-muted mb-0">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
                             <div class="divider"></div>
                             <div class="portfolio-caption-date">Expired: {{ $vacancy->expired }}</div>
                         </div>

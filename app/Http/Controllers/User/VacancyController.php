@@ -57,15 +57,7 @@ class VacancyController extends Controller
             'offering', 'rejected', 'hired'
         ];
 
-        // Tambahkan logika untuk mendapatkan interviews
-        $userId = Auth::id();
-        $interviews = Interview::whereHas('userHrjob', function ($query) use ($userId) {
-                $query->where('id_user', $userId);
-            })
-            ->with('userHrjob.hrjob')
-            ->get();
-
-        return view('user.myvacancy.index', compact('userhrjobs', 'statuses', 'status', 'formsByJob', 'interviews'));
+        return view('user.myvacancy.index', compact('userhrjobs', 'statuses', 'status', 'formsByJob'));
     }
 
     public function storeVacancy(Request $request)
