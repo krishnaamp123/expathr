@@ -70,6 +70,14 @@
                         </div>
 
                         <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" name="hide_salary" class="form-check-input" id="hideSalary" value="1"
+                                    {{ $hrjob->hide_salary ? 'checked' : '' }}>
+                                <label class="form-check-label" for="hideSalary">Yes, hide salary from users</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="description">Description</label>
                             <textarea name="description" class="form-control" id="description" rows="5" required>{{ $hrjob->description }}</textarea>
                             @error('description')

@@ -1,8 +1,8 @@
 @extends('admin.layout.app')
-@section('title', 'Interview')
+@section('title', 'User Interview')
 @section('content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Interview</h1>
+    <h1 class="h3 mb-2 text-gray-800">User Interview</h1>
 
     @if (session('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -22,7 +22,7 @@
       </div>
     @endif
 
-    <p class="mb-3">Pairing recruiters with applicants for interviews and providing assessments of interview results</p>
+    <p class="mb-3">Pairing users with applicants for interviews and providing assessments of interview results</p>
 
     <div class="mb-4">
         <ul class="nav nav-pills custom-nav">
@@ -44,7 +44,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('addInterview')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            <a href="{{route('addUserInterview')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -67,7 +67,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($interviews as $row)
+                        @foreach ($userinterviews as $row)
                         <tr class="fa-sm">
                             <td>{{$row->id}}</td>
                             <td>{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
@@ -82,12 +82,12 @@
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
-                                <a href="{{ route('editInterview', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
-                                <a href="{{ route('editRating', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i> Rating</a>
-                                <form action="{{ route('destroyInterview', $row->id) }}" method="POST" style="display:inline;">
+                                <a href="{{ route('editUserInterview', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
+                                <a href="{{ route('editUserRating', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i> Rating</a>
+                                <form action="{{ route('destroyUserInterview', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i> Delete</button>
+                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this user interview?')"><i class="fas fa-trash"></i> Delete</button>
                                 </form>
                             </td>
                         </tr>

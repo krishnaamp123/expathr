@@ -259,7 +259,7 @@
                 </a>
             </li>
 
-            <li class="nav-item {{ Request::routeIs('getInterview') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('getInterview') ? 'active' : '' }} {{ Request::routeIs('getUserInterview') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getInterview') }}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Interview</span>

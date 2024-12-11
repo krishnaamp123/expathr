@@ -93,7 +93,7 @@ class AuthController extends Controller
             ]);
 
             // event(new Registered($user));
-            $user->sendEmailVerificationNotification();
+            // $user->sendEmailVerificationNotification();
 
             auth()->login($user);
 
@@ -119,6 +119,10 @@ class AuthController extends Controller
     // Handle email verification
     public function verify(EmailVerificationRequest $request)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to verify your email.');
+        }
+
         $request->fulfill();
 
         return redirect()->route('login')->with('success', 'Email verification successful. Please log in.');

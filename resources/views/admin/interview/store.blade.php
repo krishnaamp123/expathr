@@ -11,6 +11,8 @@
                 <div class="card-body">
                     <form action="{{ route('storeInterview') }}" method="post" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="redirectTo" value="{{ $redirectTo }}">
+
                         <div class="form-group">
                             <label>Applicant</label>
                             <select name="id_user_job" class="form-control select2">

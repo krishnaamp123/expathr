@@ -25,7 +25,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr class="fa-sm text-center">
-                            <th>ID</th>>
+                            <th>ID</th>
                             <th>Job Category</th>
                             <th>Job Title</th>
                             <th>Job Type</th>

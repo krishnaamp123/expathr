@@ -8,7 +8,7 @@
                         @foreach ($language as $languagee)
                         <li class="list-group-item city-item position-relative">
                             <span class="kaem-subheading">{{ $languagee->language ?? 'Unknown Language' }}</span><br>
-                            <span class="kaem-text">{{ $languagee->skill }}</span><br>
+                            <span class="kaem-text">{{ ucwords(str_replace('_', ' ', $languagee->skill)) }}</span><br>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
                                 <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editLanguageModal{{ $languagee->id }}">
@@ -65,7 +65,7 @@
                         <select name="skill" class="form-control select2">
                             <option value="">Select Skill</option>
                             <option value="basic" {{ $languagee->language == 'basic' ? 'selected' : '' }}>Basic</option>
-                            <option value="intermediete" {{ $languagee->language == 'intermediete' ? 'selected' : '' }}>Intermediete</option>
+                            <option value="intermediate" {{ $languagee->language == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
                             <option value="profesional" {{ $languagee->language == 'profesional' ? 'selected' : '' }}>Profesional</option>
                             <option value="advanced_profesional" {{ $languagee->language == 'advanced_profesional' ? 'selected' : '' }}>Advanced Profesional</option>
                             <option value="native" {{ $languagee->language == 'native' ? 'selected' : '' }}>Native</option>

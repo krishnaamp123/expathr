@@ -40,21 +40,43 @@ class UserInterviewAdminController extends Controller
 
         $userhrjobs = UserHrjob::all();
         $users = User::where('role', '!=', 'applicant')->get();
+        $redirectTo = 'pageUserInterview';
 
-        return view('admin.userinterview.store', compact('userhrjobs', 'users'));
+        return view('admin.userinterview.store', compact('userhrjobs', 'users', 'redirectTo'));
+    }
+
+    public function addUserHrjobUserInterview()
+    {
+        if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            return redirect()->route('getUserHrjob')->with('error', 'You are not authorized to create interview');
+        }
+
+        $userhrjobs = UserHrjob::all();
+        $users = User::where('role', '!=', 'applicant')->get();
+        $redirectTo = 'pageUserHrjobUserInterview';
+
+        return view('admin.userinterview.store', compact('userhrjobs', 'users', 'redirectTo'));
     }
 
 
     public function storeUserInterview(Request $request)
     {
         if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
-            return redirect()->route('getUserInterview')->with('error', 'You are not authorized to create interview');
+            if ($request->redirectTo === 'pageUserInterview') {
+                return redirect()->route('getUserInterview')->with('error', 'You are not authorized to create user interview');
+            } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+                return redirect()->route('getUserHrjob')->with('error', 'You are not authorized to create user interview');
+            }
         }
 
         // Prevent hiring_manager from adding interviews for super_admin
         $user = User::findOrFail($request->id_user);
         if (Auth::user()->role === 'hiring_manager' && $user->role === 'super_admin') {
-            return redirect()->route('getUserInterview')->with('error', 'You cannot manage interviews for Super Admin');
+            if ($request->redirectTo === 'pageUserInterview') {
+                return redirect()->route('getUserInterview')->with('error', 'You cannot manage user interviews for Super Admin');
+            } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+                return redirect()->route('getUserHrjob')->with('error', 'You cannot manage user interviews for Super Admin');
+            }
         }
 
         $validated = $request->validate([
@@ -75,7 +97,11 @@ class UserInterviewAdminController extends Controller
             'link' => $request->link,
         ]);
 
-        return redirect()->route('getUserInterview')->with('message', 'Interview Scheduled Successfully');
+        if ($request->redirectTo === 'pageUserInterview') {
+            return redirect()->route('getUserInterview')->with('message', 'User Interview Scheduled Successfully');
+        } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+            return redirect()->route('getUserHrjob')->with('message', 'User Interview Scheduled Successfully');
+        }
     }
 
     public function editUserInterview($id)
@@ -88,8 +114,24 @@ class UserInterviewAdminController extends Controller
 
         $userhrjobs = UserHrjob::all();
         $users = User::where('role', '!=', 'applicant')->get();
+        $redirectTo = 'pageUserInterview';
 
-        return view('admin.userinterview.update', compact('userinterview', 'userhrjobs', 'users'));
+        return view('admin.userinterview.update', compact('userinterview', 'userhrjobs', 'users', 'redirectTo'));
+    }
+
+    public function editUserHrjobUserInterview($id)
+    {
+        $userinterview = UserInterview::findOrFail($id);
+
+        if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            return redirect()->route('getUserHrjob')->with('error', 'You are not authorized to edit interview');
+        }
+
+        $userhrjobs = UserHrjob::all();
+        $users = User::where('role', '!=', 'applicant')->get();
+        $redirectTo = 'pageUserHrjobUserInterview';
+
+        return view('admin.userinterview.update', compact('userinterview', 'userhrjobs', 'users', 'redirectTo'));
     }
 
     public function updateUserInterview(Request $request, $id)
@@ -97,13 +139,21 @@ class UserInterviewAdminController extends Controller
         $userinterview = UserInterview::findOrFail($id);
 
         if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
-            return redirect()->route('getUserInterview')->with('error', 'You are not authorized to edit interview');
+            if ($request->redirectTo === 'pageUserInterview') {
+                return redirect()->route('getUserInterview')->with('error', 'You are not authorized to edit user interview');
+            } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+                return redirect()->route('getUserHrjob')->with('error', 'You are not authorized to edit user interview');
+            }
         }
 
         // Prevent hiring_manager from updating interviews for super_admin
         $user = User::findOrFail($request->id_user);
         if (Auth::user()->role === 'hiring_manager' && $user->role === 'super_admin') {
-            return redirect()->route('getUserInterview')->with('error', 'You cannot manage interviews for Super Admin');
+            if ($request->redirectTo === 'pageUserInterview') {
+                return redirect()->route('getUserInterview')->with('error', 'You cannot manage user interviews for Super Admin');
+            } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+                return redirect()->route('getUserHrjob')->with('error', 'You cannot manage user interviews for Super Admin');
+            }
         }
 
         $validated = $request->validate([
@@ -125,13 +175,25 @@ class UserInterviewAdminController extends Controller
 
         $userinterview->save();
 
-        return redirect()->route('getUserInterview')->with('message', 'Interview Updated Successfully');
+        if ($request->redirectTo === 'pageUserInterview') {
+            return redirect()->route('getUserInterview')->with('message', 'User Interview Updated Successfully');
+        } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+            return redirect()->route('getUserHrjob')->with('message', 'User Interview Updated Successfully');
+        }
     }
 
     public function editUserRating($id)
     {
         $userinterview = UserInterview::findOrFail($id);
-        return view('admin.userinterview.rating', compact('userinterview'));
+        $redirectTo = 'pageUserInterview';
+        return view('admin.userinterview.rating', compact('userinterview', 'redirectTo'));
+    }
+
+    public function editUserHrjobUserRating($id)
+    {
+        $userinterview = UserInterview::findOrFail($id);
+        $redirectTo = 'pageUserHrjobUserInterview';
+        return view('admin.userinterview.rating', compact('userinterview', 'redirectTo'));
     }
 
     public function updateUserRating(Request $request, $id)
@@ -148,7 +210,11 @@ class UserInterviewAdminController extends Controller
 
         $userinterview->save();
 
-        return redirect()->route('getUserInterview')->with('message', 'Rating Updated Successfully');
+        if ($request->redirectTo === 'pageUserInterview') {
+            return redirect()->route('getUserInterview')->with('message', 'Rating Updated Successfully');
+        } elseif ($request->redirectTo === 'pageUserHrjobUserInterview') {
+            return redirect()->route('getUserHrjob')->with('message', 'Rating Updated Successfully');
+        }
     }
 
 
@@ -169,5 +235,24 @@ class UserInterviewAdminController extends Controller
         $userinterview->delete();
 
         return redirect()->route('getUserInterview')->with('message', 'Interview deleted successfully');
+    }
+
+    public function destroyUserHrjobUserInterview($id)
+    {
+        $userinterview = UserInterview::findOrFail($id);
+
+        if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            return redirect()->route('getUserHrjob')->with('error', 'You are not authorized to delete interview.');
+        }
+
+        // Prevent hiring_manager from deleting interviews for super_admin
+        $user = User::findOrFail($userinterview->id_user);
+        if (Auth::user()->role === 'hiring_manager' && $user->role === 'super_admin') {
+            return redirect()->route('getUserHrjob')->with('error', 'You cannot manage interviews for Super Admin');
+        }
+
+        $userinterview->delete();
+
+        return redirect()->route('getUserHrjob')->with('message', 'Interview deleted successfully');
     }
 }

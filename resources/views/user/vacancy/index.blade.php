@@ -138,7 +138,11 @@
                     <i class="fas fa-money-bill-wave" style="width: 20px;"></i>
                     <span class="kaem-jobtext ms-2">
                         @if (!empty($vacancy->price))
-                            Rp {{ number_format($vacancy->price, 0, ',', '.') }}
+                            @if(!$vacancy->hide_salary)
+                                Rp {{ number_format($vacancy->price, 0, ',', '.') }}
+                            @else
+                                Confidential
+                            @endif
                         @else
                             -
                         @endif

@@ -38,7 +38,6 @@
         </ul>
     </div>
 
-
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -125,13 +124,27 @@
                                         <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td>
                                         <td>{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td>
-                                            <a href="{{ route('editUserHrjobInterview', $row->interviews->first()->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
-                                            <a href="{{ route('editUserHrjobRating', $row->interviews->first()->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i> Rating</a>
-                                            <form action="{{ route('destroyUserHrjobInterview', $row->interviews->first()->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i> Delete</button>
-                                            </form>
+                                            @php
+                                                $interview = $row->interviews->first();
+                                            @endphp
+
+                                            @if ($interview && $interview->id)
+                                                <a href="{{ route('editUserHrjobInterview', $interview->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </a>
+                                                <a href="{{ route('editUserHrjobRating', $interview->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
+                                                    <i class="fas fa-star"></i> Rating
+                                                </a>
+                                                <form action="{{ route('destroyUserHrjobInterview', $interview->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-danger">Create a valid interview first !</span>
+                                            @endif
                                         </td>
                                     @else
                                         <td data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
@@ -169,6 +182,8 @@
                             </button>
                         </div>
                         <div class="modal-body">
+
+                            <input type="hidden" name="redirectTo" value="{{ session('redirectTo') }}">
 
                             <div class="form-group">
                                 <label>Applicant</label>

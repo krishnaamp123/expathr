@@ -33,6 +33,7 @@ class HrjobAdminController extends Controller
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
             'job_report' => 'nullable|string|max:1000',
             'price' => 'nullable',
+            'hide_salary' => 'nullable|boolean',
             'description' => 'nullable|string|max:1000',
             'qualification' => 'nullable|string|max:1000',
             'location_type' => 'required|in:on_site,hybrid,remote',
@@ -52,6 +53,7 @@ class HrjobAdminController extends Controller
         $hrjob->job_type = $validated['job_type'];
         $hrjob->job_report = $validated['job_report'];
         $hrjob->price = $validated['price'];
+        $hrjob->hide_salary = $validated['hide_salary'];
         $hrjob->description = $validated['description'];
         $hrjob->qualification = $validated['qualification'];
         $hrjob->location_type = $validated['location_type'];
@@ -86,6 +88,7 @@ class HrjobAdminController extends Controller
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
             'job_report' => 'nullable|string|max:1000',
             'price' => 'nullable',
+            'hide_salary' => 'nullable|boolean',
             'description' => 'nullable|string|max:1000',
             'qualification' => 'nullable|string|max:1000',
             'location_type' => 'required|in:on_site,hybrid,remote',
@@ -96,12 +99,16 @@ class HrjobAdminController extends Controller
             'is_active' => 'required|in:yes,no',
         ]);
 
+        // Set default value jika 'hide_salary' tidak ada
+        $validated['hide_salary'] = $request->has('hide_salary') ? 1 : 0;
+
         $hrjob->id_category = $validated['id_category'];
         $hrjob->id_city = $validated['id_city'];
         $hrjob->job_name = $validated['job_name'];
         $hrjob->job_type = $validated['job_type'];
         $hrjob->job_report = $validated['job_report'];
         $hrjob->price = $validated['price'];
+        $hrjob->hide_salary = $validated['hide_salary'];
         $hrjob->description = $validated['description'];
         $hrjob->qualification = $validated['qualification'];
         $hrjob->location_type = $validated['location_type'];

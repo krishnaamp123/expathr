@@ -1,18 +1,17 @@
 @extends('admin.layout.app')
-@section('title', 'Edit Interview')
+@section('title', 'Edit User Interview')
 @section('content')
-    <h1 class="h3 mb-2 text-gray-800">Interview</h1>
+    <h1 class="h3 mb-2 text-gray-800">User Interview</h1>
     <div class="row">
         <div class="col-12 col-md-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Rating Interview</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Rating User Interview</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('updateRating', $interview->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('updateUserRating', $userinterview->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="redirectTo" value="{{ $redirectTo }}">
 
                         <!-- Rating -->
                         <div class="form-group">
@@ -24,7 +23,7 @@
                                         id="star-{{ $i }}"
                                         name="rating"
                                         value="{{ $i }}"
-                                        @if($i == old('rating', $interview->rating)) checked @endif
+                                        @if($i == old('rating', $userinterview->rating)) checked @endif
                                         required>
                                     <label for="star-{{ $i }}" class="star">&#9733;</label>
                                 @endfor
@@ -37,7 +36,7 @@
                         <!-- Comment -->
                         <div class="form-group">
                             <label for="comment">Comment</label>
-                            <textarea name="comment" class="form-control" id="comment" rows="5">{{ $interview->comment }}</textarea>
+                            <textarea name="comment" class="form-control" id="comment" rows="5">{{ $userinterview->comment }}</textarea>
                             @error('comment')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -46,7 +45,7 @@
                         <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;">
                             <i class="fas fa-save"></i> Save
                         </button>
-                        <a href="{{ route('getInterview') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('getUserInterview') }}" class="btn btn-secondary btn-sm">
                             <i class="fas fa-arrow-left"></i> Back
                         </a>
                     </form>

@@ -67,6 +67,13 @@
                         </div>
 
                         <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" name="hide_salary" class="form-check-input" id="hideSalary" value="1">
+                                <label class="form-check-label" for="hideSalary">Hide salary from applicant</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="description">Description</label>
                             <textarea name="description" class="form-control" id="exampleInputDescription" rows="5"></textarea>
                             @error('description')

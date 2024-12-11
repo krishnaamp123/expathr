@@ -64,7 +64,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 text-end">
-                                        @if($vacancy->answers && $vacancy->answers->isEmpty())
+                                        @if (!isset($formsByJob[$vacancy->id_job]))
+                                            <span class="badge bg-warning">No Form</span>
+                                        @elseif ($vacancy->answers->isEmpty())
                                             <span class="badge bg-danger">Form Not Filled</span>
                                         @else
                                             <span class="badge bg-success">Form Filled</span>
