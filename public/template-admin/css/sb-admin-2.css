@@ -9606,6 +9606,10 @@ button.bg-dark:focus {
   color: #4e73df !important;
 }
 
+.text-kaem {
+    color: #72A28A !important;
+}
+
 a.text-primary:hover, a.text-primary:focus {
   color: #224abe !important;
 }

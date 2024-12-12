@@ -93,7 +93,7 @@
                                 <a href="{{ route('profile.pdf', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
                                     <i class="fas fa-file-pdf"></i> PDF
                                 </a>
-    @endif
+                                @endif
                             </td>
                         </tr>
                         @endforeach

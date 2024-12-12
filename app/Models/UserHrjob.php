@@ -37,7 +37,7 @@ class UserHrjob extends Model
         return $this->hasMany(Interview::class, 'id_user_job');
     }
 
-    public function userInterviews()
+    public function userinterviews()
     {
         return $this->hasMany(UserInterview::class, 'id_user_job');
     }

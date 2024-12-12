@@ -12,6 +12,7 @@
                     <form action="{{ route('updateUserRating', $userinterview->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="redirectTo" value="{{ $redirectTo }}">
 
                         <!-- Rating -->
                         <div class="form-group">

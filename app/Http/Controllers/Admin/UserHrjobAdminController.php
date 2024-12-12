@@ -16,13 +16,15 @@ class UserHrjobAdminController extends Controller
 
     public function getUserHrjob(Request $request)
     {
-        // Ambil parameter status dari URL
+        // Ambil parameter status, start_date, dan end_date dari URL
         $status = $request->query('status');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
 
         // Tentukan logika penyaringan berdasarkan role pengguna
         if (Auth::user()->role === 'hiring_manager') {
             // Filter untuk hiring_manager, tidak dapat melihat data dari super_admin
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews')
                 ->where(function ($query) use ($status) {
                     $query->whereHas('interviews', function ($subQuery) {
                         $subQuery->whereHas('user', function ($nestedQuery) {
@@ -35,11 +37,10 @@ class UserHrjobAdminController extends Controller
                     if ($status) {
                         $query->where('status', $status);
                     }
-                })
-                ->get();
+                });
         } elseif (Auth::user()->role === 'recruiter') {
             // Filter untuk recruiter, tidak dapat melihat data dari super_admin dan hiring_manager
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews')
                 ->where(function ($query) use ($status) {
                     $query->whereHas('interviews', function ($subQuery) {
                         $subQuery->whereHas('user', function ($nestedQuery) {
@@ -52,16 +53,25 @@ class UserHrjobAdminController extends Controller
                     if ($status) {
                         $query->where('status', $status);
                     }
-                })
-                ->get();
+                });
         } else {
             // Jika pengguna bukan recruiter atau hiring_manager, tampilkan semua data
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews')
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
-                })
-                ->get();
+                });
         }
+
+        // Tambahkan filter berdasarkan tanggal jika diberikan
+        if ($startDate) {
+            $userhrjobs->whereDate('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $userhrjobs->whereDate('created_at', '<=', $endDate);
+        }
+
+        $userhrjobs = $userhrjobs->get();
 
         // Tampilkan ke view dengan semua status untuk digunakan di topbar
         $statuses = [
@@ -74,6 +84,68 @@ class UserHrjobAdminController extends Controller
 
         return view('admin.userhrjob.index', compact('userhrjobs', 'statuses', 'status', 'users'));
     }
+
+
+    // public function getUserHrjob(Request $request)
+    // {
+    //     // Ambil parameter status dari URL
+    //     $status = $request->query('status');
+
+    //     // Tentukan logika penyaringan berdasarkan role pengguna
+    //     if (Auth::user()->role === 'hiring_manager') {
+    //         // Filter untuk hiring_manager, tidak dapat melihat data dari super_admin
+    //         $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews')
+    //             ->where(function ($query) use ($status) {
+    //                 $query->whereHas('interviews', function ($subQuery) {
+    //                     $subQuery->whereHas('user', function ($nestedQuery) {
+    //                         $nestedQuery->where('role', '!=', 'super_admin');
+    //                     });
+    //                 })
+    //                 ->orWhereDoesntHave('interviews'); // Tampilkan data tanpa relasi interviews juga
+
+    //                 // Tambahkan filter status jika ada
+    //                 if ($status) {
+    //                     $query->where('status', $status);
+    //                 }
+    //             })
+    //             ->get();
+    //     } elseif (Auth::user()->role === 'recruiter') {
+    //         // Filter untuk recruiter, tidak dapat melihat data dari super_admin dan hiring_manager
+    //         $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews')
+    //             ->where(function ($query) use ($status) {
+    //                 $query->whereHas('interviews', function ($subQuery) {
+    //                     $subQuery->whereHas('user', function ($nestedQuery) {
+    //                         $nestedQuery->whereNotIn('role', ['super_admin', 'hiring_manager']);
+    //                     });
+    //                 })
+    //                 ->orWhereDoesntHave('interviews'); // Tampilkan data tanpa relasi interviews juga
+
+    //                 // Tambahkan filter status jika ada
+    //                 if ($status) {
+    //                     $query->where('status', $status);
+    //                 }
+    //             })
+    //             ->get();
+    //     } else {
+    //         // Jika pengguna bukan recruiter atau hiring_manager, tampilkan semua data
+    //         $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews')
+    //             ->when($status, function ($query, $status) {
+    //                 return $query->where('status', $status);
+    //             })
+    //             ->get();
+    //     }
+
+    //     // Tampilkan ke view dengan semua status untuk digunakan di topbar
+    //     $statuses = [
+    //         'applicant', 'shortlist', 'phone_screen', 'hr_interview',
+    //         'user_interview', 'skill_test', 'reference_check',
+    //         'offering', 'rejected', 'hired'
+    //     ];
+
+    //     $users = User::where('role', '!=', 'applicant')->get();
+
+    //     return view('admin.userhrjob.index', compact('userhrjobs', 'statuses', 'status', 'users'));
+    // }
 
     public function addUserHrjob()
     {
@@ -145,6 +217,8 @@ class UserHrjobAdminController extends Controller
         $userhrjob->status = $request->status;
         $userhrjob->save();
 
+        $status = $request->status;
+
         if ($request->status === 'hr_interview') {
             return redirect()->route('getUserHrjob', ['status' => 'hr_interview'])
                 ->with('showModal', true)
@@ -152,7 +226,14 @@ class UserHrjobAdminController extends Controller
                 ->with('redirectTo', 'pageUserHrjobInterview');
         }
 
-        return redirect()->route('getUserHrjob')->with('message', 'Status updated successfully');
+        if ($status === 'user_interview') {
+            return redirect()->route('getUserHrjob', ['status' => 'user_interview'])
+                ->with('showuserModal', true)
+                ->with('userJobId', $id)
+                ->with('redirectTo', 'pageUserHrjobUserInterview');
+        }
+
+        return redirect()->route('getUserHrjob', ['status' => $status])->with('message', 'Status updated successfully');
     }
 
     public function destroyUserHrjob($id)
