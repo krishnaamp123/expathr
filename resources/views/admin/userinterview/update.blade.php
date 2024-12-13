@@ -104,7 +104,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-save"></i> Save</button>
-                        <a href="{{ route('getUserInterview') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+                        {{-- <a href="{{ route('getUserInterview') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a> --}}
                     </form>
                 </div>
             </div>

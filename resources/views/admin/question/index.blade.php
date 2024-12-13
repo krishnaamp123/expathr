@@ -24,7 +24,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr class="fa-sm text-center">
+                        <tr class="small text-center">
                             <th>ID</th>
                             <th>Question</th>
                             <th>Created At</th>
@@ -34,20 +34,22 @@
                     </thead>
                     <tbody>
                         @foreach ($questions as $row)
-                        <tr class="fa-sm">
+                        <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->question}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
                                 <a href="{{ route('editQuestion', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
-                                    <i class="fas fa-edit"></i> Edit
+                                    <i class="fas fa-edit"></i>
+                                    {{-- Edit --}}
                                 </a>
                                 <form action="{{ route('destroyQuestion', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this question?')">
-                                        <i class="fas fa-trash"></i> Delete
+                                        <i class="fas fa-trash"></i>
+                                        {{-- Delete --}}
                                     </button>
                                 </form>
                             </td>

@@ -24,7 +24,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr class="fa-sm text-center">
+                        <tr class="small text-center">
                             <th>ID</th>
                             <th>Job Name</th>
                             <th>Question</th>
@@ -35,18 +35,22 @@
                     </thead>
                     <tbody>
                         @foreach ($forms as $row)
-                        <tr class="fa-sm">
+                        <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->hrjob->job_name ?? 'No Job'}}</td>
                             <td>{{$row->question->question ?? 'No Question'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
-                                <a href="{{ route('editForm', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
+                                <a href="{{ route('editForm', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i>
+                                    {{-- Edit --}}
+                                </a>
                                 <form action="{{ route('destroyForm', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this form?')"><i class="fas fa-trash"></i> Delete</button>
+                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this form?')"><i class="fas fa-trash"></i>
+                                        {{-- Delete --}}
+                                    </button>
                                 </form>
                             </td>
                         </tr>

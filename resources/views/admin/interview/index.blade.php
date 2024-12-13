@@ -50,7 +50,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr class="fa-sm text-center">
+                        <tr class="small text-center">
                             <th>ID</th>
                             <th>Job</th>
                             <th>Applicant</th>
@@ -68,7 +68,7 @@
                     </thead>
                     <tbody>
                         @foreach ($interviews as $row)
-                        <tr class="fa-sm">
+                        <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
                             <td>{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
@@ -78,16 +78,31 @@
                             <td>{{$row->rating ?? 'No Rating'}}</td>
                             <td>{{$row->comment ?? 'No Comment'}}</td>
                             <td>{{$row->location ?? 'No Location'}}</td>
-                            <td>{{$row->link ?? 'No Link'}}</td>
+
+                            <td>
+                                @if ($row->link)
+                                    <a href="{{ $row->link }}" target="_blank" title="{{ $row->link }}">
+                                        {{ $row->link }}
+                                    </a>
+                                @else
+                                    No Link
+                                @endif
+                            </td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
-                                <a href="{{ route('editInterview', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
-                                <a href="{{ route('editRating', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i> Rating</a>
+                                <a href="{{ route('editInterview', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i>
+                                    {{-- Edit --}}
+                                </a>
+                                <a href="{{ route('editRating', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i>
+                                    {{-- Rating --}}
+                                </a>
                                 <form action="{{ route('destroyInterview', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i> Delete</button>
+                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i>
+                                        {{-- Delete --}}
+                                    </button>
                                 </form>
                             </td>
                         </tr>

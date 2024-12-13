@@ -36,7 +36,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr class="fa-sm text-center">
+                        <tr class="small text-center">
                             <th>ID</th>
                             <th>Job Name</th>
                             <th>Applicant</th>
@@ -49,12 +49,11 @@
                     </thead>
                     <tbody>
                         @foreach ($answers as $row)
-                        <tr class="fa-sm">
+                        <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->userhrjob->hrjob->job_name ?? 'No Job'}}</td>
                             <td>{{$row->userhrjob->user->fullname ?? 'No Applicant'}}</td>
                             <td>{{$row->form->question->question ?? 'No Question'}}</td>
-                            <!-- Ganti Jawaban Numerik dengan Label Teks -->
                             <td>{{ $answerLabels[$row->answer] ?? 'Unknown' }}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
@@ -63,7 +62,9 @@
                                 <form action="{{ route('destroyAnswer', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this answer?')"><i class="fas fa-trash"></i> Delete</button>
+                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this answer?')"><i class="fas fa-trash"></i>
+                                        {{-- Delete --}}
+                                    </button>
                                 </form>
                             </td>
                         </tr>

@@ -1,6 +1,7 @@
 @extends('admin.layout.app')
 @section('title', 'User Job')
 @section('content')
+
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">User Job</h1>
 
@@ -69,8 +70,8 @@
                     <label for="end_date" class="sr-only">End Date</label>
                     <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request('end_date') }}" placeholder="End Date">
                 </div>
-                <button type="submit" class="btn btn-primary mb-2">Filter</button>
-                <a href="{{ route('getUserHrjob', ['status' => request('status')]) }}" class="btn btn-secondary mb-2 ml-2">Clear Date</a>
+                <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
+                <a href="{{ route('getUserHrjob', ['status' => request('status')]) }}" class="btn btn-secondary btn-sm mb-2 ml-2">Clear Date</a>
             </form>
         </div>
         </div>
@@ -78,7 +79,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr class="fa-sm text-center">
+                        <tr class="small text-center small">
                             <th>ID</th>
                             <th>Job</th>
                             <th>Applicant</th>
@@ -115,16 +116,17 @@
                     <tbody>
                         @foreach ($userhrjobs as $row)
                             @if (request('status') === null || request('status') === $row->status)
-                                <tr class="fa-sm">
+                                <tr class="small">
                                     <td>{{ $row->id }}</td>
                                     <td>{{ $row->hrjob->job_name ?? 'No Job' }}</td>
                                     <td>
                                         <a
                                             href="#"
                                             class="btn p-0"
+                                            style="font-size: 0.85rem;"
                                             data-toggle="modal"
                                             data-target="#userDetailsModal-{{ $row->id }}">
-                                            {{ $row->user->fullname ?? 'No Applicant' }}
+                                            {{ \Illuminate\Support\Str::limit($row->user->fullname ?? 'No Applicant', 20, '...') }}
                                         </a>
                                     </td>
                                     <td>
@@ -154,13 +156,26 @@
                                             {{ $row->interviews->first()->rating ?? 'Not Rated' }}
                                         </td>
                                         <td>
-                                            {{ $row->interviews->first()->comment ?? 'Not Commented' }}
+                                            @if ($row->interviews->first()?->comment)
+                                                <span
+                                                    title="{{ $row->interviews->first()->comment }}">
+                                                    {{ \Illuminate\Support\Str::limit($row->interviews->first()->comment, 20, '...') }}
+                                                </span>
+                                            @else
+                                                Not Commented
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $row->interviews->first()->location ?? 'Not Located' }}
                                         </td>
                                         <td>
-                                            {{ $row->interviews->first()->comment ?? 'No Link' }}
+                                            @if ($row->interviews->first()?->link)
+                                                <a href="{{ $row->interviews->first()->link }}" target="_blank" title="{{ $row->interviews->first()->link }}">
+                                                    {{ \Illuminate\Support\Str::limit($row->interviews->first()->link, 20, '...') }}
+                                                </a>
+                                            @else
+                                                No Link
+                                            @endif
                                         </td>
                                         <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td>
                                         <td>{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
@@ -171,16 +186,19 @@
 
                                             @if ($interview && $interview->id)
                                                 <a href="{{ route('editUserHrjobInterview', $interview->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
-                                                    <i class="fas fa-edit"></i> Edit
+                                                    <i class="fas fa-edit"></i>
+                                                    {{-- Edit --}}
                                                 </a>
                                                 <a href="{{ route('editUserHrjobRating', $interview->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
-                                                    <i class="fas fa-star"></i> Rating
+                                                    <i class="fas fa-star"></i>
+                                                    {{-- Rating --}}
                                                 </a>
                                                 <form action="{{ route('destroyUserHrjobInterview', $interview->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                        <i class="fas fa-trash"></i>
+                                                        {{-- Delete --}}
                                                     </button>
                                                 </form>
                                             @else
@@ -201,13 +219,26 @@
                                             {{ $row->userinterviews->first()->rating ?? 'Not Rated' }}
                                         </td>
                                         <td>
-                                            {{ $row->userinterviews->first()->comment ?? 'Not Commented' }}
+                                            @if ($row->userinterviews->first()?->comment)
+                                                <span
+                                                    title="{{ $row->userinterviews->first()->comment }}">
+                                                    {{ \Illuminate\Support\Str::limit($row->userinterviews->first()->comment, 20, '...') }}
+                                                </span>
+                                            @else
+                                                Not Commented
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $row->userinterviews->first()->location ?? 'Not Located' }}
                                         </td>
                                         <td>
-                                            {{ $row->userinterviews->first()->comment ?? 'No Link' }}
+                                            @if ($row->userinterviews->first()?->link)
+                                                <a href="{{ $row->userinterviews->first()->link }}" target="_blank" title="{{ $row->userinterviews->first()->link }}">
+                                                    {{ \Illuminate\Support\Str::limit($row->userinterviews->first()->link, 20, '...') }}
+                                                </a>
+                                            @else
+                                                No Link
+                                            @endif
                                         </td>
                                         <td>{{ $row->userinterviews->first()->created_at ?? 'Not Created' }}</td>
                                         <td>{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
@@ -218,16 +249,19 @@
 
                                             @if ($userinterview && $userinterview->id)
                                                 <a href="{{ route('editUserHrjobUserInterview', $userinterview->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
-                                                    <i class="fas fa-edit"></i> Edit
+                                                    <i class="fas fa-edit"></i>
+                                                    {{-- Edit --}}
                                                 </a>
                                                 <a href="{{ route('editUserHrjobUserRating', $userinterview->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
-                                                    <i class="fas fa-star"></i> Rating
+                                                    <i class="fas fa-star"></i>
+                                                    {{-- Rating --}}
                                                 </a>
                                                 <form action="{{ route('destroyUserHrjobUserInterview', $userinterview->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                        <i class="fas fa-trash"></i>
+                                                        {{-- Delete --}}
                                                     </button>
                                                 </form>
                                             @else
@@ -240,11 +274,15 @@
                                         <td>{{ $row->created_at }}</td>
                                         <td>{{ $row->updated_at }}</td>
                                         <td>
-                                            <a href="{{ route('editUserHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="{{ route('editUserHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i>
+                                                {{-- Edit --}}
+                                            </a>
                                             <form action="{{ route('destroyUserHrjob', $row->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this user job?')"><i class="fas fa-trash"></i> Delete</button>
+                                                <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this user job?')"><i class="fas fa-trash"></i>
+                                                    {{-- Delete --}}
+                                                </button>
                                             </form>
                                         </td>
                                     @endif
@@ -443,11 +481,63 @@
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>
                         @endif
+                        @if ($row->answers->isNotEmpty())
+                            <a
+                                href="#"
+                                class="btn my-1"
+                                style="background-color: #781; color: white;"
+                                data-toggle="modal"
+                                data-target="#userAnswerModal-{{ $row->id }}">
+                                <i class="fas fa-file"></i> Answers
+                            </a>
+                        @else
+                            <p>No Answers</p>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
+
+    <!-- Definisikan Pemetaan Jawaban -->
+    @php
+    $answerLabels = [
+        1 => 'Sangat Tidak Baik',
+        2 => 'Tidak Baik',
+        3 => 'Netral',
+        4 => 'Baik',
+        5 => 'Sangat Baik',
+    ];
+    @endphp
+
+    @foreach ($userhrjobs as $row)
+        @if ($row->answers->isNotEmpty())
+            <div class="modal fade" id="userAnswerModal-{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="userAnswerModalLabel-{{ $row->id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="userAnswerModalLabel-{{ $row->id }}">Answers</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @foreach ($row->answers as $answer)
+                                <div class="mb-4">
+                                    <p class="mb-1"> <strong>{{ $answer->form->question->question ?? 'No Question' }}</strong></p>
+                                    <p class="mb-1"> {{ $answerLabels[$answer->answer] ?? 'No Answer' }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
+
 
 
 
