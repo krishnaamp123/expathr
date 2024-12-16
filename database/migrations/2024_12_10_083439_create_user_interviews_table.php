@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->string('location')->nullable();
             $table->string('link')->nullable();
+            $table->enum('arrival',['yes','no'])->nullable();
             $table->timestamps();
 
             $table->foreign('id_user_job')->references('id')->on('user_hrjobs');

@@ -62,6 +62,12 @@
                     color: white; /* Text color when hovered */
                 }
 
+                .select2-container--default .select2-selection--single .select2-selection__clear {
+                    right: 24px; /* Geser posisi clear ke kiri */
+                    font-size: 12px; /* Sesuaikan ukuran font jika perlu */
+                    color: #666; /* Warna tombol clear */
+                }
+
                 /* Tambahkan padding atau margin untuk logo dan menu */
                 .navbar-brand {
                     padding-left: 17px;
@@ -301,13 +307,31 @@
                             dropdownParent: $(this).closest('.modal')
                         });
                     });
-                });
-                $(document).ready(function () {
+                    // Inisialisasi Select2 untuk elemen cityFilter dan categoryFilter
                     $('#cityFilter, #categoryFilter').select2({
                         placeholder: "Select an option",
                         allowClear: false
                     });
+
+                    // Inisialisasi Select2 dengan allowClear hanya untuk elemen tertentu
+                    $('#platform').select2({
+                        placeholder: "Select an option",
+                        allowClear: true,
+                        dropdownParent: $('#addSourceModal')
+                    });
+
+                    $('#editplatform').select2({
+                        placeholder: "Select an option",
+                        allowClear: true,
+                        dropdownParent: $('#editSourceModal')
+                    });
                 });
+                // $(document).ready(function () {
+                //     $('#cityFilter, #categoryFilter').select2({
+                //         placeholder: "Select an option",
+                //         allowClear: false
+                //     });
+                // });
             </script>
 
             <script>

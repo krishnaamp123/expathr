@@ -13,6 +13,15 @@
                 </button>
             </div>
             @endif
+
+            @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{session('error')}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
             <h2 class="section-heading text-uppercase">Profile</h2>
             <h3 class="section-subheading mb-5">Complete your profile first before applying!</h3>
         </div>
@@ -38,11 +47,14 @@
             <div class="col-lg-3 mb-3">
                 @include('user.profile.workfield.index', ['workfield' => $workfield, 'fields' => $fields])
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-4 mb-3">
                 @include('user.profile.education.index', ['education' => $education])
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-5 mb-3">
                 @include('user.profile.project.index', ['project' => $project])
+            </div>
+            <div class="col-lg-3 mb-3">
+                @include('user.profile.source.index', ['source' => $source])
             </div>
             <div class="col-lg-6 mb-3">
                 @include('user.profile.experience.index', ['experience' => $experience])

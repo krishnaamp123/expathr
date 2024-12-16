@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Field extends Model
+class Outlet extends Model
 {
     use HasFactory;
 
-    protected $table = 'fields';
+    protected $table = 'outlets';
 
     protected $fillable = [
-        'field_name'
+        'outlet_name'
     ];
 }

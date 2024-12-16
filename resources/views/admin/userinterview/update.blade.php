@@ -54,7 +54,7 @@
 
                         <div class="form-group">
                             <label>Time</label>
-                            <input type="text" name="time" class="form-control" value="{{ old('time', $userinterview->time) }}">
+                            <input type="time" name="time" class="form-control" value="{{ old('time', $userinterview->time) }}">
                             @error('time')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

@@ -18,6 +18,7 @@ class UserInterview extends Model
         'comment',
         'location',
         'link',
+        'arrival',
     ];
 
     public function userHrjob()

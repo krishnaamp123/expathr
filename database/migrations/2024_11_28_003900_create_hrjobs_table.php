@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('hrjobs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_category');
+            $table->unsignedBigInteger('id_outlet');
             $table->unsignedBigInteger('id_city');
             $table->string('job_name');
             $table->enum('job_type',['full_time','part_time','self_employed','freelancer','contract','internship','seasonal']);
@@ -27,9 +28,13 @@ return new class extends Migration
             $table->date('expired');
             $table->bigInteger('number_hired')->unsigned();
             $table->enum('is_active',['yes','no']);
+            $table->timestamp('job_closed')->nullable();
+            $table->enum('is_ended',['yes','no'])->default('no');
+            $table->bigInteger('hiring_cost')->nullable();
             $table->timestamps();
 
             $table->foreign('id_category')->references('id')->on('hrjob_categories');
+            $table->foreign('id_outlet')->references('id')->on('outlets');
             $table->foreign('id_city')->references('id')->on('cities');
         });
     }

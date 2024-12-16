@@ -18,6 +18,7 @@ use App\Http\Controllers\User\ExperienceController;
 use App\Http\Controllers\User\CertificationController;
 use App\Http\Controllers\User\SkillController;
 use App\Http\Controllers\User\VacancyController;
+use App\Http\Controllers\User\SourceController;
 // ADMIN
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
@@ -147,6 +148,13 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/profile/skill/update/{id}', [SkillController::class, 'updateSkill'])->name('updateSkill');
             Route::delete('/profile/skill/destroy/{id}', [SkillController::class, 'destroySkill'])->name('destroySkill');
 
+            //SOURCE
+            Route::get('/profile/source/add', [SourceController::class, 'addSource'])->name('addSource');
+            Route::post('/profile/source/store', [SourceController::class, 'storeSource'])->name('storeSource');
+            Route::get('/profile/source/edit/{id}', [SourceController::class, 'editSource'])->name('editSource');
+            Route::put('/profile/source/update/{id}', [SourceController::class, 'updateSource'])->name('updateSource');
+            Route::delete('/profile/source/destroy/{id}', [SourceController::class, 'destroySource'])->name('destroySource');
+
             //VACANCY
             Route::get('/user/job/get', [VacancyController::class, 'getVacancy'])->name('getVacancy');
             Route::post('/user/job/store', [VacancyController::class, 'storeVacancy'])->name('storeVacancy');
@@ -231,6 +239,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/interview/update/rating/{id}', [InterviewAdminController::class, 'editRating'])->name('editRating');
             Route::get('/userjob/interview/update/rating/{id}', [InterviewAdminController::class, 'editUserHrjobRating'])->name('editUserHrjobRating');
             Route::put('/interview/update/rating/{id}', [InterviewAdminController::class, 'updateRating'])->name('updateRating');
+            Route::get('/interview/export', [InterviewAdminController::class, 'exportInterview'])->name('exportInterview');
+            Route::get('/interview/dateexport', [InterviewAdminController::class, 'exportdateInterview'])->name('exportdateInterview');
 
 
             // USER INTERVIEW
@@ -246,6 +256,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'editUserRating'])->name('editUserRating');
             Route::get('/userjob/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'editUserHrjobUserRating'])->name('editUserHrjobUserRating');
             Route::put('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'updateUserRating'])->name('updateUserRating');
+            Route::get('/userinterview/export', [UserInterviewAdminController::class, 'exportUserInterview'])->name('exportUserInterview');
+            Route::get('/userinterview/dateexport', [UserInterviewAdminController::class, 'exportdateUserInterview'])->name('exportdateUserInterview');
 
         });
     });

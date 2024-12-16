@@ -44,7 +44,44 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('addInterview')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            <a href="{{route('addInterview')}}" class="btn btn-sm mr-1" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            <a href="{{ route('exportInterview') }}" class="btn btn-sm mr-1" style="background-color: #000; color: white;">
+                <i class="fas fa-file-excel"></i> Export All
+            </a>
+            <!-- Tombol Export -->
+            <button class="btn btn-sm mr-1" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
+                <i class="fas fa-calendar-check"></i> Export Date
+            </button>
+
+            <!-- Modal Popup -->
+            <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exportModalLabel">Export Date Range</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{{ route('exportdateInterview') }}" method="GET">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Export</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">

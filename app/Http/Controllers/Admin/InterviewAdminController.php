@@ -8,6 +8,10 @@ use App\Models\Interview;
 use App\Models\UserHrjob;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 class InterviewAdminController extends Controller
 {
@@ -258,5 +262,125 @@ class InterviewAdminController extends Controller
         $interview->delete();
 
         return redirect()->route('getUserHrjob')->with('message', 'Interview deleted successfully');
+    }
+
+    public function exportInterview()
+    {
+        // Ambil data dari model Interview
+        $interviews = Interview::with(['userHrjob.hrjob', 'userHrjob.user', 'user'])->get();
+
+        // Buat Spreadsheet baru
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Tambahkan header untuk file Excel
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Job Name');
+        $sheet->setCellValue('C1', 'Applicant Name');
+        $sheet->setCellValue('D1', 'Interviewer Name');
+        $sheet->setCellValue('E1', 'Interview Date');
+        $sheet->setCellValue('F1', 'Time');
+        $sheet->setCellValue('G1', 'Rating');
+        $sheet->setCellValue('H1', 'Comment');
+        $sheet->setCellValue('I1', 'Location');
+        $sheet->setCellValue('J1', 'Link');
+        $sheet->setCellValue('K1', 'Created At');
+        $sheet->setCellValue('L1', 'Updated At');
+
+        // Isi data dari database ke dalam file Excel
+        $rowNumber = 2; // Baris pertama adalah header
+        foreach ($interviews as $interview) {
+            $sheet->setCellValue('A' . $rowNumber, $interview->id);
+            $sheet->setCellValue('B' . $rowNumber, $interview->userHrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('C' . $rowNumber, $interview->userHrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('D' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
+            $sheet->setCellValue('E' . $rowNumber, $interview->interview_date);
+            $sheet->setCellValue('F' . $rowNumber, $interview->time);
+            $sheet->setCellValue('G' . $rowNumber, $interview->rating ?? 'No Rating');
+            $sheet->setCellValue('H' . $rowNumber, $interview->comment ?? 'No Comment');
+            $sheet->setCellValue('I' . $rowNumber, $interview->location ?? 'No Location');
+            $sheet->setCellValue('J' . $rowNumber, $interview->link ?? 'No Link');
+            $sheet->setCellValue('K' . $rowNumber, $interview->created_at);
+            $sheet->setCellValue('L' . $rowNumber, $interview->updated_at);
+            $rowNumber++;
+        }
+
+        // Simpan file dan buat response untuk download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        // Konfigurasi headers
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="interviews.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
+    public function exportdateInterview(Request $request)
+    {
+        // Validasi input tanggal
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        // Filter data berdasarkan rentang tanggal
+        $interviews = Interview::with(['userHrjob.hrjob', 'userHrjob.user', 'user'])
+            ->whereBetween('interview_date', [$validated['start_date'], $validated['end_date']])
+            ->get();
+
+        // Membuat spreadsheet dan isi data
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Tambahkan header
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Job Name');
+        $sheet->setCellValue('C1', 'Applicant Name');
+        $sheet->setCellValue('D1', 'Interviewer Name');
+        $sheet->setCellValue('E1', 'Interview Date');
+        $sheet->setCellValue('F1', 'Time');
+        $sheet->setCellValue('G1', 'Rating');
+        $sheet->setCellValue('H1', 'Comment');
+        $sheet->setCellValue('I1', 'Location');
+        $sheet->setCellValue('J1', 'Link');
+        $sheet->setCellValue('K1', 'Created At');
+        $sheet->setCellValue('L1', 'Updated At');
+
+        // Isi data
+        $rowNumber = 2;
+        foreach ($interviews as $interview) {
+            $sheet->setCellValue('A' . $rowNumber, $interview->id);
+            $sheet->setCellValue('B' . $rowNumber, $interview->userHrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('C' . $rowNumber, $interview->userHrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('D' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
+            $sheet->setCellValue('E' . $rowNumber, $interview->interview_date);
+            $sheet->setCellValue('F' . $rowNumber, $interview->time);
+            $sheet->setCellValue('G' . $rowNumber, $interview->rating ?? 'No Rating');
+            $sheet->setCellValue('H' . $rowNumber, $interview->comment ?? 'No Comment');
+            $sheet->setCellValue('I' . $rowNumber, $interview->location ?? 'No Location');
+            $sheet->setCellValue('J' . $rowNumber, $interview->link ?? 'No Link');
+            $sheet->setCellValue('K' . $rowNumber, $interview->created_at);
+            $sheet->setCellValue('L' . $rowNumber, $interview->updated_at);
+            $rowNumber++;
+        }
+
+        // Simpan file dan buat response untuk download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        // Konfigurasi headers
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="interviews.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
     }
 }

@@ -19,6 +19,7 @@ use App\Models\Volunteer;
 use App\Models\Experience;
 use App\Models\Certification;
 use App\Models\Skill;
+use App\Models\Source;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileUserController extends Controller
@@ -40,9 +41,10 @@ class ProfileUserController extends Controller
         $experience = Experience::where('id_user', $user->id)->get();
         $certification = Certification::where('id_user', $user->id)->get();
         $skill = Skill::where('id_user', $user->id)->get();
+        $source = Source::where('id_user', $user->id)->get();
 
         return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language',
-        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skill'));
+        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skill', 'source'));
     }
 
     public function editProfile($id)

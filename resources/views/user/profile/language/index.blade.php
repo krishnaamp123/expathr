@@ -64,11 +64,11 @@
                         <label for="skill" class="kaem-subheading">Skill</label>
                         <select name="skill" class="form-control select2">
                             <option value="">Select Skill</option>
-                            <option value="basic" {{ $languagee->language == 'basic' ? 'selected' : '' }}>Basic</option>
-                            <option value="intermediate" {{ $languagee->language == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                            <option value="profesional" {{ $languagee->language == 'profesional' ? 'selected' : '' }}>Profesional</option>
-                            <option value="advanced_profesional" {{ $languagee->language == 'advanced_profesional' ? 'selected' : '' }}>Advanced Profesional</option>
-                            <option value="native" {{ $languagee->language == 'native' ? 'selected' : '' }}>Native</option>
+                            <option value="basic" {{ $languagee->skill == 'basic' ? 'selected' : '' }}>Basic</option>
+                            <option value="intermediate" {{ $languagee->skill == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
+                            <option value="profesional" {{ $languagee->skill == 'profesional' ? 'selected' : '' }}>Profesional</option>
+                            <option value="advanced_profesional" {{ $languagee->skill == 'advanced_profesional' ? 'selected' : '' }}>Advanced Profesional</option>
+                            <option value="native" {{ $languagee->skill == 'native' ? 'selected' : '' }}>Native</option>
                         </select>
                         @error('skill')
                             <span class="text-danger">{{ $message }}</span>
