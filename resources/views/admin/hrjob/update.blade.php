@@ -122,6 +122,21 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Outlet</label>
+                            <select name="id_outlet" class="form-control select2">
+                                <option value="">Select Outlet</option>
+                                @foreach($outlets as $outlet)
+                                    <option value="{{ $outlet->id }}" {{ $outlet->id == $hrjob->id_outlet ? 'selected' : '' }}>
+                                        {{ $outlet->outlet_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_outlet')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Experience Min</label>
                             <input type="text" name="experience_min" class="form-control" value="{{ old('experience_min', $hrjob->experience_min) }}">
                             @error('experience_min')
@@ -161,6 +176,26 @@
                                 <option value="no" {{ old('is_active', $hrjob->is_active) == 'no' ? 'selected' : '' }}>No</option>
                             </select>
                             @error('is_active')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Is Ended</label>
+                            <select name="is_ended" class="form-control select2">
+                                <option value="">Select Is Ended</option>
+                                <option value="yes" {{ old('is_ended', $hrjob->is_ended) == 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ old('is_ended', $hrjob->is_ended) == 'no' ? 'selected' : '' }}>No</option>
+                            </select>
+                            @error('is_ended')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Hiring Cost</label>
+                            <input type="number" name="hiring_cost" class="form-control" value="{{ old('hiring_cost', $hrjob->hiring_cost) }}">
+                            @error('hiring_cost')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

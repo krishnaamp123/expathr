@@ -320,10 +320,17 @@
                         dropdownParent: $('#addSourceModal')
                     });
 
-                    $('#editplatform').select2({
+                    $('.editplatform').select2({
                         placeholder: "Select an option",
                         allowClear: true,
-                        dropdownParent: $('#editSourceModal')
+                        dropdownParent: $(this).closest('.modal')
+                    });
+                });
+                $(document).on('shown.bs.modal', '.modal', function () {
+                    $(this).find('.select2').select2({
+                        placeholder: "Select an option",
+                        allowClear: true,
+                        dropdownParent: $(this)
                     });
                 });
                 // $(document).ready(function () {

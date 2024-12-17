@@ -166,6 +166,7 @@ class UserInterviewAdminController extends Controller
             'time' => 'nullable',
             'location' => 'nullable',
             'link' => 'nullable',
+            'arrival' => 'nullable',
 
         ]);
 
@@ -175,6 +176,7 @@ class UserInterviewAdminController extends Controller
         $userinterview->time = $request->time;
         $userinterview->location = $request->location;
         $userinterview->link = $request->link;
+        $userinterview->arrival = $request->arrival;
 
         $userinterview->save();
 
@@ -270,33 +272,35 @@ class UserInterviewAdminController extends Controller
 
         // Tambahkan header untuk file Excel
         $sheet->setCellValue('A1', 'ID');
-        $sheet->setCellValue('B1', 'Job Name');
-        $sheet->setCellValue('C1', 'Applicant Name');
-        $sheet->setCellValue('D1', 'Interviewer Name');
-        $sheet->setCellValue('E1', 'Interview Date');
-        $sheet->setCellValue('F1', 'Time');
-        $sheet->setCellValue('G1', 'Rating');
-        $sheet->setCellValue('H1', 'Comment');
-        $sheet->setCellValue('I1', 'Location');
+        $sheet->setCellValue('B1', 'Applicant Name');
+        $sheet->setCellValue('C1', 'Interviewer Name');
+        $sheet->setCellValue('D1', 'Job Name');
+        $sheet->setCellValue('E1', 'Location');
+        $sheet->setCellValue('F1', 'Outlet');
+        $sheet->setCellValue('G1', 'Interview Date');
+        $sheet->setCellValue('H1', 'Time');
+        $sheet->setCellValue('I1', 'Location Interview');
         $sheet->setCellValue('J1', 'Link');
-        $sheet->setCellValue('K1', 'Created At');
-        $sheet->setCellValue('L1', 'Updated At');
+        $sheet->setCellValue('K1', 'Arrival');
+
+        // Membuat header bold
+        $headerRange = 'A1:K1'; // Range dari header
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
 
         // Isi data dari database ke dalam file Excel
         $rowNumber = 2; // Baris pertama adalah header
         foreach ($interviews as $interview) {
             $sheet->setCellValue('A' . $rowNumber, $interview->id);
-            $sheet->setCellValue('B' . $rowNumber, $interview->userHrjob->hrjob->job_name ?? 'No Job');
-            $sheet->setCellValue('C' . $rowNumber, $interview->userHrjob->user->fullname ?? 'No Applicant');
-            $sheet->setCellValue('D' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
-            $sheet->setCellValue('E' . $rowNumber, $interview->interview_date);
-            $sheet->setCellValue('F' . $rowNumber, $interview->time);
-            $sheet->setCellValue('G' . $rowNumber, $interview->rating ?? 'No Rating');
-            $sheet->setCellValue('H' . $rowNumber, $interview->comment ?? 'No Comment');
+            $sheet->setCellValue('B' . $rowNumber, $interview->userHrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('C' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
+            $sheet->setCellValue('D' . $rowNumber, $interview->userHrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('E' . $rowNumber, $interview->userHrjob->hrjob->location ?? 'No Location');
+            $sheet->setCellValue('F' . $rowNumber, $interview->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('G' . $rowNumber, $interview->interview_date ?? 'No Date');
+            $sheet->setCellValue('H' . $rowNumber, $interview->time ?? 'No Time');
             $sheet->setCellValue('I' . $rowNumber, $interview->location ?? 'No Location');
             $sheet->setCellValue('J' . $rowNumber, $interview->link ?? 'No Link');
-            $sheet->setCellValue('K' . $rowNumber, $interview->created_at);
-            $sheet->setCellValue('L' . $rowNumber, $interview->updated_at);
+            $sheet->setCellValue('K' . $rowNumber, $interview->arrival ?? 'No Arrival');
             $rowNumber++;
         }
 
@@ -334,33 +338,35 @@ class UserInterviewAdminController extends Controller
 
         // Tambahkan header
         $sheet->setCellValue('A1', 'ID');
-        $sheet->setCellValue('B1', 'Job Name');
-        $sheet->setCellValue('C1', 'Applicant Name');
-        $sheet->setCellValue('D1', 'Interviewer Name');
-        $sheet->setCellValue('E1', 'Interview Date');
-        $sheet->setCellValue('F1', 'Time');
-        $sheet->setCellValue('G1', 'Rating');
-        $sheet->setCellValue('H1', 'Comment');
-        $sheet->setCellValue('I1', 'Location');
+        $sheet->setCellValue('B1', 'Applicant Name');
+        $sheet->setCellValue('C1', 'Interviewer Name');
+        $sheet->setCellValue('D1', 'Job Name');
+        $sheet->setCellValue('E1', 'Location');
+        $sheet->setCellValue('F1', 'Outlet');
+        $sheet->setCellValue('G1', 'Interview Date');
+        $sheet->setCellValue('H1', 'Time');
+        $sheet->setCellValue('I1', 'Location Interview');
         $sheet->setCellValue('J1', 'Link');
-        $sheet->setCellValue('K1', 'Created At');
-        $sheet->setCellValue('L1', 'Updated At');
+        $sheet->setCellValue('K1', 'Arrival');
+
+        // Membuat header bold
+        $headerRange = 'A1:K1'; // Range dari header
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
 
         // Isi data
         $rowNumber = 2;
         foreach ($interviews as $interview) {
             $sheet->setCellValue('A' . $rowNumber, $interview->id);
-            $sheet->setCellValue('B' . $rowNumber, $interview->userHrjob->hrjob->job_name ?? 'No Job');
-            $sheet->setCellValue('C' . $rowNumber, $interview->userHrjob->user->fullname ?? 'No Applicant');
-            $sheet->setCellValue('D' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
-            $sheet->setCellValue('E' . $rowNumber, $interview->interview_date);
-            $sheet->setCellValue('F' . $rowNumber, $interview->time);
-            $sheet->setCellValue('G' . $rowNumber, $interview->rating ?? 'No Rating');
-            $sheet->setCellValue('H' . $rowNumber, $interview->comment ?? 'No Comment');
+            $sheet->setCellValue('B' . $rowNumber, $interview->userHrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('C' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
+            $sheet->setCellValue('D' . $rowNumber, $interview->userHrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('E' . $rowNumber, $interview->userHrjob->hrjob->location ?? 'No Location');
+            $sheet->setCellValue('F' . $rowNumber, $interview->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('G' . $rowNumber, $interview->interview_date ?? 'No Date');
+            $sheet->setCellValue('H' . $rowNumber, $interview->time ?? 'No Time');
             $sheet->setCellValue('I' . $rowNumber, $interview->location ?? 'No Location');
             $sheet->setCellValue('J' . $rowNumber, $interview->link ?? 'No Link');
-            $sheet->setCellValue('K' . $rowNumber, $interview->created_at);
-            $sheet->setCellValue('L' . $rowNumber, $interview->updated_at);
+            $sheet->setCellValue('K' . $rowNumber, $interview->arrival ?? 'No Arrival');
             $rowNumber++;
         }
 

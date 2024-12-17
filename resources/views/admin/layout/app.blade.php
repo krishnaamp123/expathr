@@ -185,16 +185,22 @@
                 </div>
             </a>
             <hr class="my-2">
+
             <!-- Divider -->
             <hr class="sidebar-divider">
+            <hr class="sidebar-divider">
 
-            {{-- <!-- Nav Item - Dashboard -->
-            <li class="nav-item {{ Request::routeIs('dashboard') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('dashboard') }}">
+            <div class="sidebar-heading">
+                Analitycs
+            </div>
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item {{ Request::routeIs('getDashboardAdmin') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getDashboardAdmin') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
-            </li> --}}
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -217,10 +223,10 @@
                 </a>
             </li>
 
-            <li class="nav-item {{ Request::routeIs('getQuestion') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getQuestion') }}">
-                    <i class="fas fa-fw fa-question-circle "></i>
-                    <span>Question</span>
+            <li class="nav-item {{ Request::routeIs('getOutlet') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getOutlet') }}">
+                    <i class="fas fa-fw fa-building "></i>
+                    <span>Outlet</span>
                 </a>
             </li>
 
@@ -228,6 +234,13 @@
                 <a class="nav-link" href="{{ route('getHrjob') }}">
                     <i class="fas fa-fw fa-suitcase"></i>
                     <span>Job</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ Request::routeIs('getQuestion') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getQuestion') }}">
+                    <i class="fas fa-fw fa-question-circle "></i>
+                    <span>Question</span>
                 </a>
             </li>
 

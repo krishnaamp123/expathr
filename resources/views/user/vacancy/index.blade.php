@@ -124,7 +124,7 @@
                 </li>
                 <li class="d-flex align-items-center mb-1">
                     <i class="fas fa-map-marker-alt" style="width: 20px;"></i>
-                    <span class="kaem-jobtext ms-2">{{ ucwords(str_replace('_', ' ', $vacancy->location_type)) }} - {{ $vacancy->city->city_name }}</span>
+                    <span class="kaem-jobtext ms-2">{{ ucwords(str_replace('_', ' ', $vacancy->location_type)) }} - {{ $vacancy->city->city_name }} - {{ $vacancy->outlet->outlet_name }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-1">
                     <i class="fas fa-graduation-cap" style="width: 20px;"></i>

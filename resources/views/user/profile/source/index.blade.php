@@ -15,7 +15,7 @@
                             @endif
 
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
-                                <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editSourceModal{{ $sourcee->id }}">
+                                <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editSourceModal-{{ $sourcee->id }}">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <form action="{{ route('destroySource', $sourcee->id) }}" method="POST" style="display: inline;">
@@ -42,7 +42,7 @@
 
 @foreach ($source as $sourcee)
 <!-- Modal Edit Work Location -->
-<div class="modal fade" id="editSourceModal{{ $sourcee->id }}" tabindex="-1" role="dialog" aria-labelledby="editSourceLabel" aria-hidden="true">
+<div class="modal fade" id="editSourceModal-{{ $sourcee->id }}" tabindex="-1" role="dialog" aria-labelledby="editSourceLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -58,7 +58,7 @@
 
                     <div class="form-group">
                         <label for="editplatform" class="kaem-subheading">Platform</label>
-                        <select name="editplatform" id="editplatform" class="form-control select2">
+                        <select name="platform" class="form-control select2 editplatform">
                             <option value="">Select Platform</option>
                             <option value="linkedin" {{ $sourcee->platform == 'linkedin' ? 'selected' : '' }}>LinkedIn</option>
                             <option value="indeed" {{ $sourcee->platform == 'indeed' ? 'selected' : '' }}>Indeed</option>

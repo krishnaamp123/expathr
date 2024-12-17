@@ -11,6 +11,7 @@ use App\Models\HrjobCategory;
 use App\Models\Answer;
 use App\Models\Form;
 use App\Models\Interview;
+use App\Models\UserInterview;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +27,7 @@ class VacancyController extends Controller
         // Cek kelengkapan profil pengguna
         $user = auth()->user();
         $isProfileComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
-                        $user->skill->count() > 0 && $user->workField->count() > 0 &&
+                        $user->skill->count() > 0 && $user->workField->count() > 0 && $user->source->count() > 0 &&
                         $user->education->count() > 0 && $user->experience->count() > 0;
 
         return view('user.vacancy.index', compact('vacancies', 'isProfileComplete'));
@@ -74,7 +75,7 @@ class VacancyController extends Controller
         $user = User::findOrFail($userId);
 
         $isDataComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
-                        $user->skill->count() > 0 && $user->workField->count() > 0 &&
+                        $user->skill->count() > 0 && $user->workField->count() > 0 && $user->source->count() > 0 &&
                         $user->education->count() > 0 && $user->experience->count() > 0;
 
         if (!$isDataComplete) {
@@ -116,5 +117,31 @@ class VacancyController extends Controller
         }
 
         return redirect()->route('getMyVacancy')->with('message', 'Answers submitted successfully.');
+    }
+
+    public function confirmArrival(Request $request, Interview $interview)
+    {
+        // Periksa apakah user memiliki akses ke interview ini
+        if ($interview->userhrjob->id_user !== Auth::id()) {
+            return redirect()->back()->with('error', 'Unauthorized access!');
+        }
+
+        // Update nilai arrival menjadi 'yes'
+        $interview->update(['arrival' => 'yes']);
+
+        return redirect()->back()->with('message', 'Attendance confirmed successfully.');
+    }
+
+    public function confirmUserArrival(Request $request, UserInterview $userinterview)
+    {
+        // Periksa apakah user memiliki akses ke interview ini
+        if ($userinterview->userhrjob->id_user !== Auth::id()) {
+            return redirect()->back()->with('error', 'Unauthorized access!');
+        }
+
+        // Update nilai arrival menjadi 'yes'
+        $userinterview->update(['arrival' => 'yes']);
+
+        return redirect()->back()->with('message', 'Attendance confirmed successfully.');
     }
 }

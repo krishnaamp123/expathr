@@ -76,6 +76,18 @@
                             @enderror
                         </div>
 
+                        <div class="form-group">
+                            <label>Arrival</label>
+                            <select name="arrival" class="form-control select2">
+                                <option value="">Select Arrival</option>
+                                <option value="yes" {{ old('arrival', $userinterview->arrival) == 'yes' ? 'selected' : '' }}>Yes</option>
+                                <option value="no" {{ old('arrival', $userinterview->arrival) == 'no' ? 'selected' : '' }}>No</option>
+                            </select>
+                            @error('arrival')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <!-- Rating -->
                         <div class="form-group">
                             <label>Rating</label>

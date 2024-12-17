@@ -3,7 +3,7 @@
 
         <div class="form-group">
             <label for="platform" class="kaem-subheading">Platform</label>
-            <select name="platform" id="platform" class="form-control select2">
+            <select name='platform' id="platform" class="form-control select2">
                 <option value="">Select Platform</option>
                 <option value="linkedin">LinkedIn</option>
                 <option value="indeed">Indeed</option>

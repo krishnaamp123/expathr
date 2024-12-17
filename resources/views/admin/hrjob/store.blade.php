@@ -116,6 +116,19 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Outlet</label>
+                            <select name="id_outlet" class="form-control select2">
+                                <option value="">Select Outlet</option>
+                                @foreach($outlets as $outlet)
+                                    <option value="{{ $outlet->id }}">{{ $outlet->outlet_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_outlet')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Experience Min</label>
                             <input type="text" name="experience_min" class="form-control">
                             @error('experience_min')

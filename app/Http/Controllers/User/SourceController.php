@@ -62,24 +62,24 @@ class SourceController extends Controller
             'other' => 'nullable|string|max:255',
         ]);
 
-        // Validasi hanya salah satu yang boleh diisi
         if (!$this->isSingleFieldFilled($request)) {
             return redirect()->route('getProfile')->with(['error' => 'Only one field between Platform, Referal, or Other should be filled.']);
         }
 
-        // Pastikan data hanya diperbarui untuk id_user yang sama
         if ($source->id_user !== Auth::id()) {
             return redirect()->route('getProfile')->with(['error' => 'Unauthorized action.']);
         }
 
+        // Update data
         $source->update([
-            'platform' => $request->platform,
-            'referal' => $request->referal,
-            'other' => $request->other,
+            'platform' => $request->platform ?: null,
+            'referal' => $request->referal ?: null,
+            'other' => $request->other ?: null,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Information Source Updated Successfully');
     }
+
 
     public function destroySource($id)
     {
@@ -94,7 +94,17 @@ class SourceController extends Controller
      */
     private function isSingleFieldFilled($request)
     {
-        $fields = array_filter([$request->platform, $request->referal, $request->other]);
-        return count($fields) === 1; // Only one field should be filled
+        $fields = [
+            'platform' => $request->platform,
+            'referal' => $request->referal,
+            'other' => $request->other,
+        ];
+
+        // Hitung field yang tidak kosong atau null
+        $filledFieldsCount = collect($fields)->filter(function ($value) {
+            return !is_null($value) && $value !== ''; // Periksa nilai non-kosong
+        })->count();
+
+        return $filledFieldsCount === 1; // Validasi hanya lolos jika satu field diisi
     }
 }

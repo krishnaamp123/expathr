@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Hrjob extends Model
 {
@@ -29,6 +30,7 @@ class Hrjob extends Model
         'is_active',
         'job_closed',
         'is_ended',
+        'hiring_cost',
     ];
 
     protected static function boot()

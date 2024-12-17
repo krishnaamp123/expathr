@@ -98,6 +98,7 @@
                             <th>Comment</th>
                             <th>Location</th>
                             <th>Link</th>
+                            <th>Arrival</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
@@ -110,8 +111,8 @@
                             <td>{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
                             <td>{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
                             <td>{{$row->user->fullname ?? 'No Interviewer'}}</td>
-                            <td>{{$row->interview_date}}</td>
-                            <td>{{$row->time}}</td>
+                            <td>{{$row->interview_date ?? 'No Date'}}</td>
+                            <td>{{$row->time ?? 'No Time'}}</td>
                             <td>{{$row->rating ?? 'No Rating'}}</td>
                             <td>{{$row->comment ?? 'No Comment'}}</td>
                             <td>{{$row->location ?? 'No Location'}}</td>
@@ -124,6 +125,7 @@
                                     No Link
                                 @endif
                             </td>
+                            <td>{{$row->arrival ?? 'No Arrival'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>

@@ -23,6 +23,7 @@ use App\Http\Controllers\User\SourceController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
 use App\Http\Controllers\Admin\QuestionAdminController;
+use App\Http\Controllers\Admin\OutletAdminController;
 use App\Http\Controllers\Admin\HrJobCategoryAdminController;
 use App\Http\Controllers\Admin\HrJobAdminController;
 use App\Http\Controllers\Admin\FormAdminController;
@@ -31,9 +32,6 @@ use App\Http\Controllers\Admin\AnswerAdminController;
 use App\Http\Controllers\Admin\InterviewAdminController;
 use App\Http\Controllers\Admin\UserInterviewAdminController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 //AUTH
 Route::get('/login',[AuthController::class,'getLogin'])->name('login');
@@ -53,6 +51,9 @@ Route::get('email/verify', [AuthController::class, 'showVerificationNotice'])->n
 Route::post('email/resend', [AuthController::class, 'resendVerificationEmail'])->name('verification.resend')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        // return view('welcome');
+    });
     Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
 
     Route::middleware(['verified'])->group(function () {
@@ -162,6 +163,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/user/myjob/get', [VacancyController::class, 'getMyVacancy'])->name('getMyVacancy');
             Route::post('/user/myjob/store-answers', [VacancyController::class, 'storeMyAnswer'])->name('storeMyAnswer');
             Route::get('/user/myjob/interview', [VacancyController::class, 'getIntervieww'])->name('getIntervieww');
+            Route::put('/user/myjob/interview/{interview}/confirm', [VacancyController::class, 'confirmArrival'])->name('confirmArrival');
+            Route::put('/user/myjob/userinterview/{userinterview}/confirm', [VacancyController::class, 'confirmUserArrival'])->name('confirmUserArrival');
         });
 
 
@@ -185,6 +188,14 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/question/update/{id}', [QuestionAdminController::class, 'updateQuestion'])->name('updateQuestion');
             Route::delete('/question/destroy/{id}', [QuestionAdminController::class, 'destroyQuestion'])->name('destroyQuestion');
 
+            // OUTLET
+            Route::get('/outlet', [OutletAdminController::class, 'getOutlet'])->name('getOutlet');
+            Route::get('/outlet/create', [OutletAdminController::class, 'addOutlet'])->name('addOutlet');
+            Route::post('/outlet/create', [OutletAdminController::class, 'storeOutlet'])->name('storeOutlet');
+            Route::get('/outlet/update/{id}', [OutletAdminController::class, 'editOutlet'])->name('editOutlet');
+            Route::put('/outlet/update/{id}', [OutletAdminController::class, 'updateOutlet'])->name('updateOutlet');
+            Route::delete('/outlet/destroy/{id}', [OutletAdminController::class, 'destroyOutlet'])->name('destroyOutlet');
+
             // JOB CATEGORY
             Route::get('/jobcategory', [HrjobCategoryAdminController::class, 'getHrjobCategory'])->name('getHrjobCategory');
             Route::get('/jobcategory/create', [HrjobCategoryAdminController::class, 'addHrjobCategory'])->name('addHrjobCategory');
@@ -200,6 +211,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/job/update/{id}', [HrjobAdminController::class, 'editHrjob'])->name('editHrjob');
             Route::put('/job/update/{id}', [HrjobAdminController::class, 'updateHrjob'])->name('updateHrjob');
             Route::delete('/job/destroy/{id}', [HrjobAdminController::class, 'destroyHrjob'])->name('destroyHrjob');
+            Route::post('/job/update-is-ended/{id}', [HrjobAdminController::class, 'updateIsEnded'])->name('updateIsEnded');
 
             // FORM
             Route::get('/form', [FormAdminController::class, 'getForm'])->name('getForm');
@@ -241,7 +253,6 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/interview/update/rating/{id}', [InterviewAdminController::class, 'updateRating'])->name('updateRating');
             Route::get('/interview/export', [InterviewAdminController::class, 'exportInterview'])->name('exportInterview');
             Route::get('/interview/dateexport', [InterviewAdminController::class, 'exportdateInterview'])->name('exportdateInterview');
-
 
             // USER INTERVIEW
             Route::get('/userinterview', [UserInterviewAdminController::class, 'getUserInterview'])->name('getUserInterview');

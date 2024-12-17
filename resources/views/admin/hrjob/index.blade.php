@@ -35,11 +35,15 @@
                             <th>Qualification</th>
                             <th>Location Type</th>
                             <th>Location</th>
+                            <th>Outlet</th>
                             <th>Experience Min</th>
                             <th>Education Min</th>
                             <th>Expired</th>
                             <th>Number Hired</th>
                             <th>Is Active</th>
+                            <th>Is Ended</th>
+                            <th>Hiring Cost</th>
+                            <th>Job Closed</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
@@ -58,11 +62,15 @@
                             <td>{{$row->qualification}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td>
                             <td>{{$row->city->city_name ?? 'No City'}}</td>
+                            <td>{{$row->outlet->outlet_name ?? 'No Outlet'}}</td>
                             <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>
                             <td>{{$row->expired}}</td>
                             <td>{{$row->number_hired}}</td>
                             <td>{{$row->is_active}}</td>
+                            <td>{{$row->is_ended}}</td>
+                            <td>{{$row->hiring_cost ?? 'No Cost'}}</td>
+                            <td>{{$row->job_closed ?? 'Not Closed'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
@@ -70,6 +78,13 @@
                                     <i class="fas fa-edit"></i>
                                     {{-- Edit --}}
                                 </a>
+                                <button
+                                    class="btn btn-sm my-1 update-is-ended"
+                                    data-id="{{ $row->id }}"
+                                    data-is-ended="{{ $row->is_ended }}"
+                                    style="background-color: #72A28A; color: white;">
+                                    <i class="fas fa-tag"></i>
+                                </button>
                                 <form action="{{ route('destroyHrjob', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -86,4 +101,56 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = $('#updateIsEndedModal');
+            const form = $('#updateIsEndedForm');
+
+            $('.update-is-ended').on('click', function () {
+                const jobId = $(this).data('id');
+                const isEnded = $(this).data('is-ended');
+
+                if (isEnded === 'yes') {
+                    alert('This job is already ended!');
+                    return;
+                }
+
+                form.attr('action', `/job/update-is-ended/${jobId}`);
+                modal.modal('show');
+            });
+        });
+    </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="updateIsEndedModal" tabindex="-1" aria-labelledby="updateIsEndedLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="updateIsEndedForm" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateIsEndedLabel">Update Job Ended</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="is_ended" value="yes">
+                        <div class="form-group">
+                            <label for="hiring_cost">Hiring Cost</label>
+                            <input type="number" id="hiring_cost" name="hiring_cost" class="form-control"required>
+                            @error('hiring_cost')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection

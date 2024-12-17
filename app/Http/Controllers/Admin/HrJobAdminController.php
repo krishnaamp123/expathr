@@ -7,13 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Hrjob;
 use App\Models\HrjobCategory;
 use App\Models\City;
+use App\Models\Outlet;
 use Illuminate\Support\Facades\Storage;
 
 class HrjobAdminController extends Controller
 {
     public function getHrjob()
     {
-        $hrjobs = Hrjob::with('category', 'city')->get();
+        $hrjobs = Hrjob::with('category', 'city', 'outlet')->get();
         return view('admin.hrjob.index', compact('hrjobs'));
     }
 
@@ -21,13 +22,15 @@ class HrjobAdminController extends Controller
     {
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
-        return view('admin.hrjob.store', compact('hrjobcategories', 'cities'));
+        $outlets = Outlet::all();
+        return view('admin.hrjob.store', compact('hrjobcategories', 'cities', 'outlets'));
     }
 
     public function storeHrjob(Request $request)
     {
         $validated = $request->validate([
             'id_category' => 'required|exists:hrjob_categories,id',
+            'id_outlet' => 'required|exists:outlets,id',
             'id_city' => 'required|exists:cities,id',
             'job_name' => 'required|string|max:255',
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
@@ -48,12 +51,13 @@ class HrjobAdminController extends Controller
         $hrjob = new Hrjob();
 
         $hrjob->id_category = $validated['id_category'];
+        $hrjob->id_outlet = $validated['id_outlet'];
         $hrjob->id_city = $validated['id_city'];
         $hrjob->job_name = $validated['job_name'];
         $hrjob->job_type = $validated['job_type'];
         $hrjob->job_report = $validated['job_report'];
         $hrjob->price = $validated['price'];
-        $hrjob->hide_salary = $validated['hide_salary'];
+        $hrjob->hide_salary = $request->input('hide_salary', 0);
         $hrjob->description = $validated['description'];
         $hrjob->qualification = $validated['qualification'];
         $hrjob->location_type = $validated['location_type'];
@@ -73,8 +77,9 @@ class HrjobAdminController extends Controller
         $hrjob = Hrjob::findOrFail($id);
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
+        $outlets = Outlet::all();
 
-        return view('admin.hrjob.update', compact('hrjob', 'hrjobcategories', 'cities'));
+        return view('admin.hrjob.update', compact('hrjob', 'hrjobcategories', 'cities', 'outlets'));
     }
 
     public function updateHrjob(Request $request, $id)
@@ -83,6 +88,7 @@ class HrjobAdminController extends Controller
 
         $validated = $request->validate([
             'id_category' => 'required|exists:hrjob_categories,id',
+            'id_outlet' => 'required|exists:outlets,id',
             'id_city' => 'required|exists:cities,id',
             'job_name' => 'required|string|max:255',
             'job_type' => 'required|in:full_time,part_time,self_employed,freelancer,contract,internship,seasonal',
@@ -97,12 +103,15 @@ class HrjobAdminController extends Controller
             'expired' => 'required',
             'number_hired' => 'required',
             'is_active' => 'required|in:yes,no',
+            'is_ended' => 'nullable|in:yes,no',
+            'hiring_cost' => 'nullable',
         ]);
 
         // Set default value jika 'hide_salary' tidak ada
         $validated['hide_salary'] = $request->has('hide_salary') ? 1 : 0;
 
         $hrjob->id_category = $validated['id_category'];
+        $hrjob->id_outlet = $validated['id_outlet'];
         $hrjob->id_city = $validated['id_city'];
         $hrjob->job_name = $validated['job_name'];
         $hrjob->job_type = $validated['job_type'];
@@ -117,6 +126,8 @@ class HrjobAdminController extends Controller
         $hrjob->expired = $validated['expired'];
         $hrjob->number_hired = $validated['number_hired'];
         $hrjob->is_active = $validated['is_active'];
+        $hrjob->is_ended = $validated['is_ended'];
+        $hrjob->hiring_cost = $validated['hiring_cost'];
 
         $hrjob->save();
 
@@ -130,5 +141,25 @@ class HrjobAdminController extends Controller
         $hrjob->delete();
 
         return redirect()->route('getHrjob')->with('message', 'Job deleted successfully');
+    }
+
+    public function updateIsEnded(Request $request, $id)
+    {
+        $hrjob = Hrjob::findOrFail($id);
+
+        // Validasi input
+        $validated = $request->validate([
+            'is_ended' => 'required|in:yes,no',
+            'hiring_cost' => 'required_if:is_ended,yes|numeric',
+        ]);
+
+        $hrjob->is_ended = $validated['is_ended'];
+        if ($validated['is_ended'] === 'yes') {
+            $hrjob->hiring_cost = $validated['hiring_cost'];
+        }
+
+        $hrjob->save();
+
+        return redirect()->route('getHrjob')->with('message', 'Job status updated successfully!');
     }
 }

@@ -39,9 +39,9 @@
                 @foreach ($userhrjobs as $vacancy)
                     <div class="col-lg-6 mb-4">
                         <div class="portfolio-item"
-                                {{ ($vacancy->status === 'applicant' && $vacancy->answers->isEmpty()) || $vacancy->status === 'hr_interview' ? '' : 'disabled' }}"
+                                {{ ($vacancy->status === 'applicant' && $vacancy->answers->isEmpty()) || $vacancy->status === 'hr_interview' || $vacancy->status === 'user_interview' ? '' : 'disabled' }}
                                 data-bs-toggle="modal"
-                                href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'hr_interview' ? '#hrinterviewModal' . $vacancy->id : '#') }}">
+                                href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'hr_interview' ? '#hrinterviewModal' . $vacancy->id : ($vacancy->status === 'user_interview' ? '#userinterviewModal' . $vacancy->id : '#')) }}">
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">{{ $vacancy->hrjob->job_name }}</div>
                                 <div class="portfolio-caption-location">{{ $vacancy->hrjob->city->city_name }}</div>
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             @endforeach
-                            <button type="submit" class="btn btn-primary">Submit Answers</button>
+                            <button type="submit" class="btn btn-primary kaem-subheading">Submit Answers</button>
                         </form>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                             </li>
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Date | Time :</strong>
-                                <p>{{ $interview->interview_date }} | {{ $interview->time }} </p>
+                                <p>{{ $interview->interview_date?? 'Please Wait For Date' }} | {{ $interview->time ?? 'Please Wait For Time' }} </p>
                             </li>
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Location :</strong>
@@ -157,6 +157,64 @@
                                 <p>{{ $interview->link ?? 'Please Wait For Link'}}</p>
                             </li>
                         </ul>
+                        <form action="{{ route('confirmArrival', ['interview' => $interview->id]) }}" method="POST" class="mt-3">
+                            @csrf
+                            @method('PUT')
+                            @if ($interview->arrival === 'yes')
+                                <button type="button" class="btn btn-primary kaem-subheading" disabled>Confirmed</button>
+                            @else
+                                <button type="submit" class="btn btn-primary kaem-subheading">Confirm Attendance</button>
+                            @endif
+                        </form>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @elseif ($vacancy->status === 'user_interview')
+        <!-- Portfolio Modal for hrinterview -->
+        <div class="modal fade" id="userinterviewModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">User Interview</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @foreach ($vacancy->userinterviews as $userinterview)
+                    <div class="modal-body">
+                        <ul class="list-inline">
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Interviewer :</strong>
+                                <p>{{ $userinterview->user->fullname }}</p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Applicant :</strong>
+                                <p>{{ $userinterview->userhrjob->user->fullname }}</p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Date | Time :</strong>
+                                <p>{{ $userinterview->interview_date?? 'Please Wait For Date' }} | {{ $userinterview->time ?? 'Please Wait For Time' }} </p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Location :</strong>
+                                <p>{{ $userinterview->location ?? 'Please Wait For Location' }}</p>
+                            </li>
+                            <li class="mb-2 kaem-jobtext">
+                                <strong>Link :</strong>
+                                <p>{{ $userinterview->link ?? 'Please Wait For Link'}}</p>
+                            </li>
+                        </ul>
+                        <form action="{{ route('confirmUserArrival', ['userinterview' => $userinterview->id]) }}" method="POST" class="mt-3">
+                            @csrf
+                            @method('PUT')
+                            @if ($userinterview->arrival === 'yes')
+                                <button type="button" class="btn btn-primary kaem-subheading" disabled>Confirmed</button>
+                            @else
+                                <button type="submit" class="btn btn-primary kaem-subheading">Confirm Attendance</button>
+                            @endif
+                        </form>
                     </div>
                     @endforeach
                 </div>

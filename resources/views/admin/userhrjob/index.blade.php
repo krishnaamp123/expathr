@@ -171,6 +171,7 @@
                                 <th>Comment</th>
                                 <th>Location</th>
                                 <th>Link</th>
+                                <th>Arrival</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @elseif (request('status') === 'user_interview')
@@ -181,6 +182,7 @@
                                 <th>Comment</th>
                                 <th>Location</th>
                                 <th>Link</th>
+                                <th>Arrival</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @else
@@ -256,6 +258,7 @@
                                                 No Link
                                             @endif
                                         </td>
+                                        <td>{{ $row->interviews->first()->arrival ?? 'Not Confirmed' }}</td>
                                         <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td>
                                         <td>{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td>
@@ -319,6 +322,7 @@
                                                 No Link
                                             @endif
                                         </td>
+                                        <td>{{ $row->userinterviews->first()->arrival ?? 'Not Confirmed' }}</td>
                                         <td>{{ $row->userinterviews->first()->created_at ?? 'Not Created' }}</td>
                                         <td>{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td>
