@@ -33,6 +33,11 @@ class Hrjob extends Model
         'hiring_cost',
     ];
 
+    protected $casts = [
+        'job_closed' => 'datetime',
+        'created_at' => 'datetime',
+    ];
+
     protected static function boot()
     {
         parent::boot();

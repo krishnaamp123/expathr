@@ -230,7 +230,7 @@ class UserAdminController extends Controller
     public function generatePdf($id)
     {
         $user = User::with(['city', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education',
-            'project', 'organization', 'volunteer', 'experience', 'certification', 'skill'])->findOrFail($id);
+            'project', 'organization', 'volunteer', 'experience', 'certification', 'skill', 'source'])->findOrFail($id);
 
         if ($user->role !== 'applicant') {
         return redirect()->route('getUser')->with('error', 'PDF can only be generated for applicants.');

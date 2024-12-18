@@ -12,28 +12,38 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-
 class InterviewAdminController extends Controller
 {
-    public function getInterview()
+    public function getInterview(Request $request)
     {
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $interviewsQuery = Interview::with('userHrjob', 'user');
+
         if (Auth::user()->role === 'hiring_manager') {
             // Filter wawancara untuk hiring_manager
-            $interviews = Interview::with('userHrjob', 'user')
-                ->whereHas('user', function ($query) {
-                    $query->where('role', '!=', 'super_admin');
-                })
-                ->get();
+            $interviewsQuery->whereHas('user', function ($query) {
+                $query->where('role', '!=', 'super_admin');
+            });
         } elseif (Auth::user()->role === 'recruiter') {
             // Filter wawancara untuk recruiter
-            $interviews = Interview::with('userHrjob', 'user')
-                ->whereHas('user', function ($query) {
-                    $query->whereNotIn('role', ['super_admin', 'hiring_manager']);
-                })
-                ->get();
-        } else {
-            $interviews = Interview::with('userHrjob', 'user')->get();
+            $interviewsQuery->whereHas('user', function ($query) {
+                $query->whereNotIn('role', ['super_admin', 'hiring_manager']);
+            });
         }
+
+        // Tambahkan filter tanggal jika tersedia
+        if ($startDate) {
+            $interviewsQuery->whereDate('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $interviewsQuery->whereDate('created_at', '<=', $endDate);
+        }
+
+        // Ambil hasil query
+        $interviews = $interviewsQuery->get();
 
         return view('admin.interview.index', compact('interviews'));
     }

@@ -147,7 +147,22 @@
             </div>
         </div>
     </div>
+
     <p><strong>Link:</strong> {{ $user->link }}</p>
+
+    <p class="tight">
+        <strong>Source:</strong>
+        {{ $user->source->map(function($item) {
+            return collect($item)
+                ->only(['platform', 'referal', 'other'])
+                ->filter()
+                ->map(function($value) {
+                    return ucwords(str_replace('_', ' ', $value));
+                })
+                ->implode(', ');
+        })->implode(', ') }}
+    </p>
+
     @foreach ($user->about as $abo)
         <h3 class="left">About</h3>
         <p>{{ $abo->about }}</p>
@@ -162,6 +177,7 @@
         <strong>Preferred Work Fields:</strong>
         {{ $user->workfield->pluck('field.field_name')->implode(', ') }}
     </p>
+
     <p class="tight">
         <strong>Skills:</strong>
         {{ $user->skill->pluck('skill_name')->implode(', ') }}
@@ -181,7 +197,7 @@
                 <h3 class="left">Language</h3>
                 @foreach ($user->language as $lang)
                     <p class="tight"><strong>{{ $lang->language }}</strong></p>
-                    <p class="tight">{{ $lang->skill }}</p>
+                    <p class="tight">{{ ucwords(str_replace('_', ' ', $lang->skill))}}</p>
                 @endforeach
             </div>
         </div>

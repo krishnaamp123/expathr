@@ -77,7 +77,12 @@
                             <div class="portfolio-caption-location">{{ $vacancy->city->city_name }}</div>
                             <p class="kaem-jobtext text-muted mb-0">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
                             <div class="divider"></div>
-                            <div class="portfolio-caption-date">Expired: {{ $vacancy->expired }}</div>
+                            <div class="portfolio-caption-date">
+                                Expired: {{ $vacancy->expired }}
+                                @if ($vacancy->is_ended === 'yes')
+                                    <span class="text-danger ms-2">Ended</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
             @endforeach
@@ -106,13 +111,19 @@
                     title="Please complete your profile to apply for this job."
                 @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
                     disabled
+                @elseif ($vacancy->is_ended === 'yes')
+                    disabled
+                    title="This job has ended."
                 @else
                     data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}"
                 @endif>
+
                 @if (!$isProfileComplete)
                     Complete Your Profile
                 @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
                     Already Applied
+                @elseif ($vacancy->is_ended === 'yes')
+                    Job Ended
                 @else
                     Apply for Job
                 @endif
