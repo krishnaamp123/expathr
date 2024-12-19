@@ -200,6 +200,14 @@
                             @enderror
                         </div>
 
+                        <div class="form-group">
+                            <label for="job_closed">job_closed</label>
+                            <input type="text" class="form-control datepicker datepicker-input" id="job_closed" name="job_closed" value="{{ $hrjob->job_closed }}">
+                            @error('job_closed')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-save"></i> Save</button>
                         <a href="{{ route('getHrjob') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
                     </form>

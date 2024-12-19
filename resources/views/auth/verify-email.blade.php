@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email</title>
+    <link rel="icon" type="image/png" href="{{ asset('storage/image/logokotakkecil.png') }}">
     <link href="{{ asset('template-admin/css/sb-admin-2.min.css') }}" rel="stylesheet">
 </head>
 <body>

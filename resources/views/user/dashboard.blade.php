@@ -1,5 +1,6 @@
 @extends('user.layout.app')
 @section('title', 'Dashboard')
+<link rel="icon" type="image/png" href="{{ asset('storage/image/logokotakkecil.png') }}">
 
 @section('content')
 

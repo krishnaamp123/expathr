@@ -105,6 +105,7 @@ class HrjobAdminController extends Controller
             'is_active' => 'required|in:yes,no',
             'is_ended' => 'nullable|in:yes,no',
             'hiring_cost' => 'nullable',
+            'job_closed' => 'nullable',
         ]);
 
         // Set default value jika 'hide_salary' tidak ada
@@ -128,6 +129,7 @@ class HrjobAdminController extends Controller
         $hrjob->is_active = $validated['is_active'];
         $hrjob->is_ended = $validated['is_ended'];
         $hrjob->hiring_cost = $validated['hiring_cost'];
+        $hrjob->job_closed = $validated['job_closed'];
 
         $hrjob->save();
 

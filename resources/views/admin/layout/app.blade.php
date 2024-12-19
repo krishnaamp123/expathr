@@ -12,6 +12,8 @@
 
     <title>@yield('title')</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('storage/image/logokotakkecil.png') }}">
+
     <!-- Custom fonts for this template -->
     <link href="{{asset('template-admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link

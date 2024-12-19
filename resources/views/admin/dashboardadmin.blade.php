@@ -31,16 +31,35 @@
         <div class="row">
 
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                    Total Applicants</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ $applicantCount }}</p></div>
+                <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                        Total Applicants</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ $applicantCount }}</p></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users fa-2x text-gray-300"></i>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                        Total Jobs</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ $jobCount }}</p></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-suitcase fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -48,50 +67,35 @@
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                    Total Jobs</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ $jobCount }}</p></div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-suitcase fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                    Hiring Success Rate</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ number_format($hiringSuccessRate, 0) }}%</p></div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-handshake fa-2x text-gray-300"></i>
+                <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                        Hiring Success Rate</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ number_format($hiringSuccessRate, 0) }}%</p></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-handshake fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                    Average Hiring Cost</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">Rp {{ number_format($averageHiringCost, 0, ',', '.') }}</p></div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-tags fa-2x text-gray-300"></i>
+                <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                        Average Hiring Cost</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">Rp {{ number_format($averageHiringCost, 0, ',', '.') }}</p></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-tags fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -133,55 +137,104 @@
                 </div>
             </div>
 
-            <div class="card-body">
-                <div class="chart-pie pt-0 pb-0"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                    <canvas id="sourceChart" width="447" height="306" style="display: block; height: 245px; width: 358px;" class="chartjs-render-monitor"></canvas>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-pie pt-0 pb-0"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="sourceChart" width="447" height="306" style="display: block; height: 245px; width: 358px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            {{-- <div class="col-xl-9 col-md-6 mb-4">
+                <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="hiredRejectedChart" width="977" height="400" style="display: block; height: 320px; width: 782px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
 
         </div>
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('sourceChart').getContext('2d');
-        const sourceData = @json($percentageData);
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Script untuk Source Chart
+    const ctxSource = document.getElementById('sourceChart').getContext('2d');
+    const sourceData = @json($percentageData);
 
-        // Gabungkan data platform dengan referals dan others
-        let platforms = Object.entries(sourceData.platforms);
+    let platforms = Object.entries(sourceData.platforms);
+    platforms.sort((a, b) => b[1] - a[1]);
 
-        // Urutkan platform berdasarkan jumlah (desc)
-        platforms.sort((a, b) => b[1] - a[1]);
+    const maxVisible = 3;
+    const visiblePlatforms = platforms.slice(0, maxVisible);
+    const otherPlatformsCount = platforms.slice(maxVisible).reduce((sum, [, count]) => sum + count, 0);
 
-        // Ambil 3 platform teratas dan gabungkan sisanya menjadi "Other Platforms"
-        const maxVisible = 3; // Maksimal platform yang ditampilkan
-        const visiblePlatforms = platforms.slice(0, maxVisible);
-        const otherPlatformsCount = platforms.slice(maxVisible).reduce((sum, [, count]) => sum + count, 0);
+    const labelsSource = visiblePlatforms.map(([platform]) => platform)
+        .concat(['Other Platforms', 'Referals', 'Others']);
+    const dataSource = visiblePlatforms.map(([, count]) => count)
+        .concat([otherPlatformsCount, sourceData.referals, sourceData.others]);
 
-        // Siapkan data untuk chart
-        const labels = visiblePlatforms.map(([platform]) => platform)
-            .concat(['Other Platforms', 'Referals', 'Others']); // Menambahkan 'Other Platforms', 'Referals' dan 'Others'
-
-        const data = visiblePlatforms.map(([, count]) => count)  // Data untuk 3 platform teratas
-            .concat([otherPlatformsCount, sourceData.referals, sourceData.others]); // Tambahkan data 'Other Platforms', 'Referals', dan 'Others'
-
-        const chartData = {
-            labels: labels,
+    new Chart(ctxSource, {
+        type: 'pie',
+        data: {
+            labels: labelsSource,
             datasets: [{
-                data: data,
+                data: dataSource,
                 backgroundColor: [
-                    '#0f4217', '#53915c', '#83e691', // Warna untuk 3 platform teratas
-                    '#72A28A', // Warna untuk "Other Platforms"
-                    '#000', // Warna untuk "Referals"
-                    '#8f8f8f'  // Warna untuk "Others"
+                    '#0f4217', '#53915c', '#83e691',
+                    '#72A28A', '#000', '#8f8f8f'
                 ],
             }]
-        };
+        },
+    });
 
-        new Chart(ctx, {
-            type: 'pie',
-            data: chartData,
-        });
-    </script>
+    // Script untuk Hired vs Rejected Chart
+    const ctxHiredRejected = document.getElementById('hiredRejectedChart').getContext('2d');
+    const hiredRejectedData = @json($hiredRejectedData);
+
+    const labelsHiredRejected = Array.from(new Set([
+        ...Object.keys(hiredRejectedData.hired || {}),
+        ...Object.keys(hiredRejectedData.rejected || {})
+    ])).sort();
+
+    new Chart(ctxHiredRejected, {
+        type: 'line',
+        data: {
+            labels: labelsHiredRejected,
+            datasets: [
+                {
+                    label: 'Hired',
+                    data: labelsHiredRejected.map(label => hiredRejectedData.hired?.[label] || 0),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                },
+                {
+                    label: 'Rejected',
+                    data: labelsHiredRejected.map(label => hiredRejectedData.rejected?.[label] || 0),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            },
+        },
+    });
+</script>
 @endsection

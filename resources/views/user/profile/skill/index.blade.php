@@ -70,7 +70,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addSkillLabel">Add Skill Contact</h5>
+                <h5 class="modal-title" id="addSkillLabel">Add Skill</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
                     <span aria-hidden="true">&times;</span>
                 </button>

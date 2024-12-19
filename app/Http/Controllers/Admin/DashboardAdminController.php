@@ -82,6 +82,22 @@ class DashboardAdminController extends Controller
             ? ($onTimeCount / $totalJobsWithExpiredDate) * 100
             : 0;
 
+        // Menghitung Hired vs Rejected per bulan
+        $hiredRejectedData = $applyDateFilter(
+            UserHrjob::query()
+        )
+            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, status, COUNT(*) as count')
+            ->groupBy('month', 'year', 'status')
+            ->get()
+            ->groupBy('status')
+            ->map(function ($group) {
+                return $group->groupBy('year')->map(function ($yearGroup) {
+                    return $yearGroup->mapWithKeys(function ($item) {
+                        return [sprintf('%04d-%02d', $item->year, $item->month) => $item->count];
+                    });
+                });
+            });
+
         return view('admin.dashboardadmin', [
             'applicantCount' => $applicantCount,
             'jobCount' => $jobCount,
@@ -90,6 +106,7 @@ class DashboardAdminController extends Controller
             'averageDayToHire' => $averageDayToHire,
             'percentageData' => $percentageData,
             'percentageFilledOnTime' => $percentageFilledOnTime,
+            'hiredRejectedData' => $hiredRejectedData,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);
