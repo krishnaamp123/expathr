@@ -10,9 +10,9 @@
         </div>
 
         <div class="form-group">
-            <label for="skill" class="kaem-subheading">Skill</label>
+            <label for="skill" class="kaem-subheading">Proficiency</label>
             <select name="skill" id="skill" class="form-control select2">
-                <option value="">Select Skill</option>
+                <option value="">Select Proficiency</option>
                 <option value="basic">Basic</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="profesional">Profesional</option>

@@ -77,9 +77,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Arrival</label>
+                            <label>Confirm Attendance</label>
                             <select name="arrival" class="form-control select2">
-                                <option value="">Select Arrival</option>
+                                <option value="">Select Confirm Attendance</option>
                                 <option value="yes" {{ old('arrival', $userinterview->arrival) == 'yes' ? 'selected' : '' }}>Yes</option>
                                 <option value="no" {{ old('arrival', $userinterview->arrival) == 'no' ? 'selected' : '' }}>No</option>
                             </select>

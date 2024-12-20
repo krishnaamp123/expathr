@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class OrganizationController extends Controller
 {
@@ -27,15 +28,17 @@ class OrganizationController extends Controller
             'end_date' => 'required',
         ]);
 
-        // Jika tidak ada, tambahkan data baru
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+
         Organization::create([
             'id_user' => Auth::id(),
-            'organization' => $request->organization,
-            'position' => $request->position,
-            'associated' => $request->associated,
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'organization' => $validated['organization'],
+            'position' => $validated['position'],
+            'associated' => $validated['associated'],
+            'description' => $validated['description'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Organization Added Successfully');
@@ -45,6 +48,8 @@ class OrganizationController extends Controller
     public function editOrganization($id)
     {
         $organization = Organization::findOrFail($id);
+        $organization->start_date = Carbon::parse($organization->start_date)->format('m/Y');
+        $organization->end_date = Carbon::parse($organization->end_date)->format('m/Y');
 
         return view('user.profile.organization.update', compact('organization'));
     }
@@ -62,13 +67,17 @@ class OrganizationController extends Controller
             'end_date' => 'required',
         ]);
 
-        $organization->organization = $validated['organization'];
-        $organization->position = $validated['position'];
-        $organization->associated = $validated['associated'];
-        $organization->description = $validated['description'];
-        $organization->start_date = $validated['start_date'];
-        $organization->end_date = $validated['end_date'];
-        $organization->save();
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+
+        $organization->update([
+            'organization' => $validated['organization'],
+            'position' => $validated['position'],
+            'associated' => $validated['associated'],
+            'description' => $validated['description'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
 
         return redirect()->route('getProfile')->with('message', 'Organization Updated Successfully');
     }

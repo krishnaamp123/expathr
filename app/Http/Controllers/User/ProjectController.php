@@ -9,6 +9,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class ProjectController extends Controller
 {
@@ -22,16 +23,19 @@ class ProjectController extends Controller
         $validated = $request->validate([
             'project_name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
+
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
 
         Project::create([
             'id_user' => Auth::id(),
             'project_name' => $validated['project_name'],
             'description' => $validated['description'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Project Added Successfully');
@@ -41,6 +45,8 @@ class ProjectController extends Controller
     public function editProject($id)
     {
         $project = Project::findOrFail($id);
+        $project->start_date = Carbon::parse($project->start_date)->format('m/Y');
+        $project->end_date = Carbon::parse($project->end_date)->format('m/Y');
 
         return view('user.profile.project.update', compact('project'));
     }
@@ -56,11 +62,15 @@ class ProjectController extends Controller
             'end_date' => 'required',
         ]);
 
-        $project->project_name = $validated['project_name'];
-        $project->description = $validated['description'];
-        $project->start_date = $validated['start_date'];
-        $project->end_date = $validated['end_date'];
-        $project->save();
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+
+        $project->update([
+            'project_name' => $validated['project_name'],
+            'description' => $validated['description'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
 
         return redirect()->route('getProfile')->with('message', 'Project Updated Successfully');
     }

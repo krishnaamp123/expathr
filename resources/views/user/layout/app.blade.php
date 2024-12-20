@@ -275,11 +275,18 @@
 
             <script>
                 $(document).ready(function () {
-                    // Inisialisasi datepicker untuk semua input dengan class .datepicker
-                    $('.datepicker').datepicker({
+                    $('.datepicker-yyyy-mm-dd').datepicker({
                         format: 'yyyy-mm-dd',
                         autoclose: true,
-                        todayHighlight: true
+                        todayHighlight: true,
+                    });
+
+                   $('.datepicker-mm-yyyy').datepicker({
+                        format: 'mm/yyyy',
+                        startView: "months",
+                        minViewMode: "months",
+                        autoclose: true,
+                        todayHighlight: true,
                     });
 
                     // Menambahkan gaya kustom ketika datepicker muncul
@@ -292,9 +299,14 @@
                     });
 
                     // Ensure the date is in the correct format before submitting
-                    $('.datepicker').on('changeDate', function (e) {
+                    $('.datepicker-yyyy-mm-dd').on('changeDate', function (e) {
                         var formattedDate = e.format('yyyy-mm-dd');
-                        $(this).val(formattedDate); // Update the input field value with the correct format
+                        $(this).val(formattedDate);
+                    });
+
+                    $('.datepicker-mm-yyyy').on('changeDate', function (e) {
+                        var formattedDate = e.format('mm/yyyy');
+                        $(this).val(formattedDate);
                     });
                 });
             </script>
@@ -334,12 +346,6 @@
                         dropdownParent: $(this)
                     });
                 });
-                // $(document).ready(function () {
-                //     $('#cityFilter, #categoryFilter').select2({
-                //         placeholder: "Select an option",
-                //         allowClear: false
-                //     });
-                // });
             </script>
 
             <script>

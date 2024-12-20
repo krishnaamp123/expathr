@@ -61,9 +61,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="skill" class="kaem-subheading">Skill</label>
+                        <label for="skill" class="kaem-subheading">Proficiency</label>
                         <select name="skill" class="form-control select2">
-                            <option value="">Select Skill</option>
+                            <option value="">Select Proficiency</option>
                             <option value="basic" {{ $languagee->skill == 'basic' ? 'selected' : '' }}>Basic</option>
                             <option value="intermediate" {{ $languagee->skill == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
                             <option value="profesional" {{ $languagee->skill == 'profesional' ? 'selected' : '' }}>Profesional</option>

@@ -21,6 +21,7 @@ use App\Models\Certification;
 use App\Models\Skill;
 use App\Models\Source;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class ProfileUserController extends Controller
 {
@@ -34,12 +35,48 @@ class ProfileUserController extends Controller
         $about = About::where('id_user', $user->id)->get();
         $language = Language::where('id_user', $user->id)->get();
         $workfield = WorkField::where('id_user', $user->id)->get();
-        $education = Education::where('id_user', $user->id)->get();
-        $project = Project::where('id_user', $user->id)->get();
-        $organization = Organization::where('id_user', $user->id)->get();
-        $volunteer = Volunteer::where('id_user', $user->id)->get();
-        $experience = Experience::where('id_user', $user->id)->get();
-        $certification = Certification::where('id_user', $user->id)->get();
+        $education = Education::where('id_user', $user->id)
+        ->get()
+        ->map(function ($education) {
+            $education->start_date = Carbon::parse($education->start_date)->format('m/Y');
+            $education->end_date = Carbon::parse($education->end_date)->format('m/Y');
+            return $education;
+        });
+        $project = Project::where('id_user', $user->id)
+        ->get()
+        ->map(function ($project) {
+            $project->start_date = Carbon::parse($project->start_date)->format('m/Y');
+            $project->end_date = Carbon::parse($project->end_date)->format('m/Y');
+            return $project;
+        });
+        $organization = Organization::where('id_user', $user->id)
+        ->get()
+        ->map(function ($organization) {
+            $organization->start_date = Carbon::parse($organization->start_date)->format('m/Y');
+            $organization->end_date = Carbon::parse($organization->end_date)->format('m/Y');
+            return $organization;
+        });
+        $volunteer = Volunteer::where('id_user', $user->id)
+        ->get()
+        ->map(function ($volunteer) {
+            $volunteer->start_date = Carbon::parse($volunteer->start_date)->format('m/Y');
+            $volunteer->end_date = Carbon::parse($volunteer->end_date)->format('m/Y');
+            return $volunteer;
+        });
+        $experience = Experience::where('id_user', $user->id)
+        ->get()
+        ->map(function ($experience) {
+            $experience->start_date = Carbon::parse($experience->start_date)->format('m/Y');
+            $experience->end_date = Carbon::parse($experience->end_date)->format('m/Y');
+            return $experience;
+        });
+        $certification = Certification::where('id_user', $user->id)
+        ->get()
+        ->map(function ($certification) {
+            $certification->start_date = Carbon::parse($certification->start_date)->format('m/Y');
+            $certification->end_date = Carbon::parse($certification->end_date)->format('m/Y');
+            return $certification;
+        });
         $skill = Skill::where('id_user', $user->id)->get();
         $source = Source::where('id_user', $user->id)->get();
 

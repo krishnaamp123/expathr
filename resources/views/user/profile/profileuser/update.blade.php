@@ -3,16 +3,16 @@
     @method('PUT')
 
     <div class="form-group">
-        <label class="kaem-subheading">Current Image</label><br>
+        <label class="kaem-subheading">Current Profile Picture</label><br>
         @if ($user->profile_pict)
             <img src="{{ asset($user->profile_pict) }}" alt="User Image" class="profile-picture-edit">
         @else
-            <span class="kaem-text">No Image Available</span>
+            <span class="kaem-text">No Picture Available</span>
         @endif
     </div>
 
     <div class="form-group">
-        <label class="kaem-subheading">New Image</label>
+        <label class="kaem-subheading">New Profile Picture</label>
         <input type="file" name="file" class="form-control">
         @error('file')
             <div class="text-danger">{{ $message }}</div>
@@ -20,9 +20,9 @@
     </div>
 
     <div class="form-group">
-        <label class="kaem-subheading">City</label>
+        <label class="kaem-subheading">Domicile City</label>
             <select name="id_city" class="form-control select2">
-                <option value="">Select City</option>
+                <option value="">Select Domicile City</option>
                 @foreach($cities as $city)
                 <option value="{{ $city->id }}" {{ $city->id == $user->id_city ? 'selected' : '' }}>
                     {{ $city->city_name }}
@@ -68,7 +68,7 @@
 
     <div class="form-group">
         <label for="birth_date" class="kaem-subheading">Birth Date</label>
-        <input type="text" class="form-control datepicker datepicker-input" id="birth_date" name="birth_date" value="{{ $user->birth_date }}" required>
+        <input type="text" class="form-control datepicker datepicker-yyyy-mm-dd" id="birth_date" name="birth_date" value="{{ $user->birth_date }}" required>
         @error('birth_date')
             <span class="text-danger">{{ $message }}</span>
         @enderror

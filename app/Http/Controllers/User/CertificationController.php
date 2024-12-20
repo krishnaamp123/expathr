@@ -25,9 +25,12 @@ class CertificationController extends Controller
             'id_credentials' => 'nullable|string|max:255',
             'url_credentials' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
+
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
 
         Certification::create([
             'id_user' => Auth::id(),
@@ -36,8 +39,8 @@ class CertificationController extends Controller
             'id_credentials' => $validated['id_credentials'],
             'url_credentials' => $validated['url_credentials'],
             'description' => $validated['description'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Certification Added Successfully');
@@ -47,6 +50,8 @@ class CertificationController extends Controller
     public function editCertification($id)
     {
         $certification = Certification::findOrFail($id);
+        $certification->start_date = Carbon::parse($certification->start_date)->format('m/Y');
+        $certification->end_date = Carbon::parse($certification->end_date)->format('m/Y');
 
         return view('user.profile.certification.update', compact('certification'));
     }
@@ -61,18 +66,22 @@ class CertificationController extends Controller
             'id_credentials' => 'nullable|string|max:255',
             'url_credentials' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
 
-        $certification->lisence_name = $validated['lisence_name'];
-        $certification->organization = $validated['organization'];
-        $certification->id_credentials = $validated['id_credentials'];
-        $certification->url_credentials = $validated['url_credentials'];
-        $certification->description = $validated['description'];
-        $certification->start_date = $validated['start_date'];
-        $certification->end_date = $validated['end_date'];
-        $certification->save();
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+
+        $organization->update([
+            'lisence_name' => $validated['lisence_name'],
+            'organization' => $validated['organization'],
+            'id_credentials' => $validated['id_credentials'],
+            'url_credentials' => $validated['url_credentials'],
+            'description' => $validated['description'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
 
         return redirect()->route('getProfile')->with('message', 'Certification Updated Successfully');
     }

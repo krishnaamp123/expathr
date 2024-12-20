@@ -35,14 +35,14 @@
 
         <div class="form-group">
             <label for="start_date" class="kaem-subheading">Start Date</label>
-            <input type="text" class="form-control datepicker datepicker-input" id="start_date" name="start_date">
+            <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date">
             @error('start_date')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group">
             <label for="end_date" class="kaem-subheading">End Date</label>
-            <input type="text" class="form-control datepicker datepicker-input" id="end_date" name="end_date">
+            <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date">
             @error('end_date')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

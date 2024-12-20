@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Education;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class EducationController extends Controller
 {
@@ -26,14 +27,16 @@ class EducationController extends Controller
             'end_date' => 'required',
         ]);
 
-        // Jika tidak ada, tambahkan data baru
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+
         Education::create([
             'id_user' => Auth::id(),
-            'university' => $request->university,
-            'degree' => $request->degree,
-            'major' => $request->major,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'university' => $validated['university'],
+            'degree' => $validated['degree'],
+            'major' => $validated['major'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Education Added Successfully');
@@ -43,6 +46,8 @@ class EducationController extends Controller
     public function editEducation($id)
     {
         $education = Education::findOrFail($id);
+        $education->start_date = Carbon::parse($education->start_date)->format('m/Y');
+        $education->end_date = Carbon::parse($education->end_date)->format('m/Y');
 
         return view('user.profile.education.update', compact('education'));
     }
@@ -59,12 +64,16 @@ class EducationController extends Controller
             'end_date' => 'required',
         ]);
 
-        $education->university = $validated['university'];
-        $education->degree = $validated['degree'];
-        $education->major = $validated['major'];
-        $education->start_date = $validated['start_date'];
-        $education->end_date = $validated['end_date'];
-        $education->save();
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+
+        $education->update([
+            'university' => $validated['university'],
+            'degree' => $validated['degree'],
+            'major' => $validated['major'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
 
         return redirect()->route('getProfile')->with('message', 'Education Updated Successfully');
     }

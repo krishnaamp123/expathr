@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Experience;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class ExperienceController extends Controller
 {
@@ -30,18 +31,20 @@ class ExperienceController extends Controller
             'end_date' => 'required',
         ]);
 
-        // Jika tidak ada, tambahkan data baru
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+
         Experience::create([
             'id_user' => Auth::id(),
-            'position' => $request->position,
-            'job_type' => $request->job_type,
-            'company_name' => $request->company_name,
-            'location' => $request->location,
-            'location_type' => $request->location_type,
-            'responsibility' => $request->responsibility,
-            'job_report' => $request->job_report,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'position' => $validated['position'],
+            'job_type' => $validated['job_type'],
+            'company_name' => $validated['company_name'],
+            'location' => $validated['location'],
+            'location_type' => $validated['location_type'],
+            'responsibility' => $validated['responsibility'],
+            'job_report' => $validated['job_report'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Experience Added Successfully');
@@ -51,6 +54,8 @@ class ExperienceController extends Controller
     public function editExperience($id)
     {
         $experience = Experience::findOrFail($id);
+        $experience->start_date = Carbon::parse($experience->start_date)->format('m/Y');
+        $experience->end_date = Carbon::parse($experience->end_date)->format('m/Y');
 
         return view('user.profile.experience.update', compact('experience'));
     }
@@ -71,16 +76,21 @@ class ExperienceController extends Controller
             'end_date' => 'required',
         ]);
 
-        $experience->position = $validated['position'];
-        $experience->job_type = $validated['job_type'];
-        $experience->company_name = $validated['company_name'];
-        $experience->location = $validated['location'];
-        $experience->location_type = $validated['location_type'];
-        $experience->responsibility = $validated['responsibility'];
-        $experience->job_report = $validated['job_report'];
-        $experience->start_date = $validated['start_date'];
-        $experience->end_date = $validated['end_date'];
-        $experience->save();
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+
+        $experience->update([
+            'position' => $validated['position'],
+            'job_type' => $validated['job_type'],
+            'company_name' => $validated['company_name'],
+            'location' => $validated['location'],
+            'location_type' => $validated['location_type'],
+            'responsibility' => $validated['responsibility'],
+            'job_report' => $validated['job_report'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
+
 
         return redirect()->route('getProfile')->with('message', 'Experience Updated Successfully');
     }

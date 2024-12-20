@@ -20,6 +20,17 @@
         </div>
 
         <div class="row">
+            <div class="col-md-5 mb-4">
+                <label for="searchBar" class="kaem-subheading">Search by Position</label>
+                <div class="input-group-kaem">
+                    <!-- Ikon Pencarian -->
+                    <span class="input-icon-kaem">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <!-- Input Pencarian -->
+                    <input type="text" id="searchBar" class="form-control-kaem" placeholder="Search jobs...">
+                </div>
+            </div>
             <div class="col-md-3 mb-4">
                 <label for="cityFilter" class="kaem-subheading">Search by City</label>
                 <select id="cityFilter" class="form-control select2">
@@ -41,17 +52,6 @@
             <div class="col-md-1 mb-4">
                 <label for="button" class="kaem-subheading">&nbsp;</label>
                 <button type="button" class="btn btn-secondary" onclick="resetFilters()">&nbsp;&nbsp;&nbsp;Clear&nbsp;&nbsp;&nbsp;</button>
-            </div>
-            <div class="col-md-5 mb-4">
-                <label for="searchBar" class="kaem-subheading">Search by Position</label>
-                <div class="input-group-kaem">
-                    <!-- Ikon Pencarian -->
-                    <span class="input-icon-kaem">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <!-- Input Pencarian -->
-                    <input type="text" id="searchBar" class="form-control-kaem" placeholder="Search jobs...">
-                </div>
             </div>
         </div>
 

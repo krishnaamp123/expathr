@@ -89,7 +89,7 @@
 
                     <div class="form-group">
                         <label for="start_date" class="kaem-subheading">Start Date</label>
-                        <input type="text" class="form-control datepicker datepicker-input" id="start_date" name="start_date" value="{{ $volunteerr->start_date }}" required>
+                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $volunteerr->start_date }}" required>
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -97,7 +97,7 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control datepicker datepicker-input" id="end_date" name="end_date" value="{{ $volunteerr->end_date }}" required>
+                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $volunteerr->end_date }}" required>
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

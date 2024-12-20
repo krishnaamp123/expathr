@@ -171,7 +171,7 @@
                                 <th>Comment</th>
                                 <th>Location</th>
                                 <th>Link</th>
-                                <th>Arrival</th>
+                                <th>Confirm Attendance</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @elseif (request('status') === 'user_interview')
@@ -182,7 +182,7 @@
                                 <th>Comment</th>
                                 <th>Location</th>
                                 <th>Link</th>
-                                <th>Arrival</th>
+                                <th>Confirm Attendance</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @else

@@ -18,18 +18,28 @@ class AboutController extends Controller
 
     public function storeAbout(Request $request)
     {
-        $validated = $request->validate([
-            'about' => 'required|string|max:1000',
-        ]);
+        $about = $request->input('about');
 
-        // Jika tidak ada, tambahkan data baru
+        if (strlen($about) < 50) {
+            return redirect()->route('getProfile')
+                ->with('error', 'About must be at least 50 characters.')
+                ->withInput();
+        }
+
+        if (strlen($about) > 1000) {
+            return redirect()->route('getProfile')
+                ->with('error', 'About must not exceed 1000 characters.')
+                ->withInput();
+        }
+
         About::create([
             'id_user' => Auth::id(),
-            'about' => $request->about,
+            'about' => $about,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'About Added Successfully');
     }
+
 
 
     public function editAbout($id)
@@ -42,12 +52,23 @@ class AboutController extends Controller
     public function updateAbout(Request $request, $id)
     {
         $about = About::findOrFail($id);
+        $newAbout = $request->input('about');
 
-        $validated = $request->validate([
-            'about' => 'required|string|max:1000',
-        ]);
+        // Validasi menggunakan if-else
+        if (strlen($newAbout) < 50) {
+            return redirect()->route('getProfile')
+                ->with('error', 'About must be at least 50 characters.')
+                ->withInput();
+        }
 
-        $about->about = $validated['about'];
+        if (strlen($newAbout) > 1000) {
+            return redirect()->route('getProfile')
+                ->with('error', 'About must not exceed 1000 characters.')
+                ->withInput();
+        }
+
+        // Jika validasi lolos, perbarui data
+        $about->about = $newAbout;
         $about->save();
 
         return redirect()->route('getProfile')->with('message', 'About Updated Successfully');

@@ -9,6 +9,7 @@ use App\Models\Volunteer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class VolunteerController extends Controller
 {
@@ -24,9 +25,12 @@ class VolunteerController extends Controller
             'role' => 'required|string|max:255',
             'issue' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
+
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
 
         Volunteer::create([
             'id_user' => Auth::id(),
@@ -34,8 +38,8 @@ class VolunteerController extends Controller
             'role' => $validated['role'],
             'issue' => $validated['issue'],
             'description' => $validated['description'],
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return redirect()->route('getProfile')->with('message', 'Volunteer Added Successfully');
@@ -45,6 +49,8 @@ class VolunteerController extends Controller
     public function editVolunteer($id)
     {
         $volunteer = Volunteer::findOrFail($id);
+        $volunteer->start_date = Carbon::parse($volunteer->start_date)->format('m/Y');
+        $volunteer->end_date = Carbon::parse($volunteer->end_date)->format('m/Y');
 
         return view('user.profile.volunteer.update', compact('volunteer'));
     }
@@ -58,17 +64,22 @@ class VolunteerController extends Controller
             'role' => 'required|string|max:255',
             'issue' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
 
-        $volunteer->organization = $validated['organization'];
-        $volunteer->role = $validated['role'];
-        $volunteer->issue = $validated['issue'];
-        $volunteer->description = $validated['description'];
-        $volunteer->start_date = $validated['start_date'];
-        $volunteer->end_date = $validated['end_date'];
-        $volunteer->save();
+        $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+
+        $volunteer->update([
+            'organization' => $validated['organization'],
+            'role' => $validated['role'],
+            'issue' => $validated['issue'],
+            'description' => $validated['description'],
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
+
 
         return redirect()->route('getProfile')->with('message', 'Volunteer Updated Successfully');
     }
