@@ -5,23 +5,31 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">User Job</h1>
 
-    @if (session('message'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('message') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    <!-- Toast Container -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <!-- Toast -->
+        @if(session('success'))
+        <div id="successToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #72A28A;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
         </div>
-    @endif
+        @endif
 
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{session('error')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    @endif
+        @if(session('failed'))
+        <div id="failedToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #c03535;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('failed') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        @endif
+    </div>
 
     <p class="mb-3">Applicant's main data to the job</p>
 
@@ -45,9 +53,19 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     @if (request('status') === 'hr_interview')
-                    <a href="{{ route('addUserHrjobInterview') }}" class="btn btn-sm mr-2" style="background-color: #72A28A; color: white;">
+                    <button
+                        type="button"
+                        class="btn btn-sm mr-2"
+                        style="background-color: #72A28A; color: white;"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addInterviewModal">
                         <i class="fas fa-plus"></i> Add
-                    </a>
+                    </button>
+
+                    @include('admin.interview.storemodal', [
+                        'userhrjobs' => $userhrjobss,
+                        'users' => $users,
+                    ])
                     <a href="{{ route('exportInterview') }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
                         <i class="fas fa-file-excel"></i> Export All
                     </a>
@@ -88,9 +106,19 @@
 
                     @elseif (request('status') === 'user_interview')
                     <div class="d-flex align-items-center">
-                    <a href="{{ route('addUserHrjobUserInterview') }}" class="btn btn-sm mr-2" style="background-color: #72A28A; color: white;">
-                        <i class="fas fa-plus"></i> Add
-                    </a>
+                        <button
+                            type="button"
+                            class="btn btn-sm mr-2"
+                            style="background-color: #72A28A; color: white;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addUserInterviewModal">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+
+                        @include('admin.userinterview.storemodal', [
+                            'userhrjobs' => $userhrjobss,
+                            'users' => $users,
+                        ])
                     <a href="{{ route('exportUserInterview') }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
                         <i class="fas fa-file-excel"></i> Export All
                     </a>
@@ -130,9 +158,21 @@
                     </div>
                     </div>
                     @else
-                    <a href="{{ route('addUserHrjob') }}" class="btn btn-sm" style="background-color: #72A28A; color: white;">
+                    <button
+                        type="button"
+                        class="btn btn-sm mr-2"
+                        style="background-color: #72A28A; color: white;"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addUserHrjobModal">
                         <i class="fas fa-plus"></i> Add
-                    </a>
+                    </button>
+
+                    @include('admin.userhrjob.storemodal', [
+                        'hrjob' => $hrjobss,
+                        'user' => $userss,
+                    ])
+
+                    <button id="reject-selected" class="btn btn-danger btn-sm">Reject Selected</button>
                     @endif
                 </div>
             <!-- Form Filter Tanggal -->
@@ -159,45 +199,51 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr class="small text-center small">
+                            <th>
+                                <input type="checkbox" id="select-all">
+                            </th>
                             <th>ID</th>
                             <th>Job</th>
                             <th>Applicant</th>
-                            <th>Status</th>
                             @if (request('status') === 'hr_interview')
                                 <th>Interviewer</th>
                                 <th>Interview Date</th>
-                                <th>Time</th>
-                                <th>Rating</th>
-                                <th>Comment</th>
+                                <th>Interview Time</th>
                                 <th>Location</th>
                                 <th>Link</th>
                                 <th>Confirm Attendance</th>
-                                <th>Created At</th>
+                                {{-- <th>Created At</th> --}}
                                 <th>Updated At</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
                             @elseif (request('status') === 'user_interview')
                                 <th>Interviewer</th>
                                 <th>Interview Date</th>
-                                <th>Time</th>
-                                <th>Rating</th>
-                                <th>Comment</th>
+                                <th>Interview Time</th>
                                 <th>Location</th>
                                 <th>Link</th>
                                 <th>Confirm Attendance</th>
-                                <th>Created At</th>
+                                {{-- <th>Created At</th> --}}
                                 <th>Updated At</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
                             @else
                                 <th>Salary Expectation</th>
                                 <th>Availability</th>
-                                <th>Created At</th>
+                                <th>Applied At</th>
                                 <th>Updated At</th>
                             @endif
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($userhrjobs as $row)
                             @if (request('status') === null || request('status') === $row->status)
-                                <tr class="small">
+                                <tr class="small" data-id="{{ $row->id }}">
+                                    <td>
+                                        <input type="checkbox" name="selected_jobs[]" value="{{ $row->id }}" class="select-job">
+                                    </td>
                                     <td>{{ $row->id }}</td>
                                     <td>{{ $row->hrjob->job_name ?? 'No Job' }}</td>
                                     <td>
@@ -210,18 +256,6 @@
                                             {{ \Illuminate\Support\Str::limit($row->user->fullname ?? 'No Applicant', 20, '...') }}
                                         </a>
                                     </td>
-                                    <td>
-                                        <form action="{{ route('updateStatus', $row->id) }}" method="POST">
-                                            @csrf
-                                            <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
-                                                @foreach ($statuses as $availableStatus)
-                                                    <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
-                                                        {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </form>
-                                    </td>
                                     <!-- Tampilkan Interviewer dan Interview Date jika status adalah hr_interview -->
                                     @if (request('status') === 'hr_interview')
                                         <td>
@@ -232,19 +266,6 @@
                                         </td>
                                         <td>
                                             {{ $row->interviews->first()->time ?? 'Not Timed' }}
-                                        </td>
-                                        <td>
-                                            {{ $row->interviews->first()->rating ?? 'Not Rated' }}
-                                        </td>
-                                        <td>
-                                            @if ($row->interviews->first()?->comment)
-                                                <span
-                                                    title="{{ $row->interviews->first()->comment }}">
-                                                    {{ \Illuminate\Support\Str::limit($row->interviews->first()->comment, 20, '...') }}
-                                                </span>
-                                            @else
-                                                Not Commented
-                                            @endif
                                         </td>
                                         <td>
                                             {{ $row->interviews->first()->location ?? 'Not Located' }}
@@ -259,23 +280,70 @@
                                             @endif
                                         </td>
                                         <td>{{ $row->interviews->first()->arrival ?? 'Not Confirmed' }}</td>
-                                        <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td>
+                                        {{-- <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td> --}}
                                         <td>{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td>
+                                            {{ $row->interviews->first()->rating ?? 'Not Rated' }}
+                                        </td>
+                                        <td>
+                                            @if ($row->interviews->first()?->comment)
+                                                <span
+                                                    title="{{ $row->interviews->first()->comment }}">
+                                                    {{ \Illuminate\Support\Str::limit($row->interviews->first()->comment, 20, '...') }}
+                                                </span>
+                                            @else
+                                                Not Commented
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        </td>
                                         <td>
                                             @php
                                                 $interview = $row->interviews->first();
                                             @endphp
 
                                             @if ($interview && $interview->id)
-                                                <a href="{{ route('editUserHrjobInterview', $interview->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #969696; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editInterviewModal{{ $interview->id }}">
                                                     <i class="fas fa-edit"></i>
-                                                    {{-- Edit --}}
-                                                </a>
-                                                <a href="{{ route('editUserHrjobRating', $interview->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
+                                                </button>
+
+                                                @include('admin.interview.updatemodal', [
+                                                    'id' => $interview->id,
+                                                    'interview' => $interview,
+                                                    'userhrjobs' => $userhrjobss,
+                                                    'users' => $users,
+                                                ])
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #FFA500; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editRatingModal{{ $interview->id }}">
                                                     <i class="fas fa-star"></i>
-                                                    {{-- Rating --}}
-                                                </a>
-                                                <form action="{{ route('destroyUserHrjobInterview', $interview->id) }}" method="POST" style="display:inline;">
+                                                </button>
+
+                                                <!-- Include Modal -->
+                                                @include('admin.interview.ratingmodal', [
+                                                    'id' => $interview->id,
+                                                    'rating' => $interview->rating,
+                                                    'comment' => $interview->comment
+                                                ])
+                                                <form action="{{ route('destroyInterview', $interview->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
@@ -298,6 +366,21 @@
                                             {{ $row->userinterviews->first()->time ?? 'Not Timed' }}
                                         </td>
                                         <td>
+                                            {{ $row->userinterviews->first()->location ?? 'Not Located' }}
+                                        </td>
+                                        <td>
+                                            @if ($row->userinterviews->first()?->link)
+                                                <a href="{{ $row->userinterviews->first()->link }}" target="_blank" title="{{ $row->userinterviews->first()->link }}">
+                                                    {{ \Illuminate\Support\Str::limit($row->userinterviews->first()->link, 20, '...') }}
+                                                </a>
+                                            @else
+                                                No Link
+                                            @endif
+                                        </td>
+                                        <td>{{ $row->userinterviews->first()->arrival ?? 'Not Confirmed' }}</td>
+                                        {{-- <td>{{ $row->userinterviews->first()->created_at ?? 'Not Created' }}</td> --}}
+                                        <td>{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td>
                                             {{ $row->userinterviews->first()->rating ?? 'Not Rated' }}
                                         </td>
                                         <td>
@@ -311,35 +394,55 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{ $row->userinterviews->first()->location ?? 'Not Located' }}
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
                                         </td>
-                                        <td>
-                                            @if ($row->userinterviews->first()?->link)
-                                                <a href="{{ $row->userinterviews->first()->link }}" target="_blank" title="{{ $row->userinterviews->first()->link }}">
-                                                    {{ \Illuminate\Support\Str::limit($row->userinterviews->first()->link, 20, '...') }}
-                                                </a>
-                                            @else
-                                                No Link
-                                            @endif
-                                        </td>
-                                        <td>{{ $row->userinterviews->first()->arrival ?? 'Not Confirmed' }}</td>
-                                        <td>{{ $row->userinterviews->first()->created_at ?? 'Not Created' }}</td>
-                                        <td>{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td>
                                             @php
                                                 $userinterview = $row->userinterviews->first();
                                             @endphp
 
                                             @if ($userinterview && $userinterview->id)
-                                                <a href="{{ route('editUserHrjobUserInterview', $userinterview->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #969696; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editUserInterviewModal{{ $userinterview->id }}">
                                                     <i class="fas fa-edit"></i>
-                                                    {{-- Edit --}}
-                                                </a>
-                                                <a href="{{ route('editUserHrjobUserRating', $userinterview->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;">
+                                                </button>
+
+                                                @include('admin.userinterview.updatemodal', [
+                                                    'id' => $userinterview->id,
+                                                    'userinterview' => $userinterview,
+                                                    'userhrjobs' => $userhrjobss,
+                                                    'users' => $users,
+                                                ])
+
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #FFA500; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editUserRatingModal{{ $userinterview->id }}">
                                                     <i class="fas fa-star"></i>
-                                                    {{-- Rating --}}
-                                                </a>
-                                                <form action="{{ route('destroyUserHrjobUserInterview', $userinterview->id) }}" method="POST" style="display:inline;">
+                                                </button>
+
+                                                <!-- Include Modal -->
+                                                @include('admin.userinterview.ratingmodal', [
+                                                    'id' => $userinterview->id,
+                                                    'rating' => $userinterview->rating,
+                                                    'comment' => $userinterview->comment
+                                                ])
+                                                <form action="{{ route('destroyUserInterview', $userinterview->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
@@ -357,9 +460,33 @@
                                         <td>{{ $row->created_at }}</td>
                                         <td>{{ $row->updated_at }}</td>
                                         <td>
-                                            <a href="{{ route('editUserHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i>
-                                                {{-- Edit --}}
-                                            </a>
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm my-1"
+                                                style="background-color: #969696; color: white;"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#editUserHrjobModal{{ $row->id }}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            @include('admin.userhrjob.updatemodal', [
+                                                'id' => $row->id,
+                                                'userhrjob' => $row,
+                                                'hrjob' => $hrjobss,
+                                                'user' => $userss,
+                                            ])
                                             <form action="{{ route('destroyUserHrjob', $row->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
@@ -392,12 +519,20 @@
                         </div>
                         <div class="modal-body">
 
-                            <input type="hidden" name="redirectTo" value="{{ session('redirectTo') }}">
-
                             <div class="form-group">
                                 <label>Applicant</label>
-                                    <input name="id_user_job" class="form-control" value="{{ session('userJobId') }}" readonly>
-                             </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="{{ session('userJobName') ?? 'N/A' }}"
+                                    readonly
+                                >
+                                <input
+                                    type="hidden"
+                                    name="id_user_job"
+                                    value="{{ session('userJobId') }}"
+                                >
+                            </div>
 
                                 <div class="form-group">
                                     <label>Interviewer</label>
@@ -466,12 +601,20 @@
                         </div>
                         <div class="modal-body">
 
-                            <input type="hidden" name="redirectTo" value="{{ session('redirectTo') }}">
-
                             <div class="form-group">
                                 <label>Applicant</label>
-                                    <input name="id_user_job" class="form-control" value="{{ session('userJobId') }}" readonly>
-                             </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="{{ session('userJobName') ?? 'N/A' }}"
+                                    readonly
+                                >
+                                <input
+                                    type="hidden"
+                                    name="id_user_job"
+                                    value="{{ session('userJobId') }}"
+                                >
+                            </div>
 
                                 <div class="form-group">
                                     <label>Interviewer</label>
@@ -621,7 +764,101 @@
         @endif
     @endforeach
 
-
-
-
 @endsection
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+    // Simpan posisi scroll sebelum reload
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, parseInt(scrollPosition, 10));
+            sessionStorage.removeItem('scrollPosition');
+        }
+
+        // Simpan posisi scroll saat form dikirim
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function () {
+                sessionStorage.setItem('scrollPosition', window.scrollY);
+            });
+        });
+
+        // Inisialisasi toast
+        ['successToast', 'failedToast'].forEach(id => {
+            const toastEl = document.getElementById(id);
+            if (toastEl) {
+                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                toast.show();
+            }
+        });
+
+        // Pilih semua checkbox
+        document.getElementById('select-all').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.select-job');
+            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        });
+
+        // Kirim data yang dipilih
+        document.getElementById('reject-selected').addEventListener('click', function () {
+            const selectedJobs = Array.from(document.querySelectorAll('.select-job:checked')).map(
+                checkbox => checkbox.value
+            );
+
+            if (selectedJobs.length === 0) {
+                alert('No jobs selected!');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to reject the selected jobs?')) {
+                return;
+            }
+
+            fetch('{{ route('bulkRejectStatus') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ selected_jobs: selectedJobs }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan toast sukses
+                        showToast('successToast', data.message);
+
+                        // Refresh halaman untuk menampilkan data yang diperbarui
+                        setTimeout(() => {
+                            location.reload();
+                        }); // Berikan waktu untuk toast sebelum reload
+                    } else {
+                        // Tampilkan toast gagal
+                        showToast('failedToast', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('failedToast', 'An unexpected error occurred. Please try again.');
+                });
+        });
+
+        // Fungsi untuk menampilkan toast
+        function showToast(toastId, message) {
+            const toastEl = document.getElementById(toastId);
+            if (toastEl) {
+                // Masukkan pesan ke dalam toast
+                toastEl.querySelector('.toast-body').textContent = message;
+
+                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                toast.show();
+            } else {
+                console.error(`Toast element with ID "${toastId}" not found.`);
+            }
+        }
+
+    });
+
+</script>

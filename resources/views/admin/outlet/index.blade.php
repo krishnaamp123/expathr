@@ -1,8 +1,8 @@
 @extends('admin.layout.app')
-@section('title', 'Outlet')
+@section('title', 'Placement')
 @section('content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Outlet</h1>
+    <h1 class="h3 mb-2 text-gray-800">Placement</h1>
 
     @if (session('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -13,7 +13,7 @@
       </div>
     @endif
 
-    <p class="mb-3">Master data outlet</p>
+    <p class="mb-3">Master data placement</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -26,7 +26,7 @@
                     <thead>
                         <tr class="small text-center">
                             <th>ID</th>
-                            <th>Outlet</th>
+                            <th>Placement</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>

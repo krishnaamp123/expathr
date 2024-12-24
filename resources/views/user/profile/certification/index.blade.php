@@ -1,5 +1,5 @@
     <div class="card">
-        <div class="card-header" style="color: white;">Certification</div>
+        <div class="card-header" style="color: white;">Training & Certification</div>
         <div class="card-body">
             <div class="">
 
@@ -36,7 +36,7 @@
                         @endforeach
                     </ul>
                 @else
-                    <p class="kaem-subheading">No certification added yet.</p>
+                    <p class="kaem-subheading">No training & certification added yet.</p>
                 @endif
 
                 <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addCertificationModal">

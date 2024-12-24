@@ -229,6 +229,8 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/userjob/update/{id}', [UserHrjobAdminController::class, 'updateUserHrjob'])->name('updateUserHrjob');
             Route::delete('/userjob/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjob'])->name('destroyUserHrjob');
             Route::post('/userjob/update-status/{id}', [UserHrjobAdminController::class, 'updateStatus'])->name('updateStatus');
+            Route::post('/bulk-reject-status', [UserHrjobAdminController::class, 'bulkRejectStatus'])->name('bulkRejectStatus');
+
 
             // ANSWER
             Route::get('/answer', [AnswerAdminController::class, 'getAnswer'])->name('getAnswer');
@@ -240,32 +242,18 @@ Route::middleware(['auth'])->group(function () {
 
             // INTERVIEW
             Route::get('/interview', [InterviewAdminController::class, 'getInterview'])->name('getInterview');
-            Route::get('/interview/create', [InterviewAdminController::class, 'addInterview'])->name('addInterview');
-            Route::get('/userjob/interview/create', [InterviewAdminController::class, 'addUserHrjobInterview'])->name('addUserHrjobInterview');
             Route::post('/interview/create', [InterviewAdminController::class, 'storeInterview'])->name('storeInterview');
-            Route::get('/interview/update/{id}', [InterviewAdminController::class, 'editInterview'])->name('editInterview');
-            Route::get('/userjob/interview/update/{id}', [InterviewAdminController::class, 'editUserHrjobInterview'])->name('editUserHrjobInterview');
             Route::put('/interview/update/{id}', [InterviewAdminController::class, 'updateInterview'])->name('updateInterview');
             Route::delete('/interview/destroy/{id}', [InterviewAdminController::class, 'destroyInterview'])->name('destroyInterview');
-            Route::delete('/userjob/interview/destroy/{id}', [InterviewAdminController::class, 'destroyUserHrjobInterview'])->name('destroyUserHrjobInterview');
-            Route::get('/interview/update/rating/{id}', [InterviewAdminController::class, 'editRating'])->name('editRating');
-            Route::get('/userjob/interview/update/rating/{id}', [InterviewAdminController::class, 'editUserHrjobRating'])->name('editUserHrjobRating');
             Route::put('/interview/update/rating/{id}', [InterviewAdminController::class, 'updateRating'])->name('updateRating');
             Route::get('/interview/export', [InterviewAdminController::class, 'exportInterview'])->name('exportInterview');
             Route::get('/interview/dateexport', [InterviewAdminController::class, 'exportdateInterview'])->name('exportdateInterview');
 
             // USER INTERVIEW
             Route::get('/userinterview', [UserInterviewAdminController::class, 'getUserInterview'])->name('getUserInterview');
-            Route::get('/userinterview/create', [UserInterviewAdminController::class, 'addUserInterview'])->name('addUserInterview');
-            Route::get('/userjob/userinterview/create', [UserInterviewAdminController::class, 'addUserHrjobUserInterview'])->name('addUserHrjobUserInterview');
             Route::post('/userinterview/create', [UserInterviewAdminController::class, 'storeUserInterview'])->name('storeUserInterview');
-            Route::get('/userinterview/update/{id}', [UserInterviewAdminController::class, 'editUserInterview'])->name('editUserInterview');
-            Route::get('/userjob/userinterview/update/{id}', [UserInterviewAdminController::class, 'editUserHrjobUserInterview'])->name('editUserHrjobUserInterview');
             Route::put('/userinterview/update/{id}', [UserInterviewAdminController::class, 'updateUserInterview'])->name('updateUserInterview');
             Route::delete('/userinterview/destroy/{id}', [UserInterviewAdminController::class, 'destroyUserInterview'])->name('destroyUserInterview');
-            Route::delete('/userjob/userinterview/destroy/{id}', [UserInterviewAdminController::class, 'destroyUserHrjobUserInterview'])->name('destroyUserHrjobUserInterview');
-            Route::get('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'editUserRating'])->name('editUserRating');
-            Route::get('/userjob/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'editUserHrjobUserRating'])->name('editUserHrjobUserRating');
             Route::put('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'updateUserRating'])->name('updateUserRating');
             Route::get('/userinterview/export', [UserInterviewAdminController::class, 'exportUserInterview'])->name('exportUserInterview');
             Route::get('/userinterview/dateexport', [UserInterviewAdminController::class, 'exportdateUserInterview'])->name('exportdateUserInterview');

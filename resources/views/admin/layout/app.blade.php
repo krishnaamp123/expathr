@@ -16,6 +16,7 @@
 
     <!-- Custom fonts for this template -->
     <link href="{{asset('template-admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -39,10 +40,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
     <style>
+        .select2-container {
+            width: 100% !important;
+        }
         .select2-container .select2-selection--single {
             height: 40px; /* Mengubah tinggi dari select */
             padding: 8px; /* Mengatur padding agar lebih proporsional */
-            font-size: 16px; /* Ukuran font yang lebih besar */
+            font-size: 14px; /* Ukuran font yang lebih besar */
+        }
+
+        .select2-dropdown {
+            font-size: 14px; /* Ukuran teks dalam dropdown */
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -161,6 +169,10 @@
             padding-left: 10px; /* Sesuaikan nilai padding sesuai kebutuhan */
         }
 
+        label {
+            font-size: 14px; /* Ini akan memengaruhi semua label di seluruh proyek */
+        }
+
 
 
     </style>
@@ -228,7 +240,7 @@
             <li class="nav-item {{ Request::routeIs('getOutlet') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getOutlet') }}">
                     <i class="fas fa-fw fa-building "></i>
-                    <span>Outlet</span>
+                    <span>Placement</span>
                 </a>
             </li>
 
@@ -434,6 +446,13 @@
             $('.select2').select2({
                 placeholder: "Select",
                 allowClear: true
+            });
+            $('.select2').each(function () {
+                $(this).select2({
+                placeholder: "Select",
+                allowClear: true,
+                dropdownParent: $(this).closest('.modal')
+                });
             });
         });
     </script>

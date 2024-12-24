@@ -107,7 +107,7 @@
             <p class="kaem-jobtext text-muted mb-1">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
             <button class="btn btn-primary kaem-subheading mb-3"
                 @if (!$isProfileComplete)
-                    disabled
+                    onclick="window.location.href='{{ route('getProfile') }}'"
                     title="Please complete your profile to apply for this job."
                 @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
                     disabled

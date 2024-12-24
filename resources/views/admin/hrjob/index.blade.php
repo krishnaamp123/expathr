@@ -29,23 +29,23 @@
                             <th>Job Category</th>
                             <th>Job Title</th>
                             <th>Job Type</th>
-                            <th>Job Report</th>
+                            {{-- <th>Job Report</th>
                             <th>Salary</th>
                             <th>Description</th>
                             <th>Qualification</th>
-                            <th>Location Type</th>
+                            <th>Location Type</th> --}}
                             <th>Location</th>
-                            <th>Outlet</th>
-                            <th>Experience Min</th>
+                            <th>Placement</th>
+                            {{-- <th>Experience Min</th>
                             <th>Education Min</th>
-                            <th>Expired</th>
-                            <th>Number Hired</th>
+                            <th>Number Hired</th> --}}
                             <th>Is Active</th>
                             <th>Is Ended</th>
-                            <th>Hiring Cost</th>
-                            <th>Job Closed</th>
+                            {{-- <th>Hiring Cost</th> --}}
                             <th>Created At</th>
-                            <th>Updated At</th>
+                            <th>Expired</th>
+                            <th>Job Closed</th>
+                            {{-- <th>Updated At</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -56,23 +56,23 @@
                             <td>{{$row->category->category_name ?? 'No Category'}}</td>
                             <td>{{$row->job_name}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->job_type)) }}</td>
-                            <td>{{$row->job_report}}</td>
+                            {{-- <td>{{$row->job_report}}</td>
                             <td data-job="{{ $row->price }}">Rp {{ number_format($row->price, 0, ',', '.') }}</td>
                             <td>{{$row->description}}</td>
                             <td>{{$row->qualification}}</td>
-                            <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td>
+                            <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td> --}}
                             <td>{{$row->city->city_name ?? 'No City'}}</td>
                             <td>{{$row->outlet->outlet_name ?? 'No Outlet'}}</td>
-                            <td>{{$row->experience_min}}</td>
+                            {{-- <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>
-                            <td>{{$row->expired}}</td>
-                            <td>{{$row->number_hired}}</td>
+                            <td>{{$row->number_hired}}</td> --}}
                             <td>{{$row->is_active}}</td>
                             <td>{{$row->is_ended}}</td>
-                            <td>{{$row->hiring_cost ?? 'No Cost'}}</td>
-                            <td>{{$row->job_closed ?? 'Not Closed'}}</td>
+                            {{-- <td>{{$row->hiring_cost ?? 'No Cost'}}</td> --}}
                             <td>{{$row->created_at}}</td>
-                            <td>{{$row->updated_at}}</td>
+                            <td>{{$row->expired}}</td>
+                            <td>{{$row->job_closed ?? 'Not Closed'}}</td>
+                            {{-- <td>{{$row->updated_at}}</td> --}}
                             <td>
                                 <a href="{{ route('editHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
                                     <i class="fas fa-edit"></i>

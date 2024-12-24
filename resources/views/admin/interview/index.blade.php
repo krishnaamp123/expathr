@@ -4,23 +4,31 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Interview</h1>
 
-    @if (session('message'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{session('message')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    @endif
+    <!-- Toast Container -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <!-- Toast -->
+        @if(session('success'))
+        <div id="successToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #72A28A;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('success') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        @endif
 
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{session('error')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    @endif
+        @if(session('failed'))
+        <div id="failedToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #c03535;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('failed') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        @endif
+    </div>
 
     <p class="mb-3">Pairing recruiters with applicants for interviews and providing assessments of interview results</p>
 
@@ -45,7 +53,20 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <div>
-                <a href="{{route('addInterview')}}" class="btn btn-sm mr-1" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+                <button
+                    type="button"
+                    class="btn btn-sm mr-1"
+                    style="background-color: #72A28A; color: white;"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addInterviewModal">
+                    <i class="fas fa-plus"></i> Add
+                </button>
+
+                @include('admin.interview.storemodal', [
+                    'userhrjobs' => $userhrjobs,
+                    'users' => $users,
+                ])
+
                 <a href="{{ route('exportInterview') }}" class="btn btn-sm mr-1" style="background-color: #000; color: white;">
                     <i class="fas fa-file-excel"></i> Export All
                 </a>
@@ -76,8 +97,9 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Export</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-share"></i> Export
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -111,15 +133,15 @@
                             <th>Job</th>
                             <th>Applicant</th>
                             <th>Interviewer</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Rating</th>
-                            <th>Comment</th>
+                            <th>Interview Date</th>
+                            <th>Interview Time</th>
                             <th>Location</th>
                             <th>Link</th>
                             <th>Confirm Attendance</th>
                             <th>Created At</th>
                             <th>Updated At</th>
+                            <th>Rating</th>
+                            <th>Comment</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -132,10 +154,7 @@
                             <td>{{$row->user->fullname ?? 'No Interviewer'}}</td>
                             <td>{{$row->interview_date ?? 'No Date'}}</td>
                             <td>{{$row->time ?? 'No Time'}}</td>
-                            <td>{{$row->rating ?? 'No Rating'}}</td>
-                            <td>{{$row->comment ?? 'No Comment'}}</td>
                             <td>{{$row->location ?? 'No Location'}}</td>
-
                             <td>
                                 @if ($row->link)
                                     <a href="{{ $row->link }}" target="_blank" title="{{ $row->link }}">
@@ -148,13 +167,41 @@
                             <td>{{$row->arrival ?? 'No Arrival'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
+                            <td>{{$row->rating ?? 'No Rating'}}</td>
+                            <td>{{$row->comment ?? 'No Comment'}}</td>
                             <td>
-                                <a href="{{ route('editInterview', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i>
-                                    {{-- Edit --}}
-                                </a>
-                                <a href="{{ route('editRating', $row->id) }}" class="btn btn-sm my-1" style="background-color: #FFA500; color: white;"><i class="fas fa-star"></i>
-                                    {{-- Rating --}}
-                                </a>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm my-1"
+                                    style="background-color: #969696; color: white;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editInterviewModal{{ $row->id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                @include('admin.interview.updatemodal', [
+                                    'id' => $row->id,
+                                    'interview' => $row,
+                                    'userhrjobs' => $userhrjobs,
+                                    'users' => $users,
+                                ])
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm my-1"
+                                    style="background-color: #FFA500; color: white;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editRatingModal{{ $row->id }}">
+                                    <i class="fas fa-star"></i>
+                                </button>
+
+                                <!-- Include Modal -->
+                                @include('admin.interview.ratingmodal', [
+                                    'id' => $row->id,
+                                    'rating' => $row->rating,
+                                    'comment' => $row->comment
+                                ])
                                 <form action="{{ route('destroyInterview', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -171,3 +218,35 @@
         </div>
     </div>
 @endsection
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+        // Simpan posisi scroll sebelum reload
+            const scrollPosition = sessionStorage.getItem('scrollPosition');
+            if (scrollPosition) {
+                window.scrollTo(0, parseInt(scrollPosition, 10));
+                sessionStorage.removeItem('scrollPosition');
+            }
+
+            // Simpan posisi scroll saat form dikirim
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function () {
+                    sessionStorage.setItem('scrollPosition', window.scrollY);
+                });
+            });
+
+            // Inisialisasi toast
+            ['successToast', 'failedToast'].forEach(id => {
+                const toastEl = document.getElementById(id);
+                if (toastEl) {
+                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                    toast.show();
+                }
+            });
+        });
+
+    </script>
