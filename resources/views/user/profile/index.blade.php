@@ -51,16 +51,19 @@
                 @include('user.profile.education.index', ['education' => $education])
             </div>
             <div class="col-lg-5 mb-3">
-                @include('user.profile.project.index', ['project' => $project])
+                @include('user.profile.experience.index', ['experience' => $experience])
             </div>
             <div class="col-lg-3 mb-3">
                 @include('user.profile.source.index', ['source' => $source])
             </div>
-            <div class="col-lg-6 mb-3">
-                @include('user.profile.experience.index', ['experience' => $experience])
-            </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-4 mb-3">
                 @include('user.profile.volunteer.index', ['volunteer' => $volunteer])
+            </div>
+            <div class="col-lg-5 mb-3">
+                @include('user.profile.project.index', ['project' => $project])
+            </div>
+            <div class="col-lg-3 mb-3">
+                @include('user.profile.link.index', ['link' => $link])
             </div>
             <div class="col-lg-6 mb-3">
                 @include('user.profile.organization.index', ['organization' => $organization])

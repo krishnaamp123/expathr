@@ -13,6 +13,7 @@ class Hrjob extends Model
     protected $table = 'hrjobs';
 
     protected $fillable = [
+        'id_user',
         'id_category',
         'id_outlet',
         'id_city',
@@ -27,7 +28,6 @@ class Hrjob extends Model
         'education_min',
         'expired',
         'number_hired',
-        'is_active',
         'job_closed',
         'is_ended',
         'hiring_cost',
@@ -47,6 +47,11 @@ class Hrjob extends Model
                 $hrjob->job_closed = Carbon::now();
             }
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
     }
 
     public function category()

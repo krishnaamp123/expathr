@@ -51,6 +51,86 @@ class InterviewAdminController extends Controller
         return view('admin.interview.index', compact('interviews', 'userhrjobs', 'users'));
     }
 
+    // public function storeInterview(Request $request)
+    // {
+    //     try {
+    //         // Cek otorisasi user
+    //         if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+    //             session()->flash('failed', 'You are not authorized to create this interview.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Validasi input
+    //         $validated = $request->validate([
+    //             'id_user_job' => 'required',
+    //             'id_user' => 'required', // Pastikan id_user berupa array
+    //             'id_user.*' => 'exists:users,id', // Validasi setiap elemen array
+    //             'interview_date' => 'nullable|date',
+    //             'time' => 'nullable|date_format:H:i',
+    //             'location' => 'nullable|string|max:255',
+    //             'link' => 'nullable|url|max:255',
+    //         ]);
+
+    //         foreach ($validated['id_user'] as $id_user) {
+    //             $user = User::findOrFail($id_user);
+
+    //             // Cegah hiring_manager menambahkan wawancara untuk super_admin
+    //             if (Auth::user()->role === 'hiring_manager' && $user->role === 'super_admin') {
+    //                 session()->flash('failed', 'You cannot manage interviews for Super Admin.');
+    //                 return back()->withInput();
+    //             }
+
+    //             // Buat wawancara baru
+    //             $interview = Interview::create([
+    //                 'id_user_job' => $validated['id_user_job'],
+    //                 'id_user' => $id_user,
+    //                 'interview_date' => $validated['interview_date'],
+    //                 'time' => $validated['time'],
+    //                 'location' => $validated['location'],
+    //                 'link' => $validated['link'],
+    //             ]);
+
+    //             // Ambil data untuk email
+    //             $jobName = $interview->userHrjob->hrjob->job_name ?? 'No Job';
+    //             $applicantName = $interview->userHrjob->user->fullname ?? 'No Applicant';
+    //             $interviewDate = $interview->interview_date ?? 'No Date';
+    //             $time = $interview->time ?? 'No Time';
+    //             $location = $interview->location ?? 'No Location';
+    //             $link = $interview->link ?? 'No Link';
+
+    //             // Kirim email ke setiap user
+    //             $emailData = [
+    //                 'job_name' => $jobName,
+    //                 'applicant_name' => $applicantName,
+    //                 'interview_date' => $interviewDate,
+    //                 'time' => $time,
+    //                 'location' => $location,
+    //                 'link' => $link,
+    //             ];
+
+    //             $recipientEmail = $interview->userHrjob->user->email; // Ganti dengan email tujuan yang sesuai
+    //             Mail::send('admin.interview.email', $emailData, function ($message) use ($recipientEmail) {
+    //                 $message->to($recipientEmail)
+    //                     ->subject('Interview Scheduled');
+    //             });
+    //         }
+
+    //         session()->flash('success', 'Interviews created successfully & Emails sent successfully!');
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         // Gabungkan semua pesan validasi
+    //         $errors = [];
+    //         foreach ($e->errors() as $fieldErrors) {
+    //             $errors = array_merge($errors, $fieldErrors);
+    //         }
+    //         session()->flash('failed', implode(' ', $errors));
+    //     } catch (\Exception $e) {
+    //         // Pesan error untuk kesalahan umum
+    //         session()->flash('failed', 'An unexpected error occurred. Please try again.');
+    //     }
+
+    //     return back()->withInput();
+    // }
+
     public function storeInterview(Request $request)
     {
         try {
@@ -150,6 +230,8 @@ class InterviewAdminController extends Controller
                 'location' => 'nullable',
                 'link' => 'nullable',
                 'arrival' => 'nullable',
+                'rating' => 'nullable|integer|min:1|max:5',
+                'comment' => 'nullable|string|max:1000',
 
             ]);
 
@@ -160,6 +242,8 @@ class InterviewAdminController extends Controller
             $interview->location = $request->location;
             $interview->link = $request->link;
             $interview->arrival = $request->arrival;
+            $interview->rating = $request->rating;
+            $interview->comment = $request->comment;
 
             $interview->save();
 
@@ -184,17 +268,40 @@ class InterviewAdminController extends Controller
         $interview = Interview::findOrFail($id);
 
         try {
+            // Validasi input
             $validated = $request->validate([
                 'rating' => 'required|integer|min:1|max:5',
                 'comment' => 'required|string|max:1000',
             ]);
 
+            // Perbarui rating dan komentar di tabel Interview
             $interview->rating = $validated['rating'];
             $interview->comment = $validated['comment'];
             $interview->save();
 
-            // Pesan sukses
-            session()->flash('success', 'Rating updated successfully!');
+            // Perbarui status di tabel UserHrjob
+            $userHrjob = $interview->userHrjob; // Asumsikan ada relasi Interview -> UserHrjob
+            if (!$userHrjob) {
+                throw new \Exception('UserHrjob record not found.');
+            }
+
+            if ($request->action === 'reject') {
+                $userHrjob->status = 'rejected';
+                $userHrjob->save();
+
+                session()->flash('success', 'Status updated to Rejected.');
+            } elseif ($request->action === 'next') {
+                $userHrjob->status = 'user_interview';
+                $userHrjob->save();
+
+                // Redirect dengan modal jika status menjadi `user_interview`
+                return redirect()->route('getUserHrjob', ['status' => 'user_interview'])
+                    ->with('showuserModal', true)
+                    ->with('userJobId', $userHrjob->id)
+                    ->with('userJobName', $userHrjob->user->fullname);
+            } else {
+                session()->flash('success', 'Rating updated successfully!');
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
             $errors = [];
@@ -209,6 +316,38 @@ class InterviewAdminController extends Controller
 
         return back()->withInput(); // Kembali ke posisi semula dengan input
     }
+
+
+    // public function updateRating(Request $request, $id)
+    // {
+    //     $interview = Interview::findOrFail($id);
+
+    //     try {
+    //         $validated = $request->validate([
+    //             'rating' => 'required|integer|min:1|max:5',
+    //             'comment' => 'required|string|max:1000',
+    //         ]);
+
+    //         $interview->rating = $validated['rating'];
+    //         $interview->comment = $validated['comment'];
+    //         $interview->save();
+
+    //         // Pesan sukses
+    //         session()->flash('success', 'Rating updated successfully!');
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         // Gabungkan semua pesan validasi
+    //         $errors = [];
+    //         foreach ($e->errors() as $fieldErrors) {
+    //             $errors = array_merge($errors, $fieldErrors);
+    //         }
+    //         session()->flash('failed', implode(' ', $errors));
+    //     } catch (\Exception $e) {
+    //         // Pesan error untuk kesalahan umum
+    //         session()->flash('failed', 'An unexpected error occurred. Please try again.');
+    //     }
+
+    //     return back()->withInput(); // Kembali ke posisi semula dengan input
+    // }
 
     public function destroyInterview($id)
     {

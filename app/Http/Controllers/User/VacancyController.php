@@ -20,7 +20,7 @@ class VacancyController extends Controller
     public function getVacancy()
     {
         $vacancies = Hrjob::with('category', 'city')
-                          ->where('is_active', 'yes')
+                          ->where('is_ended', 'no')
                           ->orderBy('created_at', 'desc')
                           ->get();
 

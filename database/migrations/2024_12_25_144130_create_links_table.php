@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('volunteers', function (Blueprint $table) {
+        Schema::create('links', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('organization');
-            $table->string('role');
-            $table->string('issue');
-            $table->text('description')->nullable();
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->enum('media',['facebook','instagram','x','linkedin','portofolio','tiktok']);
+            $table->string('media_url');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('volunteers');
+        Schema::dropIfExists('links');
     }
 };

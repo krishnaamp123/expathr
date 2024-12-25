@@ -443,15 +443,18 @@
 
     <script>
         $(document).ready(function() {
-            $('.select2').select2({
+            // Inisialisasi Select2 untuk elemen di luar modal
+            $('.select2:not(.inside-modal)').select2({
                 placeholder: "Select",
                 allowClear: true
             });
-            $('.select2').each(function () {
+
+            // Inisialisasi Select2 untuk elemen di dalam modal
+            $('.select2.inside-modal').each(function () {
                 $(this).select2({
-                placeholder: "Select",
-                allowClear: true,
-                dropdownParent: $(this).closest('.modal')
+                    placeholder: "Select",
+                    allowClear: true,
+                    dropdownParent: $(this).closest('.modal')
                 });
             });
         });

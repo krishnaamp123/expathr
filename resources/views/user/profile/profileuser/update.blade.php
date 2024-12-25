@@ -86,13 +86,5 @@
         @enderror
     </div>
 
-    <div class="form-group">
-        <label for="link" class="kaem-subheading">Link</label>
-        <input type="url" class="form-control" id="link" name="link" value="{{ $user->link }}">
-        @error('link')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-
     <button type="submit" class="btn btn-primary kaem-subheading">Update Profile</button>
 </form>

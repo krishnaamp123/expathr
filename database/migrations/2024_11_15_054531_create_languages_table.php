@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('skill',['basic','intermediate','profesional','advanced_profesional','native']);
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

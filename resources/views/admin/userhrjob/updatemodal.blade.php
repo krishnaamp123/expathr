@@ -13,7 +13,7 @@
 
                     <div class="form-group">
                         <label>Job</label>
-                        <select name="id_job" class="form-control select2">
+                        <select name="id_job" class="form-control select2 inside-modal">
                             <option value="">Select Job</option>
                             @foreach($hrjob as $job)
                                 <option value="{{ $job->id }}" {{ $job->id == $userhrjob->id_job ? 'selected' : '' }}>
@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         <label>Applicant</label>
-                        <select name="id_user" class="form-control select2">
+                        <select name="id_user" class="form-control select2 inside-modal">
                             <option value="">Select Applicant</option>
                             @foreach($user as $applicant)
                                 <option value="{{ $applicant->id }}" {{ $applicant->id == $userhrjob->id_user ? 'selected' : '' }}>
@@ -43,7 +43,7 @@
 
                     <div class="form-group">
                         <label>Status</label>
-                        <select name="status" class="form-control select2">
+                        <select name="status" class="form-control select2 inside-modal">
                             <option value="">Select Status</option>
                             <option value="applicant" {{ old('status', $userhrjob->status) == 'applicant' ? 'selected' : '' }}>Applicant</option>
                             <option value="shortlist" {{ old('status', $userhrjob->status) == 'shortlist' ? 'selected' : '' }}>Shortlist</option>
@@ -71,7 +71,7 @@
 
                     <div class="form-group">
                         <label>Availability</label>
-                        <select name="availability" class="form-control select2">
+                        <select name="availability" class="form-control select2 inside-modal">
                             <option value="">Select Availability</option>
                             <option value="immediately" {{ old('availability', $userhrjob->availability) == 'immediately' ? 'selected' : '' }}>Immediately</option>
                             <option value="<1_month_notice" {{ old('availability', $userhrjob->availability) == '<1_month_notice' ? 'selected' : '' }}>< 1 Month Notice</option>

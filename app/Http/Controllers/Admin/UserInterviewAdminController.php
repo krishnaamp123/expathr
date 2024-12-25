@@ -149,6 +149,8 @@ class UserInterviewAdminController extends Controller
                 'location' => 'nullable',
                 'link' => 'nullable',
                 'arrival' => 'nullable',
+                'rating' => 'nullable|integer|min:1|max:5',
+                'comment' => 'nullable|string|max:1000',
 
             ]);
 
@@ -159,6 +161,8 @@ class UserInterviewAdminController extends Controller
             $userinterview->location = $request->location;
             $userinterview->link = $request->link;
             $userinterview->arrival = $request->arrival;
+            $userinterview->rating = $request->rating;
+            $userinterview->comment = $request->comment;
 
             $userinterview->save();
 
@@ -183,17 +187,37 @@ class UserInterviewAdminController extends Controller
         $userinterview = UserInterview::findOrFail($id);
 
         try {
+            // Validasi input
             $validated = $request->validate([
                 'rating' => 'required|integer|min:1|max:5',
                 'comment' => 'required|string|max:1000',
             ]);
 
+            // Perbarui rating dan komentar di tabel Interview
             $userinterview->rating = $validated['rating'];
             $userinterview->comment = $validated['comment'];
-
             $userinterview->save();
 
-            session()->flash('success', 'Rating updated successfully!');
+            // Perbarui status di tabel UserHrjob
+            $userHrjob = $userinterview->userHrjob;
+            if (!$userHrjob) {
+                throw new \Exception('UserHrjob record not found.');
+            }
+
+            if ($request->action === 'reject') {
+                $userHrjob->status = 'rejected';
+                $message = 'Status updated to Rejected.';
+            } elseif ($request->action === 'next') {
+                $userHrjob->status = 'skill_test';
+                $message = 'Status updated to Skill Test.';
+            } else {
+                $message = 'Rating updated successfully!';
+            }
+
+            $userHrjob->save();
+
+            // Pesan sukses
+            session()->flash('success', $message);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
             $errors = [];
@@ -206,9 +230,8 @@ class UserInterviewAdminController extends Controller
             session()->flash('failed', 'An unexpected error occurred. Please try again.');
         }
 
-        return back()->withInput();
+        return back()->withInput(); // Kembali ke posisi semula dengan input
     }
-
 
     public function destroyUserInterview($id)
     {

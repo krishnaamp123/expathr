@@ -20,8 +20,8 @@ return new class extends Migration
             $table->enum('availability',['immediately','<1_month_notice','1_month_notice','>1_month_notice']);
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('id_job')->references('id')->on('hrjobs');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_job')->references('id')->on('hrjobs')->onDelete('cascade');
         });
     }
 

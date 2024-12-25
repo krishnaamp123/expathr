@@ -20,6 +20,7 @@ use App\Models\Experience;
 use App\Models\Certification;
 use App\Models\Skill;
 use App\Models\Source;
+use App\Models\Link;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -42,19 +43,12 @@ class ProfileUserController extends Controller
             $education->end_date = Carbon::parse($education->end_date)->format('m/Y');
             return $education;
         });
-        $project = Project::where('id_user', $user->id)
+        $experience = Experience::where('id_user', $user->id)
         ->get()
-        ->map(function ($project) {
-            $project->start_date = Carbon::parse($project->start_date)->format('m/Y');
-            $project->end_date = Carbon::parse($project->end_date)->format('m/Y');
-            return $project;
-        });
-        $organization = Organization::where('id_user', $user->id)
-        ->get()
-        ->map(function ($organization) {
-            $organization->start_date = Carbon::parse($organization->start_date)->format('m/Y');
-            $organization->end_date = Carbon::parse($organization->end_date)->format('m/Y');
-            return $organization;
+        ->map(function ($experience) {
+            $experience->start_date = Carbon::parse($experience->start_date)->format('m/Y');
+            $experience->end_date = Carbon::parse($experience->end_date)->format('m/Y');
+            return $experience;
         });
         $volunteer = Volunteer::where('id_user', $user->id)
         ->get()
@@ -63,12 +57,20 @@ class ProfileUserController extends Controller
             $volunteer->end_date = Carbon::parse($volunteer->end_date)->format('m/Y');
             return $volunteer;
         });
-        $experience = Experience::where('id_user', $user->id)
+        $project = Project::where('id_user', $user->id)
         ->get()
-        ->map(function ($experience) {
-            $experience->start_date = Carbon::parse($experience->start_date)->format('m/Y');
-            $experience->end_date = Carbon::parse($experience->end_date)->format('m/Y');
-            return $experience;
+        ->map(function ($project) {
+            $project->start_date = Carbon::parse($project->start_date)->format('m/Y');
+            $project->end_date = Carbon::parse($project->end_date)->format('m/Y');
+            return $project;
+        });
+        $link = Link::where('id_user', $user->id)->get();
+        $organization = Organization::where('id_user', $user->id)
+        ->get()
+        ->map(function ($organization) {
+            $organization->start_date = Carbon::parse($organization->start_date)->format('m/Y');
+            $organization->end_date = Carbon::parse($organization->end_date)->format('m/Y');
+            return $organization;
         });
         $certification = Certification::where('id_user', $user->id)
         ->get()
@@ -81,7 +83,7 @@ class ProfileUserController extends Controller
         $source = Source::where('id_user', $user->id)->get();
 
         return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language',
-        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skill', 'source'));
+        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skill', 'source', 'link'));
     }
 
     public function editProfile($id)
@@ -105,7 +107,6 @@ class ProfileUserController extends Controller
             'birth_date' => 'required',
             'gender' => 'required|in:male,female',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'link' => 'nullable|url',
         ]);
 
         // Perbarui gambar jika ada
@@ -146,7 +147,6 @@ class ProfileUserController extends Controller
         $user->address = $validated['address'];
         $user->birth_date = $validated['birth_date'];
         $user->gender = $validated['gender'];
-        $user->link = $validated['link'];
 
         $user->save();
 

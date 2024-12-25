@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_question');
             $table->timestamps();
 
-            $table->foreign('id_job')->references('id')->on('hrjobs');
+            $table->foreign('id_job')->references('id')->on('hrjobs')->onDelete('cascade');
             $table->foreign('id_question')->references('id')->on('questions')->onDelete('cascade');
         });
     }

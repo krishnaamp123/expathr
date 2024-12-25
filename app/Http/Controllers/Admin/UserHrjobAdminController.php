@@ -8,6 +8,7 @@ use App\Models\UserHrjob;
 use App\Models\Hrjob;
 use App\Models\User;
 use App\Models\Interview;
+use App\Models\UserHrjobStatusHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -127,6 +128,12 @@ class UserHrjobAdminController extends Controller
     {
         $userhrjob = UserHrjob::findOrFail($id);
 
+        // Simpan status lama ke tabel historis sebelum memperbarui
+        \App\Models\UserHrjobStatusHistory::create([
+            'user_hrjob_id' => $userhrjob->id,
+            'status' => $userhrjob->status, // Status lama
+        ]);
+
         try {
             $validated = $request->validate([
                 'id_job' => 'required|exists:hrjobs,id',
@@ -143,6 +150,22 @@ class UserHrjobAdminController extends Controller
             $userhrjob->availability = $request->availability;
 
             $userhrjob->save();
+
+            $status = $request->status;
+
+            if ($request->status === 'hr_interview') {
+                return redirect()->route('getUserHrjob', ['status' => 'hr_interview'])
+                    ->with('showModal', true)
+                    ->with('userJobId', $id)
+                    ->with('userJobName', $userhrjob->user->fullname);
+            }
+
+            if ($status === 'user_interview') {
+                return redirect()->route('getUserHrjob', ['status' => 'user_interview'])
+                    ->with('showuserModal', true)
+                    ->with('userJobId', $id)
+                    ->with('userJobName', $userhrjob->user->fullname);
+            }
 
             session()->flash('success', 'User Job updated successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -168,6 +191,13 @@ class UserHrjobAdminController extends Controller
             ]);
 
             $userhrjob = UserHrjob::findOrFail($id);
+
+            // Simpan status lama ke tabel historis sebelum memperbarui
+            \App\Models\UserHrjobStatusHistory::create([
+                'user_hrjob_id' => $userhrjob->id,
+                'status' => $userhrjob->status, // Status lama
+            ]);
+
             $userhrjob->status = $request->status;
             $userhrjob->save();
 
@@ -227,10 +257,25 @@ class UserHrjobAdminController extends Controller
     public function bulkRejectStatus(Request $request)
     {
         try {
+            // Validasi input
             $validated = $request->validate([
                 'selected_jobs' => 'required|array',
                 'selected_jobs.*' => 'exists:user_hrjobs,id',
             ]);
+
+            // Ambil semua data UserHrjob yang akan diperbarui
+            $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
+
+            // Simpan riwayat status ke tabel user_hrjob_status_histories
+            $statusHistories = $userHrjobs->map(function ($userHrjob) {
+                return [
+                    'user_hrjob_id' => $userHrjob->id,
+                    'status' => $userHrjob->status, // Status sebelum diubah
+                    'updated_at' => now(),
+                ];
+            })->toArray();
+
+            \App\Models\UserHrjobStatusHistory::insert($statusHistories);
 
             // Update status menjadi 'rejected'
             UserHrjob::whereIn('id', $request->selected_jobs)->update(['status' => 'rejected']);
@@ -251,7 +296,30 @@ class UserHrjobAdminController extends Controller
         }
     }
 
+    // public function bulkRejectStatus(Request $request)
+    // {
+    //     try {
+    //         $validated = $request->validate([
+    //             'selected_jobs' => 'required|array',
+    //             'selected_jobs.*' => 'exists:user_hrjobs,id',
+    //         ]);
 
+    //         // Update status menjadi 'rejected'
+    //         UserHrjob::whereIn('id', $request->selected_jobs)->update(['status' => 'rejected']);
 
-
+    //         // Simpan pesan sukses ke dalam session
+    //         session()->flash('success', 'Selected jobs successfully rejected.');
+    //         return response()->json(['success' => true, 'message' => 'Selected jobs successfully rejected.']);
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         $errors = [];
+    //         foreach ($e->errors() as $fieldErrors) {
+    //             $errors = array_merge($errors, $fieldErrors);
+    //         }
+    //         session()->flash('failed', implode(' ', $errors));
+    //         return response()->json(['success' => false, 'message' => implode(' ', $errors)]);
+    //     } catch (\Exception $e) {
+    //         session()->flash('failed', 'An unexpected error occurred. Please try again.');
+    //         return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
+    //     }
+    // }
 }

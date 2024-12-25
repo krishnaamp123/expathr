@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('skill_name');
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

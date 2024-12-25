@@ -24,13 +24,12 @@ return new class extends Migration
             $table->date('birth_date');
             $table->enum('gender',['male','female']);
             $table->string('profile_pict')->nullable();
-            $table->string('link')->nullable();
-            $table->enum('role',['super_admin','hiring_manager','recruiter','applicant'])->default('applicant');
+            $table->enum('role',['super_admin','hiring_manager','recruiter','interviewer','applicant'])->default('applicant');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('id_city')->references('id')->on('cities');
+            $table->foreign('id_city')->references('id')->on('cities')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

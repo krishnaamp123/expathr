@@ -14,21 +14,23 @@ class HrjobAdminController extends Controller
 {
     public function getHrjob()
     {
-        $hrjobs = Hrjob::with('category', 'city', 'outlet')->get();
+        $hrjobs = Hrjob::with('user','category', 'city', 'outlet')->get();
         return view('admin.hrjob.index', compact('hrjobs'));
     }
 
     public function addHrjob()
     {
+        $users = User::where('role', '!=', 'applicant')->get();
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
         $outlets = Outlet::all();
-        return view('admin.hrjob.store', compact('hrjobcategories', 'cities', 'outlets'));
+        return view('admin.hrjob.store', compact('users','hrjobcategories', 'cities', 'outlets'));
     }
 
     public function storeHrjob(Request $request)
     {
         $validated = $request->validate([
+            'id_user' => 'required|exists:users,id',
             'id_category' => 'required|exists:hrjob_categories,id',
             'id_outlet' => 'required|exists:outlets,id',
             'id_city' => 'required|exists:cities,id',
@@ -44,12 +46,12 @@ class HrjobAdminController extends Controller
             'education_min' => 'required|string|max:255',
             'expired' => 'required',
             'number_hired' => 'required',
-            'is_active' => 'required|in:yes,no',
         ]);
 
         // Buat instance hrjob baru
         $hrjob = new Hrjob();
 
+        $hrjob->id_user = $validated['id_user'];
         $hrjob->id_category = $validated['id_category'];
         $hrjob->id_outlet = $validated['id_outlet'];
         $hrjob->id_city = $validated['id_city'];
@@ -65,7 +67,6 @@ class HrjobAdminController extends Controller
         $hrjob->education_min = $validated['education_min'];
         $hrjob->expired = $validated['expired'];
         $hrjob->number_hired = $validated['number_hired'];
-        $hrjob->is_active = $validated['is_active'];
 
         $hrjob->save();
 
@@ -75,11 +76,12 @@ class HrjobAdminController extends Controller
     public function editHrjob($id)
     {
         $hrjob = Hrjob::findOrFail($id);
+        $users = User::where('role', '!=', 'applicant')->get();
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
         $outlets = Outlet::all();
 
-        return view('admin.hrjob.update', compact('hrjob', 'hrjobcategories', 'cities', 'outlets'));
+        return view('admin.hrjob.update', compact('hrjob', 'users', 'hrjobcategories', 'cities', 'outlets'));
     }
 
     public function updateHrjob(Request $request, $id)
@@ -87,6 +89,7 @@ class HrjobAdminController extends Controller
         $hrjob = Hrjob::findOrFail($id);
 
         $validated = $request->validate([
+            'id_user' => 'required|exists:users,id',
             'id_category' => 'required|exists:hrjob_categories,id',
             'id_outlet' => 'required|exists:outlets,id',
             'id_city' => 'required|exists:cities,id',
@@ -102,7 +105,6 @@ class HrjobAdminController extends Controller
             'education_min' => 'required|string|max:255',
             'expired' => 'required',
             'number_hired' => 'required',
-            'is_active' => 'required|in:yes,no',
             'is_ended' => 'nullable|in:yes,no',
             'hiring_cost' => 'nullable',
             'job_closed' => 'nullable',
@@ -111,6 +113,7 @@ class HrjobAdminController extends Controller
         // Set default value jika 'hide_salary' tidak ada
         $validated['hide_salary'] = $request->has('hide_salary') ? 1 : 0;
 
+        $hrjob->id_user = $validated['id_user'];
         $hrjob->id_category = $validated['id_category'];
         $hrjob->id_outlet = $validated['id_outlet'];
         $hrjob->id_city = $validated['id_city'];
@@ -126,7 +129,6 @@ class HrjobAdminController extends Controller
         $hrjob->education_min = $validated['education_min'];
         $hrjob->expired = $validated['expired'];
         $hrjob->number_hired = $validated['number_hired'];
-        $hrjob->is_active = $validated['is_active'];
         $hrjob->is_ended = $validated['is_ended'];
         $hrjob->hiring_cost = $validated['hiring_cost'];
         $hrjob->job_closed = $validated['job_closed'];

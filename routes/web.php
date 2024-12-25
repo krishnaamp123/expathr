@@ -19,6 +19,7 @@ use App\Http\Controllers\User\CertificationController;
 use App\Http\Controllers\User\SkillController;
 use App\Http\Controllers\User\VacancyController;
 use App\Http\Controllers\User\SourceController;
+use App\Http\Controllers\User\LinkController;
 // ADMIN
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
@@ -92,6 +93,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/profile/language/edit/{id}', [LanguageController::class, 'editLanguage'])->name('editLanguage');
             Route::put('/profile/language/update/{id}', [LanguageController::class, 'updateLanguage'])->name('updateLanguage');
             Route::delete('/profile/language/destroy/{id}', [LanguageController::class, 'destroyLanguage'])->name('destroyLanguage');
+
+            //LINK
+            Route::get('/profile/link/add', [LinkController::class, 'addLink'])->name('addLink');
+            Route::post('/profile/link/store', [LinkController::class, 'storeLink'])->name('storeLink');
+            Route::get('/profile/link/edit/{id}', [LinkController::class, 'editLink'])->name('editLink');
+            Route::put('/profile/link/update/{id}', [LinkController::class, 'updateLink'])->name('updateLink');
+            Route::delete('/profile/link/destroy/{id}', [LinkController::class, 'destroyLink'])->name('destroyLink');
 
             //WORK FIELD
             Route::get('/profile/workfield/add', [WorkFieldController::class, 'addWorkField'])->name('addWorkField');

@@ -13,7 +13,7 @@
 
                     <div class="form-group">
                         <label>Applicant</label>
-                        <select name="id_user_job" class="form-control select2">
+                        <select name="id_user_job" class="form-control select2 inside-modal">
                             <option value="">Select Applicant</option>
                             @foreach ($userhrjobs as $applicant)
                                 <option value="{{ $applicant->id }}" {{ $applicant->id == $userinterview->id_user_job ? 'selected' : '' }}>
@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         <label>Interviewer</label>
-                        <select name="id_user" class="form-control select2">
+                        <select name="id_user" class="form-control select2 inside-modal">
                             <option value="">Select Interviewer</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}" {{ $user->id == $userinterview->id_user ? 'selected' : '' }}>
@@ -75,7 +75,7 @@
 
                     <div class="form-group">
                         <label>Confirm Attendance</label>
-                        <select name="arrival" class="form-control select2">
+                        <select name="arrival" class="form-control select2 inside-modal">
                             <option value="">Select Confirm Attendance</option>
                             <option value="yes" {{ old('arrival', $userinterview->arrival) == 'yes' ? 'selected' : '' }}>Yes</option>
                             <option value="no" {{ old('arrival', $userinterview->arrival) == 'no' ? 'selected' : '' }}>No</option>
@@ -92,11 +92,11 @@
                             @for ($i = 5; $i >= 1; $i--)
                                 <input
                                     type="radio"
-                                    id="star-{{ $i }}"
+                                    id="star-{{ $i }}-{{ $id }}"
                                     name="rating"
                                     value="{{ $i }}"
                                     @if($i == old('rating', $userinterview->rating)) checked @endif>
-                                <label for="star-{{ $i }}" class="star">&#9733;</label>
+                                <label for="star-{{ $i }}-{{ $id }}" class="star">&#9733;</label>
                             @endfor
                         </div>
                         @error('rating')

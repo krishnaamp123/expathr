@@ -8,7 +8,12 @@
                         @foreach ($education as $educationn)
                         <li class="list-group-item city-item position-relative">
                             <span class="kaem-heading">{{ $educationn->university ?? 'Unknown Education' }}</span><br>
-                            <span class="kaem-subheading">{{ $educationn->degree }} - {{ $educationn->major }}</span><br>
+                            <span class="kaem-subheading">
+                                {{ $educationn->degree }}
+                                @if (!empty($educationn->major))
+                                    - {{ $educationn->major }}
+                                @endif
+                            </span><br>
                             <span class="kaem-text">{{ $educationn->start_date }} - {{ $educationn->end_date }}</span>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
@@ -62,7 +67,15 @@
 
                     <div class="form-group">
                         <label for="degree" class="kaem-subheading">Degree</label>
-                        <input type="text" class="form-control" id="degree" name="degree"  value="{{ $educationn->degree }}" required>
+                        <select name="degree" class="form-control select2">
+                            <option value="">Select Degree</option>
+                            <option value="elementary" {{ $educationn->degree == 'elementary' ? 'selected' : '' }}>Elementary School</option>
+                            <option value="juniorhigh" {{ $educationn->degree == 'juniorhigh' ? 'selected' : '' }}>Junior High School</option>
+                            <option value="seniorhigh" {{ $educationn->degree == 'seniorhigh' ? 'selected' : '' }}>Senior High School</option>
+                            <option value="bachelor" {{ $educationn->degree == 'bachelor' ? 'selected' : '' }}>Bachelor's</option>
+                            <option value="master" {{ $educationn->degree == 'master' ? 'selected' : '' }}>Master's</option>
+                            <option value="doctoral" {{ $educationn->degree == 'doctoral' ? 'selected' : '' }}>Doctoral</option>
+                        </select>
                         @error('degree')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

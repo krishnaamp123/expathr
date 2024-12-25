@@ -40,9 +40,24 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;">
-                        <i class="fas fa-save"></i> Save
-                    </button>
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between mt-3">
+                        <!-- Save Button -->
+                        <button type="submit" name="action" value="save" class="btn btn-sm" style="background-color: #72A28A; color: white;">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+
+                        <!-- Reject Button -->
+                        <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+
+                        <!-- Next Button -->
+                        <button type="submit" name="action" value="next" class="btn btn-sm btn-primary">
+                            <i class="fas fa-arrow-right"></i> Next
+                        </button>
+                    </div>
+
                 </form>
             </div>
         </div>

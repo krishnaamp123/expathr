@@ -43,14 +43,6 @@
                         <strong>City:</strong>
                         <p>{{ $user->city->city_name }}</p>
                     </div>
-                    <div class="mb-3 kaem-text">
-                        <strong>Link:</strong>
-                        @if(!empty($user->link))
-                            <p>{{ $user->link }}</p>
-                        @else
-                            <p>Add Your link</p>
-                        @endif
-                    </div>
                 </div>
             </div>
         </div>

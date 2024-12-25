@@ -10,10 +10,17 @@
         </div>
         <div class="form-group">
             <label for="degree" class="kaem-subheading">Degree</label>
-            <input name="degree" type="text" class="form-control form-control-user"
-                id="exampleInputDegree">
+            <select name="degree" id="degree" class="form-control select2">
+                <option value="">Select Degree</option>
+                <option value="elementary">Elementary School</option>
+                <option value="juniorhigh">Junior High School</option>
+                <option value="seniorhigh">Senior High School</option>
+                <option value="bachelor">Bachelor's</option>
+                <option value="master">Master's</option>
+                <option value="doctoral">Doctoral</option>
+            </select>
             @error('degree')
-                <div class="text-danger">{{$message}}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group">

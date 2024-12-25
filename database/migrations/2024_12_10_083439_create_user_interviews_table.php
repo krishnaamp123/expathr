@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('user_interviews', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user_job');
-            $table->unsignedBigInteger('id_user');
             $table->date('interview_date')->nullable();
             $table->string('time')->nullable();
             $table->bigInteger('rating')->nullable();
@@ -24,8 +23,8 @@ return new class extends Migration
             $table->enum('arrival',['yes','no'])->nullable();
             $table->timestamps();
 
-            $table->foreign('id_user_job')->references('id')->on('user_hrjobs');
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_user_job')->references('id')->on('user_hrjobs')->onDelete('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

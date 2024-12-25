@@ -12,7 +12,7 @@
 
                     <div class="form-group">
                         <label>Applicant</label>
-                        <select name="id_user_job" class="form-control select2">
+                        <select name="id_user_job" class="form-control select2 inside-modal">
                             <option value="">Select Applicant</option>
                             @foreach($userhrjobs as $applicant)
                                 <option value="{{ $applicant->id }}">{{ $applicant->user->fullname }} | {{ $applicant->hrjob->job_name }}</option>
@@ -25,7 +25,7 @@
 
                     <div class="form-group">
                         <label>Interviewer</label>
-                        <select name="id_user" class="form-control select2">
+                        <select name="id_user" class="form-control select2 inside-modal">
                             <option value="">Select Interviewer</option>
                             @foreach($users as $interviewer)
                                 <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>

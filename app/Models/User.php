@@ -31,13 +31,17 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'birth_date',
         'gender',
         'profile_pict',
-        'link',
         'role',
     ];
 
     public function city()
     {
         return $this->belongsTo(City::class, 'id_city');
+    }
+
+    public function hrjob()
+    {
+        return $this->hasMany(Hrjob::class, 'id_user');
     }
 
     public function workLocation()
@@ -78,6 +82,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function language()
     {
         return $this->hasMany(Language::class, 'id_user');
+    }
+
+    public function link()
+    {
+        return $this->hasMany(Link::class, 'id_user');
     }
 
     public function project()

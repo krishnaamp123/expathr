@@ -49,4 +49,20 @@ class UserHrjob extends Model
                    ->where('id_job', $jobId)
                    ->exists();
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // Event sebelum data diperbarui
+        static::updating(function ($userHrjob) {
+            if ($userHrjob->isDirty('status')) {
+                // Simpan perubahan status ke tabel historis
+                \App\Models\UserHrjobStatusHistory::create([
+                    'user_hrjob_id' => $userHrjob->id,
+                    'status' => $userHrjob->getOriginal('status'), // Status sebelumnya
+                ]);
+            }
+        });
+    }
 }

@@ -74,6 +74,8 @@
                         <i class="fas fa-calendar-check"></i> Export Date
                     </button>
 
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-minus"></i> Reject Selected</button>
+
                     <!-- Modal Popup -->
                     <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -127,6 +129,8 @@
                         <i class="fas fa-calendar-check"></i> Export Date
                     </button>
 
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-minus"></i> Reject Selected</button>
+
                     <!-- Modal Popup -->
                     <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -172,7 +176,7 @@
                         'user' => $userss,
                     ])
 
-                    <button id="reject-selected" class="btn btn-danger btn-sm">Reject Selected</button>
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-minus"></i> Reject Selected</button>
                     @endif
                 </div>
             <!-- Form Filter Tanggal -->
@@ -511,14 +515,13 @@
                 <div class="modal-content">
                     <form action="{{ route('storeInterview') }}" method="POST">
                         @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="interviewModalLabel">Add Interview Details</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href='{{ route('getUserHrjob') }}'">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="interviewModalLabel">Add Interview Details</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
                             <div class="form-group">
                                 <label>Applicant</label>
                                 <input
@@ -534,53 +537,52 @@
                                 >
                             </div>
 
-                                <div class="form-group">
-                                    <label>Interviewer</label>
-                                    <select name="id_user" class="form-control select2">
-                                        <option value="">Select Interviewer</option>
-                                        @foreach($users as $interviewer)
-                                            <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('id_user')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Interviewer</label>
+                                <select name="id_user" class="form-control select2">
+                                    <option value="">Select Interviewer</option>
+                                    @foreach($users as $interviewer)
+                                        <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_user')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                                <div class="form-group">
-                                    <label>Interview Date</label>
-                                    <input type="text" name="interview_date" class="form-control datepicker datepicker-input">
-                                    @error('interview_date')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Interview Date</label>
+                                <input type="text" name="interview_date" class="form-control datepicker datepicker-input">
+                                @error('interview_date')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                                <div class="form-group">
-                                    <label>Time</label>
-                                    <input type="time" name="time" class="form-control">
-                                    @error('time')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" name="time" class="form-control">
+                                @error('time')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                                <div class="form-group">
-                                    <label>Location</label>
-                                    <input type="text" name="location" class="form-control">
-                                    @error('location')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" name="location" class="form-control">
+                                @error('location')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
-                                <div class="form-group">
-                                    <label>Link</label>
-                                    <input type="text" name="link" class="form-control">
-                                    @error('link')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Link</label>
+                                <input type="text" name="link" class="form-control">
+                                @error('link')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('getUserHrjob') }}'">Close</button>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </form>
@@ -593,13 +595,13 @@
                 <div class="modal-content">
                     <form action="{{ route('storeUserInterview') }}" method="POST">
                         @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="interviewuserModalLabel">Add User Interview Details</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href='{{ route('getUserHrjob') }}'">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="interviewuserModalLabel">Add User Interview Details</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
                             <div class="form-group">
                                 <label>Applicant</label>
@@ -660,12 +662,11 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('getUserHrjob') }}'">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>
@@ -793,6 +794,11 @@
                 const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
                 toast.show();
             }
+        });
+
+        $(document).ready(function () {
+            $('#interviewModal').modal('show');
+            $('#interviewuserModal').modal('show');
         });
 
         // Pilih semua checkbox
