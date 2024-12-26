@@ -14,6 +14,21 @@
                         @method('PUT')
 
                         <div class="form-group">
+                            <label>User</label>
+                            <select name="id_user" class="form-control select2">
+                                <option value="">Select User</option>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}" {{ $user->id == $hrjob->id_user ? 'selected' : '' }}>
+                                        {{ $user->fullname }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_user')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Job Category</label>
                             <select name="id_category" class="form-control select2">
                                 <option value="">Select Category</option>
@@ -169,18 +184,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Is Active</label>
-                            <select name="is_active" class="form-control select2">
-                                <option value="">Select Is Active</option>
-                                <option value="yes" {{ old('is_active', $hrjob->is_active) == 'yes' ? 'selected' : '' }}>Yes</option>
-                                <option value="no" {{ old('is_active', $hrjob->is_active) == 'no' ? 'selected' : '' }}>No</option>
-                            </select>
-                            @error('is_active')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
                             <label>Is Ended</label>
                             <select name="is_ended" class="form-control select2">
                                 <option value="">Select Is Ended</option>
@@ -201,7 +204,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_closed">job_closed</label>
+                            <label for="job_closed">Job Closed</label>
                             <input type="text" class="form-control datepicker datepicker-input" id="job_closed" name="job_closed" value="{{ $hrjob->job_closed }}">
                             @error('job_closed')
                                 <span class="text-danger">{{ $message }}</span>

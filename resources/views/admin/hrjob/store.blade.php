@@ -13,6 +13,19 @@
                         @csrf
 
                         <div class="form-group">
+                            <label>User</label>
+                            <select name="id_user" class="form-control select2">
+                                <option value="">Select User</option>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->fullname }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_user')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Job Category</label>
                             <select name="id_category" class="form-control select2">
                                 <option value="">Select Category</option>
@@ -156,18 +169,6 @@
                             <label>Number Hired</label>
                             <input type="number" name="number_hired" class="form-control">
                             @error('number_hired')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label>Is Active</label>
-                            <select name="is_active" class="form-control select2">
-                                <option value="">Select Is Active</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                            @error('is_active')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

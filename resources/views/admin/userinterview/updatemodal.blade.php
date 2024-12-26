@@ -27,23 +27,23 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Interviewer</label>
-                        <select name="id_user" class="form-control select2 inside-modal">
-                            <option value="">Select Interviewer</option>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}" {{ $user->id == $userinterview->id_user ? 'selected' : '' }}>
-                                    {{ $user->fullname }}
+                        <label>Interviewers</label>
+                        <select name="user_interviewers[]" class="form-control select2" multiple>
+                            @foreach ($users as $userinterviewer)
+                                <option value="{{ $userinterviewer->id }}"
+                                    {{ in_array($userinterviewer->id, $userinterview->user_interviewers->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                    {{ $userinterviewer->fullname }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('id_user')
+                        @error('user_interviewers')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="interview_date">Interview Date</label>
-                        <input type="text" class="form-control datepicker datepicker-input" id="interview_date" name="interview_date" value="{{ $userinterview->interview_date }}" required>
+                        <input type="text" class="form-control datepicker datepicker-input" id="interview_date" name="interview_date" value="{{ $userinterview->interview_date }}">
                         @error('interview_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

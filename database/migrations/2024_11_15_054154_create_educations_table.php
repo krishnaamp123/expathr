@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->string('university');
             $table->enum('degree',['elementary','juniorhigh','seniorhigh','bachelor','master','doctoral']);
-            $table->string('degree');
             $table->string('major')->nullable();
             $table->date('start_date');
             $table->date('end_date');

@@ -24,14 +24,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Interviewer</label>
-                        <select name="id_user" class="form-control select2 inside-modal">
-                            <option value="">Select Interviewer</option>
+                        <label>Interviewers</label>
+                        <select name="interviewers[]" class="form-control select2 inside-modal" multiple>
+                            <option value="">Select Interviewers</option>
                             @foreach($users as $interviewer)
                                 <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
                             @endforeach
                         </select>
-                        @error('id_user')
+                        @error('interviewers')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

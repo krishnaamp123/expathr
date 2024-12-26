@@ -17,53 +17,48 @@ class UserHrjobAdminController extends Controller
 
     public function getUserHrjob(Request $request)
     {
-        // Ambil parameter status, start_date, dan end_date dari URL
+        // Ambil parameter status, start_date, end_date, dan id_job dari URL
         $status = $request->query('status');
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
+        $hrjobId = $request->query('id_job');
 
         // Tentukan logika penyaringan berdasarkan role pengguna
         if (Auth::user()->role === 'hiring_manager') {
-            // Filter untuk hiring_manager, tidak dapat melihat data dari super_admin
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews', 'answers')
                 ->where(function ($query) use ($status) {
-                    $query->whereHas('interviews', function ($subQuery) {
-                        $subQuery->whereHas('user', function ($nestedQuery) {
-                            $nestedQuery->where('role', '!=', 'super_admin');
-                        });
+                    $query->whereHas('interviews.interviewers', function ($subQuery) {
+                        $subQuery->where('role', '!=', 'super_admin');
                     })
                     ->orWhereDoesntHave('interviews'); // Tampilkan data tanpa relasi interviews juga
 
-                    // Tambahkan filter status jika ada
                     if ($status) {
                         $query->where('status', $status);
                     }
                 });
         } elseif (Auth::user()->role === 'recruiter') {
-            // Filter untuk recruiter, tidak dapat melihat data dari super_admin dan hiring_manager
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews', 'answers')
                 ->where(function ($query) use ($status) {
-                    $query->whereHas('interviews', function ($subQuery) {
-                        $subQuery->whereHas('user', function ($nestedQuery) {
-                            $nestedQuery->whereNotIn('role', ['super_admin', 'hiring_manager']);
-                        });
+                    $query->whereHas('interviews.interviewers', function ($subQuery) {
+                        $subQuery->whereNotIn('role', ['super_admin', 'hiring_manager']);
                     })
                     ->orWhereDoesntHave('interviews'); // Tampilkan data tanpa relasi interviews juga
 
-                    // Tambahkan filter status jika ada
                     if ($status) {
                         $query->where('status', $status);
                     }
                 });
         } else {
-            // Jika pengguna bukan recruiter atau hiring_manager, tampilkan semua data
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews', 'answers')
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 });
         }
 
-        // Tambahkan filter berdasarkan tanggal jika diberikan
+        if ($hrjobId) {
+            $userhrjobs = $userhrjobs->where('id_job', $hrjobId);
+        }
+
         if ($startDate) {
             $userhrjobs->whereDate('created_at', '>=', $startDate);
         }
@@ -83,11 +78,12 @@ class UserHrjobAdminController extends Controller
 
         $userhrjobss = UserHrJob::with('user', 'hrjob')->get();
         $hrjobss = Hrjob::all();
-        $userss= User::where('role', '=', 'applicant')->get();
+        $userss = User::where('role', '=', 'applicant')->get();
         $users = User::where('role', '!=', 'applicant')->get();
 
         return view('admin.userhrjob.index', compact('userhrjobs', 'userhrjobss', 'hrjobss', 'statuses', 'status', 'users', 'userss'));
     }
+
 
     public function storeUserHrjob(Request $request)
     {
@@ -128,11 +124,6 @@ class UserHrjobAdminController extends Controller
     {
         $userhrjob = UserHrjob::findOrFail($id);
 
-        // Simpan status lama ke tabel historis sebelum memperbarui
-        \App\Models\UserHrjobStatusHistory::create([
-            'user_hrjob_id' => $userhrjob->id,
-            'status' => $userhrjob->status, // Status lama
-        ]);
 
         try {
             $validated = $request->validate([
@@ -150,6 +141,13 @@ class UserHrjobAdminController extends Controller
             $userhrjob->availability = $request->availability;
 
             $userhrjob->save();
+
+            if ($userhrjob->status !== $request->status) {
+                \App\Models\UserHrjobStatusHistory::create([
+                    'id_user_job' => $userhrjob->id,
+                    'status' => $userhrjob->status,
+                ]);
+            }
 
             $status = $request->status;
 
@@ -192,14 +190,16 @@ class UserHrjobAdminController extends Controller
 
             $userhrjob = UserHrjob::findOrFail($id);
 
-            // Simpan status lama ke tabel historis sebelum memperbarui
-            \App\Models\UserHrjobStatusHistory::create([
-                'user_hrjob_id' => $userhrjob->id,
-                'status' => $userhrjob->status, // Status lama
-            ]);
 
             $userhrjob->status = $request->status;
             $userhrjob->save();
+
+            if ($userhrjob->status !== $request->status) {
+                \App\Models\UserHrjobStatusHistory::create([
+                    'id_user_job' => $userhrjob->id,
+                    'status' => $userhrjob->status,
+                ]);
+            }
 
             $status = $request->status;
 
@@ -269,7 +269,7 @@ class UserHrjobAdminController extends Controller
             // Simpan riwayat status ke tabel user_hrjob_status_histories
             $statusHistories = $userHrjobs->map(function ($userHrjob) {
                 return [
-                    'user_hrjob_id' => $userHrjob->id,
+                    'id_user_job' => $userHrjob->id,
                     'status' => $userHrjob->status, // Status sebelum diubah
                     'updated_at' => now(),
                 ];

@@ -50,17 +50,15 @@ class UserHrjob extends Model
                    ->exists();
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
-        // Event sebelum data diperbarui
-        static::updating(function ($userHrjob) {
+        static::updated(function ($userHrjob) {
             if ($userHrjob->isDirty('status')) {
-                // Simpan perubahan status ke tabel historis
                 \App\Models\UserHrjobStatusHistory::create([
-                    'user_hrjob_id' => $userHrjob->id,
-                    'status' => $userHrjob->getOriginal('status'), // Status sebelumnya
+                    'id_user_job' => $userHrjob->id,
+                    'status' => $userHrjob->status,
                 ]);
             }
         });

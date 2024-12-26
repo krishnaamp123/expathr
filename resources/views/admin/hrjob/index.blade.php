@@ -39,7 +39,6 @@
                             {{-- <th>Experience Min</th>
                             <th>Education Min</th>
                             <th>Number Hired</th> --}}
-                            <th>Is Active</th>
                             <th>Is Ended</th>
                             {{-- <th>Hiring Cost</th> --}}
                             <th>Created At</th>
@@ -66,7 +65,6 @@
                             {{-- <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>
                             <td>{{$row->number_hired}}</td> --}}
-                            <td>{{$row->is_active}}</td>
                             <td>{{$row->is_ended}}</td>
                             {{-- <td>{{$row->hiring_cost ?? 'No Cost'}}</td> --}}
                             <td>{{$row->created_at}}</td>

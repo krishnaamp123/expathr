@@ -10,7 +10,7 @@ class UserHrjobStatusHistory extends Model
     protected $table = 'user_hrjob_status_histories';
 
     protected $fillable = [
-        'user_hrjob_id',
+        'id_user_job',
         'status',
     ];
 

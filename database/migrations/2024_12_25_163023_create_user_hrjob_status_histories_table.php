@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_hrjob_status_histories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_hrjob_id');
+            $table->unsignedBigInteger('id_user_job');
             $table->enum('status', [
                 'applicant', 'shortlist', 'phone_screen', 'hr_interview',
                 'user_interview', 'skill_test', 'reference_check',
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign key
-            $table->foreign('user_hrjob_id')->references('id')->on('user_hrjobs')->onDelete('cascade');
+            $table->foreign('id_user_job')->references('id')->on('user_hrjobs')->onDelete('cascade');
         });
     }
 

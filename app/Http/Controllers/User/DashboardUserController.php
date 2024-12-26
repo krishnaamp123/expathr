@@ -11,7 +11,7 @@ class DashboardUserController extends Controller
     public function getDashboardUser()
     {
         $davacancies = Hrjob::with('category', 'city')
-                            ->where('is_active', 'yes')
+                            ->where('is_ended', 'yes')
                             ->orderBy('created_at', 'desc')
                             // ->take(3) // Batasi hanya 3 data
                             ->get();

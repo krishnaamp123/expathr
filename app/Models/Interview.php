@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Interview extends Model
@@ -11,7 +12,6 @@ class Interview extends Model
 
     protected $fillable = [
         'id_user_job',
-        'id_user',
         'interview_date',
         'time',
         'rating',
@@ -26,8 +26,8 @@ class Interview extends Model
         return $this->belongsTo(UserHrjob::class, 'id_user_job');
     }
 
-    public function user()
+    public function interviewers(): BelongsToMany
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsToMany(User::class, 'interviewers', 'id_interview', 'id_user');
     }
 }

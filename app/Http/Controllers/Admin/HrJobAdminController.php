@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Hrjob;
 use App\Models\HrjobCategory;
 use App\Models\City;
@@ -20,7 +21,7 @@ class HrjobAdminController extends Controller
 
     public function addHrjob()
     {
-        $users = User::where('role', '!=', 'applicant')->get();
+        $users = User::whereNotIn('role', ['applicant', 'interviewer'])->get();
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
         $outlets = Outlet::all();

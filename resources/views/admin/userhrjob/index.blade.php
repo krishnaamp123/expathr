@@ -33,6 +33,23 @@
 
     <p class="mb-3">Applicant's main data to the job</p>
 
+    <form action="{{ route('getUserHrjob') }}" method="GET">
+        <div class="col-md-3">
+            <label for="id_job">Filter by HR Job</label>
+            <select name="id_job" id="id_job" class="form-control select2">
+                <option value="">-- All HR Jobs --</option>
+                @foreach($hrjobss as $hrjob)
+                    <option value="{{ $hrjob->id }}" {{ request('id_job') == $hrjob->id ? 'selected' : '' }}>
+                        {{ $hrjob->job_name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary mt-4">Apply Filter</button>
+        </div>
+    </form>
+
     <!-- Topbar for Filtering by Status -->
     <div class="mb-3">
         <ul class="nav nav-pills nav-justified custom-nav">
@@ -74,7 +91,7 @@
                         <i class="fas fa-calendar-check"></i> Export Date
                     </button>
 
-                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-minus"></i> Reject Selected</button>
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
 
                     <!-- Modal Popup -->
                     <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
@@ -129,7 +146,7 @@
                         <i class="fas fa-calendar-check"></i> Export Date
                     </button>
 
-                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-minus"></i> Reject Selected</button>
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
 
                     <!-- Modal Popup -->
                     <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
@@ -176,7 +193,7 @@
                         'user' => $userss,
                     ])
 
-                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-minus"></i> Reject Selected</button>
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
                     @endif
                 </div>
             <!-- Form Filter Tanggal -->
@@ -263,7 +280,15 @@
                                     <!-- Tampilkan Interviewer dan Interview Date jika status adalah hr_interview -->
                                     @if (request('status') === 'hr_interview')
                                         <td>
-                                            {{ $row->interviews->first()->user->fullname ?? 'Not Assigned' }}
+                                            @if ($row->interviews->isNotEmpty())
+                                                <ul>
+                                                    @foreach($row->interviews->first()->interviewers ?? [] as $interviewer)
+                                                        <li>{{ $interviewer->fullname }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <span>No Interviewers</span>
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $row->interviews->first()->interview_date ?? 'Not Scheduled' }}
@@ -361,7 +386,15 @@
                                         </td>
                                     @elseif (request('status') === 'user_interview')
                                         <td>
-                                            {{ $row->userinterviews->first()->user->fullname ?? 'Not Assigned' }}
+                                            @if ($row->userinterviews->isNotEmpty())
+                                                <ul>
+                                                    @foreach($row->userinterviews->first()->user_interviewers ?? [] as $userinterviewer)
+                                                        <li>{{ $userinterviewer->fullname }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <span>No Interviewers</span>
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $row->userinterviews->first()->interview_date ?? 'Not Scheduled' }}
@@ -538,14 +571,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Interviewer</label>
-                                <select name="id_user" class="form-control select2">
-                                    <option value="">Select Interviewer</option>
+                                <label>Interviewers</label>
+                                <select name="interviewers[]" class="form-control select2 inside-modal" multiple>
+                                    <option value="">Select Interviewers</option>
                                     @foreach($users as $interviewer)
                                         <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
                                     @endforeach
                                 </select>
-                                @error('id_user')
+                                @error('interviewers')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -582,9 +615,8 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
+
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
                     </form>
                 </div>
             </div>
@@ -618,18 +650,18 @@
                                 >
                             </div>
 
-                                <div class="form-group">
-                                    <label>Interviewer</label>
-                                    <select name="id_user" class="form-control select2">
-                                        <option value="">Select Interviewer</option>
-                                        @foreach($users as $interviewer)
-                                            <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('id_user')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Interviewers</label>
+                                <select name="user_interviewers[]" class="form-control select2 inside-modal" multiple>
+                                    <option value="">Select Interviewers</option>
+                                    @foreach($users as $userinterviewer)
+                                        <option value="{{ $userinterviewer->id }}">{{ $userinterviewer->fullname }}</option>
+                                    @endforeach
+                                </select>
+                                @error('user_interviewers')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                                 <div class="form-group">
                                     <label>Interview Date</label>
@@ -663,9 +695,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
+                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
                         </form>
                 </div>
             </div>
@@ -702,16 +732,15 @@
                         <p class="mb-1"> {{ $row->user->city->city_name ?? 'No City' }}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         @if ($row->user->role === 'applicant')
-                        <a href="{{ route('profile.pdf', $row->user->id) }}" class="btn my-1" style="background-color: #000; color: white;">
+                        <a href="{{ route('profile.pdf', $row->user->id) }}" class="btn btn-sm" style="background-color: #000; color: white;">
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>
                         @endif
                         @if ($row->answers->isNotEmpty())
                             <a
                                 href="#"
-                                class="btn my-1"
+                                class="btn btn-sm"
                                 style="background-color: #72A28A; color: white;"
                                 data-toggle="modal"
                                 data-target="#userAnswerModal-{{ $row->id }}">
