@@ -41,6 +41,9 @@ class AuthController extends Controller
         } elseif ($user->role === 'recruiter') {
             cookie()->queue(cookie('token', $token, null));
             return redirect()->route('getDashboardAdmin');
+        } elseif ($user->role === 'interviewer') {
+            cookie()->queue(cookie('token', $token, null));
+            return redirect()->route('getDashboardAdmin');
         } elseif ($user->role === 'super_admin') {
             cookie()->queue(cookie('token', $token, null));
             return redirect()->route('getDashboardAdmin');

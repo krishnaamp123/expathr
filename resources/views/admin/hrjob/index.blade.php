@@ -13,6 +13,15 @@
       </div>
     @endif
 
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{session('error')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @endif
+
     <p class="mb-3">Master data job</p>
 
     <!-- DataTales Example -->
@@ -53,7 +62,11 @@
                         <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->category->category_name ?? 'No Category'}}</td>
-                            <td>{{$row->job_name}}</td>
+                            <td>
+                                <a href="{{ route('getUserHrjob', ['id_job' => $row->id]) }}" class="btn p-0" style="font-size: 0.8rem;">
+                                    {{$row->job_name}}
+                                </a>
+                            </td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->job_type)) }}</td>
                             {{-- <td>{{$row->job_report}}</td>
                             <td data-job="{{ $row->price }}">Rp {{ number_format($row->price, 0, ',', '.') }}</td>

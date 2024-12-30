@@ -9,7 +9,7 @@
                         <li class="list-group-item city-item position-relative">
                             <span class="kaem-heading">{{ $educationn->university ?? 'Unknown Education' }}</span><br>
                             <span class="kaem-subheading">
-                                {{ $educationn->degree }}
+                                {{ ucwords(str_replace('_', ' ', $educationn->degree)) }}
                                 @if (!empty($educationn->major))
                                     - {{ $educationn->major }}
                                 @endif

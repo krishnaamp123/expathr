@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Hrjob;
 use App\Models\UserHrjob;
 use App\Models\Source;
+use App\Models\UserHrjobStatusHistory;
 
 class DashboardAdminController extends Controller
 {
@@ -86,7 +87,7 @@ class DashboardAdminController extends Controller
         $hiredRejectedData = $applyDateFilter(
             UserHrjob::query()
         )
-            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, status, COUNT(*) as count')
+            ->selectRaw('MONTH(updated_at) as month, YEAR(updated_at) as year, status, COUNT(*) as count')
             ->groupBy('month', 'year', 'status')
             ->get()
             ->groupBy('status')
@@ -98,6 +99,33 @@ class DashboardAdminController extends Controller
                 });
             });
 
+        // Menghitung funnel chart
+        $statuses = [
+            'applicant', 'shortlist', 'phone_screen', 'hr_interview',
+            'user_interview', 'skill_test', 'reference_check',
+            'offering', 'rejected', 'hired'
+        ];
+
+        $funnelData = collect($statuses)->mapWithKeys(function ($status) use ($applyDateFilter) {
+            if ($status === 'applicant') {
+                // Jika status adalah applicant, hitung dari total id_user_job
+                $count = $applyDateFilter(
+                    UserHrjob::query()
+                        ->distinct('id')
+                )->count();
+            } else {
+                // Untuk status lainnya, lakukan filter berdasarkan status
+                $count = $applyDateFilter(
+                    UserHrjobStatusHistory::query()
+                        ->select('id_user_job')
+                        ->where('status', $status)
+                        ->distinct('id_user_job')
+                )->count();
+            }
+
+            return [$status => $count];
+        });
+
         return view('admin.dashboardadmin', [
             'applicantCount' => $applicantCount,
             'jobCount' => $jobCount,
@@ -107,6 +135,7 @@ class DashboardAdminController extends Controller
             'percentageData' => $percentageData,
             'percentageFilledOnTime' => $percentageFilledOnTime,
             'hiredRejectedData' => $hiredRejectedData,
+            'funnelData' => $funnelData,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);

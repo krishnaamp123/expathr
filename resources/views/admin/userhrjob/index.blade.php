@@ -33,11 +33,15 @@
 
     <p class="mb-3">Applicant's main data to the job</p>
 
-    <form action="{{ route('getUserHrjob') }}" method="GET">
-        <div class="col-md-3">
+    <form action="{{ route('getUserHrjob') }}" method="GET" class="d-flex align-items-end">
+        <input type="hidden" name="status" value="{{ request('status') }}">
+        <input type="hidden" name="start_date" value="{{ request('start_date') }}">
+        <input type="hidden" name="end_date" value="{{ request('end_date') }}">
+
+        <div class="me-3">
             <label for="id_job">Filter by HR Job</label>
             <select name="id_job" id="id_job" class="form-control select2">
-                <option value="">-- All HR Jobs --</option>
+                <option value="">All Jobs</option>
                 @foreach($hrjobss as $hrjob)
                     <option value="{{ $hrjob->id }}" {{ request('id_job') == $hrjob->id ? 'selected' : '' }}>
                         {{ $hrjob->job_name }}
@@ -45,8 +49,8 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary mt-4">Apply Filter</button>
+        <div>
+            <button type="submit" class="btn btn-primary">Apply Filter</button>
         </div>
     </form>
 
@@ -55,7 +59,12 @@
         <ul class="nav nav-pills nav-justified custom-nav">
             @foreach ($statuses as $filterStatus)
                 <li class="nav-item">
-                    <a href="{{ route('getUserHrjob', ['status' => $filterStatus, 'start_date' => request('start_date'), 'end_date' => request('end_date')]) }}"
+                    <a href="{{ route('getUserHrjob', [
+                        'status' => $filterStatus,
+                        'id_job' => request('id_job'),
+                        'start_date' => request('start_date'),
+                        'end_date' => request('end_date')
+                    ]) }}"
                        class="nav-link {{ $status === $filterStatus ? 'active' : '' }}">
                         {{ ucwords(str_replace('_', ' ', $filterStatus)) }}
                     </a>
@@ -197,22 +206,27 @@
                     @endif
                 </div>
             <!-- Form Filter Tanggal -->
-            <form action="{{ route('getUserHrjob') }}" method="GET" class="form-inline">
-                <input type="hidden" name="status" value="{{ request('status') }}">
-                <div class="form-group mx-sm-2 mb-2">
-                    <label for="start_date" class="sr-only">Start Date</label>
-                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request('start_date') }}" placeholder="Start Date">
-                </div>
-                <span class="mx-2">
-                    <i class="fas fa-arrow-right"></i>
-                </span>
-                <div class="form-group mx-sm-2 mb-2">
-                    <label for="end_date" class="sr-only">End Date</label>
-                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request('end_date') }}" placeholder="End Date">
-                </div>
-                <a href="{{ route('getUserHrjob', ['status' => request('status')]) }}" class="btn btn-secondary btn-sm mb-2 mr-2">Clear Date</a>
-                <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
-            </form>
+            <div class="d-flex justify-content-end">
+                <form action="{{ route('getUserHrjob') }}" method="GET" class="form-inline">
+                    <input type="hidden" name="status" value="{{ request('status') }}">
+                    <input type="hidden" name="id_job" value="{{ request('id_job') }}">
+
+                    <div class="form-group mx-sm-2 mb-2">
+                        <label for="start_date" class="sr-only">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request('start_date') }}" placeholder="Start Date">
+                    </div>
+                    <span class="mx-2"><i class="fas fa-arrow-right"></i></span>
+                    <div class="form-group mx-sm-2 mb-2">
+                        <label for="end_date" class="sr-only">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request('end_date') }}" placeholder="End Date">
+                    </div>
+                    <a href="{{ route('getUserHrjob', [
+                        'status' => request('status'),
+                        'id_job' => request('id_job')
+                    ]) }}" class="btn btn-secondary btn-sm mb-2 mr-2">Clear Date</a>
+                    <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
+                </form>
+            </div>
         </div>
         </div>
         <div class="card-body">
@@ -271,7 +285,7 @@
                                         <a
                                             href="#"
                                             class="btn p-0"
-                                            style="font-size: 0.85rem;"
+                                            style="font-size: 0.8rem;"
                                             data-toggle="modal"
                                             data-target="#userDetailsModal-{{ $row->id }}">
                                             {{ \Illuminate\Support\Str::limit($row->user->fullname ?? 'No Applicant', 20, '...') }}
@@ -614,9 +628,8 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Save</button>
                         </div>
-
-                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
                     </form>
                 </div>
             </div>
@@ -694,8 +707,8 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Save</button>
                             </div>
-                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
                         </form>
                 </div>
             </div>

@@ -151,7 +151,17 @@
                             <td>{{$row->id}}</td>
                             <td>{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
                             <td>{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
-                            <td>{{$row->users ?? 'No Interviewer'}}</td>
+                            <td>
+                                @if ($row->interviewers->isNotEmpty())
+                                    <ul>
+                                        @foreach ($row->interviewers as $interviewer)
+                                            <li>{{ $interviewer->fullname }}</li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <span>No Interviewers</span>
+                                @endif
+                            </td>
                             <td>{{$row->interview_date ?? 'No Date'}}</td>
                             <td>{{$row->time ?? 'No Time'}}</td>
                             <td>{{$row->location ?? 'No Location'}}</td>

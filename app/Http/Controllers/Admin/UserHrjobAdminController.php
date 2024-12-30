@@ -25,31 +25,57 @@ class UserHrjobAdminController extends Controller
 
         // Tentukan logika penyaringan berdasarkan role pengguna
         if (Auth::user()->role === 'hiring_manager') {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'answers')
                 ->where(function ($query) use ($status) {
                     $query->whereHas('interviews.interviewers', function ($subQuery) {
                         $subQuery->where('role', '!=', 'super_admin');
                     })
-                    ->orWhereDoesntHave('interviews'); // Tampilkan data tanpa relasi interviews juga
+                    ->orWhereHas('userinterviews.user_interviewers', function ($subQuery) {
+                        $subQuery->where('role', '!=', 'super_admin');
+                    })
+                    ->orWhereDoesntHave('interviews') // Tampilkan data tanpa relasi interviews juga
+                    ->orWhereDoesntHave('userinterviews'); // Data tanpa userinterviews juga
 
                     if ($status) {
                         $query->where('status', $status);
                     }
                 });
         } elseif (Auth::user()->role === 'recruiter') {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'answers')
                 ->where(function ($query) use ($status) {
-                    $query->whereHas('interviews.interviewers', function ($subQuery) {
-                        $subQuery->whereNotIn('role', ['super_admin', 'hiring_manager']);
+                    // Pekerjaan yang recruiter handle berdasarkan `id_user`
+                    $query->whereHas('hrjob', function ($subQuery) {
+                        $subQuery->where('id_user', Auth::id());
                     })
-                    ->orWhereDoesntHave('interviews'); // Tampilkan data tanpa relasi interviews juga
+                    ->orWhereHas('interviews.interviewers', function ($subQuery) {
+                        $subQuery->where('id_user', Auth::id());
+                    })
+                    ->orWhereHas('userinterviews.user_interviewers', function ($subQuery) {
+                        $subQuery->where('id_user', Auth::id());
+                    })
+                    ->orWhereDoesntHave('interviews') // Tampilkan data tanpa relasi interviews
+                    ->orWhereDoesntHave('userinterviews'); // Tampilkan data tanpa userinterviews
 
                     if ($status) {
                         $query->where('status', $status);
                     }
                 });
+        } elseif (Auth::user()->role === 'interviewer') {
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews.user_interviewers', 'answers')
+                ->where(function ($query) use ($status) {
+                    $query->whereHas('userinterviews.user_interviewers', function ($subQuery) {
+                        $subQuery->whereNotIn('role', ['super_admin', 'hiring_manager', 'recruiter']);
+                    });
+
+                    if ($status) {
+                        $query->where('status', $status);
+                    }
+                })
+                ->whereHas('userinterviews.user_interviewers', function ($subQuery) {
+                    $subQuery->where('id_user', Auth::id());
+                });
         } else {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'answers')
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 });
@@ -88,6 +114,11 @@ class UserHrjobAdminController extends Controller
     public function storeUserHrjob(Request $request)
     {
         try {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+                session()->flash('failed', 'You are not authorized to create this user job.');
+                return back()->withInput();
+            }
+
             $validated = $request->validate([
                 'id_job' => 'required|exists:hrjobs,id',
                 'id_user' => 'required|exists:users,id',
@@ -124,8 +155,13 @@ class UserHrjobAdminController extends Controller
     {
         $userhrjob = UserHrjob::findOrFail($id);
 
-
         try {
+
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+                session()->flash('failed', 'You are not authorized to update this user job.');
+                return back()->withInput();
+            }
+
             $validated = $request->validate([
                 'id_job' => 'required|exists:hrjobs,id',
                 'id_user' => 'required|exists:users,id',
@@ -184,6 +220,12 @@ class UserHrjobAdminController extends Controller
     public function updateStatus(Request $request, $id)
     {
         try {
+
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+                session()->flash('failed', 'You are not authorized to update this user job.');
+                return back()->withInput();
+            }
+
             $validated = $request->validate([
                 'status' => 'required|in:applicant,shortlist,phone_screen,hr_interview,user_interview,skill_test,reference_check,offering,rejected,hired',
             ]);
@@ -237,6 +279,11 @@ class UserHrjobAdminController extends Controller
     {
         $userhrjob = UserHrjob::findOrFail($id);
         try {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+                session()->flash('failed', 'You are not authorized to delete this user job.');
+                return back()->withInput();
+            }
+
             $userhrjob->delete();
             session()->flash('success', 'User Job deleted successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -254,55 +301,34 @@ class UserHrjobAdminController extends Controller
         return back()->withInput();
     }
 
-    public function bulkRejectStatus(Request $request)
-    {
-        try {
-            // Validasi input
-            $validated = $request->validate([
-                'selected_jobs' => 'required|array',
-                'selected_jobs.*' => 'exists:user_hrjobs,id',
-            ]);
-
-            // Ambil semua data UserHrjob yang akan diperbarui
-            $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
-
-            // Simpan riwayat status ke tabel user_hrjob_status_histories
-            $statusHistories = $userHrjobs->map(function ($userHrjob) {
-                return [
-                    'id_user_job' => $userHrjob->id,
-                    'status' => $userHrjob->status, // Status sebelum diubah
-                    'updated_at' => now(),
-                ];
-            })->toArray();
-
-            \App\Models\UserHrjobStatusHistory::insert($statusHistories);
-
-            // Update status menjadi 'rejected'
-            UserHrjob::whereIn('id', $request->selected_jobs)->update(['status' => 'rejected']);
-
-            // Simpan pesan sukses ke dalam session
-            session()->flash('success', 'Selected jobs successfully rejected.');
-            return response()->json(['success' => true, 'message' => 'Selected jobs successfully rejected.']);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            $errors = [];
-            foreach ($e->errors() as $fieldErrors) {
-                $errors = array_merge($errors, $fieldErrors);
-            }
-            session()->flash('failed', implode(' ', $errors));
-            return response()->json(['success' => false, 'message' => implode(' ', $errors)]);
-        } catch (\Exception $e) {
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
-            return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
-        }
-    }
-
     // public function bulkRejectStatus(Request $request)
     // {
     //     try {
+
+    //         if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+    //             session()->flash('failed', 'You are not authorized to bulk reject this user job.');
+    //             return back()->withInput();
+    //         }
+
+    //         // Validasi input
     //         $validated = $request->validate([
     //             'selected_jobs' => 'required|array',
     //             'selected_jobs.*' => 'exists:user_hrjobs,id',
     //         ]);
+
+    //         // Ambil semua data UserHrjob yang akan diperbarui
+    //         $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
+
+    //         // Simpan riwayat status ke tabel user_hrjob_status_histories
+    //         $statusHistories = $userHrjobs->map(function ($userHrjob) {
+    //             return [
+    //                 'id_user_job' => $userHrjob->id,
+    //                 'status' => $userHrjob->status, // Status sebelum diubah
+    //                 'updated_at' => now(),
+    //             ];
+    //         })->toArray();
+
+    //         \App\Models\UserHrjobStatusHistory::insert($statusHistories);
 
     //         // Update status menjadi 'rejected'
     //         UserHrjob::whereIn('id', $request->selected_jobs)->update(['status' => 'rejected']);
@@ -322,4 +348,53 @@ class UserHrjobAdminController extends Controller
     //         return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
     //     }
     // }
+
+    public function bulkRejectStatus(Request $request)
+    {
+        try {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+                session()->flash('failed', 'You are not authorized to bulk reject this user job.');
+                return back()->withInput();
+            }
+
+            // Validasi input
+            $validated = $request->validate([
+                'selected_jobs' => 'required|array',
+                'selected_jobs.*' => 'exists:user_hrjobs,id',
+            ]);
+
+            // Ambil semua data UserHrjob yang akan diperbarui
+            $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
+
+            // Simpan riwayat status sebelum diubah
+            $statusHistories = $userHrjobs->map(function ($userHrjob) {
+                return [
+                    'id_user_job' => $userHrjob->id,
+                    'status' => $userHrjob->status,
+                    'updated_at' => now(),
+                ];
+            })->toArray();
+
+            \App\Models\UserHrjobStatusHistory::insert($statusHistories);
+            // Perbarui status menjadi 'rejected'
+            $userHrjobs->each(function ($userHrjob) {
+                $userHrjob->update(['status' => 'rejected']);
+            });
+
+
+            // Simpan pesan sukses ke dalam session
+            session()->flash('success', 'Selected jobs successfully rejected.');
+            return response()->json(['success' => true, 'message' => 'Selected jobs successfully rejected.']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $errors = [];
+            foreach ($e->errors() as $fieldErrors) {
+                $errors = array_merge($errors, $fieldErrors);
+            }
+            session()->flash('failed', implode(' ', $errors));
+            return response()->json(['success' => false, 'message' => implode(' ', $errors)]);
+        } catch (\Exception $e) {
+            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
+        }
+    }
 }

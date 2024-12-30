@@ -28,7 +28,7 @@
 
                     <div class="form-group">
                         <label>Interviewers</label>
-                        <select name="interviewers[]" class="form-control select2" multiple>
+                        <select name="interviewers[]" class="form-control select2 inside-modal" multiple>
                             @foreach ($users as $interviewer)
                                 <option value="{{ $interviewer->id }}"
                                     {{ in_array($interviewer->id, $interview->interviewers->pluck('id')->toArray()) ? 'selected' : '' }}>

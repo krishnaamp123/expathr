@@ -9,13 +9,30 @@ use App\Models\Hrjob;
 use App\Models\HrjobCategory;
 use App\Models\City;
 use App\Models\Outlet;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class HrjobAdminController extends Controller
 {
     public function getHrjob()
     {
-        $hrjobs = Hrjob::with('user','category', 'city', 'outlet')->get();
+        // Tentukan logika penyaringan berdasarkan role pengguna
+        if (Auth::user()->role === 'hiring_manager') {
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet')
+                ->whereHas('user', function ($query) {
+                    $query->where('role', '!=', 'super_admin');
+                })
+                ->get();
+        } elseif (Auth::user()->role === 'recruiter') {
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet')
+                ->whereHas('user', function ($query) {
+                    $query->where('id', Auth::id());
+                })
+                ->get();
+        } else {
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet')->get();
+        }
+
         return view('admin.hrjob.index', compact('hrjobs'));
     }
 
@@ -48,6 +65,24 @@ class HrjobAdminController extends Controller
             'expired' => 'required',
             'number_hired' => 'required',
         ]);
+
+        $loggedInUser = Auth::user();
+
+        // Jika user yang login adalah recruiter
+        if ($loggedInUser->role === 'recruiter') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
+                return redirect()->back()->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
+            }
+        }
+
+        // Jika user yang login adalah hiring_manager
+        if ($loggedInUser->role === 'hiring_manager') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && $selectedUser->role === 'super_admin') {
+                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+            }
+        }
 
         // Buat instance hrjob baru
         $hrjob = new Hrjob();
@@ -111,6 +146,24 @@ class HrjobAdminController extends Controller
             'job_closed' => 'nullable',
         ]);
 
+        $loggedInUser = Auth::user();
+
+        // Jika user yang login adalah recruiter
+        if ($loggedInUser->role === 'recruiter') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
+            }
+        }
+
+        // Jika user yang login adalah hiring_manager
+        if ($loggedInUser->role === 'hiring_manager') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && $selectedUser->role === 'super_admin') {
+                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+            }
+        }
+
         // Set default value jika 'hide_salary' tidak ada
         $validated['hide_salary'] = $request->has('hide_salary') ? 1 : 0;
 
@@ -143,6 +196,24 @@ class HrjobAdminController extends Controller
     {
         $hrjob = Hrjob::findOrFail($id);
 
+        $loggedInUser = Auth::user();
+
+        // Jika user yang login adalah recruiter
+        if ($loggedInUser->role === 'recruiter') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
+            }
+        }
+
+        // Jika user yang login adalah hiring_manager
+        if ($loggedInUser->role === 'hiring_manager') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && $selectedUser->role === 'super_admin') {
+                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+            }
+        }
+
         $hrjob->delete();
 
         return redirect()->route('getHrjob')->with('message', 'Job deleted successfully');
@@ -151,6 +222,24 @@ class HrjobAdminController extends Controller
     public function updateIsEnded(Request $request, $id)
     {
         $hrjob = Hrjob::findOrFail($id);
+
+        $loggedInUser = Auth::user();
+
+        // Jika user yang login adalah recruiter
+        if ($loggedInUser->role === 'recruiter') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
+            }
+        }
+
+        // Jika user yang login adalah hiring_manager
+        if ($loggedInUser->role === 'hiring_manager') {
+            $selectedUser = User::find($validated['id_user']);
+            if ($selectedUser && $selectedUser->role === 'super_admin') {
+                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+            }
+        }
 
         // Validasi input
         $validated = $request->validate([

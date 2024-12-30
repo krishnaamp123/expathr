@@ -29,9 +29,13 @@ class InterviewAdminController extends Controller
                 $query->where('role', '!=', 'super_admin');
             });
         } elseif (Auth::user()->role === 'recruiter') {
-            // Filter wawancara untuk recruiter
-            $interviewsQuery->whereHas('interviewers', function ($query) {
-                $query->whereNotIn('role', ['super_admin', 'hiring_manager']);
+            $interviewsQuery->where(function ($query) {
+                $query->whereHas('interviewers', function ($query) {
+                    $query->where('id_user', Auth::id());
+                })
+                ->orWhereHas('userHrjob.hrjob', function ($query) {
+                    $query->where('id_user', Auth::id());
+                });
             });
         }
 
@@ -60,7 +64,7 @@ class InterviewAdminController extends Controller
     public function storeInterview(Request $request)
     {
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('failed', 'You are not authorized to create this interview.');
                 return back()->withInput();
             }
@@ -73,6 +77,17 @@ class InterviewAdminController extends Controller
 
                 if ($superAdminExists) {
                     session()->flash('failed', 'You cannot manage interviews for Super Admin.');
+                    return back()->withInput();
+                }
+            }
+
+            if (Auth::user()->role === 'recruiter') {
+                $invalidRolesExist = User::whereIn('id', $request->interviewers)
+                    ->whereIn('role', ['super_admin', 'hiring_manager'])
+                    ->exists();
+
+                if ($invalidRolesExist) {
+                    session()->flash('failed', 'You cannot manage interviews for Super Admin or Hiring Manager.');
                     return back()->withInput();
                 }
             }
@@ -143,7 +158,7 @@ class InterviewAdminController extends Controller
 
         try {
 
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('failed', 'You are not authorized to edit this interview.');
                 return back()->withInput();
             }
@@ -157,6 +172,17 @@ class InterviewAdminController extends Controller
 
                 if ($superAdminExists) {
                     session()->flash('failed', 'You cannot manage interviews for Super Admin.');
+                    return back()->withInput();
+                }
+            }
+
+            if (Auth::user()->role === 'recruiter') {
+                $invalidRolesExist = User::whereIn('id', $request->interviewers)
+                    ->whereIn('role', ['super_admin', 'hiring_manager'])
+                    ->exists();
+
+                if ($invalidRolesExist) {
+                    session()->flash('failed', 'You cannot manage interviews for Super Admin or Hiring Manager.');
                     return back()->withInput();
                 }
             }
@@ -257,44 +283,12 @@ class InterviewAdminController extends Controller
         return back()->withInput(); // Kembali ke posisi semula dengan input
     }
 
-
-    // public function updateRating(Request $request, $id)
-    // {
-    //     $interview = Interview::findOrFail($id);
-
-    //     try {
-    //         $validated = $request->validate([
-    //             'rating' => 'required|integer|min:1|max:5',
-    //             'comment' => 'required|string|max:1000',
-    //         ]);
-
-    //         $interview->rating = $validated['rating'];
-    //         $interview->comment = $validated['comment'];
-    //         $interview->save();
-
-    //         // Pesan sukses
-    //         session()->flash('success', 'Rating updated successfully!');
-    //     } catch (\Illuminate\Validation\ValidationException $e) {
-    //         // Gabungkan semua pesan validasi
-    //         $errors = [];
-    //         foreach ($e->errors() as $fieldErrors) {
-    //             $errors = array_merge($errors, $fieldErrors);
-    //         }
-    //         session()->flash('failed', implode(' ', $errors));
-    //     } catch (\Exception $e) {
-    //         // Pesan error untuk kesalahan umum
-    //         session()->flash('failed', 'An unexpected error occurred. Please try again.');
-    //     }
-
-    //     return back()->withInput(); // Kembali ke posisi semula dengan input
-    // }
-
     public function destroyInterview($id)
     {
         $interview = Interview::findOrFail($id);
 
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('failed', 'You are not authorized to delete this interview.');
                 return back()->withInput();
             }
@@ -308,6 +302,17 @@ class InterviewAdminController extends Controller
 
                 if ($superAdminExists) {
                     session()->flash('failed', 'You cannot manage interviews for Super Admin.');
+                    return back()->withInput();
+                }
+            }
+
+            if (Auth::user()->role === 'recruiter') {
+                $invalidRolesExist = User::whereIn('id', $request->interviewers)
+                    ->whereIn('role', ['super_admin', 'hiring_manager'])
+                    ->exists();
+
+                if ($invalidRolesExist) {
+                    session()->flash('failed', 'You cannot manage interviews for Super Admin or Hiring Manager.');
                     return back()->withInput();
                 }
             }

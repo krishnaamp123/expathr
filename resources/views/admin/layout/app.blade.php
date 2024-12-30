@@ -216,6 +216,7 @@
                 </a>
             </li>
 
+            @if(Auth::user()->role !== 'interviewer')
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -264,6 +265,7 @@
                     <span>Form</span>
                 </a>
             </li>
+            @endif
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -279,6 +281,7 @@
                 </a>
             </li>
 
+            @if(Auth::user()->role !== 'interviewer')
             <li class="nav-item {{ Request::routeIs('getAnswer') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getAnswer') }}">
                     <i class="fas fa-fw fa-file"></i>
@@ -292,6 +295,7 @@
                     <span>Interview</span>
                 </a>
             </li>
+            @endif
 
              <!-- Divider -->
              <hr class="sidebar-divider">

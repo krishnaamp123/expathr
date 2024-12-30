@@ -44,7 +44,6 @@ class UserAdminController extends Controller
 
     public function addUser()
     {
-
         $cities = City::all();
         return view('admin.user.store', compact('cities'));
     }

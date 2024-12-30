@@ -29,9 +29,13 @@ class UserInterviewAdminController extends Controller
                 $query->where('role', '!=', 'super_admin');
             });
         } elseif (Auth::user()->role === 'recruiter') {
-            // Filter wawancara untuk recruiter
-            $userinterviewsQuery->whereHas('user_interviewers', function ($query) {
-                $query->whereNotIn('role', ['super_admin', 'hiring_manager']);
+            $userinterviewsQuery->where(function ($query) {
+                $query->whereHas('user_interviewers', function ($query) {
+                    $query->where('id_user', Auth::id());
+                })
+                ->orWhereHas('userHrjob.hrjob', function ($query) {
+                    $query->where('id_user', Auth::id());
+                });
             });
         }
 
@@ -60,7 +64,7 @@ class UserInterviewAdminController extends Controller
     public function storeUserInterview(Request $request)
     {
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('failed', 'You are not authorized to create this user interview.');
                 return back()->withInput();
             }
@@ -72,7 +76,18 @@ class UserInterviewAdminController extends Controller
                     ->exists();
 
                 if ($superAdminExists) {
-                    session()->flash('failed', 'You cannot manage interviews for Super Admin.');
+                    session()->flash('failed', 'You cannot manage user interviews for Super Admin.');
+                    return back()->withInput();
+                }
+            }
+
+            if (Auth::user()->role === 'recruiter') {
+                $invalidRolesExist = User::whereIn('id', $request->user_interviewers)
+                    ->whereIn('role', ['super_admin', 'hiring_manager'])
+                    ->exists();
+
+                if ($invalidRolesExist) {
+                    session()->flash('failed', 'You cannot manage user interviews for Super Admin or Hiring Manager.');
                     return back()->withInput();
                 }
             }
@@ -142,7 +157,7 @@ class UserInterviewAdminController extends Controller
         $userinterview = UserInterview::findOrFail($id);
 
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('failed', 'You are not authorized to edit this user interview.');
                 return back()->withInput();
             }
@@ -159,6 +174,18 @@ class UserInterviewAdminController extends Controller
                     return back()->withInput();
                 }
             }
+
+            if (Auth::user()->role === 'recruiter') {
+                $invalidRolesExist = User::whereIn('id', $request->user_interviewers)
+                    ->whereIn('role', ['super_admin', 'hiring_manager'])
+                    ->exists();
+
+                if ($invalidRolesExist) {
+                    session()->flash('failed', 'You cannot manage user interviews for Super Admin or Hiring Manager.');
+                    return back()->withInput();
+                }
+            }
+
 
             $validated = $request->validate([
                 'id_user_job' => 'required',
@@ -257,7 +284,7 @@ class UserInterviewAdminController extends Controller
     {
         $userinterview = UserInterview::findOrFail($id);
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('failed', 'You are not authorized to delete this user interview.');
                 return back()->withInput();
             }
@@ -265,15 +292,27 @@ class UserInterviewAdminController extends Controller
             // Prevent hiring_manager from deleting interviews for super_admin
             if (Auth::user()->role === 'hiring_manager') {
                 // Validasi: Cek apakah ada super_admin di daftar interviewer
-                $superAdminExists = User::whereIn('id', $request->interviewers)
+                $superAdminExists = User::whereIn('id', $request->user_interviewers)
                     ->where('role', 'super_admin')
                     ->exists();
 
                 if ($superAdminExists) {
-                    session()->flash('failed', 'You cannot manage interviews for Super Admin.');
+                    session()->flash('failed', 'You cannot manage user interviews for Super Admin.');
                     return back()->withInput();
                 }
             }
+
+            if (Auth::user()->role === 'recruiter') {
+                $invalidRolesExist = User::whereIn('id', $request->user_interviewers)
+                    ->whereIn('role', ['super_admin', 'hiring_manager'])
+                    ->exists();
+
+                if ($invalidRolesExist) {
+                    session()->flash('failed', 'You cannot manage user interviews for Super Admin or Hiring Manager.');
+                    return back()->withInput();
+                }
+            }
+
 
             $userinterview->delete();
 

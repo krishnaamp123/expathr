@@ -30,7 +30,7 @@
 
         <div class="row">
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6">
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
@@ -66,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6">
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6">
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
@@ -137,7 +137,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
@@ -150,18 +150,31 @@
                 </div>
             </div>
 
-            {{-- <div class="col-xl-9 col-md-6 mb-4">
+
+            <div class="col-xl-6 col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Recruitment Funnel</h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="funnelChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6 col-md-6 mb-4">
                 <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
                         </div>
                         <div class="card-body">
+                            {{-- <pre>{{ json_encode($hiredRejectedData) }}</pre> --}}
                             <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
                             <canvas id="hiredRejectedChart" width="977" height="400" style="display: block; height: 320px; width: 782px;" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
         </div>
 @endsection
@@ -180,8 +193,11 @@
     const visiblePlatforms = platforms.slice(0, maxVisible);
     const otherPlatformsCount = platforms.slice(maxVisible).reduce((sum, [, count]) => sum + count, 0);
 
-    const labelsSource = visiblePlatforms.map(([platform]) => platform)
-        .concat(['Other Platforms', 'Referals', 'Others']);
+    const labelsSource = visiblePlatforms.map(([platform]) =>
+    platform
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase())
+).concat(['Other Platforms', 'Referals', 'Others']);
     const dataSource = visiblePlatforms.map(([, count]) => count)
         .concat([otherPlatformsCount, sourceData.referals, sourceData.others]);
 
@@ -199,42 +215,117 @@
         },
     });
 
-    // Script untuk Hired vs Rejected Chart
-    const ctxHiredRejected = document.getElementById('hiredRejectedChart').getContext('2d');
-    const hiredRejectedData = @json($hiredRejectedData);
+    // Script untuk Funnel Chart
+    document.addEventListener('DOMContentLoaded', function () {
+        const funnelData = @json($funnelData);
 
-    const labelsHiredRejected = Array.from(new Set([
-        ...Object.keys(hiredRejectedData.hired || {}),
-        ...Object.keys(hiredRejectedData.rejected || {})
-    ])).sort();
+        // Status dan data sesuai urutan funnel
+        const statuses = Object.keys(funnelData);
+        const counts = Object.values(funnelData);
 
-    new Chart(ctxHiredRejected, {
-        type: 'line',
-        data: {
-            labels: labelsHiredRejected,
-            datasets: [
-                {
-                    label: 'Hired',
-                    data: labelsHiredRejected.map(label => hiredRejectedData.hired?.[label] || 0),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        const ctx = document.getElementById('funnelChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: statuses.map(status =>
+                    status
+                        .replace('_', ' ')
+                        .toLowerCase()
+                        .replace(/\b\w/g, char => char.toUpperCase())
+                ),
+                datasets: [{
+                    label: 'Number of Users',
+                    data: counts,
+                    backgroundColor: [
+                        'rgba(15, 66, 23, 0.5)',
+                        'rgba(83, 145, 92, 0.5)',
+                        'rgba(131, 230, 145, 0.5)',
+                        'rgba(114, 162, 138, 0.5)',
+                        'rgba(0, 0, 0, 0.5)',
+                        'rgba(143, 143, 143, 0.5)',
+                        'rgba(15, 66, 23, 0.5)',
+                        'rgba(83, 145, 92, 0.5)',
+                        'rgba(131, 230, 145, 0.5)',
+                        'rgba(114, 162, 138, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(15, 66, 23, 1)',
+                        'rgba(83, 145, 92, 1)',
+                        'rgba(131, 230, 145, 1)',
+                        'rgba(114, 162, 138, 1)',
+                        'rgba(0, 0, 0, 1)',
+                        'rgba(143, 143, 143, 1)',
+                        'rgba(15, 66, 23, 1)',
+                        'rgba(83, 145, 92, 1)',
+                        'rgba(131, 230, 145, 1)',
+                        'rgba(114, 162, 138, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Orientasi horizontal
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
                 },
-                {
-                    label: 'Rejected',
-                    data: labelsHiredRejected.map(label => hiredRejectedData.rejected?.[label] || 0),
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                plugins: {
+                    legend: {
+                        display: false // Sembunyikan label dataset
+                    }
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
+            }
+        });
+    });
+
+    // Script untuk Hired vs Rejected Chart
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctxHiredRejected = document.getElementById('hiredRejectedChart').getContext('2d');
+        const hiredRejectedData = @json($hiredRejectedData);
+
+        // Ambil semua label (misalnya, "2024-12") dari hired dan rejected
+        const labelsHiredRejected = Array.from(new Set([
+            ...Object.entries(hiredRejectedData.hired || {}).flatMap(([year, months]) => Object.keys(months)),
+            ...Object.entries(hiredRejectedData.rejected || {}).flatMap(([year, months]) => Object.keys(months)),
+        ])).sort();
+
+        // Buat chart dengan data yang disesuaikan
+        new Chart(ctxHiredRejected, {
+            type: 'line',
+            data: {
+                labels: labelsHiredRejected, // Gunakan label dari semua bulan-tahun
+                datasets: [
+                    {
+                        label: 'Hired',
+                        data: labelsHiredRejected.map(label => {
+                            const [year, month] = label.split('-');
+                            return hiredRejectedData.hired?.[year]?.[label] || 0;
+                        }),
+                        borderColor: 'rgba(131, 230, 145, 1)',
+                        backgroundColor: 'rgba(131, 230, 145, 0.5)',
+                    },
+                    {
+                        label: 'Rejected',
+                        data: labelsHiredRejected.map(label => {
+                            const [year, month] = label.split('-');
+                            return hiredRejectedData.rejected?.[year]?.[label] || 0;
+                        }),
+                        borderColor: 'rgba(143, 143, 143, 1)',
+                        backgroundColor: 'rgba(143, 143, 143, 0.5)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
                 },
             },
-        },
+        });
     });
+
 </script>
 @endsection

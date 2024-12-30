@@ -22,7 +22,7 @@ class AdminMiddleware
             // Tangani permintaan AJAX
         }
         // List of roles that are allowed access
-        $allowedRoles = ['super_admin', 'hiring_manager', 'recruiter'];
+        $allowedRoles = ['super_admin', 'hiring_manager', 'recruiter', 'interviewer'];
 
         // Check if the user is authenticated and has one of the allowed roles
         if (Auth::check() && in_array(Auth::user()->role, $allowedRoles)) {
