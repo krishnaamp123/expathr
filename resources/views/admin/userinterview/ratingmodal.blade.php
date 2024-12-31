@@ -18,12 +18,12 @@
                             @for ($i = 5; $i >= 1; $i--)
                                 <input
                                     type="radio"
-                                    id="star-{{ $i }}-{{ $id }}"
+                                    id="rating-star-{{ $i }}-{{ $id }}"
                                     name="rating"
                                     value="{{ $i }}"
                                     @if($i == old('rating', $rating)) checked @endif
                                     required>
-                                <label for="star-{{ $i }}-{{ $id }}" class="star">&#9733;</label>
+                                <label for="rating-star-{{ $i }}-{{ $id }}" class="star">&#9733;</label>
                             @endfor
                         </div>
                         @error('rating')
@@ -41,19 +41,19 @@
                     </div>
 
                     <!-- Buttons -->
-                    <div class="d-flex justify-content-between mt-3">
+                    <div class="d-flex justify-content">
                         <!-- Save Button -->
-                        <button type="submit" name="action" value="save" class="btn btn-sm" style="background-color: #72A28A; color: white;">
+                        <button type="submit" name="action" value="save" class="btn btn-sm mr-2" style="background-color: #72A28A; color: white;">
                             <i class="fas fa-save"></i> Save
                         </button>
 
                         <!-- Reject Button -->
-                        <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger">
+                        <button type="submit" name="action" value="reject" class="btn btn-sm mr-2" style="background-color: #c03535; color: white;">
                             <i class="fas fa-times"></i> Reject
                         </button>
 
                         <!-- Next Button -->
-                        <button type="submit" name="action" value="next" class="btn btn-sm btn-primary">
+                        <button type="submit" name="action" value="next" class="btn btn-sm" style="background-color: #969696; color: white;">
                             <i class="fas fa-arrow-right"></i> Next
                         </button>
                     </div>

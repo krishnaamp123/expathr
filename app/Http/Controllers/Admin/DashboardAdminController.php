@@ -26,6 +26,13 @@ class DashboardAdminController extends Controller
             return $query;
         };
 
+        $applyupDateFilter = function ($query) use ($startDate, $endDate) {
+            if ($startDate && $endDate) {
+                $query->whereBetween('updated_at', [$startDate, $endDate]); // Ganti created_at dengan updated_at
+            }
+            return $query;
+        };
+
         // Menghitung jumlah applicant
         $applicantCount = $applyDateFilter(
             User::where('role', 'applicant')
@@ -84,7 +91,7 @@ class DashboardAdminController extends Controller
             : 0;
 
         // Menghitung Hired vs Rejected per bulan
-        $hiredRejectedData = $applyDateFilter(
+        $hiredRejectedData = $applyupDateFilter(
             UserHrjob::query()
         )
             ->selectRaw('MONTH(updated_at) as month, YEAR(updated_at) as year, status, COUNT(*) as count')
@@ -98,6 +105,29 @@ class DashboardAdminController extends Controller
                     });
                 });
             });
+
+        // $hiredRejectedData = $applyDateFilter(
+        //     UserHrjobStatusHistory::query()
+        // )
+        //     ->selectRaw('id_user_job, status, MAX(updated_at) as latest_update')
+        //     ->groupBy('id_user_job', 'status')
+        //     ->get()
+        //     ->groupBy('status')
+        //     ->map(function ($statusGroup) {
+        //         return $statusGroup
+        //             ->groupBy(function ($item) {
+        //                 // Kelompokkan berdasarkan tahun dari updated_at
+        //                 return \Carbon\Carbon::parse($item->latest_update)->year;
+        //             })
+        //             ->map(function ($yearGroup) {
+        //                 return $yearGroup
+        //                     ->groupBy(function ($item) {
+        //                         // Kelompokkan berdasarkan bulan dari updated_at
+        //                         return \Carbon\Carbon::parse($item->latest_update)->format('Y-m');
+        //                     })
+        //                     ->map->count();
+        //             });
+        //     });
 
         // Menghitung funnel chart
         $statuses = [

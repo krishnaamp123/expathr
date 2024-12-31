@@ -168,7 +168,6 @@
                             <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
                         </div>
                         <div class="card-body">
-                            {{-- <pre>{{ json_encode($hiredRejectedData) }}</pre> --}}
                             <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
                             <canvas id="hiredRejectedChart" width="977" height="400" style="display: block; height: 320px; width: 782px;" class="chartjs-render-monitor"></canvas>
                         </div>

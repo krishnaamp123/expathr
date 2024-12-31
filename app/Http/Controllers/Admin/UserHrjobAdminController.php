@@ -301,54 +301,6 @@ class UserHrjobAdminController extends Controller
         return back()->withInput();
     }
 
-    // public function bulkRejectStatus(Request $request)
-    // {
-    //     try {
-
-    //         if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-    //             session()->flash('failed', 'You are not authorized to bulk reject this user job.');
-    //             return back()->withInput();
-    //         }
-
-    //         // Validasi input
-    //         $validated = $request->validate([
-    //             'selected_jobs' => 'required|array',
-    //             'selected_jobs.*' => 'exists:user_hrjobs,id',
-    //         ]);
-
-    //         // Ambil semua data UserHrjob yang akan diperbarui
-    //         $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
-
-    //         // Simpan riwayat status ke tabel user_hrjob_status_histories
-    //         $statusHistories = $userHrjobs->map(function ($userHrjob) {
-    //             return [
-    //                 'id_user_job' => $userHrjob->id,
-    //                 'status' => $userHrjob->status, // Status sebelum diubah
-    //                 'updated_at' => now(),
-    //             ];
-    //         })->toArray();
-
-    //         \App\Models\UserHrjobStatusHistory::insert($statusHistories);
-
-    //         // Update status menjadi 'rejected'
-    //         UserHrjob::whereIn('id', $request->selected_jobs)->update(['status' => 'rejected']);
-
-    //         // Simpan pesan sukses ke dalam session
-    //         session()->flash('success', 'Selected jobs successfully rejected.');
-    //         return response()->json(['success' => true, 'message' => 'Selected jobs successfully rejected.']);
-    //     } catch (\Illuminate\Validation\ValidationException $e) {
-    //         $errors = [];
-    //         foreach ($e->errors() as $fieldErrors) {
-    //             $errors = array_merge($errors, $fieldErrors);
-    //         }
-    //         session()->flash('failed', implode(' ', $errors));
-    //         return response()->json(['success' => false, 'message' => implode(' ', $errors)]);
-    //     } catch (\Exception $e) {
-    //         session()->flash('failed', 'An unexpected error occurred. Please try again.');
-    //         return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
-    //     }
-    // }
-
     public function bulkRejectStatus(Request $request)
     {
         try {
@@ -363,26 +315,28 @@ class UserHrjobAdminController extends Controller
                 'selected_jobs.*' => 'exists:user_hrjobs,id',
             ]);
 
-            // Ambil semua data UserHrjob yang akan diperbarui
-            $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
+            // Nonaktifkan event updated
+            UserHrjob::withoutEvents(function () use ($request) {
+                $userHrjobs = UserHrjob::whereIn('id', $request->selected_jobs)->get();
 
-            // Simpan riwayat status sebelum diubah
-            $statusHistories = $userHrjobs->map(function ($userHrjob) {
-                return [
-                    'id_user_job' => $userHrjob->id,
-                    'status' => $userHrjob->status,
-                    'updated_at' => now(),
-                ];
-            })->toArray();
+                $statusHistories = [];
+                $currentTimestamp = now();
 
-            \App\Models\UserHrjobStatusHistory::insert($statusHistories);
-            // Perbarui status menjadi 'rejected'
-            $userHrjobs->each(function ($userHrjob) {
-                $userHrjob->update(['status' => 'rejected']);
+                $userHrjobs->each(function ($userHrjob) use (&$statusHistories, $currentTimestamp) {
+                    $userHrjob->update(['status' => 'rejected']); // Perbarui status
+
+                    $statusHistories[] = [
+                        'id_user_job' => $userHrjob->id,
+                        'status' => 'rejected',
+                        'created_at' => $currentTimestamp,
+                        'updated_at' => $currentTimestamp,
+                    ];
+                });
+
+                // Simpan riwayat status ke tabel UserHrjobStatusHistory
+                \App\Models\UserHrjobStatusHistory::insert($statusHistories);
             });
 
-
-            // Simpan pesan sukses ke dalam session
             session()->flash('success', 'Selected jobs successfully rejected.');
             return response()->json(['success' => true, 'message' => 'Selected jobs successfully rejected.']);
         } catch (\Illuminate\Validation\ValidationException $e) {

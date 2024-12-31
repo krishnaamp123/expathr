@@ -234,10 +234,16 @@ class InterviewAdminController extends Controller
         $interview = Interview::findOrFail($id);
 
         try {
+
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+                session()->flash('failed', 'You are not authorized to rate this interview.');
+                return back()->withInput();
+            }
+
             // Validasi input
             $validated = $request->validate([
-                'rating' => 'required|integer|min:1|max:5',
-                'comment' => 'required|string|max:1000',
+                'rating' => 'nullable|integer|min:1|max:5',
+                'comment' => 'nullable|string|max:1000',
             ]);
 
             // Perbarui rating dan komentar di tabel Interview

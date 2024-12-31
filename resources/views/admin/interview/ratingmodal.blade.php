@@ -18,12 +18,12 @@
                             @for ($i = 5; $i >= 1; $i--)
                                 <input
                                     type="radio"
-                                    id="star-{{ $i }}-{{ $id }}"
+                                    id="rating-star-{{ $i }}-{{ $id }}"
                                     name="rating"
                                     value="{{ $i }}"
                                     @if($i == old('rating', $rating)) checked @endif
                                     required>
-                                <label for="star-{{ $i }}-{{ $id }}" class="star">&#9733;</label>
+                                <label for="rating-star-{{ $i }}-{{ $id }}" class="star">&#9733;</label>
                             @endfor
                         </div>
                         @error('rating')

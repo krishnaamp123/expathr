@@ -173,8 +173,6 @@
             font-size: 14px; /* Ini akan memengaruhi semua label di seluruh proyek */
         }
 
-
-
     </style>
 
 
