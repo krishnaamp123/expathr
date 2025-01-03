@@ -1,5 +1,6 @@
 <form action="{{ route('storeEmergency') }}" method="POST">
     @csrf
+        <label class="kaem-text">Emergency contact number that can be contacted!</label>
         <div class="form-group">
             <label for="emergency_name" class="kaem-subheading">Name</label>
             <input name="emergency_name" type="text" class="form-control form-control-user"

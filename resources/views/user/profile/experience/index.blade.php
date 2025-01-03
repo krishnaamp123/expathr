@@ -64,6 +64,7 @@
                 <form id="editExperienceForm" method="POST" action="{{ route('updateExperience', $experiencee->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Edit the experience you have had so far that is related to the job you are looking for!</label>
                     <div class="form-group">
                         <label for="position" class="kaem-subheading">Position</label>
                         <input type="text" class="form-control" id="position" name="position"  value="{{ $experiencee->position }}" required>

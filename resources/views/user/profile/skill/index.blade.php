@@ -50,6 +50,7 @@
                 <form id="editSkillForm" method="POST" action="{{ route('updateSkill', $skilll->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Select all the skills that you master!</label>
                     <div class="form-group">
                         <label for="skill_name" class="kaem-subheading">Skill Name</label>
                         <input type="text" class="form-control" id="skill_name" name="skill_name"  value="{{ $skilll->skill_name }}" required>

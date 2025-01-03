@@ -1,5 +1,6 @@
 <form action="{{ route('storeSkill') }}" method="POST">
     @csrf
+    <label class="kaem-text">Select all the skills that you master!</label>
         <div class="form-group">
             <label for="skill_name" class="kaem-subheading">Skill Name</label>
             <input name="skill_name" type="text" class="form-control form-control-user"

@@ -56,6 +56,7 @@
                     @csrf
                     @method('PUT')
 
+                    <label class="kaem-text">Where do you get information related to this website, fill in just one field!</label>
                     <div class="form-group">
                         <label for="editplatform" class="kaem-subheading">Platform</label>
                         <select name="platform" class="form-control select2 editplatform">

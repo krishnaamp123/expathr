@@ -1,5 +1,6 @@
 <form action="{{ route('storeLanguage') }}" method="POST">
     @csrf
+    <label class="kaem-text">Add the language you speak!</label>
         <div class="form-group">
             <label for="language" class="kaem-subheading">Language</label>
             <input name="language" type="text" class="form-control form-control-user"

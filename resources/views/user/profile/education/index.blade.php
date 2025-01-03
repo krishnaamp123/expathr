@@ -57,6 +57,7 @@
                 <form id="editEducationForm" method="POST" action="{{ route('updateEducation', $educationn->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Edit the education you have taken!</label>
                     <div class="form-group">
                         <label for="university" class="kaem-subheading">Institution</label>
                         <input type="text" class="form-control" id="university" name="university"  value="{{ $educationn->university }}" required>

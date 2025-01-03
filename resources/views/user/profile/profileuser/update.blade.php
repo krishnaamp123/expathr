@@ -2,6 +2,8 @@
     @csrf
     @method('PUT')
 
+    <label class="kaem-text">Fill in your personal data with accurate and up to date information!</label><br>
+
     <div class="form-group">
         <label class="kaem-subheading">Current Profile Picture</label><br>
         @if ($user->profile_pict)

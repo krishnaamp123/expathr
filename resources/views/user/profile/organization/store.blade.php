@@ -1,5 +1,6 @@
 <form action="{{ route('storeOrganization') }}" method="POST">
     @csrf
+    <label class="kaem-text">Add organizations you've been involved with that are related to the job you're looking for!</label>
         <div class="form-group">
             <label for="organization" class="kaem-subheading">Organization</label>
             <input name="organization" type="text" class="form-control form-control-user"

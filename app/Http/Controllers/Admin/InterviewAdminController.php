@@ -343,7 +343,7 @@ class InterviewAdminController extends Controller
     public function exportInterview()
     {
         // Ambil data dari model Interview
-        $interviews = Interview::with(['userHrjob.hrjob', 'userHrjob.user', 'user'])->get();
+        $interviews = Interview::with(['userHrjob.hrjob', 'userHrjob.user', 'interviewers'])->get();
 
         // Buat Spreadsheet baru
         $spreadsheet = new Spreadsheet();
@@ -365,7 +365,7 @@ class InterviewAdminController extends Controller
         $sheet->setCellValue('M1', 'Confirm Attendance');
 
         // Membuat header bold
-        $headerRange = 'A1:M1'; // Range dari header
+        $headerRange = 'A1:M1';
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
 
         // Isi data dari database ke dalam file Excel
@@ -377,10 +377,11 @@ class InterviewAdminController extends Controller
             $time = $interview->time ?? 'No Time';
             $phone = $interview->userHrjob->user->phone ?? 'No Phone';
             $city = $interview->userHrjob->hrjob->city->city_name  ?? 'No Location';
+            $interviewerNames = $interview->interviewers->pluck('fullname')->implode(', ') ?: 'No Interviewers';
 
             $sheet->setCellValue('A' . $rowNumber, $interview->id);
             $sheet->setCellValue('B' . $rowNumber, $applicantName);
-            $sheet->setCellValue('C' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
+            $sheet->setCellValue('C' . $rowNumber, $interviewerNames);
             $sheet->setCellValue('D' . $rowNumber, $jobName);
             $sheet->setCellValue('E' . $rowNumber, $city);
             $sheet->setCellValue('F' . $rowNumber, $interview->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
@@ -392,7 +393,7 @@ class InterviewAdminController extends Controller
             $sheet->setCellValue('M' . $rowNumber, $interview->arrival ?? 'No Confirm');
 
             // Tambahkan formula HYPERLINK di kolom J
-            $whatsappMessage = "Selamat sore {$applicantName},
+            $whatsappMessage = "Halo {$applicantName},
 
 Terima kasih telah melamar di Expat. Roasters. Perkenalkan kami dari HR Expat. Roasters. Selanjutnya kami mengundang Anda untuk mengikuti proses Phone Screen Interview untuk posisi {$jobName} ($city) pada:
 
@@ -438,7 +439,7 @@ Expat. Roasters";
         ]);
 
         // Filter data berdasarkan rentang tanggal
-        $interviews = Interview::with(['userHrjob.hrjob', 'userHrjob.user', 'user'])
+        $interviews = Interview::with(['userHrjob.hrjob', 'userHrjob.user', 'interviewers'])
             ->whereBetween('interview_date', [$validated['start_date'], $validated['end_date']])
             ->get();
 
@@ -474,10 +475,11 @@ Expat. Roasters";
             $time = $interview->time ?? 'No Time';
             $phone = $interview->userHrjob->user->phone ?? 'No Phone';
             $city = $interview->userHrjob->hrjob->city->city_name  ?? 'No Location';
+            $interviewerNames = $interview->interviewers->pluck('fullname')->implode(', ') ?: 'No Interviewers';
 
             $sheet->setCellValue('A' . $rowNumber, $interview->id);
             $sheet->setCellValue('B' . $rowNumber, $applicantName);
-            $sheet->setCellValue('C' . $rowNumber, $interview->user->fullname ?? 'No Interviewer');
+            $sheet->setCellValue('C' . $rowNumber, $interviewerNames);
             $sheet->setCellValue('D' . $rowNumber, $jobName);
             $sheet->setCellValue('E' . $rowNumber, $city);
             $sheet->setCellValue('F' . $rowNumber, $interview->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
@@ -489,7 +491,7 @@ Expat. Roasters";
             $sheet->setCellValue('M' . $rowNumber, $interview->arrival ?? 'No Confirm');
 
             // Tambahkan formula HYPERLINK di kolom J
-            $whatsappMessage = "Selamat sore {$applicantName},
+            $whatsappMessage = "Halo {$applicantName},
 
 Terima kasih telah melamar di Expat. Roasters. Perkenalkan kami dari HR Expat. Roasters. Selanjutnya kami mengundang Anda untuk mengikuti proses Phone Screen Interview untuk posisi {$jobName} ($city) pada:
 
@@ -520,7 +522,7 @@ Expat. Roasters";
 
         // Konfigurasi headers
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment;filename="interviews.xlsx"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="interviews_date.xlsx"');
         $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;

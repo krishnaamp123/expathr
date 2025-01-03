@@ -49,6 +49,7 @@
                 <form id="editWorkLocationForm" method="POST" action="{{ route('updateWorkLocation', $location->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Select all the cities you want to be placed in!</label>
                     <div class="form-group">
                         <label for="edit_id_city" class="kaem-subheading">City</label>
                         <select name="id_city" id="edit_id_city" class="form-control select2" required>

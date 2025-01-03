@@ -1,6 +1,7 @@
 <form action="{{ route('storeProject') }}" method="POST">
     @csrf
 
+    <label class="kaem-text">Add projects that you have worked on that relate to the job you are looking for!</label>
         <div class="form-group">
             <label for="project_name" class="kaem-subheading">Name</label>
             <input name="project_name" type="text" class="form-control form-control-user"

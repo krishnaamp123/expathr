@@ -52,6 +52,7 @@
                     @csrf
                     @method('PUT')
 
+                    <label class="kaem-text">Edit the language you speak!</label>
                     <div class="form-group">
                         <label for="language" class="kaem-subheading">Language</label>
                         <input type="text" class="form-control" id="language" name="language"  value="{{ $languagee->language }}" required>

@@ -1,6 +1,6 @@
 <form action="{{ route('storeSource') }}" method="POST">
     @csrf
-
+    <label class="kaem-text">Where do you get information related to this website, fill in just one field!</label>
         <div class="form-group">
             <label for="platform" class="kaem-subheading">Platform</label>
             <select name='platform' id="platform" class="form-control select2">

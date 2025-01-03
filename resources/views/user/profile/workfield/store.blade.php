@@ -1,5 +1,6 @@
 <form action="{{ route('storeWorkField') }}" method="POST">
     @csrf
+    <label class="kaem-text">Select all the fields you want to place!</label>
     <div class="form-group">
         <label for="id_field" class="kaem-subheading">Field</label>
         <select name="id_field" id="id_field" class="form-control select2" required>

@@ -1,5 +1,6 @@
 <form action="{{ route('storeLink') }}" method="POST">
     @csrf
+    <label class="kaem-text">Social media that you have!</label>
         <div class="form-group">
             <label for="media" class="kaem-subheading">Social</label>
             <select name="media" id="media" class="form-control select2">

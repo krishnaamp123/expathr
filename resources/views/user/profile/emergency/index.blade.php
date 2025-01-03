@@ -52,6 +52,7 @@
                 <form id="editEmergencyForm" method="POST" action="{{ route('updateEmergency', $emergencyy->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Emergency contact number that can be contacted!</label>
                     <div class="form-group">
                         <label for="emergency_name" class="kaem-subheading">Name</label>
                         <input type="text" class="form-control" id="emergency_name" name="emergency_name"  value="{{ $emergencyy->emergency_name }}" required>

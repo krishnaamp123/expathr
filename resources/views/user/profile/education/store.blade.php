@@ -1,5 +1,6 @@
 <form action="{{ route('storeEducation') }}" method="POST">
     @csrf
+    <label class="kaem-text">Add the education you have taken!</label>
         <div class="form-group">
             <label for="university" class="kaem-subheading">Institution</label>
             <input name="university" type="text" class="form-control form-control-user"

@@ -138,7 +138,15 @@
                         <ul class="list-inline">
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Interviewer :</strong>
-                                <p>{{ $interview->user->fullname }}</p>
+                                @if ($interview->interviewers->isNotEmpty())
+                                    <ul>
+                                        @foreach ($interview->interviewers as $interviewer)
+                                            <li class="mb-2 kaem-jobtext">{{ $interviewer->fullname }}</li>
+                                        @endforeach
+                                </ul>
+                                @else
+                                    <p>Please Wait For Interviewer</p>
+                                @endif
                             </li>
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Applicant :</strong>
@@ -187,7 +195,15 @@
                         <ul class="list-inline">
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Interviewer :</strong>
-                                <p>{{ $userinterview->user->fullname }}</p>
+                                @if ($userinterview->user_interviewers->isNotEmpty())
+                                    <ul>
+                                        @foreach ($userinterview->user_interviewers as $interviewer)
+                                            <li class="mb-2 kaem-jobtext">{{ $interviewer->fullname }}</li>
+                                        @endforeach
+                                </ul>
+                                @else
+                                    <p>Please Wait For Interviewer</p>
+                                @endif
                             </li>
                             <li class="mb-2 kaem-jobtext">
                                 <strong>Applicant :</strong>

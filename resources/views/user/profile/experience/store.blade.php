@@ -1,5 +1,6 @@
 <form action="{{ route('storeExperience') }}" method="POST">
     @csrf
+    <label class="kaem-text">Add the experience you have had so far that is related to the job you are looking for!</label>
         <div class="form-group">
             <label for="position" class="kaem-subheading">Position</label>
             <input name="position" type="text" class="form-control form-control-user"

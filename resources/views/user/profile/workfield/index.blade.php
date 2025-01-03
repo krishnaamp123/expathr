@@ -49,6 +49,7 @@
                 <form id="editWorkFieldForm" method="POST" action="{{ route('updateWorkField', $workfieldd->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Select all the fields you want to place!</label>
                     <div class="form-group">
                         <label for="id_field" class="kaem-subheading">Field</label>
                         <select name="id_field" id="edit_id_field" class="form-control select2" required>

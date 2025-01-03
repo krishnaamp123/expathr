@@ -55,6 +55,7 @@
                 <form id="editOrganizationForm" method="POST" action="{{ route('updateOrganization', $organizationn->id) }}">
                     @csrf
                     @method('PUT')
+                    <label class="kaem-text">Edit organizations you've been involved with that are related to the job you're looking for!</label>
                     <div class="form-group">
                         <label for="organization" class="kaem-subheading">Organization</label>
                         <input type="text" class="form-control" id="organization" name="organization"  value="{{ $organizationn->organization }}" required>

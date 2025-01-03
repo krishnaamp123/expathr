@@ -55,6 +55,7 @@
                     @csrf
                     @method('PUT')
 
+                    <label class="kaem-text">Edit projects that you have worked on that relate to the job you are looking for!</label>
                     <div class="form-group">
                         <label for="project_name" class="kaem-subheading">Name</label>
                         <input type="text" class="form-control" id="project_name" name="project_name"  value="{{ $projectt->project_name }}" required>
