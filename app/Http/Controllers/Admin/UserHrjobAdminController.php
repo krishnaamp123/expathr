@@ -11,6 +11,10 @@ use App\Models\Interview;
 use App\Models\UserHrjobStatusHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Carbon\Carbon;
 
 class UserHrjobAdminController extends Controller
 {
@@ -350,5 +354,146 @@ class UserHrjobAdminController extends Controller
             session()->flash('failed', 'An unexpected error occurred. Please try again.');
             return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
         }
+    }
+
+    public function exportUserHrjob()
+    {
+        $status = request('status');
+        // Ambil data dari model UserHrjob berdasarkan status
+        $userhrjobs = UserHrjob::with(['hrjob', 'user'])
+            ->where('status', $status)
+            ->get();
+
+        // Buat Spreadsheet baru
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Tambahkan header untuk file Excel
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Applicant Name');
+        $sheet->setCellValue('C1', 'Job Name');
+        $sheet->setCellValue('D1', 'Location');
+        $sheet->setCellValue('E1', 'Outlet');
+        $sheet->setCellValue('F1', 'Job Salary');
+        $sheet->setCellValue('G1', 'Salary Expectation');
+        $sheet->setCellValue('H1', 'Applied At');
+        $sheet->setCellValue('I1', 'Availability');
+        $sheet->setCellValue('J1', 'Status');
+
+        // Membuat header bold
+        $headerRange = 'A1:J1';
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+
+        // Isi data dari database ke dalam file Excel
+        $rowNumber = 2; // Baris pertama adalah header
+        foreach ($userhrjobs as $userhrjob) {
+
+            $sheet->setCellValue('A' . $rowNumber, $userhrjob->id);
+            $sheet->setCellValue('B' . $rowNumber, $userhrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('C' . $rowNumber, $userhrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('D' . $rowNumber, $userhrjob->hrjob->city->city_name  ?? 'No Location');
+            $sheet->setCellValue('E' . $rowNumber, $userhrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('F' . $rowNumber, $userhrjob->hrjob->price ?? 'No Job Salary');
+            $sheet->setCellValue('G' . $rowNumber, $userhrjob->salary_expectation ?? 'No Salary Expectation');
+            $sheet->setCellValue('H' . $rowNumber, $userhrjob->created_at ?? 'No Applied');
+            $sheet->setCellValue('I' . $rowNumber, $userhrjob->availability ?? 'No Availability');
+            $sheet->setCellValue('J' . $rowNumber, $userhrjob->status ?? 'No Status');
+
+            $rowNumber++;
+        }
+
+        // Simpan file dan buat response untuk download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        // Konfigurasi headers
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="user_job.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
+    public function exportdateUserHrjob(Request $request)
+    {
+        // Validasi input tanggal
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $status = request('status','all');
+        // Filter data berdasarkan rentang tanggal dan status
+        $userhrjobs = UserHrjob::with(['hrjob', 'user'])
+            ->whereBetween('created_at', [
+                Carbon::parse($validated['start_date'])->startOfDay(),
+                Carbon::parse($validated['end_date'])->endOfDay()
+            ])
+            ->when($status !== 'all', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->get();
+
+            // \Log::info('Tanggal yang digunakan untuk filter', [
+            //     'start_date' => Carbon::parse($validated['start_date'])->startOfDay(),
+            //     'end_date' => Carbon::parse($validated['end_date'])->endOfDay(),
+            //     'status' => $status,
+            // ]);
+
+            // \Log::info('Data hasil query', $userhrjobs->toArray());
+
+
+        // Membuat spreadsheet dan isi data
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Tambahkan header
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Applicant Name');
+        $sheet->setCellValue('C1', 'Job Name');
+        $sheet->setCellValue('D1', 'Location');
+        $sheet->setCellValue('E1', 'Outlet');
+        $sheet->setCellValue('F1', 'Job Salary');
+        $sheet->setCellValue('G1', 'Salary Expectation');
+        $sheet->setCellValue('H1', 'Applied At');
+        $sheet->setCellValue('I1', 'Availability');
+        $sheet->setCellValue('J1', 'Status');
+
+        // Membuat header bold
+        $headerRange = 'A1:J1'; // Range dari header
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+
+        // Isi data
+        $rowNumber = 2;
+        foreach ($userhrjobs as $userhrjob) {
+            $sheet->setCellValue('A' . $rowNumber, $userhrjob->id);
+            $sheet->setCellValue('B' . $rowNumber, $userhrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('C' . $rowNumber, $userhrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('D' . $rowNumber, $userhrjob->hrjob->city->city_name  ?? 'No Location');
+            $sheet->setCellValue('E' . $rowNumber, $userhrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('F' . $rowNumber, $userhrjob->hrjob->price ?? 'No Job Salary');
+            $sheet->setCellValue('G' . $rowNumber, $userhrjob->salary_expectation ?? 'No Salary Expectation');
+            $sheet->setCellValue('H' . $rowNumber, $userhrjob->created_at ?? 'No Applied');
+            $sheet->setCellValue('I' . $rowNumber, $userhrjob->availability ?? 'No Availability');
+            $sheet->setCellValue('J' . $rowNumber, $userhrjob->status ?? 'No Status');
+            $rowNumber++;
+        }
+
+        // Simpan file dan buat response untuk download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        // Konfigurasi headers
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="user_job_date.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
     }
 }

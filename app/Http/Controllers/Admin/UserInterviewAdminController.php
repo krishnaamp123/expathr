@@ -334,8 +334,12 @@ class UserInterviewAdminController extends Controller
 
     public function exportUserInterview()
     {
-        // Ambil data dari model Interview
-        $interviews = UserInterview::with(['userHrjob.hrjob', 'userHrjob.user', 'user_interviewers'])->get();
+        // Ambil data dari model UserInterview dengan status user_interview
+        $interviews = UserInterview::with(['userHrjob.hrjob', 'userHrjob.user', 'user_interviewers'])
+            ->whereHas('userHrjob', function ($query) {
+                $query->where('status', 'user_interview');
+            })
+            ->get();
 
         // Buat Spreadsheet baru
         $spreadsheet = new Spreadsheet();
@@ -430,9 +434,12 @@ Expat. Roasters";
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
-        // Filter data berdasarkan rentang tanggal
+        // Filter data berdasarkan rentang tanggal dan status
         $interviews = UserInterview::with(['userHrjob.hrjob', 'userHrjob.user', 'user_interviewers'])
             ->whereBetween('interview_date', [$validated['start_date'], $validated['end_date']])
+            ->whereHas('userHrjob', function ($query) {
+                $query->where('status', 'user_interview');
+            })
             ->get();
 
         // Membuat spreadsheet dan isi data

@@ -169,7 +169,7 @@
                         </div>
                         <div class="card-body">
                             <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                            <canvas id="hiredRejectedChart" width="977" height="400" style="display: block; height: 320px; width: 782px;" class="chartjs-render-monitor"></canvas>
+                            <canvas id="hiredRejectedChart" width="977" height="600" style="display: block; height: 320px; width: 782px;" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
                 </div>

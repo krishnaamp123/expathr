@@ -16,6 +16,6 @@ class UserHrjobStatusHistory extends Model
 
     public function userHrjob()
     {
-        return $this->belongsTo(UserHrjob::class);
+        return $this->belongsTo(UserHrjob::class, 'id_user_job');
     }
 }

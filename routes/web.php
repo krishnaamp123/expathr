@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\UserHrjobAdminController;
 use App\Http\Controllers\Admin\AnswerAdminController;
 use App\Http\Controllers\Admin\InterviewAdminController;
 use App\Http\Controllers\Admin\UserInterviewAdminController;
+use App\Http\Controllers\Admin\UserHrjobHistoryAdminController;
 
 
 //AUTH
@@ -238,7 +239,12 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/userjob/destroy/{id}', [UserHrjobAdminController::class, 'destroyUserHrjob'])->name('destroyUserHrjob');
             Route::post('/userjob/update-status/{id}', [UserHrjobAdminController::class, 'updateStatus'])->name('updateStatus');
             Route::post('/bulk-reject-status', [UserHrjobAdminController::class, 'bulkRejectStatus'])->name('bulkRejectStatus');
+            Route::get('/userjob/export', [UserHrjobAdminController::class, 'exportUserHrjob'])->name('exportUserHrjob');
+            Route::get('/userjob/dateexport', [UserHrjobAdminController::class, 'exportdateUserHrjob'])->name('exportdateUserHrjob');
 
+            // USERHRJOBHISTORY
+            Route::get('/userjob/history', [UserHrjobHistoryAdminController::class, 'getUserHrjobHistory'])->name('getUserHrjobHistory');
+            Route::delete('/userjob/history/destroy/{id}', [UserHrjobHistoryAdminController::class, 'destroyUserHrjobHistory'])->name('destroyUserHrjobHistory');
 
             // ANSWER
             Route::get('/answer', [AnswerAdminController::class, 'getAnswer'])->name('getAnswer');

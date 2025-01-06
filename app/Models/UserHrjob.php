@@ -32,6 +32,11 @@ class UserHrjob extends Model
         return $this->hasMany(Answer::class, 'id_user_job');
     }
 
+    public function histories()
+    {
+        return $this->hasMany(UserHrjobStatusHistory::class, 'id_user_job');
+    }
+
     public function interviews()
     {
         return $this->hasMany(Interview::class, 'id_user_job');

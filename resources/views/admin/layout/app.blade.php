@@ -287,6 +287,13 @@
                 </a>
             </li>
 
+            <li class="nav-item {{ Request::routeIs('getUserHrjobHistory') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getUserHrjobHistory') }}">
+                    <i class="fas fa-fw fa-history"></i>
+                    <span>User Job History</span>
+                </a>
+            </li>
+
             <li class="nav-item {{ Request::routeIs('getInterview') ? 'active' : '' }} {{ Request::routeIs('getUserInterview') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getInterview') }}">
                     <i class="fas fa-fw fa-users"></i>

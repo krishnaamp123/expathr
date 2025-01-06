@@ -72,7 +72,7 @@ class HrjobAdminController extends Controller
         if ($loggedInUser->role === 'recruiter') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
-                return redirect()->back()->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
             }
         }
 
@@ -80,7 +80,7 @@ class HrjobAdminController extends Controller
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
             }
         }
 
@@ -160,7 +160,7 @@ class HrjobAdminController extends Controller
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
             }
         }
 
@@ -210,7 +210,7 @@ class HrjobAdminController extends Controller
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
             }
         }
 
@@ -237,7 +237,7 @@ class HrjobAdminController extends Controller
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->back()->with('error', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
             }
         }
 
