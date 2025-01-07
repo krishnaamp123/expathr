@@ -162,8 +162,7 @@ class UserHrjobAdminController extends Controller
         try {
 
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to update this user job.');
-                return back()->withInput();
+                return response()->json(['message' => 'You are not authorized to update this user job.'], 403);
             }
 
             $validated = $request->validate([
@@ -174,11 +173,11 @@ class UserHrjobAdminController extends Controller
                 'availability' => 'required|in:immediately,<1_month_notice,1_month_notice,>1_month_notice',
             ]);
 
-            $userhrjob->id_job = $request->id_job;
-            $userhrjob->id_user = $request->id_user;
-            $userhrjob->status = $request->status;
-            $userhrjob->salary_expectation = $request->salary_expectation;
-            $userhrjob->availability = $request->availability;
+            $userhrjob->id_job = $validated['id_job'];
+            $userhrjob->id_user = $validated['id_user'];
+            $userhrjob->status = $validated['status'];
+            $userhrjob->salary_expectation = $validated['salary_expectation'];
+            $userhrjob->availability = $validated['availability'];
 
             $userhrjob->save();
 
@@ -205,20 +204,29 @@ class UserHrjobAdminController extends Controller
                     ->with('userJobName', $userhrjob->user->fullname);
             }
 
-            session()->flash('success', 'User Job updated successfully!');
+            return response()->json([
+                'message' => 'User Job updated successfully!',
+                'updatedRow' => [
+                    'id' => $userhrjob->id,
+                    'job_name' => $userhrjob->hrjob->job_name ?? 'No Job',
+                    'fullname' => $userhrjob->user->fullname ?? 'No Applicant',
+                    'status' => $userhrjob->status,
+                    'salary_expectation' => $userhrjob->salary_expectation,
+                    'availability' => $userhrjob->availability,
+                    'updated_at' => $userhrjob->updated_at->toDateTimeString(),
+                ],
+            ], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            return response()->json(['message' => 'An error occurred while deleting the interviews.'], 500);
         }
-
-        return back()->withInput();
     }
 
     public function updateStatus(Request $request, $id)
@@ -226,8 +234,7 @@ class UserHrjobAdminController extends Controller
         try {
 
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to update this user job.');
-                return back()->withInput();
+                return response()->json(['message' => 'You are not authorized to update this user job.'], 403);
             }
 
             $validated = $request->validate([
@@ -263,17 +270,24 @@ class UserHrjobAdminController extends Controller
                     ->with('userJobName', $userhrjob->user->fullname);
             }
 
-            session()->flash('success', 'Status updated successfully');
+            return response()->json([
+                'status' => 'success',
+                'updatedRow' => [
+                    'id' => $userhrjob->id,
+                    'status' => $userhrjob->status,
+                    'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                ],
+            ]);
+            // return response()->json(['message' => 'Status updated successfully.'], 200);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 // Gabungkan semua pesan validasi
                 $errors = [];
                 foreach ($e->errors() as $fieldErrors) {
                     $errors = array_merge($errors, $fieldErrors);
                 }
-                session()->flash('failed', implode(' ', $errors));
+                return response()->json(['message' => implode(' ', $errors)], 422);
             } catch (\Exception $e) {
-                // Pesan error untuk kesalahan umum
-                session()->flash('failed', 'An unexpected error occurred. Please try again.');
+                return response()->json(['message' => 'An error occurred while updating the status.'], 500);
             }
 
         return back()->withInput();
@@ -284,25 +298,20 @@ class UserHrjobAdminController extends Controller
         $userhrjob = UserHrjob::findOrFail($id);
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to delete this user job.');
-                return back()->withInput();
+                return response()->json(['message' => 'You are not authorized to delete this user job.'], 403);
             }
 
             $userhrjob->delete();
-            session()->flash('success', 'User Job deleted successfully!');
+            return response()->json(['message' => 'User Job deleted successfully.'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Gabungkan semua pesan validasi
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
-            // Pesan error untuk kesalahan umum
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            return response()->json(['message' => 'An error occurred while deleting the history.'], 500);
         }
-
-        return back()->withInput();
     }
 
     public function bulkRejectStatus(Request $request)

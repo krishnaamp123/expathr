@@ -295,8 +295,7 @@ class InterviewAdminController extends Controller
 
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to delete this interview.');
-                return back()->withInput();
+                return response()->json(['message' => 'You are not authorized to delete this interview.'], 403);
             }
 
             // Prevent hiring_manager from deleting interviews for super_admin
@@ -307,8 +306,7 @@ class InterviewAdminController extends Controller
                     ->exists();
 
                 if ($superAdminExists) {
-                    session()->flash('failed', 'You cannot manage interviews for Super Admin.');
-                    return back()->withInput();
+                    return response()->json(['message' => 'You cannot manage interviews for Super Admin.'], 403);
                 }
             }
 
@@ -318,26 +316,23 @@ class InterviewAdminController extends Controller
                     ->exists();
 
                 if ($invalidRolesExist) {
-                    session()->flash('failed', 'You cannot manage interviews for Super Admin or Hiring Manager.');
-                    return back()->withInput();
+                    return response()->json(['message' => 'You cannot manage interviews for Super Admin & Hiring Manager.'], 403);
                 }
             }
 
             $interview->delete();
-            session()->flash('success', 'Interview deleted successfully!');
+            return response()->json(['message' => 'Interview deleted successfully.'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            return response()->json(['message' => 'An error occurred while deleting the interviews.'], 500);
         }
-
-        return back()->withInput();
     }
 
     public function exportInterview()

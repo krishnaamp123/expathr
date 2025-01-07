@@ -1,13 +1,16 @@
 <!-- Modal Component -->
-<div class="modal fade" id="editUserHrjobModal{{ $id }}" tabindex="-1" aria-labelledby="editUserHrjobModalLabel{{ $id }}" aria-hidden="true">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<div class="modal fade" id="editUserHrjobModal{{ $id }}" tabindex="-1" aria-labelledby="editUserHrjobModalLabel{{ $id }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editUserHrjobModalLabel{{ $id }}">Update Interview</h5>
+                <h5 class="modal-title" id="editUserHrjobModalLabel{{ $id }}">Update User Job</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('updateUserHrjob', $id) }}" method="post">
+                {{-- <pre>{{ json_encode($userhrjob) }}</pre> --}}
+                <form id="updateUserHrjobForm" class="update-form" action="{{ route('updateUserHrjob', $id) }}" method="post">
                     @csrf
                     @method('PUT')
 

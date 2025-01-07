@@ -6,27 +6,31 @@
     <h1 class="h3 mb-2 text-gray-800">User Job History</h1>
 
     <!-- Toast Container -->
-    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        <div id="successToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #72A28A;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <!-- Placeholder untuk pesan sukses -->
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">
+        <div id="successToast" class="toast text-white" style="background-color: #72A28A; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #72A28A;">
+                <strong class="mr-auto">Success</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan sukses -->
             </div>
         </div>
 
-        <div id="failedToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #c03535;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <!-- Placeholder untuk pesan gagal -->
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <div id="failedToast" class="toast text-white" style="background-color: #c03535; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #c03535;">
+                <strong class="mr-auto">Error</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan gagal -->
             </div>
         </div>
     </div>
-
-
 
     <p class="mb-3">To see the applicant's status job pipeline history</p>
 
@@ -56,7 +60,7 @@
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
-                                <form method="POST" style="display:inline;">
+                                <form method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button"
@@ -75,9 +79,6 @@
         </div>
     </div>
 @endsection
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
 
@@ -124,14 +125,18 @@
                 const toastEl = document.getElementById(toastId);
                 if (toastEl) {
                     toastEl.querySelector('.toast-body').textContent = message;
+                    toastEl.classList.add('show'); // Tambahkan kelas 'show'
+                    toastEl.style.pointerEvents = 'auto'; // Aktifkan pointer-events
 
-                    // Inisialisasi dan tampilkan toast Bootstrap
-                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                    toast.show();
+                    setTimeout(() => {
+                        toastEl.classList.remove('show'); // Hilangkan kelas 'show'
+                        toastEl.style.pointerEvents = 'none'; // Matikan pointer-events
+                    }, 3000); // Hilangkan setelah 3 detik
                 } else {
-                    console.error('Toast element not found:', toastId);
+                    console.error(`Toast element with ID ${toastId} not found`);
                 }
             }
+
 
         });
 

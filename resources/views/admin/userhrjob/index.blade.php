@@ -6,29 +6,30 @@
     <h1 class="h3 mb-2 text-gray-800">User Job</h1>
 
     <!-- Toast Container -->
-    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        <!-- Toast -->
-        @if(session('success'))
-        <div id="successToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #72A28A;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ session('success') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">
+        <div id="successToast" class="toast text-white" style="background-color: #72A28A; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #72A28A;">
+                <strong class="mr-auto">Success</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan sukses -->
             </div>
         </div>
-        @endif
 
-        @if(session('failed'))
-        <div id="failedToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #c03535;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ session('failed') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <div id="failedToast" class="toast text-white" style="background-color: #c03535; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #c03535;">
+                <strong class="mr-auto">Error</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan gagal -->
             </div>
         </div>
-        @endif
     </div>
 
     <p class="mb-3">Applicant's main data to the job</p>
@@ -320,8 +321,8 @@
                                         <input type="checkbox" name="selected_jobs[]" value="{{ $row->id }}" class="select-job">
                                     </td>
                                     <td>{{ $row->id }}</td>
-                                    <td>{{ $row->hrjob->job_name ?? 'No Job' }}</td>
-                                    <td>
+                                    <td data-field="job_name">{{ $row->hrjob->job_name ?? 'No Job' }}</td>
+                                    <td data-field="fullname">
                                         <a
                                             href="#"
                                             class="btn p-0"
@@ -426,12 +427,15 @@
                                                     'rating' => $interview->rating,
                                                     'comment' => $interview->comment
                                                 ])
-                                                <form action="{{ route('destroyInterview', $interview->id) }}" method="POST" style="display:inline;">
+                                                <form method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
+                                                    <button type="button"
+                                                            class="btn btn-sm delete-btn"
+                                                            style="background-color: #c03535; color: white;"
+                                                            data-url="{{ route('destroyInterview', $interview->id) }}"
+                                                            data-confirm-message="Are you sure you want to delete this interview?">
                                                         <i class="fas fa-trash"></i>
-                                                        {{-- Delete --}}
                                                     </button>
                                                 </form>
                                             @else
@@ -533,12 +537,15 @@
                                                     'rating' => $userinterview->rating,
                                                     'comment' => $userinterview->comment
                                                 ])
-                                                <form action="{{ route('destroyUserInterview', $userinterview->id) }}" method="POST" style="display:inline;">
+                                                <form method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')">
+                                                    <button type="button"
+                                                            class="btn btn-sm delete-btn"
+                                                            style="background-color: #c03535; color: white;"
+                                                            data-url="{{ route('destroyUserInterview', $userinterview->id) }}"
+                                                            data-confirm-message="Are you sure you want to delete this user interview?">
                                                         <i class="fas fa-trash"></i>
-                                                        {{-- Delete --}}
                                                     </button>
                                                 </form>
                                             @else
@@ -546,12 +553,12 @@
                                             @endif
                                         </td>
                                     @else
-                                        <td data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
-                                        <td>{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
-                                        <td>{{ $row->created_at }}</td>
-                                        <td>{{ $row->updated_at }}</td>
-                                        <td>
-                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                        <td data-field="salary_expectation" data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
+                                        <td data-field="availability" >{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
+                                        <td data-field="created_at">{{ $row->created_at }}</td>
+                                        <td data-field="updated_at">{{ $row->updated_at }}</td>
+                                        <td data-field="status">
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
                                                 <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
                                                     @foreach ($statuses as $availableStatus)
@@ -578,11 +585,16 @@
                                                 'hrjob' => $hrjobss,
                                                 'user' => $userss,
                                             ])
-                                            <form action="{{ route('destroyUserHrjob', $row->id) }}" method="POST" style="display:inline;">
+
+                                            <form method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this user job?')"><i class="fas fa-trash"></i>
-                                                    {{-- Delete --}}
+                                                <button type="button"
+                                                        class="btn btn-sm delete-btn"
+                                                        style="background-color: #c03535; color: white;"
+                                                        data-url="{{ route('destroyUserHrjob', $row->id) }}"
+                                                        data-confirm-message="Are you sure you want to delete this user job?">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -855,28 +867,166 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-    // Simpan posisi scroll sebelum reload
-        const scrollPosition = sessionStorage.getItem('scrollPosition');
-        if (scrollPosition) {
-            window.scrollTo(0, parseInt(scrollPosition, 10));
-            sessionStorage.removeItem('scrollPosition');
-        }
+        document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
 
-        // Simpan posisi scroll saat form dikirim
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function () {
-                sessionStorage.setItem('scrollPosition', window.scrollY);
+                    const confirmMessage = this.dataset.confirmMessage || 'Are you sure you want to delete this item?';
+
+                    if (!confirm(confirmMessage)) {
+                        return;
+                    }
+
+                    const url = this.dataset.url;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                    fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                        .then(response => {
+                            // Simpan response untuk validasi status
+                            const isOk = response.ok;
+                            return response.json().then(data => ({ isOk, data }));
+                        })
+                        .then(({ isOk, data }) => {
+                            if (isOk) {
+                                const row = this.closest('tr');
+                                row.remove(); // Hapus baris
+                                showToast('successToast', data.message); // Tampilkan toast sukses
+                            } else {
+                                showToast('failedToast', data.message); // Tampilkan toast gagal
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showToast('failedToast', 'An error occurred. Please try again.');
+                        });
+                });
             });
-        });
 
-        // Inisialisasi toast
-        ['successToast', 'failedToast'].forEach(id => {
-            const toastEl = document.getElementById(id);
-            if (toastEl) {
-                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                toast.show();
+            document.querySelectorAll('.update-form').forEach(form => {
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault(); // Mencegah pengiriman form default
+
+                        const url = this.action; // URL dari atribut `action` pada form
+                        const formData = new FormData(this); // Ambil data form
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                        const form = event.target; // Referensi elemen form yang sedang dikirim
+                        if (form.tagName !== 'FORM') {
+                            console.error('Element is not a form:', form);
+                            return;
+                        }
+
+                        const formData = new FormData(form); // Pastikan form adalah elemen <form>
+                        for (const [key, value] of formData.entries()) {
+                            console.log(key, value); // Debug data yang dikirim
+                        }
+
+                        fetch(url, {
+                            method: 'PUT',
+                            headers: {
+
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                            body: formData,
+                        })
+                            .then(response => {
+                                const isOk = response.ok;
+                                return response.json().then(data => ({ isOk, data }));
+                            })
+                            .then(({ isOk, data }) => {
+                                if (isOk) {
+                                    updateTableRow(data.updatedRow); // Perbarui tabel (customize untuk tiap update)
+                                    showToast('successToast', data.message);
+                                    // Tutup modal
+                                    const modal = bootstrap.Modal.getInstance(this.closest('.modal'));
+                                    modal.hide();
+                                } else {
+                                    showToast('failedToast', data.message);
+                                }
+                            })
+                            .catch(error => {
+                                showToast('failedToast', 'An error occurred. Please try again.');
+                            });
+                    });
+                });
+
+            // Fungsi untuk memperbarui data di tabel
+            function updateTableRow(updatedRow) {
+                const row = document.querySelector(`tr[data-id="${updatedRow.id}"]`);
+                if (row) {
+                    Object.keys(updatedRow).forEach(key => {
+                        const cell = row.querySelector(`[data-field="${key}"]`);
+                        if (cell) {
+                            cell.textContent = updatedRow[key];
+                        }
+                    });
+                }
             }
+
+    // Tangani perubahan dropdown status
+    document.querySelectorAll('.update-status-form select').forEach(select => {
+        select.addEventListener('change', function (event) {
+            const form = this.closest('form');
+            const url = form.action;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            const formData = new FormData(form);
+
+            // Kirim request dengan Ajax
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: formData,
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update status.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Perbarui tabel atau tampilkan pesan sukses
+                    if (data.status === 'success') {
+                        const row = document.querySelector(`tr[data-id="${data.updatedRow.id}"]`);
+                        if (row) {
+                            row.querySelector('[data-field="status"]').textContent = data.updatedRow.status;
+                            row.querySelector('[data-field="updated_at"]').textContent = data.updatedRow.updated_at;
+                        }
+                        showToast('successToast', data.message || 'Status updated successfully!');
+                    } else {
+                        showToast('failedToast', data.message || 'Failed to update status.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('failedToast', 'An error occurred. Please try again.');
+                });
         });
+    });
+
+
+
+            function showToast(toastId, message) {
+                const toastEl = document.getElementById(toastId);
+                if (toastEl) {
+                    toastEl.querySelector('.toast-body').textContent = message;
+                    toastEl.classList.add('show'); // Tambahkan kelas 'show'
+                    toastEl.style.pointerEvents = 'auto'; // Aktifkan pointer-events
+
+                    setTimeout(() => {
+                        toastEl.classList.remove('show'); // Hilangkan kelas 'show'
+                        toastEl.style.pointerEvents = 'none'; // Matikan pointer-events
+                    }, 3000); // Hilangkan setelah 3 detik
+                } else {
+                    console.error(`Toast element with ID ${toastId} not found`);
+                }
+            }
 
         $(document).ready(function () {
             $('#interviewModal').modal('show');
@@ -932,20 +1082,6 @@
                     showToast('failedToast', 'An unexpected error occurred. Please try again.');
                 });
         });
-
-        // Fungsi untuk menampilkan toast
-        function showToast(toastId, message) {
-            const toastEl = document.getElementById(toastId);
-            if (toastEl) {
-                // Masukkan pesan ke dalam toast
-                toastEl.querySelector('.toast-body').textContent = message;
-
-                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                toast.show();
-            } else {
-                console.error(`Toast element with ID "${toastId}" not found.`);
-            }
-        }
 
     });
 

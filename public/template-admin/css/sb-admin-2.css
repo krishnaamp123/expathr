@@ -5612,8 +5612,11 @@ a.close.disabled {
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   opacity: 0;
+  transition: opacity 0.3s ease-in-out;
   padding: 10px;
   border-radius: 1rem;
+  position: fixed;
+  pointer-events: none;
 }
 
 .toast:not(:last-child) {
@@ -5622,6 +5625,7 @@ a.close.disabled {
 
 .toast.showing {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .toast.show {
