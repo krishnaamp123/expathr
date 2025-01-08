@@ -380,9 +380,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
-                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
                                                     @foreach ($statuses as $availableStatus)
                                                         <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
                                                             {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
@@ -489,9 +489,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST">
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
-                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
                                                     @foreach ($statuses as $availableStatus)
                                                         <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
                                                             {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
@@ -554,13 +554,13 @@
                                         </td>
                                     @else
                                         <td data-field="salary_expectation" data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
-                                        <td data-field="availability" >{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
+                                        <td data-field="availability">{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
                                         <td data-field="created_at">{{ $row->created_at }}</td>
                                         <td data-field="updated_at">{{ $row->updated_at }}</td>
-                                        <td data-field="status">
+                                        <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
-                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}" onchange="this.form.submit()">
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
                                                     @foreach ($statuses as $availableStatus)
                                                         <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
                                                             {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
@@ -909,30 +909,26 @@
 
             document.querySelectorAll('.update-form').forEach(form => {
                     form.addEventListener('submit', function (event) {
-                        event.preventDefault(); // Mencegah pengiriman form default
+                        event.preventDefault();
 
                         const url = this.action; // URL dari atribut `action` pada form
                         const formData = new FormData(this); // Ambil data form
                         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-                        const form = event.target; // Referensi elemen form yang sedang dikirim
-                        if (form.tagName !== 'FORM') {
-                            console.error('Element is not a form:', form);
-                            return;
+                        for (const [key, value] of formData.entries()) {
+                            console.log(`${key}: ${value}`); // Debug data yang dikirim
                         }
 
-                        const formData = new FormData(form); // Pastikan form adalah elemen <form>
-                        for (const [key, value] of formData.entries()) {
-                            console.log(key, value); // Debug data yang dikirim
-                        }
+                        const formDataObject = Object.fromEntries(formData.entries());
 
                         fetch(url, {
                             method: 'PUT',
                             headers: {
-
                                 'X-CSRF-TOKEN': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
                             },
-                            body: formData,
+                            body: JSON.stringify(formDataObject),
                         })
                             .then(response => {
                                 const isOk = response.ok;
@@ -940,77 +936,118 @@
                             })
                             .then(({ isOk, data }) => {
                                 if (isOk) {
-                                    updateTableRow(data.updatedRow); // Perbarui tabel (customize untuk tiap update)
+                                    handleTableRowUpdate(data.updatedRow);
                                     showToast('successToast', data.message);
-                                    // Tutup modal
-                                    const modal = bootstrap.Modal.getInstance(this.closest('.modal'));
-                                    modal.hide();
+                                    $(this.closest('.modal')).modal('hide');
                                 } else {
                                     showToast('failedToast', data.message);
                                 }
                             })
                             .catch(error => {
+                                console.error('Error:', error.message || error);
                                 showToast('failedToast', 'An error occurred. Please try again.');
                             });
                     });
                 });
 
-            // Fungsi untuk memperbarui data di tabel
-            function updateTableRow(updatedRow) {
+            // Fungsi untuk menangani pembaruan atau penghapusan baris tabel
+            function handleTableRowUpdate(updatedRow) {
                 const row = document.querySelector(`tr[data-id="${updatedRow.id}"]`);
+                const currentFilterStatus = '{{ $status }}'; // Status filter saat ini (sesuaikan dengan backend Anda)
+
                 if (row) {
-                    Object.keys(updatedRow).forEach(key => {
-                        const cell = row.querySelector(`[data-field="${key}"]`);
-                        if (cell) {
-                            cell.textContent = updatedRow[key];
-                        }
-                    });
+                    // Hapus baris jika status tidak sesuai dengan filter saat ini
+                    if (updatedRow.status !== currentFilterStatus) {
+                        row.remove();
+                    } else {
+                        // Perbarui tampilan baris jika tetap sesuai filter
+                        Object.keys(updatedRow).forEach(key => {
+                            const cell = row.querySelector(`[data-field="${key}"]`);
+                            if (cell) {
+                                // Format khusus jika diperlukan
+                                if (key === 'salary_expectation') {
+                                    cell.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(updatedRow[key])}`;
+                                } else if (key === 'updated_at') {
+                                    cell.textContent = updatedRow[key]; // Format waktu (jika diperlukan)
+                                } else {
+                                    cell.textContent = updatedRow[key];
+                                }
+                            }
+                        });
+                    }
                 }
             }
 
-    // Tangani perubahan dropdown status
-    document.querySelectorAll('.update-status-form select').forEach(select => {
-        select.addEventListener('change', function (event) {
-            const form = this.closest('form');
-            const url = form.action;
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            const formData = new FormData(form);
+            function showModal(modalData) {
+                const modal = document.getElementById('interviewModal');
+                if (modal) {
+                    modal.querySelector('.modal-title').textContent = `Add Interview Details for ${modalData.userJobName}`;
+                    modal.querySelector('input[name="id_user_job"]').value = modalData.userJobId;
+                    modal.querySelector('input[type="text"][readonly]').value = modalData.userJobName || 'N/A';
+                    new bootstrap.Modal(modal).show();
+                }
+            }
 
-            // Kirim request dengan Ajax
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: formData,
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update status.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Perbarui tabel atau tampilkan pesan sukses
-                    if (data.status === 'success') {
-                        const row = document.querySelector(`tr[data-id="${data.updatedRow.id}"]`);
-                        if (row) {
-                            row.querySelector('[data-field="status"]').textContent = data.updatedRow.status;
-                            row.querySelector('[data-field="updated_at"]').textContent = data.updatedRow.updated_at;
-                        }
-                        showToast('successToast', data.message || 'Status updated successfully!');
-                    } else {
-                        showToast('failedToast', data.message || 'Failed to update status.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showToast('failedToast', 'An error occurred. Please try again.');
+            // Fungsi untuk memperbarui status di tabel
+            document.querySelectorAll('.update-status-form select').forEach(select => {
+                select.addEventListener('change', function () {
+                    const form = this.closest('form'); // Ambil form terdekat
+                    const url = form.action; // URL untuk pengiriman form
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content; // CSRF token
+                    const formData = new FormData(form); // Data form yang akan dikirim
+
+                    // Kirim permintaan Ajax dengan Fetch API
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(errorData => {
+                                    throw new Error(errorData.message || 'Failed to update status.');
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.status === 'success') {
+
+                                if (data.modalData) {
+                                    showModal(data.modalData);
+                                }
+
+                                if (data.redirectUrl) {
+                                    window.location.href = data.redirectUrl;
+                                    return;
+                                }
+
+                                const row = document.querySelector(`tr[data-id="${data.updatedRow.id}"]`);
+
+                                // Hapus row dari tabel jika status tidak sesuai dengan filter saat ini
+                                if (row && data.updatedRow.status !== '{{ $status }}') {
+                                    row.remove();
+                                } else if (row) {
+                                    // Perbarui tampilan row jika status sesuai
+                                    row.querySelector('[data-field="status"]').textContent = data.updatedRow.status;
+                                    row.querySelector('[data-field="updated_at"]').textContent = data.updatedRow.updated_at;
+                                }
+
+                                showToast('successToast', data.message || 'Status updated successfully!');
+                            } else {
+                                showToast('failedToast', data.message || 'Failed to update status.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showToast('failedToast', error.message || 'An error occurred. Please try again.');
+                        });
                 });
-        });
-    });
-
-
+            });
 
             function showToast(toastId, message) {
                 const toastEl = document.getElementById(toastId);
@@ -1068,10 +1105,13 @@
                         // Tampilkan toast sukses
                         showToast('successToast', data.message);
 
-                        // Refresh halaman untuk menampilkan data yang diperbarui
-                        setTimeout(() => {
-                            location.reload();
-                        }); // Berikan waktu untuk toast sebelum reload
+                        // Hapus baris dari tabel secara dinamis
+                        selectedJobs.forEach(jobId => {
+                            const row = document.querySelector(`tr[data-id="${jobId}"]`);
+                            if (row) {
+                                row.remove(); // Hapus baris dari tabel
+                            }
+                        });
                     } else {
                         // Tampilkan toast gagal
                         showToast('failedToast', data.message);

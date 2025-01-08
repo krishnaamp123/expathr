@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class UserHrjobAdminController extends Controller
 {
@@ -158,6 +159,7 @@ class UserHrjobAdminController extends Controller
     public function updateUserHrjob(Request $request, $id)
     {
         $userhrjob = UserHrjob::findOrFail($id);
+        $previousStatus = $userhrjob->status;
 
         try {
 
@@ -205,19 +207,22 @@ class UserHrjobAdminController extends Controller
             }
 
             return response()->json([
+                'status' => 'success',
                 'message' => 'User Job updated successfully!',
                 'updatedRow' => [
                     'id' => $userhrjob->id,
-                    'job_name' => $userhrjob->hrjob->job_name ?? 'No Job',
-                    'fullname' => $userhrjob->user->fullname ?? 'No Applicant',
+                    'job_name' => $userhrjob->hrjob->job_name,
+                    'fullname' => $userhrjob->user->fullname,
                     'status' => $userhrjob->status,
                     'salary_expectation' => $userhrjob->salary_expectation,
                     'availability' => $userhrjob->availability,
-                    'updated_at' => $userhrjob->updated_at->toDateTimeString(),
+                    'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                    'previous_status' => $previousStatus,
                 ],
-            ], 200);
+            ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
+            Log::error('Validation Error:', $e->errors());
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
@@ -242,9 +247,9 @@ class UserHrjobAdminController extends Controller
             ]);
 
             $userhrjob = UserHrjob::findOrFail($id);
+            $previousStatus = $userhrjob->status;
 
-
-            $userhrjob->status = $request->status;
+            $userhrjob->status = $validated['status'];
             $userhrjob->save();
 
             if ($userhrjob->status !== $request->status) {
@@ -257,17 +262,27 @@ class UserHrjobAdminController extends Controller
             $status = $request->status;
 
             if ($request->status === 'hr_interview') {
-                return redirect()->route('getUserHrjob', ['status' => 'hr_interview'])
-                    ->with('showModal', true)
-                    ->with('userJobId', $id)
-                    ->with('userJobName', $userhrjob->user->fullname);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated successfully!',
+                    'redirectUrl' => route('getUserHrjob', ['status' => 'hr_interview']),
+                    'modalData' => [
+                        'userJobId' => $id,
+                        'userJobName' => $userhrjob->user->fullname,
+                    ],
+                ]);
             }
 
-            if ($status === 'user_interview') {
-                return redirect()->route('getUserHrjob', ['status' => 'user_interview'])
-                    ->with('showuserModal', true)
-                    ->with('userJobId', $id)
-                    ->with('userJobName', $userhrjob->user->fullname);
+            if ($request->status === 'user_interview') {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated successfully!',
+                    'redirectUrl' => route('getUserHrjob', ['status' => 'user_interview']),
+                    'modalData' => [
+                        'userJobId' => $id,
+                        'userJobName' => $userhrjob->user->fullname,
+                    ],
+                ]);
             }
 
             return response()->json([
@@ -276,9 +291,9 @@ class UserHrjobAdminController extends Controller
                     'id' => $userhrjob->id,
                     'status' => $userhrjob->status,
                     'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                    'previous_status' => $previousStatus,
                 ],
             ]);
-            // return response()->json(['message' => 'Status updated successfully.'], 200);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 // Gabungkan semua pesan validasi
                 $errors = [];
@@ -289,8 +304,6 @@ class UserHrjobAdminController extends Controller
             } catch (\Exception $e) {
                 return response()->json(['message' => 'An error occurred while updating the status.'], 500);
             }
-
-        return back()->withInput();
     }
 
     public function destroyUserHrjob($id)
@@ -318,8 +331,7 @@ class UserHrjobAdminController extends Controller
     {
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to bulk reject this user job.');
-                return back()->withInput();
+                return response()->json(['success' => false, 'message' => 'You are not authorized to bulk reject this user job.']);
             }
 
             // Validasi input
@@ -350,17 +362,14 @@ class UserHrjobAdminController extends Controller
                 \App\Models\UserHrjobStatusHistory::insert($statusHistories);
             });
 
-            session()->flash('success', 'Selected jobs successfully rejected.');
             return response()->json(['success' => true, 'message' => 'Selected jobs successfully rejected.']);
         } catch (\Illuminate\Validation\ValidationException $e) {
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
             return response()->json(['success' => false, 'message' => implode(' ', $errors)]);
         } catch (\Exception $e) {
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
             return response()->json(['success' => false, 'message' => 'An unexpected error occurred. Please try again.']);
         }
     }

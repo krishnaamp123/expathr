@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 {{-- <pre>{{ json_encode($userhrjob) }}</pre> --}}
-                <form id="updateUserHrjobForm" class="update-form" action="{{ route('updateUserHrjob', $id) }}" method="post">
+                <form id="updateUserHrjobForm" class="update-form" action="{{ route('updateUserHrjob', $id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
