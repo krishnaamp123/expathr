@@ -467,6 +467,15 @@
                 });
             });
         });
+
+        $('#interviewModal').on('shown.bs.modal', function () {
+        // Inisialisasi Select2 untuk elemen select di dalam modal
+        $('.select2').select2({
+            placeholder: "Select Interviewers",
+            allowClear: true,
+            dropdownParent: $(this).find('.modal-dialog') // Pastikan dropdown berada dalam modal
+        });
+    });
     </script>
 
 @yield('scripts')

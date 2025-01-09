@@ -607,165 +607,6 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    @if (session('showModal'))
-        <div class="modal fade show" id="interviewModal" tabindex="-1" role="dialog" aria-labelledby="interviewModalLabel" aria-hidden="true" style="display: block;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form action="{{ route('storeInterview') }}" method="POST">
-                        @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="interviewModalLabel">Add Interview Details</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                            <div class="form-group">
-                                <label>Applicant</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ session('userJobName') ?? 'N/A' }}"
-                                    readonly
-                                >
-                                <input
-                                    type="hidden"
-                                    name="id_user_job"
-                                    value="{{ session('userJobId') }}"
-                                >
-                            </div>
-
-                            <div class="form-group">
-                                <label>Interviewers</label>
-                                <select name="interviewers[]" class="form-control select2 inside-modal" multiple>
-                                    <option value="">Select Interviewers</option>
-                                    @foreach($users as $interviewer)
-                                        <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
-                                    @endforeach
-                                </select>
-                                @error('interviewers')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label>Interview Date</label>
-                                <input type="text" name="interview_date" class="form-control datepicker datepicker-input">
-                                @error('interview_date')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label>Time</label>
-                                <input type="time" name="time" class="form-control">
-                                @error('time')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label>Location</label>
-                                <input type="text" name="location" class="form-control">
-                                @error('location')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label>Link</label>
-                                <input type="text" name="link" class="form-control">
-                                @error('link')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @elseif (session('showuserModal'))
-        <div class="modal fade show" id="interviewuserModal" tabindex="-1" role="dialog" aria-labelledby="interviewuserModalLabel" aria-hidden="true" style="display: block;">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form action="{{ route('storeUserInterview') }}" method="POST">
-                        @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="interviewuserModalLabel">Add User Interview Details</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                            <div class="form-group">
-                                <label>Applicant</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    value="{{ session('userJobName') ?? 'N/A' }}"
-                                    readonly
-                                >
-                                <input
-                                    type="hidden"
-                                    name="id_user_job"
-                                    value="{{ session('userJobId') }}"
-                                >
-                            </div>
-
-                            <div class="form-group">
-                                <label>Interviewers</label>
-                                <select name="user_interviewers[]" class="form-control select2 inside-modal" multiple>
-                                    <option value="">Select Interviewers</option>
-                                    @foreach($users as $userinterviewer)
-                                        <option value="{{ $userinterviewer->id }}">{{ $userinterviewer->fullname }}</option>
-                                    @endforeach
-                                </select>
-                                @error('user_interviewers')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                                <div class="form-group">
-                                    <label>Interview Date</label>
-                                    <input type="text" name="interview_date" class="form-control datepicker datepicker-input">
-                                    @error('interview_date')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Time</label>
-                                    <input type="time" name="time" class="form-control">
-                                    @error('time')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Location</label>
-                                    <input type="text" name="location" class="form-control">
-                                    @error('location')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Link</label>
-                                    <input type="text" name="link" class="form-control">
-                                    @error('link')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Save</button>
-                            </div>
-                        </form>
-                </div>
-            </div>
-        </div>
-    @endif
 
     @foreach ($userhrjobs as $row)
         <div class="modal fade" id="userDetailsModal-{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel-{{ $row->id }}" aria-hidden="true">
@@ -908,47 +749,83 @@
             });
 
             document.querySelectorAll('.update-form').forEach(form => {
-                    form.addEventListener('submit', function (event) {
-                        event.preventDefault();
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
 
-                        const url = this.action; // URL dari atribut `action` pada form
-                        const formData = new FormData(this); // Ambil data form
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+                    const url = this.action; // URL dari atribut `action` pada form
+                    const formData = new FormData(this); // Ambil data form
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-                        for (const [key, value] of formData.entries()) {
-                            console.log(`${key}: ${value}`); // Debug data yang dikirim
-                        }
+                    // Debug data yang dikirim
+                    for (const [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value}`);
+                    }
 
-                        const formDataObject = Object.fromEntries(formData.entries());
+                    const formDataObject = Object.fromEntries(formData.entries());
 
-                        fetch(url, {
-                            method: 'PUT',
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken,
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(formDataObject),
+                    fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formDataObject),
+                    })
+                        .then(response => {
+                            const isOk = response.ok;
+                            return response.json().then(data => ({ isOk, data }));
                         })
-                            .then(response => {
-                                const isOk = response.ok;
-                                return response.json().then(data => ({ isOk, data }));
-                            })
-                            .then(({ isOk, data }) => {
-                                if (isOk) {
-                                    handleTableRowUpdate(data.updatedRow);
-                                    showToast('successToast', data.message);
-                                    $(this.closest('.modal')).modal('hide');
-                                } else {
-                                    showToast('failedToast', data.message);
+                        .then(({ isOk, data }) => {
+                            if (isOk) {
+                                handleTableRowUpdate(data.updatedRow);
+                                showToast('successToast', data.message);
+
+                                // Tangani modal
+                                if (data.modalType === 'hr_interview' || data.modalType === 'user_interview') {
+                                    const modalId = data.modalType === 'hr_interview' ? 'interviewModal' : 'userInterviewModal';
+                                    const modalUrl = data.modalType === 'hr_interview'
+                                        ? '{{ route("getInterviewModal") }}'
+                                        : '{{ route("getUserInterviewModal") }}';
+
+                                    loadModal(modalId, modalUrl, (modalElement) => {
+                                        const modalInstance = new bootstrap.Modal(modalElement);
+
+                                        // Isi data modal
+                                        const modalUserJobName = modalElement.querySelector('#modalUserJobName');
+                                        const modalUserJobId = modalElement.querySelector('#modalUserJobId');
+
+                                        if (modalUserJobName) modalUserJobName.value = data.modalData.userJobName;
+                                        if (modalUserJobId) modalUserJobId.value = data.modalData.userJobId;
+
+                                        // Inisialisasi Select2
+                                        $(modalElement).find('.select2.inside-modal').select2({
+                                            dropdownParent: $(modalElement) // Attach dropdown to modal
+                                        });
+
+                                        // Inisialisasi Datepicker
+                                        $(modalElement).find('.datepicker').datepicker({
+                                            format: 'yyyy-mm-dd', // Format tanggal
+                                            autoclose: true,
+                                        });
+
+                                        // Tampilkan modal
+                                        modalInstance.show();
+                                    });
                                 }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error.message || error);
-                                showToast('failedToast', 'An error occurred. Please try again.');
-                            });
-                    });
+
+                                // Tutup modal jika masih terbuka
+                                $(this.closest('.modal')).modal('hide');
+                            } else {
+                                showToast('failedToast', data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error.message || error);
+                            showToast('failedToast', 'An error occurred. Please try again.');
+                        });
                 });
+            });
 
             // Fungsi untuk menangani pembaruan atau penghapusan baris tabel
             function handleTableRowUpdate(updatedRow) {
@@ -978,14 +855,33 @@
                 }
             }
 
-            function showModal(modalData) {
-                const modal = document.getElementById('interviewModal');
-                if (modal) {
-                    modal.querySelector('.modal-title').textContent = `Add Interview Details for ${modalData.userJobName}`;
-                    modal.querySelector('input[name="id_user_job"]').value = modalData.userJobId;
-                    modal.querySelector('input[type="text"][readonly]').value = modalData.userJobName || 'N/A';
-                    new bootstrap.Modal(modal).show();
-                }
+            function loadModal(modalId, modalUrl, callback) {
+                fetch(modalUrl, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load modal content');
+                        }
+                        return response.text();
+                    })
+                    .then(html => {
+                        // Tambahkan HTML modal ke dalam body
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html.trim();
+                        const modalElement = tempDiv.firstElementChild;
+                        document.body.appendChild(modalElement);
+
+                        // Jalankan callback jika ada
+                        if (typeof callback === 'function') callback(modalElement);
+                    })
+                    .catch(error => {
+                        console.error('Error loading modal:', error);
+                        showToast('failedToast', 'Failed to load modal. Please try again.');
+                    });
             }
 
             // Fungsi untuk memperbarui status di tabel
@@ -1015,20 +911,44 @@
                             return response.json();
                         })
                         .then(data => {
+                            console.log('Response:', data);
+
                             if (data.status === 'success') {
+                                // Tangani modal
+                                if (data.modalType === 'hr_interview' || data.modalType === 'user_interview') {
+                                    const modalId = data.modalType === 'hr_interview' ? 'interviewModal' : 'userInterviewModal';
+                                    const modalUrl = data.modalType === 'hr_interview'
+                                        ? '{{ route("getInterviewModal") }}'
+                                        : '{{ route("getUserInterviewModal") }}';
 
-                                if (data.modalData) {
-                                    showModal(data.modalData);
+                                    loadModal(modalId, modalUrl, (modalElement) => {
+                                        const modalInstance = new bootstrap.Modal(modalElement);
+
+                                        // Isi data modal
+                                        const modalUserJobName = modalElement.querySelector('#modalUserJobName');
+                                        const modalUserJobId = modalElement.querySelector('#modalUserJobId');
+
+                                        if (modalUserJobName) modalUserJobName.value = data.modalData.userJobName;
+                                        if (modalUserJobId) modalUserJobId.value = data.modalData.userJobId;
+
+                                        // Inisialisasi Select2
+                                        $(modalElement).find('.select2.inside-modal').select2({
+                                            dropdownParent: $(modalElement) // Attach dropdown to modal
+                                        });
+
+                                        // Inisialisasi Datepicker
+                                        $(modalElement).find('.datepicker').datepicker({
+                                            format: 'yyyy-mm-dd', // Format tanggal
+                                            autoclose: true,
+                                        });
+
+                                        // Tampilkan modal
+                                        modalInstance.show();
+                                    });
                                 }
 
-                                if (data.redirectUrl) {
-                                    window.location.href = data.redirectUrl;
-                                    return;
-                                }
-
+                                // Hapus atau perbarui baris di tabel
                                 const row = document.querySelector(`tr[data-id="${data.updatedRow.id}"]`);
-
-                                // Hapus row dari tabel jika status tidak sesuai dengan filter saat ini
                                 if (row && data.updatedRow.status !== '{{ $status }}') {
                                     row.remove();
                                 } else if (row) {
@@ -1037,6 +957,7 @@
                                     row.querySelector('[data-field="updated_at"]').textContent = data.updatedRow.updated_at;
                                 }
 
+                                // Tampilkan toast sukses
                                 showToast('successToast', data.message || 'Status updated successfully!');
                             } else {
                                 showToast('failedToast', data.message || 'Failed to update status.');
@@ -1045,6 +966,46 @@
                         .catch(error => {
                             console.error('Error:', error);
                             showToast('failedToast', error.message || 'An error occurred. Please try again.');
+                        });
+                });
+            });
+
+            document.querySelectorAll('.store-interview-form').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    const url = this.action; // URL dari atribut `action` pada form
+                    const formData = new FormData(this); // Ambil data form
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: formData,
+                    })
+                        .then(response => {
+                            const isOk = response.ok;
+                            return response.json().then(data => ({ isOk, data }));
+                        })
+                        .then(({ isOk, data }) => {
+                            if (isOk) {
+                                // Tampilkan toast sukses
+                                showToast('successToast', data.message);
+
+                                // Reset form atau tutup modal (opsional)
+                                form.reset();
+                                $(form.closest('.modal')).modal('hide');
+                            } else {
+                                // Tampilkan toast gagal
+                                showToast('failedToast', data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error.message || error);
+                            showToast('failedToast', 'An error occurred. Please try again.');
                         });
                 });
             });
@@ -1064,11 +1025,6 @@
                     console.error(`Toast element with ID ${toastId} not found`);
                 }
             }
-
-        $(document).ready(function () {
-            $('#interviewModal').modal('show');
-            $('#interviewuserModal').modal('show');
-        });
 
         // Pilih semua checkbox
         document.getElementById('select-all').addEventListener('change', function() {

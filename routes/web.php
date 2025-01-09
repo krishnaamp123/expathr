@@ -241,6 +241,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/bulk-reject-status', [UserHrjobAdminController::class, 'bulkRejectStatus'])->name('bulkRejectStatus');
             Route::get('/userjob/export', [UserHrjobAdminController::class, 'exportUserHrjob'])->name('exportUserHrjob');
             Route::get('/userjob/dateexport', [UserHrjobAdminController::class, 'exportdateUserHrjob'])->name('exportdateUserHrjob');
+            Route::get('/modal/interview', [UserHrjobAdminController::class, 'getInterviewModal'])->name('getInterviewModal');
+            Route::get('/modal/userinterview', [UserHrjobAdminController::class, 'getUserInterviewModal'])->name('getUserInterviewModal');
+
 
             // USERHRJOBHISTORY
             Route::get('/userjob/history', [UserHrjobHistoryAdminController::class, 'getUserHrjobHistory'])->name('getUserHrjobHistory');

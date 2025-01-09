@@ -115,6 +115,23 @@ class UserHrjobAdminController extends Controller
         return view('admin.userhrjob.index', compact('userhrjobs', 'userhrjobss', 'hrjobss', 'statuses', 'status', 'users', 'userss'));
     }
 
+    public function getInterviewModal(Request $request)
+    {
+        $users = User::where('role', '!=', 'applicant')->get();
+
+        return view('admin.userhrjob.interviewmodal', [
+            'users' => $users,
+        ]);
+    }
+
+    public function getUserInterviewModal(Request $request)
+    {
+        $users = User::where('role', '!=', 'applicant')->get();
+
+        return view('admin.userhrjob.userinterviewmodal', [
+            'users' => $users,
+        ]);
+    }
 
     public function storeUserHrjob(Request $request)
     {
@@ -193,17 +210,40 @@ class UserHrjobAdminController extends Controller
             $status = $request->status;
 
             if ($request->status === 'hr_interview') {
-                return redirect()->route('getUserHrjob', ['status' => 'hr_interview'])
-                    ->with('showModal', true)
-                    ->with('userJobId', $id)
-                    ->with('userJobName', $userhrjob->user->fullname);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated successfully!',
+                    'modalType' => 'hr_interview',
+                    'modalData' => [
+                        'userJobId' => $id,
+                        'userJobName' => $userhrjob->user->fullname,
+                    ],
+                    'updatedRow' => [
+                        'id' => $userhrjob->id,
+                        'status' => $userhrjob->status,
+                        'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                        'previous_status' => $previousStatus,
+                    ],
+                ]);
             }
 
-            if ($status === 'user_interview') {
-                return redirect()->route('getUserHrjob', ['status' => 'user_interview'])
-                    ->with('showuserModal', true)
-                    ->with('userJobId', $id)
-                    ->with('userJobName', $userhrjob->user->fullname);
+
+            if ($request->status === 'user_interview') {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated successfully!',
+                    'modalType' => 'user_interview',
+                    'modalData' => [
+                        'userJobId' => $id,
+                        'userJobName' => $userhrjob->user->fullname,
+                    ],
+                    'updatedRow' => [
+                        'id' => $userhrjob->id,
+                        'status' => $userhrjob->status,
+                        'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                        'previous_status' => $previousStatus,
+                    ],
+                ]);
             }
 
             return response()->json([
@@ -265,23 +305,38 @@ class UserHrjobAdminController extends Controller
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Status updated successfully!',
-                    'redirectUrl' => route('getUserHrjob', ['status' => 'hr_interview']),
+                    'modalType' => 'hr_interview',
                     'modalData' => [
                         'userJobId' => $id,
                         'userJobName' => $userhrjob->user->fullname,
                     ],
+                    'updatedRow' => [
+                        'id' => $userhrjob->id,
+                        'status' => $userhrjob->status,
+                        'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                        'previous_status' => $previousStatus,
+                    ],
+                    // 'redirectUrl' => route('getUserHrjob', ['status' => 'hr_interview']),
                 ]);
             }
+
 
             if ($request->status === 'user_interview') {
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Status updated successfully!',
-                    'redirectUrl' => route('getUserHrjob', ['status' => 'user_interview']),
+                    'modalType' => 'user_interview',
                     'modalData' => [
                         'userJobId' => $id,
                         'userJobName' => $userhrjob->user->fullname,
                     ],
+                    'updatedRow' => [
+                        'id' => $userhrjob->id,
+                        'status' => $userhrjob->status,
+                        'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                        'previous_status' => $previousStatus,
+                    ],
+                    // 'redirectUrl' => route('getUserHrjob', ['status' => 'user_interview']),
                 ]);
             }
 
