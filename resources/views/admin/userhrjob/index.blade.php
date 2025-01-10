@@ -334,27 +334,29 @@
                                     </td>
                                     <!-- Tampilkan Interviewer dan Interview Date jika status adalah hr_interview -->
                                     @if (request('status') === 'hr_interview')
-                                        <td>
+                                        <td data-field="interviewers">
                                             @if ($row->interviews->isNotEmpty())
                                                 <ul>
-                                                    @foreach($row->interviews->first()->interviewers ?? [] as $interviewer)
-                                                        <li>{{ $interviewer->fullname }}</li>
+                                                    @foreach ($row->interviews as $interview)
+                                                        @foreach ($interview->interviewers as $interviewer)
+                                                            <li>{{ $interviewer->fullname }}</li>
+                                                        @endforeach
                                                     @endforeach
                                                 </ul>
                                             @else
                                                 <span>No Interviewers</span>
                                             @endif
                                         </td>
-                                        <td>
+                                        <td data-field="interview_date">
                                             {{ $row->interviews->first()->interview_date ?? 'Not Scheduled' }}
                                         </td>
-                                        <td>
+                                        <td data-field="time">
                                             {{ $row->interviews->first()->time ?? 'Not Timed' }}
                                         </td>
-                                        <td>
+                                        <td data-field="location">
                                             {{ $row->interviews->first()->location ?? 'Not Located' }}
                                         </td>
-                                        <td>
+                                        <td data-field="link">
                                             @if ($row->interviews->first()?->link)
                                                 <a href="{{ $row->interviews->first()->link }}" target="_blank" title="{{ $row->interviews->first()->link }}">
                                                     {{ \Illuminate\Support\Str::limit($row->interviews->first()->link, 20, '...') }}
@@ -363,13 +365,13 @@
                                                 No Link
                                             @endif
                                         </td>
-                                        <td>{{ $row->interviews->first()->arrival ?? 'Not Confirmed' }}</td>
+                                        <td data-field="arrival">{{ $row->interviews->first()->arrival ?? 'Not Confirmed' }}</td>
                                         {{-- <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td> --}}
-                                        <td>{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
-                                        <td>
+                                        <td data-field="updated_at">{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="rating">
                                             {{ $row->interviews->first()->rating ?? 'Not Rated' }}
                                         </td>
-                                        <td>
+                                        <td data-field="comment">
                                             @if ($row->interviews->first()?->comment)
                                                 <span
                                                     title="{{ $row->interviews->first()->comment }}">
@@ -814,6 +816,18 @@
                                     });
                                 }
 
+                                // Pastikan interviewers[] diproses sebagai array
+                                const interviewers = Array.from(this.querySelectorAll('select[name="interviewers[]"] option:checked'))
+                                    .map(option => option.value);
+
+                                // Hapus key "interviewers" sebelumnya
+                                formData.delete('interviewers');
+
+                                // Tambahkan setiap nilai interviewers[] ke dalam FormData
+                                interviewers.forEach(interviewer => {
+                                    formData.append('interviewers[]', interviewer);
+                                });
+
                                 // Tutup modal jika masih terbuka
                                 $(this.closest('.modal')).modal('hide');
                             } else {
@@ -844,6 +858,14 @@
                                 // Format khusus jika diperlukan
                                 if (key === 'salary_expectation') {
                                     cell.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(updatedRow[key])}`;
+                                } else if (key === 'interviewers') {
+                                    // Kosongkan dan tambahkan daftar interviewers
+                                    cell.innerHTML = '';
+                                    updatedRow[key].forEach(interviewer => {
+                                        const listItem = document.createElement('li');
+                                        listItem.textContent = `${interviewer.fullname} (${interviewer.role})`;
+                                        cell.appendChild(listItem);
+                                    });
                                 } else if (key === 'updated_at') {
                                     cell.textContent = updatedRow[key]; // Format waktu (jika diperlukan)
                                 } else {
@@ -970,46 +992,6 @@
                 });
             });
 
-            document.querySelectorAll('.store-interview-form').forEach(form => {
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-
-                    const url = this.action; // URL dari atribut `action` pada form
-                    const formData = new FormData(this); // Ambil data form
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                            'X-Requested-With': 'XMLHttpRequest',
-                        },
-                        body: formData,
-                    })
-                        .then(response => {
-                            const isOk = response.ok;
-                            return response.json().then(data => ({ isOk, data }));
-                        })
-                        .then(({ isOk, data }) => {
-                            if (isOk) {
-                                // Tampilkan toast sukses
-                                showToast('successToast', data.message);
-
-                                // Reset form atau tutup modal (opsional)
-                                form.reset();
-                                $(form.closest('.modal')).modal('hide');
-                            } else {
-                                // Tampilkan toast gagal
-                                showToast('failedToast', data.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error.message || error);
-                            showToast('failedToast', 'An error occurred. Please try again.');
-                        });
-                });
-            });
-
             function showToast(toastId, message) {
                 const toastEl = document.getElementById(toastId);
                 if (toastEl) {
@@ -1025,6 +1007,12 @@
                     console.error(`Toast element with ID ${toastId} not found`);
                 }
             }
+
+            @if(session('toast_type') && session('toast_message'))
+                const toastId = "{{ session('toast_type') === 'success' ? 'successToast' : 'failedToast' }}";
+                const message = "{{ session('toast_message') }}";
+                showToast(toastId, message);
+            @endif
 
         // Pilih semua checkbox
         document.getElementById('select-all').addEventListener('change', function() {

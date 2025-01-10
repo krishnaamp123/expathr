@@ -1,6 +1,5 @@
-<!-- Modal Component -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
+<!-- Modal Component -->
 <div class="modal fade" id="editUserHrjobModal{{ $id }}" tabindex="-1" aria-labelledby="editUserHrjobModalLabel{{ $id }}">
     <div class="modal-dialog">
         <div class="modal-content">

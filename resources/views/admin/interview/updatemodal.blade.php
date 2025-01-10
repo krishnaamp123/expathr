@@ -1,5 +1,6 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- Modal Component -->
-<div class="modal fade" id="editInterviewModal{{ $id }}" tabindex="-1" aria-labelledby="editInterviewModalLabel{{ $id }}" aria-hidden="true">
+<div class="modal fade" id="editInterviewModal{{ $id }}" tabindex="-1" aria-labelledby="editInterviewModalLabel{{ $id }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('updateInterview', $id) }}" method="post">
+                <form id="updateInterviewForm" class="update-form" action="{{ route('updateInterview', $id) }}" method="POST">
                     @csrf
                     @method('PUT')
 

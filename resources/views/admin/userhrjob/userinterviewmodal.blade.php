@@ -1,29 +1,30 @@
 <!-- userInterviewModal.blade.php -->
 <div class="modal fade" id="userInterviewModal" tabindex="-1" role="dialog" aria-labelledby="userInterviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ route('storeUserInterview') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userInterviewModalLabel">Add User Interview Details</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userInterviewModalLabel">Add User Interview Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <form action="{{ route('storeUserInterview') }}" method="POST">
+                        @csrf
                     <div class="form-group">
                         <label>Applicant</label>
                         <input
                             type="text"
+                            name="fullname"
                             class="form-control"
-                            id="userModalUserJobName"
+                            id="ModalUserJobName"
                             value=""
                             readonly
                         >
                         <input
                             type="hidden"
                             name="id_user_job"
-                            id="userModalUserJobId"
+                            id="ModalUserJobId"
                             value=""
                         >
                     </div>
@@ -68,8 +69,8 @@
                         @enderror
                     </div>
                     <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Save</button>
+                </form>
                 </div>
-            </form>
         </div>
     </div>
 </div>

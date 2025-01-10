@@ -1,3 +1,4 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- Modal Component -->
 <div class="modal fade" id="editUserInterviewModal{{ $id }}" tabindex="-1" aria-labelledby="editUserInterviewModalLabel{{ $id }}" aria-hidden="true">
     <div class="modal-dialog">

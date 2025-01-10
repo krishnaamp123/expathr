@@ -65,7 +65,8 @@ class UserInterviewAdminController extends Controller
     {
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to create this user interview.');
+                session()->flash('toast_type', 'failed');
+                session()->flash('toast_message', 'You are not authorized to create this user interview.');
                 return back()->withInput();
             }
 
@@ -76,7 +77,8 @@ class UserInterviewAdminController extends Controller
                     ->exists();
 
                 if ($superAdminExists) {
-                    session()->flash('failed', 'You cannot manage user interviews for Super Admin.');
+                    session()->flash('toast_type', 'failed');
+                    session()->flash('toast_message', 'You cannot manage user interviews for Super Admin.');
                     return back()->withInput();
                 }
             }
@@ -87,7 +89,8 @@ class UserInterviewAdminController extends Controller
                     ->exists();
 
                 if ($invalidRolesExist) {
-                    session()->flash('failed', 'You cannot manage user interviews for Super Admin or Hiring Manager.');
+                    session()->flash('toast_type', 'failed');
+                    session()->flash('toast_message', 'You cannot manage user interviews for Super Admin and Hiring Manager.');
                     return back()->withInput();
                 }
             }
@@ -136,17 +139,19 @@ class UserInterviewAdminController extends Controller
                         ->subject('Interview Scheduled');
             });
 
-            session()->flash('success', 'User Interview created successfully & Email sent successfully!');
+            session()->flash('toast_type', 'success');
+            session()->flash('toast_message', 'User Interview created successfully and Email sent successfully!');
+            return back()->withInput();
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Gabungkan semua pesan validasi
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', implode(' ', $errors));
         } catch (\Exception $e) {
-            // Pesan error untuk kesalahan umum
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', 'An unexpected error occurred. Please try again.');
         }
 
         return back()->withInput();

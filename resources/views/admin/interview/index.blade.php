@@ -5,29 +5,30 @@
     <h1 class="h3 mb-2 text-gray-800">Interview</h1>
 
     <!-- Toast Container -->
-    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        <!-- Toast -->
-        @if(session('success'))
-        <div id="successToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #72A28A;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ session('success') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">
+        <div id="successToast" class="toast text-white" style="background-color: #72A28A; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #72A28A;">
+                <strong class="mr-auto">Success</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan sukses -->
             </div>
         </div>
-        @endif
 
-        @if(session('failed'))
-        <div id="failedToast" class="toast align-items-center text-white font-weight-bold" style="background-color: #c03535;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    {{ session('failed') }}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <div id="failedToast" class="toast text-white" style="background-color: #c03535; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #c03535;">
+                <strong class="mr-auto">Error</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan gagal -->
             </div>
         </div>
-        @endif
     </div>
 
     <p class="mb-3">Pairing recruiters with applicants for interviews and providing assessments of interview results</p>
@@ -147,11 +148,11 @@
                     </thead>
                     <tbody>
                         @foreach ($interviews as $row)
-                        <tr class="small">
-                            <td>{{$row->id}}</td>
-                            <td>{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
-                            <td>{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
-                            <td>
+                        <tr class="small" data-id="{{ $row->id }}">
+                            <td>{{ $row->id }}</td>
+                            <td data-field="job_name">{{ $row->userHrjob->hrjob->job_name ?? 'No Job' }}</td>
+                            <td data-field="applicant_name">{{ $row->userHrjob->user->fullname ?? 'No Applicant' }}</td>
+                            <td data-field="interviewers">
                                 @if ($row->interviewers->isNotEmpty())
                                     <ul>
                                         @foreach ($row->interviewers as $interviewer)
@@ -162,25 +163,22 @@
                                     <span>No Interviewers</span>
                                 @endif
                             </td>
-                            <td>{{$row->interview_date ?? 'No Date'}}</td>
-                            <td>{{$row->time ?? 'No Time'}}</td>
-                            <td>{{$row->location ?? 'No Location'}}</td>
-                            <td>
+                            <td data-field="interview_date">{{ $row->interview_date ?? 'No Date' }}</td>
+                            <td data-field="time">{{ $row->time ?? 'No Time' }}</td>
+                            <td data-field="location">{{ $row->location ?? 'No Location' }}</td>
+                            <td data-field="link">
                                 @if ($row->link)
-                                    <a href="{{ $row->link }}" target="_blank" title="{{ $row->link }}">
-                                        {{ $row->link }}
-                                    </a>
+                                    <a href="{{ $row->link }}" target="_blank" title="{{ $row->link }}">{{ $row->link }}</a>
                                 @else
                                     No Link
                                 @endif
                             </td>
-                            <td>{{$row->arrival ?? 'No Arrival'}}</td>
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->updated_at}}</td>
-                            <td>{{$row->rating ?? 'No Rating'}}</td>
-                            <td>{{$row->comment ?? 'No Comment'}}</td>
+                            <td data-field="arrival">{{ $row->arrival ?? 'No Arrival' }}</td>
+                            <td data-field="created_at">{{ $row->created_at }}</td>
+                            <td data-field="updated_at">{{ $row->updated_at }}</td>
+                            <td data-field="rating">{{ $row->rating ?? 'No Rating' }}</td>
+                            <td data-field="comment">{{ $row->comment ?? 'No Comment' }}</td>
                             <td>
-
                                 <button
                                     type="button"
                                     class="btn btn-sm my-1"
@@ -212,11 +210,16 @@
                                     'rating' => $row->rating,
                                     'comment' => $row->comment
                                 ])
-                                <form action="{{ route('destroyInterview', $row->id) }}" method="POST" style="display:inline;">
+
+                                <form method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm my-1" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this interview?')"><i class="fas fa-trash"></i>
-                                        {{-- Delete --}}
+                                    <button type="button"
+                                            class="btn btn-sm delete-btn"
+                                            style="background-color: #c03535; color: white;"
+                                            data-url="{{ route('destroyInterview', $row->id) }}"
+                                            data-confirm-message="Are you sure you want to delete this interview?">
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
@@ -235,28 +238,133 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
-        // Simpan posisi scroll sebelum reload
-            const scrollPosition = sessionStorage.getItem('scrollPosition');
-            if (scrollPosition) {
-                window.scrollTo(0, parseInt(scrollPosition, 10));
-                sessionStorage.removeItem('scrollPosition');
-            }
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
 
-            // Simpan posisi scroll saat form dikirim
-            document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function () {
-                    sessionStorage.setItem('scrollPosition', window.scrollY);
+                    const confirmMessage = this.dataset.confirmMessage || 'Are you sure you want to delete this item?';
+
+                    if (!confirm(confirmMessage)) {
+                        return;
+                    }
+
+                    const url = this.dataset.url;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                    fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    })
+                        .then(response => {
+                            // Simpan response untuk validasi status
+                            const isOk = response.ok;
+                            return response.json().then(data => ({ isOk, data }));
+                        })
+                        .then(({ isOk, data }) => {
+                            if (isOk) {
+                                const row = this.closest('tr');
+                                row.remove(); // Hapus baris
+                                showToast('successToast', data.message); // Tampilkan toast sukses
+                            } else {
+                                showToast('failedToast', data.message); // Tampilkan toast gagal
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showToast('failedToast', 'An error occurred. Please try again.');
+                        });
                 });
             });
 
-            // Inisialisasi toast
-            ['successToast', 'failedToast'].forEach(id => {
-                const toastEl = document.getElementById(id);
-                if (toastEl) {
-                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                    toast.show();
+            document.querySelectorAll('.update-form').forEach(form => {
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault();
+                        const form = event.target;
+                        const formData = new FormData(form);
+                        const formDataObject = Object.fromEntries(formData.entries());
+                        formDataObject.interviewers = formData.getAll('interviewers[]');
+                        console.log(formDataObject);
+
+                        const url = this.action;
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                        for (const [key, value] of formData.entries()) {
+                            console.log(`${key}: ${value}`);
+                        }
+
+                        // Tambahkan interviewers sebagai array kosong jika tidak ada
+                        if (!formDataObject.hasOwnProperty('interviewers')) {
+                            formDataObject.interviewers = [];
+                        }
+
+                        fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(formDataObject),
+                        })
+                            .then(response => {
+                                const isOk = response.ok;
+                                return response.json().then(data => ({ isOk, data }));
+                            })
+                            .then(({ isOk, data }) => {
+                                if (isOk) {
+                                    updateTableRow(data.updatedRow);
+                                    showToast('successToast', data.message);
+                                    // Tutup modal
+                                    $(this.closest('.modal')).modal('hide');
+                                } else {
+                                    showToast('failedToast', data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error.message || error);
+                                showToast('failedToast', 'An error occurred. Please try again.');
+                            });
+                    });
+                });
+
+                function updateTableRow(updatedRow) {
+                    const row = document.querySelector(`tr[data-id="${updatedRow.id}"]`);
+                    if (row) {
+                        Object.keys(updatedRow).forEach(key => {
+                            const cell = row.querySelector(`[data-field="${key}"]`);
+                            if (cell) {
+                                if (key === "interviewers") {
+                                    // Ubah array objek menjadi string nama interviewer
+                                    const interviewers = updatedRow[key].map(interviewer => interviewer.name).join(', ');
+                                    cell.textContent = interviewers;
+                                } else if (key === "link") {
+                                    cell.innerHTML = `<a href="${updatedRow[key]}" target="_blank">${updatedRow[key]}</a>`;
+                                } else {
+                                    cell.textContent = updatedRow[key];
+                                }
+                            }
+                        });
+                    }
                 }
-            });
+
+            function showToast(toastId, message) {
+                const toastEl = document.getElementById(toastId);
+                if (toastEl) {
+                    toastEl.querySelector('.toast-body').textContent = message;
+                    toastEl.classList.add('show'); // Tambahkan kelas 'show'
+                    toastEl.style.pointerEvents = 'auto'; // Aktifkan pointer-events
+
+                    setTimeout(() => {
+                        toastEl.classList.remove('show'); // Hilangkan kelas 'show'
+                        toastEl.style.pointerEvents = 'none'; // Matikan pointer-events
+                    }, 3000); // Hilangkan setelah 3 detik
+                } else {
+                    console.error(`Toast element with ID ${toastId} not found`);
+                }
+            }
+
         });
 
     </script>

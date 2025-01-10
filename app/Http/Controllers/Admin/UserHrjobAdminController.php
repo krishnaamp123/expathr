@@ -137,7 +137,8 @@ class UserHrjobAdminController extends Controller
     {
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to create this user job.');
+                session()->flash('toast_type', 'failed');
+                session()->flash('toast_message', 'You are not authorized to create this user job.');
                 return back()->withInput();
             }
 
@@ -157,17 +158,18 @@ class UserHrjobAdminController extends Controller
                 'availability' => $request->availability,
             ]);
 
-            session()->flash('success', 'User Job created successfully!');
+            session()->flash('toast_type', 'success');
+            session()->flash('toast_message', 'User Job created successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Gabungkan semua pesan validasi
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', implode(' ', $errors));
         } catch (\Exception $e) {
-            // Pesan error untuk kesalahan umum
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', 'An unexpected error occurred. Please try again.');
         }
 
         return back()->withInput();
@@ -270,7 +272,7 @@ class UserHrjobAdminController extends Controller
             return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
-            return response()->json(['message' => 'An error occurred while deleting the interviews.'], 500);
+            return response()->json(['message' => 'An unexpected error occurred. Please try again.'], 500);
         }
     }
 
