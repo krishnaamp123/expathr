@@ -332,14 +332,13 @@
                                             {{ \Illuminate\Support\Str::limit($row->user->fullname ?? 'No Applicant', 20, '...') }}
                                         </a>
                                     </td>
-                                    <!-- Tampilkan Interviewer dan Interview Date jika status adalah hr_interview -->
                                     @if (request('status') === 'hr_interview')
                                         <td data-field="interviewers">
                                             @if ($row->interviews->isNotEmpty())
                                                 <ul>
                                                     @foreach ($row->interviews as $interview)
                                                         @foreach ($interview->interviewers as $interviewer)
-                                                            <li>{{ $interviewer->fullname }}</li>
+                                                            <li>{{ $interviewer->fullname }} </li>
                                                         @endforeach
                                                     @endforeach
                                                 </ul>
@@ -445,27 +444,29 @@
                                             @endif
                                         </td>
                                     @elseif (request('status') === 'user_interview')
-                                        <td>
+                                        <td data-field="user_interviewers">
                                             @if ($row->userinterviews->isNotEmpty())
                                                 <ul>
-                                                    @foreach($row->userinterviews->first()->user_interviewers ?? [] as $userinterviewer)
-                                                        <li>{{ $userinterviewer->fullname }}</li>
+                                                    @foreach ($row->userinterviews as $userinterview)
+                                                        @foreach ($userinterview->user_interviewers as $user_interviewer)
+                                                            <li>{{ $user_interviewer->fullname }} </li>
+                                                        @endforeach
                                                     @endforeach
                                                 </ul>
                                             @else
                                                 <span>No Interviewers</span>
                                             @endif
                                         </td>
-                                        <td>
+                                        <td data-field="interview_date">
                                             {{ $row->userinterviews->first()->interview_date ?? 'Not Scheduled' }}
                                         </td>
-                                        <td>
+                                        <td data-field="time">
                                             {{ $row->userinterviews->first()->time ?? 'Not Timed' }}
                                         </td>
-                                        <td>
+                                        <td data-field="location">
                                             {{ $row->userinterviews->first()->location ?? 'Not Located' }}
                                         </td>
-                                        <td>
+                                        <td data-field="link">
                                             @if ($row->userinterviews->first()?->link)
                                                 <a href="{{ $row->userinterviews->first()->link }}" target="_blank" title="{{ $row->userinterviews->first()->link }}">
                                                     {{ \Illuminate\Support\Str::limit($row->userinterviews->first()->link, 20, '...') }}
@@ -474,13 +475,12 @@
                                                 No Link
                                             @endif
                                         </td>
-                                        <td>{{ $row->userinterviews->first()->arrival ?? 'Not Confirmed' }}</td>
-                                        {{-- <td>{{ $row->userinterviews->first()->created_at ?? 'Not Created' }}</td> --}}
-                                        <td>{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
-                                        <td>
+                                        <td data-field="arrival">{{ $row->userinterviews->first()->arrival ?? 'Not Confirmed' }}</td>
+                                        <td data-field="updated_at">{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="rating">
                                             {{ $row->userinterviews->first()->rating ?? 'Not Rated' }}
                                         </td>
-                                        <td>
+                                        <td data-field="comment">
                                             @if ($row->userinterviews->first()?->comment)
                                                 <span
                                                     title="{{ $row->userinterviews->first()->comment }}">
@@ -753,17 +753,28 @@
             document.querySelectorAll('.update-form').forEach(form => {
                 form.addEventListener('submit', function (event) {
                     event.preventDefault();
-
-                    const url = this.action; // URL dari atribut `action` pada form
                     const formData = new FormData(this); // Ambil data form
+                    const url = this.action; // URL dari atribut `action` pada form
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+                    const formDataObject = Object.fromEntries(formData.entries());
+
+                    formDataObject.interviewers = formData.getAll('interviewers[]');
+                    formDataObject.user_interviewers = formData.getAll('user_interviewers[]');
 
                     // Debug data yang dikirim
                     for (const [key, value] of formData.entries()) {
                         console.log(`${key}: ${value}`);
                     }
 
-                    const formDataObject = Object.fromEntries(formData.entries());
+                    // Tambahkan interviewers sebagai array kosong jika tidak ada
+                    if (!formDataObject.hasOwnProperty('interviewers')) {
+                            formDataObject.interviewers = [];
+                        }
+                    // Tambahkan user_interviewers sebagai array kosong jika tidak ada
+                    if (!formDataObject.hasOwnProperty('user_interviewers')) {
+                            formDataObject.user_interviewers = [];
+                        }
+
 
                     fetch(url, {
                         method: 'PUT',
@@ -781,6 +792,7 @@
                         .then(({ isOk, data }) => {
                             if (isOk) {
                                 handleTableRowUpdate(data.updatedRow);
+                                console.log('Updated row data:', data.updatedRow);
                                 showToast('successToast', data.message);
 
                                 // Tangani modal
@@ -819,6 +831,9 @@
                                 // Pastikan interviewers[] diproses sebagai array
                                 const interviewers = Array.from(this.querySelectorAll('select[name="interviewers[]"] option:checked'))
                                     .map(option => option.value);
+                                // const interviewers = updatedRow.interviewers.map(interviewer => interviewer.name).join(', ');
+                                // $(`tr[data-id="${updatedRow.id}"]`).find('[data-field="interviewers"]').html(interviewers);
+
 
                                 // Hapus key "interviewers" sebelumnya
                                 formData.delete('interviewers');
@@ -826,6 +841,18 @@
                                 // Tambahkan setiap nilai interviewers[] ke dalam FormData
                                 interviewers.forEach(interviewer => {
                                     formData.append('interviewers[]', interviewer);
+                                });
+
+                                // Pastikan user_interviewers[] diproses sebagai array
+                                const user_interviewers = Array.from(this.querySelectorAll('select[name="user_interviewers[]"] option:checked'))
+                                    .map(option => option.value);
+
+                                // Hapus key "user_interviewers" sebelumnya
+                                formData.delete('user_interviewers');
+
+                                // Tambahkan setiap nilai user_interviewers[] ke dalam FormData
+                                user_interviewers.forEach(interviewer => {
+                                    formData.append('user_interviewers[]', interviewer);
                                 });
 
                                 // Tutup modal jika masih terbuka
@@ -859,13 +886,35 @@
                                 if (key === 'salary_expectation') {
                                     cell.textContent = `Rp ${new Intl.NumberFormat('id-ID').format(updatedRow[key])}`;
                                 } else if (key === 'interviewers') {
-                                    // Kosongkan dan tambahkan daftar interviewers
+                                    // Kosongkan isi lama dan tambahkan daftar interviewers baru
                                     cell.innerHTML = '';
-                                    updatedRow[key].forEach(interviewer => {
-                                        const listItem = document.createElement('li');
-                                        listItem.textContent = `${interviewer.fullname} (${interviewer.role})`;
-                                        cell.appendChild(listItem);
-                                    });
+                                    if (updatedRow[key] && updatedRow[key].length > 0) {
+                                        const ul = document.createElement('ul');
+                                        updatedRow[key].forEach(interviewer => {
+                                            const li = document.createElement('li');
+                                            li.textContent = interviewer.fullname; // Pastikan fullname dikirim dari server
+                                            ul.appendChild(li);
+                                        });
+                                        cell.appendChild(ul);
+                                    } else {
+                                        cell.textContent = 'No Interviewers';
+                                    }
+                                } else if (key === 'user_interviewers') {
+                                    // Kosongkan isi lama dan tambahkan daftar user_interviewers baru
+                                    cell.innerHTML = '';
+                                    if (updatedRow[key] && updatedRow[key].length > 0) {
+                                        const ul = document.createElement('ul');
+                                        updatedRow[key].forEach(interviewer => {
+                                            const li = document.createElement('li');
+                                            li.textContent = interviewer.fullname; // Pastikan fullname dikirim dari server
+                                            ul.appendChild(li);
+                                        });
+                                        cell.appendChild(ul);
+                                    } else {
+                                        cell.textContent = 'No User Interviewers';
+                                    }
+                                } else if (key === "link") {
+                                    cell.innerHTML = `<a href="${updatedRow[key]}" target="_blank">${updatedRow[key]}</a>`;
                                 } else if (key === 'updated_at') {
                                     cell.textContent = updatedRow[key]; // Format waktu (jika diperlukan)
                                 } else {

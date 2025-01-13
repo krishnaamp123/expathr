@@ -38,6 +38,12 @@ class InterviewAdminController extends Controller
                     $query->where('id_user', Auth::id());
                 });
             });
+        } elseif (Auth::user()->role === 'interviewer') {
+            $interviewsQuery->where(function ($query) {
+                $query->whereHas('interviewers', function ($query) {
+                    $query->where('id_user', Auth::id());
+                });
+            });
         }
 
         if ($hrjobId) {
@@ -163,7 +169,7 @@ class InterviewAdminController extends Controller
     {
         $interview = Interview::findOrFail($id);
 
-        Log::info('Data request diterima:', $request->all());
+        // Log::info('Data request diterima:', $request->all());
 
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
@@ -252,11 +258,12 @@ class InterviewAdminController extends Controller
         $interview = Interview::findOrFail($id);
 
         try {
-
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                session()->flash('failed', 'You are not authorized to rate this interview.');
-                return back()->withInput();
+                return response()->json(['message' => 'You are not authorized to rate this interview.'], 403);
             }
+
+            \Log::info('Button action received: ' . $request->button_action);
+            \Log::info('Request data received:', $request->all());
 
             // Validasi input
             $validated = $request->validate([
@@ -270,27 +277,55 @@ class InterviewAdminController extends Controller
             $interview->save();
 
             // Perbarui status di tabel UserHrjob
-            $userHrjob = $interview->userHrjob; // Asumsikan ada relasi Interview -> UserHrjob
+            $userHrjob = $interview->userHrjob;
             if (!$userHrjob) {
                 throw new \Exception('UserHrjob record not found.');
             }
 
-            if ($request->action === 'reject') {
+            if ($request->button_action === 'reject') {
                 $userHrjob->status = 'rejected';
                 $userHrjob->save();
 
-                session()->flash('success', 'Status updated to Rejected.');
-            } elseif ($request->action === 'next') {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated to Rejected!',
+                    'updatedRow' => [
+                        'id' => $interview->id,
+                        'rating' => $interview->rating,
+                        'comment' => $interview->comment,
+                        'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
+                    ],
+                ]);
+            } elseif ($request->button_action === 'next') {
                 $userHrjob->status = 'user_interview';
                 $userHrjob->save();
 
-                // Redirect dengan modal jika status menjadi `user_interview`
-                return redirect()->route('getUserHrjob', ['status' => 'user_interview'])
-                    ->with('showuserModal', true)
-                    ->with('userJobId', $userHrjob->id)
-                    ->with('userJobName', $userHrjob->user->fullname);
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated to User Interview!',
+                    'modalType' => 'user_interview',
+                    'modalData' => [
+                        'userJobId' => $userHrjob->id,
+                        'userJobName' => $userhrjob->user->fullname,
+                    ],
+                    'updatedRow' => [
+                        'id' => $interview->id,
+                        'rating' => $interview->rating,
+                        'comment' => $interview->comment,
+                        'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
+                    ],
+                ]);
             } else {
-                session()->flash('success', 'Rating updated successfully!');
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Rating updated successfully!',
+                    'updatedRow' => [
+                        'id' => $interview->id,
+                        'rating' => $interview->rating,
+                        'comment' => $interview->comment,
+                        'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
+                    ],
+                ]);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
@@ -298,13 +333,11 @@ class InterviewAdminController extends Controller
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
-            session()->flash('failed', 'An unexpected error occurred. Please try again.');
+            return response()->json(['message' => 'An unexpected error occurred. Please try again.'], 500);
         }
-
-        return back()->withInput(); // Kembali ke posisi semula dengan input
     }
 
     public function destroyInterview($id)

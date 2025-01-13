@@ -300,6 +300,13 @@
                     <span>Interview</span>
                 </a>
             </li>
+
+            <li class="nav-item {{ Request::routeIs('getSkillTest') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getSkillTest') }}">
+                    <i class="fas fa-fw fa-file-code"></i>
+                    <span>Skill Test</span>
+                </a>
+            </li>
             @endif
 
              <!-- Divider -->

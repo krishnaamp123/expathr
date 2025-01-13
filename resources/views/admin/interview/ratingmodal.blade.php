@@ -1,5 +1,6 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- Modal Component -->
-<div class="modal fade" id="editRatingModal{{ $id }}" tabindex="-1" aria-labelledby="editRatingModalLabel{{ $id }}" aria-hidden="true">
+<div class="modal fade" id="editRatingModal{{ $id }}" tabindex="-1" aria-labelledby="editRatingModalLabel{{ $id }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,9 +8,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('updateRating', $id) }}" method="post">
+                <form id="updateRatingForm" class="update-form" action="{{ route('updateRating', $id) }}" method="POST">
                     @csrf
                     @method('PUT')
+
+                    <!-- Score -->
+                    <div class="form-group mt-3">
+                        <label for="score">Score (1-10)</label>
+                        <input
+                            type="range"
+                            id="score"
+                            name="score"
+                            class="form-range"
+                            min="1"
+                            max="10"
+                            value="5"
+                            oninput="document.getElementById('scoreValue').textContent = this.value;">
+                        <div class="d-flex justify-content-between">
+                            <small>1</small>
+                            <strong id="scoreValue">5</strong>
+                            <small>10</small>
+                        </div>
+                        @error('score')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
 
                     <!-- Rating -->
                     <div class="form-group">
@@ -21,8 +45,7 @@
                                     id="rating-star-{{ $i }}-{{ $id }}"
                                     name="rating"
                                     value="{{ $i }}"
-                                    @if($i == old('rating', $rating)) checked @endif
-                                    required>
+                                    @if($i == old('rating', $rating)) checked @endif>
                                 <label for="rating-star-{{ $i }}-{{ $id }}" class="star">&#9733;</label>
                             @endfor
                         </div>
@@ -43,17 +66,17 @@
                     <!-- Buttons -->
                     <div class="d-flex justify-content">
                         <!-- Save Button -->
-                        <button type="submit" name="action" value="save" class="btn btn-sm mr-2" style="background-color: #72A28A; color: white;">
+                        <button type="submit" name="button_action" value="save" class="btn btn-sm mr-2" style="background-color: #72A28A; color: white;">
                             <i class="fas fa-save"></i> Save
                         </button>
 
                         <!-- Reject Button -->
-                        <button type="submit" name="action" value="reject" class="btn btn-sm mr-2" style="background-color: #c03535; color: white;">
+                        <button type="submit" name="button_action" value="reject" class="btn btn-sm mr-2" style="background-color: #c03535; color: white;">
                             <i class="fas fa-times"></i> Reject
                         </button>
 
                         <!-- Next Button -->
-                        <button type="submit" name="action" value="next" class="btn btn-sm" style="background-color: #969696; color: white;">
+                        <button type="submit" name="button_action" value="next" class="btn btn-sm" style="background-color: #969696; color: white;">
                             <i class="fas fa-arrow-right"></i> Next
                         </button>
                     </div>

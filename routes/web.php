@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\AnswerAdminController;
 use App\Http\Controllers\Admin\InterviewAdminController;
 use App\Http\Controllers\Admin\UserInterviewAdminController;
 use App\Http\Controllers\Admin\UserHrjobHistoryAdminController;
+use App\Http\Controllers\Admin\SkillTestAdminController;
 
 
 //AUTH
@@ -274,6 +275,14 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/userinterview/update/rating/{id}', [UserInterviewAdminController::class, 'updateUserRating'])->name('updateUserRating');
             Route::get('/userinterview/export', [UserInterviewAdminController::class, 'exportUserInterview'])->name('exportUserInterview');
             Route::get('/userinterview/dateexport', [UserInterviewAdminController::class, 'exportdateUserInterview'])->name('exportdateUserInterview');
+
+            // SKILL TEST
+            Route::get('/skilltest', [SkillTestAdminController::class, 'getSkillTest'])->name('getSkillTest');
+            Route::post('/skilltest/create', [SkillTestAdminController::class, 'storeSkillTest'])->name('storeSkillTest');
+            Route::put('/skilltest/update/{id}', [SkillTestAdminController::class, 'updateSkillTest'])->name('updateSkillTest');
+            Route::delete('/skilltest/destroy/{id}', [SkillTestAdminController::class, 'destroySkillTest'])->name('destroySkillTest');
+            Route::get('/skilltest/export', [SkillTestAdminController::class, 'exportSkillTest'])->name('exportSkillTest');
+            Route::get('/skilltest/dateexport', [SkillTestAdminController::class, 'exportdateSkillTest'])->name('exportdateSkillTest');
 
         });
     });
