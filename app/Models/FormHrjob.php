@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Question extends Model
+class FormHrjob extends Model
 {
     use HasFactory;
 
-    protected $table = 'questions';
+    protected $table = 'form_hrjobs';
 
     protected $fillable = [
+        'id_job',
         'id_form',
-        'question_name',
     ];
 
-    public function answers()
+    public function hrjob()
     {
-        return $this->hasMany(Answer::class, 'id_question');
+        return $this->belongsTo(Hrjob::class, 'id_job');
     }
 
     public function form()

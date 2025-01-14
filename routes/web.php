@@ -16,24 +16,25 @@ use App\Http\Controllers\User\OrganizationController;
 use App\Http\Controllers\User\VolunteerController;
 use App\Http\Controllers\User\ExperienceController;
 use App\Http\Controllers\User\CertificationController;
-use App\Http\Controllers\User\SkillController;
 use App\Http\Controllers\User\VacancyController;
 use App\Http\Controllers\User\SourceController;
 use App\Http\Controllers\User\LinkController;
+use App\Http\Controllers\User\WorkSkillController;
 // ADMIN
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
-use App\Http\Controllers\Admin\QuestionAdminController;
 use App\Http\Controllers\Admin\OutletAdminController;
 use App\Http\Controllers\Admin\HrJobCategoryAdminController;
 use App\Http\Controllers\Admin\HrJobAdminController;
 use App\Http\Controllers\Admin\FormAdminController;
+use App\Http\Controllers\Admin\FormHrjobAdminController;
 use App\Http\Controllers\Admin\UserHrjobAdminController;
 use App\Http\Controllers\Admin\AnswerAdminController;
 use App\Http\Controllers\Admin\InterviewAdminController;
 use App\Http\Controllers\Admin\UserInterviewAdminController;
 use App\Http\Controllers\Admin\UserHrjobHistoryAdminController;
 use App\Http\Controllers\Admin\SkillTestAdminController;
+use App\Http\Controllers\Admin\SkillAdminController;
 
 
 //AUTH
@@ -152,12 +153,12 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/profile/certification/update/{id}', [CertificationController::class, 'updateCertification'])->name('updateCertification');
             Route::delete('/profile/certification/destroy/{id}', [CertificationController::class, 'destroyCertification'])->name('destroyCertification');
 
-            //SKILL
-            Route::get('/profile/skill/add', [SkillController::class, 'addSkill'])->name('addSkill');
-            Route::post('/profile/skill/store', [SkillController::class, 'storeSkill'])->name('storeSkill');
-            Route::get('/profile/skill/edit/{id}', [SkillController::class, 'editSkill'])->name('editSkill');
-            Route::put('/profile/skill/update/{id}', [SkillController::class, 'updateSkill'])->name('updateSkill');
-            Route::delete('/profile/skill/destroy/{id}', [SkillController::class, 'destroySkill'])->name('destroySkill');
+            //WORK SKILL
+            Route::get('/profile/skill/add', [WorkSkillController::class, 'addWorkSkill'])->name('addWorkSkill');
+            Route::post('/profile/skill/store', [WorkSkillController::class, 'storeWorkSkill'])->name('storeWorkSkill');
+            Route::get('/profile/skill/edit/{id}', [WorkSkillController::class, 'editWorkSkill'])->name('editWorkSkill');
+            Route::put('/profile/skill/update/{id}', [WorkSkillController::class, 'updateWorkSkill'])->name('updateWorkSkill');
+            Route::delete('/profile/skill/destroy/{id}', [WorkSkillController::class, 'destroyWorkSkill'])->name('destroyWorkSkill');
 
             //SOURCE
             Route::get('/profile/source/add', [SourceController::class, 'addSource'])->name('addSource');
@@ -190,14 +191,6 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/user/destroy/{id}', [UserAdminController::class, 'destroyUser'])->name('destroyUser');
             Route::get('/user/{id}/pdf', [UserAdminController::class, 'generatePdf'])->name('profile.pdf');
 
-            // QUESTION
-            Route::get('/question', [QuestionAdminController::class, 'getQuestion'])->name('getQuestion');
-            Route::get('/question/create', [QuestionAdminController::class, 'addQuestion'])->name('addQuestion');
-            Route::post('/question/create', [QuestionAdminController::class, 'storeQuestion'])->name('storeQuestion');
-            Route::get('/question/update/{id}', [QuestionAdminController::class, 'editQuestion'])->name('editQuestion');
-            Route::put('/question/update/{id}', [QuestionAdminController::class, 'updateQuestion'])->name('updateQuestion');
-            Route::delete('/question/destroy/{id}', [QuestionAdminController::class, 'destroyQuestion'])->name('destroyQuestion');
-
             // OUTLET
             Route::get('/outlet', [OutletAdminController::class, 'getOutlet'])->name('getOutlet');
             Route::get('/outlet/create', [OutletAdminController::class, 'addOutlet'])->name('addOutlet');
@@ -205,6 +198,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/outlet/update/{id}', [OutletAdminController::class, 'editOutlet'])->name('editOutlet');
             Route::put('/outlet/update/{id}', [OutletAdminController::class, 'updateOutlet'])->name('updateOutlet');
             Route::delete('/outlet/destroy/{id}', [OutletAdminController::class, 'destroyOutlet'])->name('destroyOutlet');
+
+            // SKILL
+            Route::get('/skill', [SkillAdminController::class, 'getSkill'])->name('getSkill');
+            Route::get('/skill/create', [SkillAdminController::class, 'addSkill'])->name('addSkill');
+            Route::post('/skill/create', [SkillAdminController::class, 'storeSkill'])->name('storeSkill');
+            Route::get('/skill/update/{id}', [SkillAdminController::class, 'editSkill'])->name('editSkill');
+            Route::put('/skill/update/{id}', [SkillAdminController::class, 'updateSkill'])->name('updateSkill');
+            Route::delete('/skill/destroy/{id}', [SkillAdminController::class, 'destroySkill'])->name('destroySkill');
 
             // JOB CATEGORY
             Route::get('/jobcategory', [HrjobCategoryAdminController::class, 'getHrjobCategory'])->name('getHrjobCategory');
@@ -230,6 +231,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/form/update/{id}', [FormAdminController::class, 'editForm'])->name('editForm');
             Route::put('/form/update/{id}', [FormAdminController::class, 'updateForm'])->name('updateForm');
             Route::delete('/form/destroy/{id}', [FormAdminController::class, 'destroyForm'])->name('destroyForm');
+
+            // FORM JOB
+            Route::get('/formjob', [FormHrjobAdminController::class, 'getFormHrjob'])->name('getFormHrjob');
+            Route::get('/formjob/create', [FormHrjobAdminController::class, 'addFormHrjob'])->name('addFormHrjob');
+            Route::post('/formjob/create', [FormHrjobAdminController::class, 'storeFormHrjob'])->name('storeFormHrjob');
+            Route::get('/formjob/update/{id}', [FormHrjobAdminController::class, 'editFormHrjob'])->name('editFormHrjob');
+            Route::put('/formjob/update/{id}', [FormHrjobAdminController::class, 'updateFormHrjob'])->name('updateFormHrjob');
+            Route::delete('/formjob/destroy/{id}', [FormHrjobAdminController::class, 'destroyFormHrjob'])->name('destroyFormHrjob');
 
             // USERHRJOB
             Route::get('/userjob', [UserHrjobAdminController::class, 'getUserHrjob'])->name('getUserHrjob');

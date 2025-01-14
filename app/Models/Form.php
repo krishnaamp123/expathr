@@ -7,25 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Form extends Model
 {
+    use HasFactory;
+
     protected $table = 'forms';
 
     protected $fillable = [
-        'id_job',
-        'id_question',
+        'form_name',
     ];
 
-    public function hrjob()
+    public function questions()
     {
-        return $this->belongsTo(Hrjob::class, 'id_job');
-    }
-
-    public function question()
-    {
-        return $this->belongsTo(Question::class, 'id_question');
-    }
-
-    public function answer()
-    {
-        return $this->hasMany(Answer::class, 'id_user');
+        return $this->hasMany(Question::class, 'id_form');
     }
 }

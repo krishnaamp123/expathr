@@ -47,6 +47,11 @@ class UserHrjob extends Model
         return $this->hasMany(UserInterview::class, 'id_user_job');
     }
 
+    public function skilltests()
+    {
+        return $this->hasMany(SkillTest::class, 'id_user_job');
+    }
+
     // Tambahkan metode untuk memeriksa apakah pengguna telah melamar pekerjaan tertentu
     public static function hasApplied($userId, $jobId)
     {

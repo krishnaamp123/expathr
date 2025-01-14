@@ -1,53 +1,132 @@
 @extends('admin.layout.app')
 @section('title', 'Edit Form')
 @section('content')
-    <h1 class="h3 mb-2 text-gray-800">Form</h1>
+    <h1 class="h3 mb-2 text-gray-800">Edit Form</h1>
     <div class="row">
         <div class="col-12 col-md-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Form</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Edit Form</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('updateForm', $form->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('updateForm', $form->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
+                        <!-- Form Name -->
                         <div class="form-group">
-                            <label>Job Name</label>
-                            <select name="id_job" class="form-control select2">
-                                <option value="">Select Job</option>
-                                @foreach($hrjobs as $job)
-                                    <option value="{{ $job->id }}" {{ $job->id == $form->id_job ? 'selected' : '' }}>
-                                        {{ $job->job_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('id_job')
+                            <label>Form Name</label>
+                            <input type="text" name="form_name" class="form-control" value="{{ $form->form_name }}" placeholder="Enter Form Name">
+                            @error('form_name')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label>Question</label>
-                            <select name="id_question" class="form-control select2">
-                                <option value="">Select Question</option>
-                                @foreach($questions as $question)
-                                    <option value="{{ $question->id }}" {{ $question->id == $form->id_question ? 'selected' : '' }}>
-                                        {{ $question->question }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('id_question')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <!-- Questions and Answers -->
+                        <div id="questions-container">
+                            @foreach ($form->questions as $qIndex => $question)
+                                <div class="question-item">
+                                    <div class="form-group">
+                                        <label>Question</label>
+                                        <input type="hidden" name="questions[{{ $qIndex }}][id]" value="{{ $question->id }}">
+                                        <input type="text" name="questions[{{ $qIndex }}][question_name]" class="form-control" value="{{ $question->question_name }}" placeholder="Enter Question">
+                                        @error("questions.*.question_name")
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="answers-container">
+                                        @foreach ($question->answers as $aIndex => $answer)
+                                            <div class="form-group">
+                                                <label>Answer</label>
+                                                <input type="hidden" name="questions[{{ $qIndex }}][answers][{{ $aIndex }}][id]" value="{{ $answer->id }}">
+                                                <input type="text" name="questions[{{ $qIndex }}][answers][{{ $aIndex }}][answer_name]" class="form-control" value="{{ $answer->answer_name }}" placeholder="Enter Answer">
+                                                <input type="hidden" name="questions[{{ $qIndex }}][answers][{{ $aIndex }}][is_answer]" value="no">
+                                                <label class="form-check-label">
+                                                    <input type="radio" name="questions[{{ $qIndex }}][correct_answer]" value="{{ $aIndex }}" class="form-check-input" {{ $answer->is_answer === 'yes' ? 'checked' : '' }} onclick="setCorrectAnswer(this)"> Correct Answer
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm btn-secondary add-answer">Add Answer</button>
+                                    <hr>
+                                </div>
+                            @endforeach
                         </div>
 
-                        <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-save"></i> Save</button>
-                        <a href="{{ route('getForm') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Back</a>
+                        <button type="button" id="add-question" class="btn btn-sm btn-primary">Add Question</button>
+                        <hr>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;">
+                            <i class="fas fa-save"></i> Update
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        let questionIndex = document.querySelectorAll('.question-item').length - 1;
+
+        // Add new question
+        document.getElementById('add-question').addEventListener('click', function () {
+            questionIndex++;
+            const questionItem = `
+                <div class="question-item">
+                    <div class="form-group">
+                        <label>Question</label>
+                        <input type="text" name="questions[${questionIndex}][question_name]" class="form-control" placeholder="Enter Question">
+                    </div>
+                    <div class="answers-container">
+                        <div class="form-group">
+                            <label>Answer</label>
+                            <input type="text" name="questions[${questionIndex}][answers][0][answer_name]" class="form-control" placeholder="Enter Answer">
+                            <input type="hidden" name="questions[${questionIndex}][answers][0][is_answer]" value="no">
+                            <label class="form-check-label">
+                                <input type="radio" name="questions[${questionIndex}][correct_answer]" value="0" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
+                            </label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary add-answer">Add Answer</button>
+                    <hr>
+                </div>
+            `;
+            document.getElementById('questions-container').insertAdjacentHTML('beforeend', questionItem);
+        });
+
+        // Add new answer to a question
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('add-answer')) {
+                const questionItem = e.target.closest('.question-item');
+                const answersContainer = questionItem.querySelector('.answers-container');
+                const questionIndex = Array.from(document.querySelectorAll('.question-item')).indexOf(questionItem);
+                const answerCount = answersContainer.querySelectorAll('.form-group').length;
+
+                const newAnswer = `
+                    <div class="form-group">
+                        <label>Answer</label>
+                        <input type="text" name="questions[${questionIndex}][answers][${answerCount}][answer_name]" class="form-control" placeholder="Enter Answer">
+                        <input type="hidden" name="questions[${questionIndex}][answers][${answerCount}][is_answer]" value="no">
+                        <label class="form-check-label">
+                            <input type="radio" name="questions[${questionIndex}][correct_answer]" value="${answerCount}" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
+                        </label>
+                    </div>
+                `;
+                answersContainer.insertAdjacentHTML('beforeend', newAnswer);
+            }
+        });
+
+        // Set the correct answer
+        function setCorrectAnswer(input) {
+            const questionItem = input.closest('.question-item');
+            const answerInputs = questionItem.querySelectorAll('input[name*="[is_answer]"]');
+
+            answerInputs.forEach((hiddenInput, index) => {
+                hiddenInput.value = (input.value == index) ? 'yes' : 'no';
+            });
+        }
+    </script>
 @endsection

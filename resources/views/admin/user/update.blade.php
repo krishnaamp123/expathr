@@ -112,6 +112,7 @@
                                 <option value="super_admin" {{ old('role', $user->role) == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                                 <option value="hiring_manager" {{ old('role', $user->role) == 'hiring_manager' ? 'selected' : '' }}>Hiring Manager</option>
                                 <option value="recruiter" {{ old('role', $user->role) == 'recruiter' ? 'selected' : '' }}>Recruiter</option>
+                                <option value="interviewer" {{ old('role', $user->role) == 'interviewer' ? 'selected' : '' }}>Interviewer</option>
                                 <option value="applicant" {{ old('role', $user->role) == 'applicant' ? 'selected' : '' }}>Applicant</option>
                             </select>
                             @error('role')

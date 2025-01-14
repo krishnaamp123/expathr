@@ -5,76 +5,166 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Form;
-use App\Models\Hrjob;
 use App\Models\Question;
+use App\Models\Answer;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class FormAdminController extends Controller
 {
     public function getForm()
     {
-        $forms = Form::with('hrjob', 'question')->get();
-        return view('admin.form.index', compact('forms'));
+        return view('admin.form.index', [
+            'forms' => Form::latest()->get()
+        ]);
     }
 
     public function addForm()
     {
-        $hrjobs = Hrjob::all();
-        $questions = Question::all();
-
-        return view('admin.form.store', compact('hrjobs', 'questions'));
+        return view('admin.form.store');
     }
-
 
     public function storeForm(Request $request)
     {
-        $validated = $request->validate([
-            'id_job' => 'required',
-            'id_question' => 'required|array', // Ensure id_question is an array
-            'id_question.*' => 'required|exists:questions,id', // Validate each question ID
-        ]);
+        try {
+            \Log::info('storeForm function is running');
 
-        foreach ($request->id_question as $questionId) {
-            Form::create([
-                'id_job' => $request->id_job,
-                'id_question' => $questionId,
+            // Validasi input
+            $validated = $request->validate([
+                'form_name' => 'required|max:255',
+                'questions' => 'required|array|min:1',
+                'questions.*.question_name' => 'required|max:255',
+                'questions.*.answers' => 'required|array|min:2',
+                'questions.*.answers.*.answer_name' => 'required|max:255',
+                'questions.*.answers.*.is_answer' => 'required|in:yes,no',
             ]);
-        }
 
-        return redirect()->route('getForm')->with('message', 'Questions added successfully to the job.');
+            \Log::info('Validation passed', $validated);
+
+            // Simpan form (hanya satu kali)
+            $form = Form::create([
+                'form_name' => $validated['form_name'],
+            ]);
+
+            // Iterasi dan simpan setiap pertanyaan
+            foreach ($validated['questions'] as $questionData) {
+                $question = $form->question()->create([
+                    'question_name' => $questionData['question_name'],
+                ]);
+
+                // Iterasi dan simpan jawaban untuk pertanyaan tersebut
+                foreach ($questionData['answers'] as $answerData) {
+                    $question->answer()->create([
+                        'answer_name' => $answerData['answer_name'],
+                        'is_answer' => $answerData['is_answer'],
+                    ]);
+                }
+            }
+
+            \Log::info('Form and related data stored successfully');
+            return redirect()->route('getForm')->with('message', 'Form and Questions Added Successfully');
+        } catch (\Exception $e) {
+            \Log::error('Error in storeForm: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An unexpected error occurred.']);
+        }
     }
 
     public function editForm($id)
     {
-        $form = Form::findOrFail($id);
-        $hrjobs = Hrjob::all();
-        $questions = Question::all();
+        // Ambil form berdasarkan ID
+        $form = Form::with('questions.answers')->findOrFail($id);
 
-        return view('admin.form.update', compact('form', 'hrjobs', 'questions'));
+        return view('admin.form.update', compact('form'));
     }
 
     public function updateForm(Request $request, $id)
     {
-        $form = Form::findOrFail($id);
+        try {
+            \Log::info('updateForm function is running');
 
-        $validated = $request->validate([
-            'id_job' => 'required',
-            'id_question' => 'required',
-        ]);
+            // Validasi input
+            $validated = $request->validate([
+                'form_name' => 'required|max:255',
+                'questions' => 'required|array|min:1',
+                'questions.*.id' => 'nullable|exists:questions,id',
+                'questions.*.question_name' => 'required|max:255',
+                'questions.*.answers' => 'required|array|min:2',
+                'questions.*.answers.*.id' => 'nullable|exists:answers,id',
+                'questions.*.answers.*.answer_name' => 'required|max:255',
+                'questions.*.answers.*.is_answer' => 'required|in:yes,no',
+            ]);
 
-        $form->id_job = $request->id_job;
-        $form->id_question = $request->id_question;
+            \Log::info('Validation passed', $validated);
 
-        $form->save();
+            // Cari form berdasarkan ID
+            $form = Form::findOrFail($id);
 
-        return redirect()->route('getForm')->with('message', 'Form Updated Successfully');
+            // Update nama form
+            $form->update([
+                'form_name' => $validated['form_name'],
+            ]);
+
+            // Iterasi pertanyaan
+            foreach ($validated['questions'] as $questionData) {
+                if (isset($questionData['id'])) {
+                    // Update pertanyaan jika ID ada
+                    $question = $form->questions()->findOrFail($questionData['id']);
+                    $question->update([
+                        'question_name' => $questionData['question_name'],
+                    ]);
+                } else {
+                    // Buat pertanyaan baru jika ID tidak ada
+                    $question = $form->questions()->create([
+                        'question_name' => $questionData['question_name'],
+                    ]);
+                }
+
+                // Iterasi jawaban
+                foreach ($questionData['answers'] as $answerData) {
+                    if (isset($answerData['id'])) {
+                        // Update jawaban jika ID ada
+                        $answer = $question->answers()->findOrFail($answerData['id']);
+                        $answer->update([
+                            'answer_name' => $answerData['answer_name'],
+                            'is_answer' => $answerData['is_answer'],
+                        ]);
+                    } else {
+                        // Buat jawaban baru jika ID tidak ada
+                        $question->answers()->create([
+                            'answer_name' => $answerData['answer_name'],
+                            'is_answer' => $answerData['is_answer'],
+                        ]);
+                    }
+                }
+            }
+
+            \Log::info('Form and related data updated successfully');
+            return redirect()->route('getForm')->with('message', 'Form and Questions Updated Successfully');
+        } catch (\Exception $e) {
+            \Log::error('Error in updateForm: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'An unexpected error occurred.']);
+        }
     }
 
     public function destroyForm($id)
     {
-        $form = Form::findOrFail($id);
+        try {
+            $form = Form::findOrFail($id);
 
-        $form->delete();
+            $form->questions()->each(function ($question) {
+                $question->answers()->delete();
+                $question->delete();
+            });
 
-        return redirect()->route('getForm')->with('message', 'Form deleted successfully');
+            // Hapus form
+            $form->delete();
+
+            return redirect()->route('getForm')->with('message', 'Form and its related data have been deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('getForm')->with('error', 'Failed to delete the form: ' . $e->getMessage());
+        }
     }
+
+
 }

@@ -115,6 +115,7 @@
                                 <option value="super_admin">Super Admin</option>
                                 <option value="hiring_manager">Hiring Manager</option>
                                 <option value="recruiter">Recruiter</option>
+                                <option value="interviewer">Interviewer</option>
                                 <option value="applicant">Applicant</option>
                             </select>
                             @error('role')

@@ -66,7 +66,7 @@ class UserAdminController extends Controller
             'address' => 'required|string|max:500',
             'birth_date' => 'required',
             'gender' => 'required|in:male,female',
-            'role' => 'required|in:super_admin,hiring_manager,recruiter,applicant',
+            'role' => 'required|in:super_admin,hiring_manager,recruiter,interviewer,applicant',
             'email_verified_at' => 'required',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -147,7 +147,7 @@ class UserAdminController extends Controller
             'address' => 'required|string|max:500',
             'birth_date' => 'required',
             'gender' => 'required|in:male,female',
-            'role' => 'required|in:super_admin,hiring_manager,recruiter,applicant',
+            'role' => 'required|in:super_admin,hiring_manager,recruiter,interviewer,applicant',
             'email_verified_at' => 'required',
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

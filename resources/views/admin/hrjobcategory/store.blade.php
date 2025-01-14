@@ -9,7 +9,7 @@
                     <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Add Job Category Form</h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('storeHrjobCategory') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('storeHrjobCategory') }}" method="post">
                         @csrf
 
                         <div class="form-group">

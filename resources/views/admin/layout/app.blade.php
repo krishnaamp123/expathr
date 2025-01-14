@@ -229,6 +229,13 @@
                 </a>
             </li>
 
+            <li class="nav-item {{ Request::routeIs('getSkill') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getSkill') }}">
+                    <i class="fas fa-fw fa-wrench "></i>
+                    <span>Skill</span>
+                </a>
+            </li>
+
             <li class="nav-item {{ Request::routeIs('getHrjobCategory') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getHrjobCategory') }}">
                     <i class="fas fa-fw fa-cubes "></i>
@@ -250,17 +257,17 @@
                 </a>
             </li>
 
-            <li class="nav-item {{ Request::routeIs('getQuestion') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getQuestion') }}">
+            <li class="nav-item {{ Request::routeIs('getForm') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getForm') }}">
                     <i class="fas fa-fw fa-question-circle "></i>
-                    <span>Question</span>
+                    <span>Form</span>
                 </a>
             </li>
 
-            <li class="nav-item {{ Request::routeIs('getForm') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getForm') }}">
+            <li class="nav-item {{ Request::routeIs('getFormHrjob') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getFormHrjob') }}">
                     <i class="fas fa-fw fa-clipboard "></i>
-                    <span>Form</span>
+                    <span>Form Job</span>
                 </a>
             </li>
             @endif

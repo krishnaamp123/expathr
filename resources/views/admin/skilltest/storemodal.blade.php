@@ -24,22 +24,9 @@
                     </div>
 
                     <!-- Score -->
-                    <div class="form-group mt-3">
-                        <label for="score">Score (1-10)</label>
-                        <input
-                            type="range"
-                            id="score"
-                            name="score"
-                            class="form-range custom-range"
-                            min="1"
-                            max="10"
-                            value="5"
-                            oninput="document.getElementById('scoreValue').textContent = this.value;">
-                        <div class="d-flex justify-content-between">
-                            <small>1</small>
-                            <strong id="scoreValue">5</strong>
-                            <small>10</small>
-                        </div>
+                    <div class="form-group">
+                        <label>Score (1-10)</label>
+                        <input type="number" name="score" class="form-control" min="1" max="10">
                         @error('score')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -109,42 +96,4 @@
         width: 100%;
     }
 
-    .form-range.custom-range {
-        -webkit-appearance: none;
-        width: 100%;
-        height: 8px;
-        background: #d3d3d3; /* Bar (abu-abu) */
-        border-radius: 5px;
-        outline: none;
-        transition: background 0.3s;
-    }
-
-    .form-range.custom-range::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background: #72A28A; /* Thumb (hijau) */
-        cursor: pointer;
-        border: 2px solid #d3d3d3; /* Border abu-abu */
-        transition: background 0.3s, border-color 0.3s;
-    }
-
-    .form-range.custom-range::-moz-range-thumb {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background: #72A28A; /* Thumb (hijau) */
-        cursor: pointer;
-        border: 2px solid #d3d3d3; /* Border abu-abu */
-    }
-
-    .form-range.custom-range:focus::-webkit-slider-thumb {
-        border-color: #72A28A; /* Border hijau saat fokus */
-    }
-
-    .form-range.custom-range:focus {
-        outline: none;
-    }
 </style>

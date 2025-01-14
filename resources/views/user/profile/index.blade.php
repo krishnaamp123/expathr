@@ -42,7 +42,7 @@
                 @include('user.profile.language.index', ['language' => $language])
             </div>
             <div class="col-lg-3 mb-3">
-                @include('user.profile.skill.index', ['skill' => $skill])
+                @include('user.profile.workskill.index', ['workskill' => $workskill, 'skills' => $skills])
             </div>
             <div class="col-lg-3 mb-3">
                 @include('user.profile.workfield.index', ['workfield' => $workfield, 'fields' => $fields])

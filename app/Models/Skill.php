@@ -12,12 +12,6 @@ class Skill extends Model
     protected $table = 'skills';
 
     protected $fillable = [
-        'id_user',
         'skill_name',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user');
-    }
 }

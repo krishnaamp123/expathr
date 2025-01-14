@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\HrjobCategory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class HrjobCategoryAdminController extends Controller
 {
@@ -26,6 +27,7 @@ class HrjobCategoryAdminController extends Controller
         $validated = $request->validate([
             'category_name' => 'required|max:255',
         ]);
+        \Log::info('Validated Data:', $validated);
 
         HrjobCategory::create([
             'category_name' => $request->category_name,

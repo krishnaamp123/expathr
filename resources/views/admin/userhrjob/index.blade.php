@@ -303,6 +303,12 @@
                                 <th>Updated At</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
+                            @elseif (request('status') === 'skill_test')
+                                <th>Score</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                             @else
                                 <th>Salary Expectation</th>
                                 <th>Availability</th>
@@ -552,6 +558,73 @@
                                                 </form>
                                             @else
                                                 <span class="text-danger">Create a valid interview first !</span>
+                                            @endif
+                                        </td>
+                                    @elseif (request('status') === 'skill_test')
+                                        <td data-field="score">
+                                            {{ $row->skilltests->first()->score ?? 'Not Scored' }}
+                                        </td>
+                                        <td data-field="rating">
+                                            {{ $row->skilltests->first()->rating ?? 'Not Rated' }}
+                                        </td>
+                                        <td data-field="comment">
+                                            @if ($row->skilltests->first()?->comment)
+                                            <span
+                                                title="{{ $row->skilltests->first()->comment }}">
+                                                {{ \Illuminate\Support\Str::limit($row->skilltests->first()->comment, 20, '...') }}
+                                            </span>
+                                            @else
+                                                Not Commented
+                                            @endif
+                                        </td>
+                                        <td data-field="updated_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="created_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td>
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $skilltest = $row->skilltests->first();
+                                            @endphp
+
+                                            @if ($skilltest && $skilltest->id)
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #969696; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editSkillTestModal{{ $skilltest->id }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+
+                                                @include('admin.skilltest.updatemodal', [
+                                                    'id' => $skilltest->id,
+                                                    'skilltest' => $skilltest,
+                                                    'userhrjobs' => $userhrjobss,
+                                                ])
+
+                                                <form method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                            class="btn btn-sm delete-btn"
+                                                            style="background-color: #c03535; color: white;"
+                                                            data-url="{{ route('destroySkillTest', $skilltest->id) }}"
+                                                            data-confirm-message="Are you sure you want to delete this skill test?">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-danger">Create a valid skill test first !</span>
                                             @endif
                                         </td>
                                     @else

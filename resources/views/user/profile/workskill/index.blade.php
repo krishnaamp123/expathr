@@ -3,17 +3,17 @@
         <div class="card-body">
             <div class="">
 
-                @if ($skill->isNotEmpty())
+                @if ($workskill->isNotEmpty())
                     <ul class="list-group">
-                        @foreach ($skill as $skilll)
+                        @foreach ($workskill as $skilll)
                         <li class="list-group-item city-item position-relative">
-                            <span class="kaem-subheading">{{ $skilll->skill_name ?? 'Unknown Skill' }}</span><br>
+                            <span class="kaem-subheading">{{ $skilll->skill->skill_name ?? 'Unknown Skill' }}</span><br>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
-                                <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editSkillModal{{ $skilll->id }}">
+                                <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editSkillModal">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <form action="{{ route('destroySkill', $skilll->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('destroyWorkSkill', $skilll->id) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
@@ -35,9 +35,9 @@
         </div>
     </div>
 
-@foreach ($skill as $skilll)
+@foreach ($workskill as $skilll)
 <!-- Modal Edit Work Location -->
-<div class="modal fade" id="editSkillModal{{ $skilll->id }}" tabindex="-1" role="dialog" aria-labelledby="editSkillLabel" aria-hidden="true">
+<div class="modal fade" id="editSkillModal" tabindex="-1" role="dialog" aria-labelledby="editSkillLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,16 +47,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editSkillForm" method="POST" action="{{ route('updateSkill', $skilll->id) }}">
+                <form id="editSkillForm" method="POST" action="{{ route('updateWorkSkill', $skilll->id) }}">
                     @csrf
                     @method('PUT')
                     <label class="kaem-text">Select all the skills that you master!</label>
                     <div class="form-group">
-                        <label for="skill_name" class="kaem-subheading">Skill Name</label>
-                        <input type="text" class="form-control" id="skill_name" name="skill_name"  value="{{ $skilll->skill_name }}" required>
-                        @error('skill_name')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <label for="id_skill" class="kaem-subheading">Skill</label>
+                        <select name="id_skill" id="edit_id_skill" class="form-control select2" required>
+                            <option value="">Select Skill</option>
+                            @foreach ($skills as $skill)
+                                <option value="{{ $skill->id }}">{{ $skill->skill_name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary kaem-subheading">Update</button>
                 </form>
@@ -77,7 +79,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @include('user.profile.skill.store')
+                @include('user.profile.skill.store', ['skills' => $skills])
             </div>
         </div>
     </div>

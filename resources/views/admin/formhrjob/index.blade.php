@@ -1,8 +1,8 @@
 @extends('admin.layout.app')
-@section('title', 'Question')
+@section('title', 'Form Job')
 @section('content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Question</h1>
+    <h1 class="h3 mb-2 text-gray-800">Form Job</h1>
 
     @if (session('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -13,12 +13,12 @@
       </div>
     @endif
 
-    <p class="mb-3">Master data question</p>
+    <p class="mb-3">Assign form into job</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('addQuestion')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            <a href="{{route('addFormHrjob')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -26,6 +26,7 @@
                     <thead>
                         <tr class="small text-center">
                             <th>ID</th>
+                            <th>Job Name</th>
                             <th>Question</th>
                             <th>Created At</th>
                             <th>Updated At</th>
@@ -33,22 +34,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($questions as $row)
+                        @foreach ($forms as $row)
                         <tr class="small">
                             <td>{{$row->id}}</td>
-                            <td>{{$row->question}}</td>
+                            <td>{{$row->hrjob->job_name ?? 'No Job'}}</td>
+                            <td>{{$row->question->question ?? 'No Question'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>
-                                <a href="{{ route('editQuestion', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
-                                    <i class="fas fa-edit"></i>
+                                <a href="{{ route('editFormHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;"><i class="fas fa-edit"></i>
                                     {{-- Edit --}}
                                 </a>
-                                <form action="{{ route('destroyQuestion', $row->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('destroyFormHrjob', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this question?')">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this form?')"><i class="fas fa-trash"></i>
                                         {{-- Delete --}}
                                     </button>
                                 </form>
