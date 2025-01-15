@@ -287,10 +287,10 @@
             </li>
 
             @if(Auth::user()->role !== 'interviewer')
-            <li class="nav-item {{ Request::routeIs('getAnswer') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getAnswer') }}">
+            <li class="nav-item {{ Request::routeIs('getUserAnswer') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getUserAnswer') }}">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Answer</span>
+                    <span>User Answer</span>
                 </a>
             </li>
 

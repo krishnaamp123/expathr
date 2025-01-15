@@ -39,9 +39,9 @@
                 @foreach ($userhrjobs as $vacancy)
                     <div class="col-lg-6 mb-4">
                         <div class="portfolio-item"
-                                {{ ($vacancy->status === 'applicant' && $vacancy->answers->isEmpty()) || $vacancy->status === 'hr_interview' || $vacancy->status === 'user_interview' ? '' : 'disabled' }}
+                                {{ ($vacancy->status === 'applicant' && $vacancy->userAnswer->isEmpty()) || $vacancy->status === 'hr_interview' || $vacancy->status === 'user_interview' ? '' : 'disabled' }}
                                 data-bs-toggle="modal"
-                                href="{{ $vacancy->status === 'applicant' && $vacancy->answers->isEmpty() ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'hr_interview' ? '#hrinterviewModal' . $vacancy->id : ($vacancy->status === 'user_interview' ? '#userinterviewModal' . $vacancy->id : '#')) }}">
+                                href="{{ $vacancy->status === 'applicant' && $vacancy->userAnswer->isEmpty() ? '#portfolioModal' . $vacancy->id : ($vacancy->status === 'hr_interview' ? '#hrinterviewModal' . $vacancy->id : ($vacancy->status === 'user_interview' ? '#userinterviewModal' . $vacancy->id : '#')) }}">
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">{{ $vacancy->hrjob->job_name }}</div>
                                 <div class="portfolio-caption-location">{{ $vacancy->hrjob->city->city_name }}</div>
@@ -66,7 +66,7 @@
                                     <div class="col-12 text-end">
                                         @if (!isset($formsByJob[$vacancy->id_job]))
                                             <span class="badge bg-warning">No Form</span>
-                                        @elseif ($vacancy->answers->isEmpty())
+                                        @elseif ($vacancy->userAnswer->isEmpty())
                                             <span class="badge bg-danger">Form Not Filled</span>
                                         @else
                                             <span class="badge bg-success">Form Filled</span>
@@ -84,6 +84,53 @@
 
 @foreach ($userhrjobs as $vacancy)
     @if ($vacancy->status === 'applicant' && isset($formsByJob[$vacancy->id_job]))
+    <div class="modal fade" id="portfolioModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Answer Questions for {{ $vacancy->hrjob->job_title }}</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('storeMyAnswer') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_user_job" value="{{ $vacancy->id }}">
+
+                        @foreach ($formsByJob[$vacancy->id_job] as $formHrjob)
+                            <h5>{{ $formHrjob->form->form_name }}</h5>
+
+                            @foreach ($formHrjob->form->questions as $question)
+                                <div class="form-group">
+                                    <label for="question_{{ $question->id }}">{{ $question->question_name }}</label>
+                                    <div class="form-check">
+                                        @foreach ($question->answers as $answer)
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                    type="radio"
+                                                    id="answer_{{ $question->id }}_{{ $answer->id }}"
+                                                    name="answers[{{ $question->id }}]"
+                                                    value="{{ $answer->id }}"
+                                                    required>
+                                                <label class="form-check-label" for="answer_{{ $question->id }}_{{ $answer->id }}">
+                                                    {{ $answer->answer_name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endforeach
+
+                        <button type="submit" class="btn btn-primary">Submit Answers</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- @if ($vacancy->status === 'applicant' && isset($formsByJob[$vacancy->id_job]))
         <div class="modal fade" id="portfolioModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -121,7 +168,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     @elseif ($vacancy->status === 'hr_interview')
         <!-- Portfolio Modal for hrinterview -->
         <div class="modal fade" id="hrinterviewModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">

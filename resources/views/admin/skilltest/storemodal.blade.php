@@ -41,7 +41,8 @@
                                 <input
                                     type="radio"
                                     id="star-{{ $i }}"
-                                    name="rating">
+                                    name="rating"
+                                    value="{{ $i }}">
                                 <label for="star-{{ $i }}" class="star">&#9733;</label>
                             @endfor
                         </div>

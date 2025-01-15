@@ -18,6 +18,7 @@ use App\Models\Organization;
 use App\Models\Volunteer;
 use App\Models\Experience;
 use App\Models\Certification;
+use App\Models\WorkSkill;
 use App\Models\Skill;
 use App\Models\Source;
 use App\Models\Link;
@@ -31,11 +32,13 @@ class ProfileUserController extends Controller
         $user = auth()->user()->load('city');
         $cities = City::all();
         $fields = Field::all();
+        $skills = Skill::all();
         $worklocation = WorkLocation::where('id_user', $user->id)->get();
         $emergency = Emergency::where('id_user', $user->id)->get();
         $about = About::where('id_user', $user->id)->get();
         $language = Language::where('id_user', $user->id)->get();
         $workfield = WorkField::where('id_user', $user->id)->get();
+        $workskill = WorkSkill::where('id_user', $user->id)->get();
         $education = Education::where('id_user', $user->id)
         ->get()
         ->map(function ($education) {
@@ -79,11 +82,10 @@ class ProfileUserController extends Controller
             $certification->end_date = Carbon::parse($certification->end_date)->format('m/Y');
             return $certification;
         });
-        $skill = Skill::where('id_user', $user->id)->get();
         $source = Source::where('id_user', $user->id)->get();
 
         return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language',
-        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skill', 'source', 'link'));
+        'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skills', 'workskill', 'source', 'link'));
     }
 
     public function editProfile($id)

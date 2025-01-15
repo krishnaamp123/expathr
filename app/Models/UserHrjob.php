@@ -27,11 +27,6 @@ class UserHrjob extends Model
         return $this->belongsTo(Hrjob::class, 'id_job');
     }
 
-    public function answers()
-    {
-        return $this->hasMany(Answer::class, 'id_user_job');
-    }
-
     public function histories()
     {
         return $this->hasMany(UserHrjobStatusHistory::class, 'id_user_job');
@@ -50,6 +45,11 @@ class UserHrjob extends Model
     public function skilltests()
     {
         return $this->hasMany(SkillTest::class, 'id_user_job');
+    }
+
+    public function userAnswer()
+    {
+        return $this->hasMany(UserAnswer::class, 'id_user_job');
     }
 
     // Tambahkan metode untuk memeriksa apakah pengguna telah melamar pekerjaan tertentu

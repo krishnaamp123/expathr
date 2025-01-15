@@ -27,18 +27,18 @@
                         <tr class="small text-center">
                             <th>ID</th>
                             <th>Job Name</th>
-                            <th>Question</th>
+                            <th>Form Name</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($forms as $row)
+                        @foreach ($formhrjobs as $row)
                         <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->hrjob->job_name ?? 'No Job'}}</td>
-                            <td>{{$row->question->question ?? 'No Question'}}</td>
+                            <td>{{$row->form->form_name ?? 'No Form'}}</td>
                             <td>{{$row->created_at}}</td>
                             <td>{{$row->updated_at}}</td>
                             <td>

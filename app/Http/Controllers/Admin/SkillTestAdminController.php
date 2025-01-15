@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\SkillTest;
 use App\Models\UserHrjob;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SkillTestAdminController extends Controller
 {
@@ -91,7 +94,7 @@ class SkillTestAdminController extends Controller
                 'comment' => 'required|string|max:1000',
             ]);
 
-            $interview = Interview::create([
+            $skilltest = SkillTest::create([
                 'id_user_job' => $request->id_user_job,
                 'score' => $request->score,
                 'rating' => $request->rating,
@@ -133,7 +136,7 @@ class SkillTestAdminController extends Controller
                 'comment' => 'nullable|string|max:1000',
             ]);
 
-            $interview->update([
+            $skilltest->update([
                 'id_user_job' => $request->id_user_job,
                 'score' => $request->score,
                 'rating' => $request->rating,
@@ -142,7 +145,7 @@ class SkillTestAdminController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Interview updated successfully!',
+                'message' => 'Skill Test updated successfully!',
                 'updatedRow' => [
                     'id' => $skilltest->id,
                     'id_user_job' => $skilltest->id_user_job,
@@ -170,7 +173,7 @@ class SkillTestAdminController extends Controller
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 return response()->json(['message' => 'You are not authorized to delete this skill test.'], 403);
             }
-            $interview->delete();
+            $skilltest->delete();
             return response()->json(['message' => 'Skill Test deleted successfully.'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
@@ -214,17 +217,17 @@ class SkillTestAdminController extends Controller
 
         // Isi data dari database ke dalam file Excel
         $rowNumber = 2; // Baris pertama adalah header
-        foreach ($userhrjobs as $userhrjob) {
+        foreach ($skilltests as $skilltest) {
 
-            $sheet->setCellValue('A' . $rowNumber, $skilltests->id);
-            $sheet->setCellValue('B' . $rowNumber, $skilltests->userHrjob->user->fullname ?? 'No Applicant');
-            $sheet->setCellValue('C' . $rowNumber, $skilltests->userHrjob->hrjob->job_name ?? 'No Job');
-            $sheet->setCellValue('D' . $rowNumber, $skilltests->userHrjob->hrjob->city->city_name  ?? 'No Location');
-            $sheet->setCellValue('E' . $rowNumber, $skilltests->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
-            $sheet->setCellValue('F' . $rowNumber, $skilltests->userHrjob->created_at ?? 'No Applied');
-            $sheet->setCellValue('G' . $rowNumber, $skilltests->score ?? 'No Score');
-            $sheet->setCellValue('H' . $rowNumber, $skilltests->rating ?? 'No Rating');
-            $sheet->setCellValue('I' . $rowNumber, $skilltests->comment ?? 'No Comment');
+            $sheet->setCellValue('A' . $rowNumber, $skilltest->id);
+            $sheet->setCellValue('B' . $rowNumber, $skilltest->userHrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('C' . $rowNumber, $skilltest->userHrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('D' . $rowNumber, $skilltest->userHrjob->hrjob->city->city_name  ?? 'No Location');
+            $sheet->setCellValue('E' . $rowNumber, $skilltest->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('F' . $rowNumber, $skilltest->userHrjob->created_at ?? 'No Applied');
+            $sheet->setCellValue('G' . $rowNumber, $skilltest->score ?? 'No Score');
+            $sheet->setCellValue('H' . $rowNumber, $skilltest->rating ?? 'No Rating');
+            $sheet->setCellValue('I' . $rowNumber, $skilltest->comment ?? 'No Comment');
 
             $rowNumber++;
         }
@@ -284,16 +287,16 @@ class SkillTestAdminController extends Controller
 
         // Isi data
         $rowNumber = 2;
-        foreach ($userhrjobs as $userhrjob) {
-            $sheet->setCellValue('A' . $rowNumber, $skilltests->id);
-            $sheet->setCellValue('B' . $rowNumber, $skilltests->userHrjob->user->fullname ?? 'No Applicant');
-            $sheet->setCellValue('C' . $rowNumber, $skilltests->userHrjob->hrjob->job_name ?? 'No Job');
-            $sheet->setCellValue('D' . $rowNumber, $skilltests->userHrjob->hrjob->city->city_name  ?? 'No Location');
-            $sheet->setCellValue('E' . $rowNumber, $skilltests->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
-            $sheet->setCellValue('F' . $rowNumber, $skilltests->userHrjob->created_at ?? 'No Applied');
-            $sheet->setCellValue('G' . $rowNumber, $skilltests->score ?? 'No Score');
-            $sheet->setCellValue('H' . $rowNumber, $skilltests->rating ?? 'No Rating');
-            $sheet->setCellValue('I' . $rowNumber, $skilltests->comment ?? 'No Comment');
+        foreach ($skilltests as $skilltest) {
+            $sheet->setCellValue('A' . $rowNumber, $skilltest->id);
+            $sheet->setCellValue('B' . $rowNumber, $skilltest->userHrjob->user->fullname ?? 'No Applicant');
+            $sheet->setCellValue('C' . $rowNumber, $skilltest->userHrjob->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('D' . $rowNumber, $skilltest->userHrjob->hrjob->city->city_name  ?? 'No Location');
+            $sheet->setCellValue('E' . $rowNumber, $skilltest->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('F' . $rowNumber, $skilltest->userHrjob->created_at ?? 'No Applied');
+            $sheet->setCellValue('G' . $rowNumber, $skilltest->score ?? 'No Score');
+            $sheet->setCellValue('H' . $rowNumber, $skilltest->rating ?? 'No Rating');
+            $sheet->setCellValue('I' . $rowNumber, $skilltest->comment ?? 'No Comment');
 
             $rowNumber++;
         }

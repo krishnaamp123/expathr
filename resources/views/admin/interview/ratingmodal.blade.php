@@ -12,29 +12,6 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Score -->
-                    <div class="form-group mt-3">
-                        <label for="score">Score (1-10)</label>
-                        <input
-                            type="range"
-                            id="score"
-                            name="score"
-                            class="form-range"
-                            min="1"
-                            max="10"
-                            value="5"
-                            oninput="document.getElementById('scoreValue').textContent = this.value;">
-                        <div class="d-flex justify-content-between">
-                            <small>1</small>
-                            <strong id="scoreValue">5</strong>
-                            <small>10</small>
-                        </div>
-                        @error('score')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-
                     <!-- Rating -->
                     <div class="form-group">
                         <label>Rating</label>

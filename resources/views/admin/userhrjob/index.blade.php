@@ -188,6 +188,61 @@
                         </div>
                     </div>
                     </div>
+                    @elseif (request('status') === 'skill_test')
+                    <div class="d-flex align-items-center">
+                        <button
+                            type="button"
+                            class="btn btn-sm mr-2"
+                            style="background-color: #72A28A; color: white;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addSkillTestModal">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+
+                        @include('admin.skilltest.storemodal', [
+                            'userhrjobs' => $userhrjobss,
+                            'users' => $users,
+                        ])
+                    <a href="{{ route('exportSkillTest') }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
+                        <i class="fas fa-file-excel"></i> Export All
+                    </a>
+                    <!-- Tombol Export -->
+                    <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
+                        <i class="fas fa-calendar-check"></i> Export Date
+                    </button>
+
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
+
+                    <!-- Modal Popup -->
+                    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exportModalLabel">Export Date Range</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ route('exportdateSkillTest') }}" method="GET">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Export</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                     @else
                     <button
                         type="button"
@@ -718,7 +773,7 @@
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>
                         @endif
-                        @if ($row->answers->isNotEmpty())
+                        @if ($row->userAnswer->isNotEmpty())
                             <a
                                 href="#"
                                 class="btn btn-sm"
@@ -736,44 +791,43 @@
         </div>
     @endforeach
 
-    <!-- Definisikan Pemetaan Jawaban -->
-    @php
-    $answerLabels = [
-        1 => 'Sangat Tidak Baik',
-        2 => 'Tidak Baik',
-        3 => 'Netral',
-        4 => 'Baik',
-        5 => 'Sangat Baik',
-    ];
-    @endphp
-
     @foreach ($userhrjobs as $row)
-        @if ($row->answers->isNotEmpty())
-            <div class="modal fade" id="userAnswerModal-{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="userAnswerModalLabel-{{ $row->id }}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="userAnswerModalLabel-{{ $row->id }}">Answers</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            @foreach ($row->answers as $answer)
-                                <div class="mb-4">
-                                    <p class="mb-1"> <strong>{{ $answer->form->question->question ?? 'No Question' }}</strong></p>
-                                    <p class="mb-1"> {{ $answerLabels[$answer->answer] ?? 'No Answer' }}</p>
+        <div class="modal fade" id="userAnswerModal-{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="userAnswerModalLabel-{{ $row->id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userAnswerModalLabel-{{ $row->id }}">
+                            Answers for {{ $row->hrjob->job_title ?? 'No Job Title' }}
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @foreach ($row->userAnswer->groupBy('question.form.form_name') as $formName => $answersByForm)
+                            <h5>Form: {{ $formName }}</h5>
+                            @foreach ($answersByForm as $answer)
+                                <div class="mb-3">
+                                    <p><strong>Question:</strong> {{ $answer->question->question_name ?? 'No Question' }}</p>
+                                    <p><strong>Answers:</strong></p>
+                                    <ul>
+                                        @foreach ($answer->question->answers as $possibleAnswer)
+                                            <li>{{ $possibleAnswer->answer_name }}</li>
+                                        @endforeach
+                                    </ul>
+                                    <p><strong>User Selected:</strong> {{ $answer->answer->answer_name ?? 'No Answer Selected' }}</p>
                                 </div>
                             @endforeach
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
+                        @endforeach
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
     @endforeach
+
 
 @endsection
 
@@ -943,6 +997,7 @@
 
             // Fungsi untuk menangani pembaruan atau penghapusan baris tabel
             function handleTableRowUpdate(updatedRow) {
+                console.log('Updating table row:', updatedRow);
                 const row = document.querySelector(`tr[data-id="${updatedRow.id}"]`);
                 const currentFilterStatus = '{{ $status }}'; // Status filter saat ini (sesuaikan dengan backend Anda)
 

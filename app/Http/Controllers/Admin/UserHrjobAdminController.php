@@ -30,7 +30,10 @@ class UserHrjobAdminController extends Controller
 
         // Tentukan logika penyaringan berdasarkan role pengguna
         if (Auth::user()->role === 'hiring_manager') {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'userAnswer',
+            'userAnswer.question.form',
+            'userAnswer.question.answers',
+            'userAnswer.answer')
                 ->where(function ($query) use ($status) {
                     $query->whereHas('interviews.interviewers', function ($subQuery) {
                         $subQuery->where('role', '!=', 'super_admin');
@@ -46,7 +49,10 @@ class UserHrjobAdminController extends Controller
                     }
                 });
         } elseif (Auth::user()->role === 'recruiter') {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'userAnswer',
+            'userAnswer.question.form',
+            'userAnswer.question.answers',
+            'userAnswer.answer')
                 ->where(function ($query) use ($status) {
                     // Pekerjaan yang recruiter handle berdasarkan `id_user`
                     $query->whereHas('hrjob', function ($subQuery) {
@@ -66,7 +72,10 @@ class UserHrjobAdminController extends Controller
                     }
                 });
         } elseif (Auth::user()->role === 'interviewer') {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews.user_interviewers', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews.user_interviewers', 'userAnswer',
+            'userAnswer.question.form',
+            'userAnswer.question.answers',
+            'userAnswer.answer')
                 ->where(function ($query) use ($status) {
                     $query->whereHas('userinterviews.user_interviewers', function ($subQuery) {
                         $subQuery->whereNotIn('role', ['super_admin', 'hiring_manager', 'recruiter']);
@@ -80,7 +89,10 @@ class UserHrjobAdminController extends Controller
                     $subQuery->where('id_user', Auth::id());
                 });
         } else {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'answers')
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'userAnswer',
+            'userAnswer.question.form',
+            'userAnswer.question.answers',
+            'userAnswer.answer')
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 });

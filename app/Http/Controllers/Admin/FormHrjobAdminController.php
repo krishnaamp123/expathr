@@ -4,24 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\FormHrjob;
 use App\Models\Form;
 use App\Models\Hrjob;
-use App\Models\Question;
 
 class FormHrjobAdminController extends Controller
 {
     public function getFormHrjob()
     {
-        $forms = Form::with('hrjob', 'question')->get();
-        return view('admin.form.index', compact('forms'));
+        $formhrjobs = FormHrjob::with('hrjob', 'form')->get();
+        return view('admin.formhrjob.index', compact('formhrjobs'));
     }
 
     public function addFormHrjob()
     {
         $hrjobs = Hrjob::all();
-        $questions = Question::all();
+        $forms = Form::all();
 
-        return view('admin.form.store', compact('hrjobs', 'questions'));
+        return view('admin.formhrjob.store', compact('hrjobs', 'forms'));
     }
 
 
@@ -29,52 +29,52 @@ class FormHrjobAdminController extends Controller
     {
         $validated = $request->validate([
             'id_job' => 'required',
-            'id_question' => 'required|array', // Ensure id_question is an array
-            'id_question.*' => 'required|exists:questions,id', // Validate each question ID
+            'id_form' => 'required|array',
+            'id_form.*' => 'required|exists:forms,id',
         ]);
 
-        foreach ($request->id_question as $questionId) {
-            Form::create([
+        foreach ($request->id_form as $formId) {
+            FormHrjob::create([
                 'id_job' => $request->id_job,
-                'id_question' => $questionId,
+                'id_form' => $formId,
             ]);
         }
 
-        return redirect()->route('getForm')->with('message', 'Questions added successfully to the job.');
+        return redirect()->route('getFormHrjob')->with('message', 'Forms added successfully to the job.');
     }
 
     public function editFormHrjob($id)
     {
-        $form = Form::findOrFail($id);
+        $formhrjob = FormHrjob::findOrFail($id);
         $hrjobs = Hrjob::all();
-        $questions = Question::all();
+        $forms = Form::all();
 
-        return view('admin.form.update', compact('form', 'hrjobs', 'questions'));
+        return view('admin.formhrjob.update', compact('formhrjob', 'hrjobs', 'forms'));
     }
 
     public function updateFormHrjob(Request $request, $id)
     {
-        $form = Form::findOrFail($id);
+        $formhrjob = FormHrjob::findOrFail($id);
 
         $validated = $request->validate([
             'id_job' => 'required',
-            'id_question' => 'required',
+            'id_form' => 'required',
         ]);
 
-        $form->id_job = $request->id_job;
-        $form->id_question = $request->id_question;
+        $formhrjob->id_job = $request->id_job;
+        $formhrjob->id_form = $request->id_form;
 
-        $form->save();
+        $formhrjob->save();
 
-        return redirect()->route('getForm')->with('message', 'Form Updated Successfully');
+        return redirect()->route('getFormHrjob')->with('message', 'Form Job Updated Successfully');
     }
 
     public function destroyFormHrjob($id)
     {
-        $form = Form::findOrFail($id);
+        $formhrjob = FormHrjob::findOrFail($id);
 
-        $form->delete();
+        $formhrjob->delete();
 
-        return redirect()->route('getForm')->with('message', 'Form deleted successfully');
+        return redirect()->route('getFormHrjob')->with('message', 'Form Job deleted successfully');
     }
 }

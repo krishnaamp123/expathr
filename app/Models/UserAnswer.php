@@ -11,6 +11,7 @@ class UserAnswer extends Model
 
     protected $fillable = [
         'id_user',
+        'id_user_job',
         'id_question',
         'id_answer',
     ];
@@ -18,6 +19,11 @@ class UserAnswer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function userHrjob()
+    {
+        return $this->belongsTo(UserHrjob::class, 'id_user_job');
     }
 
     public function question()

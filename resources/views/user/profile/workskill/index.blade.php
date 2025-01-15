@@ -29,7 +29,7 @@
                 @endif
 
             <button type="button" class="btn btn-primary kaem-subheading mt-2" data-toggle="modal" data-target="#addSkillModal">
-                Add Skill
+                Add Preferred Skill
             </button>
         </div>
         </div>
@@ -79,7 +79,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @include('user.profile.skill.store', ['skills' => $skills])
+                @include('user.profile.workskill.store', ['skills' => $skills])
             </div>
         </div>
     </div>

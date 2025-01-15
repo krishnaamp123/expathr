@@ -19,7 +19,7 @@ class DashboardUserController extends Controller
         // Cek kelengkapan profil pengguna
         $user = auth()->user();
         $isProfileComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
-                        $user->skill->count() > 0 && $user->workField->count() > 0 && $user->source->count() > 0 &&
+                        $user->workSkill->count() > 0 && $user->workField->count() > 0 && $user->source->count() > 0 &&
                         $user->education->count() > 0 && $user->experience->count() > 0;
 
         return view('user.dashboard', compact('davacancies', 'isProfileComplete'));

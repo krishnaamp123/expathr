@@ -246,6 +246,7 @@
                                 return response.json().then(data => ({ isOk, data }));
                             })
                             .then(({ isOk, data }) => {
+                                console.log('Server Response:', data);
                                 if (isOk) {
                                     updateTableRow(data.updatedRow);
                                     showToast('successToast', data.message);

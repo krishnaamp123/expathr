@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\HrJobAdminController;
 use App\Http\Controllers\Admin\FormAdminController;
 use App\Http\Controllers\Admin\FormHrjobAdminController;
 use App\Http\Controllers\Admin\UserHrjobAdminController;
-use App\Http\Controllers\Admin\AnswerAdminController;
+use App\Http\Controllers\Admin\UserAnswerAdminController;
 use App\Http\Controllers\Admin\InterviewAdminController;
 use App\Http\Controllers\Admin\UserInterviewAdminController;
 use App\Http\Controllers\Admin\UserHrjobHistoryAdminController;
@@ -260,12 +260,8 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/userjob/history/destroy/{id}', [UserHrjobHistoryAdminController::class, 'destroyUserHrjobHistory'])->name('destroyUserHrjobHistory');
 
             // ANSWER
-            Route::get('/answer', [AnswerAdminController::class, 'getAnswer'])->name('getAnswer');
-            Route::get('/answer/create', [AnswerAdminController::class, 'addAnswer'])->name('addAnswer');
-            Route::post('/answer/create', [AnswerAdminController::class, 'storeAnswer'])->name('storeAnswer');
-            Route::get('/answer/update/{id}', [AnswerAdminController::class, 'editAnswer'])->name('editAnswer');
-            Route::put('/answer/update/{id}', [AnswerAdminController::class, 'updateAnswer'])->name('updateAnswer');
-            Route::delete('/answer/destroy/{id}', [AnswerAdminController::class, 'destroyAnswer'])->name('destroyAnswer');
+            Route::get('/useranswer', [UserAnswerAdminController::class, 'getUserAnswer'])->name('getUserAnswer');
+            Route::delete('/useranswer/destroy/{id}', [UserAnswerAdminController::class, 'destroyUserAnswer'])->name('destroyUserAnswer');
 
             // INTERVIEW
             Route::get('/interview', [InterviewAdminController::class, 'getInterview'])->name('getInterview');

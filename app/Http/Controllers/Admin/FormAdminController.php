@@ -49,13 +49,13 @@ class FormAdminController extends Controller
 
             // Iterasi dan simpan setiap pertanyaan
             foreach ($validated['questions'] as $questionData) {
-                $question = $form->question()->create([
+                $question = $form->questions()->create([
                     'question_name' => $questionData['question_name'],
                 ]);
 
                 // Iterasi dan simpan jawaban untuk pertanyaan tersebut
                 foreach ($questionData['answers'] as $answerData) {
-                    $question->answer()->create([
+                    $question->answers()->create([
                         'answer_name' => $answerData['answer_name'],
                         'is_answer' => $answerData['is_answer'],
                     ]);
