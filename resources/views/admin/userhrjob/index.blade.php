@@ -243,6 +243,61 @@
                         </div>
                     </div>
                     </div>
+                    @elseif (request('status') === 'phone_screen')
+                    <div class="d-flex align-items-center">
+                        <button
+                            type="button"
+                            class="btn btn-sm mr-2"
+                            style="background-color: #72A28A; color: white;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addPhoneScreenModal">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+
+                        @include('admin.phonescreen.storemodal', [
+                            'userhrjobs' => $userhrjobss,
+                            'users' => $users,
+                        ])
+                    <a href="{{ route('exportPhoneScreen') }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
+                        <i class="fas fa-file-excel"></i> Export All
+                    </a>
+                    <!-- Tombol Export -->
+                    <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
+                        <i class="fas fa-calendar-check"></i> Export Date
+                    </button>
+
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
+
+                    <!-- Modal Popup -->
+                    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exportModalLabel">Export Date Range</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ route('exportdatePhoneScreen') }}" method="GET">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Export</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                     @else
                     <button
                         type="button"
@@ -342,8 +397,7 @@
                                 <th>Interview Time</th>
                                 <th>Location</th>
                                 <th>Link</th>
-                                <th>Confirm Attendance</th>
-                                {{-- <th>Created At</th> --}}
+                                <th>Confirmed</th>
                                 <th>Updated At</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
@@ -353,8 +407,7 @@
                                 <th>Interview Time</th>
                                 <th>Location</th>
                                 <th>Link</th>
-                                <th>Confirm Attendance</th>
-                                {{-- <th>Created At</th> --}}
+                                <th>Confirmed</th>
                                 <th>Updated At</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
@@ -362,6 +415,11 @@
                                 <th>Score</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                            @elseif (request('status') === 'phone_screen')
+                                <th>Phone Screen Date</th>
+                                <th>Phone Screen Time</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @else
@@ -425,7 +483,13 @@
                                                 No Link
                                             @endif
                                         </td>
-                                        <td data-field="arrival">{{ $row->interviews->first()->arrival ?? 'Not Confirmed' }}</td>
+                                        <td data-field="arrival">
+                                            @if ($row->interviews->first()->arrival === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
+                                            @elseif ($row->interviews->first()->arrival === 'no' || is_null($row->interviews->first()->arrival))
+                                                <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                            @endif
+                                        </td>
                                         {{-- <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td> --}}
                                         <td data-field="updated_at">{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td data-field="rating">
@@ -536,7 +600,13 @@
                                                 No Link
                                             @endif
                                         </td>
-                                        <td data-field="arrival">{{ $row->userinterviews->first()->arrival ?? 'Not Confirmed' }}</td>
+                                        <td data-field="arrival">
+                                            @if ($row->userinterviews->first()->arrival === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
+                                            @elseif ($row->userinterviews->first()->arrival === 'no' || is_null($row->userinterviews->first()->arrival))
+                                                <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                            @endif
+                                        </td>
                                         <td data-field="updated_at">{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td data-field="rating">
                                             {{ $row->userinterviews->first()->rating ?? 'Not Rated' }}
@@ -682,6 +752,63 @@
                                                 <span class="text-danger">Create a valid skill test first !</span>
                                             @endif
                                         </td>
+                                    @elseif (request('status') === 'phone_screen')
+                                        <td data-field="phonescreen_date">
+                                            {{ $row->phonescreens->first()->phonescreen_date ?? 'Not Scheduled' }}
+                                        </td>
+                                        <td data-field="time">
+                                            {{ $row->phonescreens->first()->time ?? 'Not Timed' }}
+                                        </td>
+                                        <td data-field="updated_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="created_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td>
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $phonescreen = $row->phonescreens->first();
+                                            @endphp
+
+                                            @if ($phonescreen && $phonescreen->id)
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #969696; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editPhoneScreenModal{{ $phonescreen->id }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+
+                                                @include('admin.phonescreen.updatemodal', [
+                                                    'id' => $phonescreen->id,
+                                                    'phonescreen' => $phonescreen,
+                                                    'userhrjobs' => $userhrjobss,
+                                                ])
+
+                                                <form method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                            class="btn btn-sm delete-btn"
+                                                            style="background-color: #c03535; color: white;"
+                                                            data-url="{{ route('destroyPhoneScreen', $phonescreen->id) }}"
+                                                            data-confirm-message="Are you sure you want to delete this phone screen?">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-danger">Create a valid phone screen first !</span>
+                                            @endif
+                                        </td>
                                     @else
                                         <td data-field="salary_expectation" data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
                                         <td data-field="availability">{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
@@ -797,7 +924,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="userAnswerModalLabel-{{ $row->id }}">
-                            Answers for {{ $row->hrjob->job_title ?? 'No Job Title' }}
+                            Answers for {{ $row->hrjob->job_name ?? 'No Job Title' }}
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -805,17 +932,17 @@
                     </div>
                     <div class="modal-body">
                         @foreach ($row->userAnswer->groupBy('question.form.form_name') as $formName => $answersByForm)
-                            <h5>Form: {{ $formName }}</h5>
+                            <h6 class="modal-subtitle"><strong>{{ $formName }}</strong></h6>
                             @foreach ($answersByForm as $answer)
                                 <div class="mb-3">
-                                    <p><strong>Question:</strong> {{ $answer->question->question_name ?? 'No Question' }}</p>
-                                    <p><strong>Answers:</strong></p>
+                                    <p class="modal-subtitlegrey"><strong>{{ $answer->question->question_name ?? 'No Question' }}</strong></p>
+                                    <p class="modal-subtitlegrey"></p>
                                     <ul>
                                         @foreach ($answer->question->answers as $possibleAnswer)
-                                            <li>{{ $possibleAnswer->answer_name }}</li>
+                                            <li class="modal-subtitlegrey">{{ $possibleAnswer->answer_name }}</li>
                                         @endforeach
                                     </ul>
-                                    <p><strong>User Selected:</strong> {{ $answer->answer->answer_name ?? 'No Answer Selected' }}</p>
+                                    <p class="modal-subtitlegrey"><strong>User Selected:</strong> {{ $answer->answer->answer_name ?? 'No Answer Selected' }}</p>
                                 </div>
                             @endforeach
                         @endforeach
@@ -876,6 +1003,19 @@
                         });
                 });
             });
+
+            document.querySelectorAll('#updateRatingForm button[type="submit"]').forEach(button => {
+                button.addEventListener('click', function () {
+                    // Tambahkan value tombol yang diklik ke dalam form
+                    const form = this.closest('form');
+                    const hiddenField = document.createElement('input');
+                    hiddenField.type = 'hidden';
+                    hiddenField.name = 'button_action';
+                    hiddenField.value = this.value;
+                    form.appendChild(hiddenField);
+                });
+            });
+
 
             document.querySelectorAll('.update-form').forEach(form => {
                 form.addEventListener('submit', function (event) {

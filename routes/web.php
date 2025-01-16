@@ -20,6 +20,7 @@ use App\Http\Controllers\User\VacancyController;
 use App\Http\Controllers\User\SourceController;
 use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\WorkSkillController;
+use App\Http\Controllers\User\ReferenceController;
 // ADMIN
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Admin\InterviewAdminController;
 use App\Http\Controllers\Admin\UserInterviewAdminController;
 use App\Http\Controllers\Admin\UserHrjobHistoryAdminController;
 use App\Http\Controllers\Admin\SkillTestAdminController;
+use App\Http\Controllers\Admin\PhoneScreenAdminController;
 use App\Http\Controllers\Admin\SkillAdminController;
 
 
@@ -82,6 +84,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/profile/emergency/edit/{id}', [EmergencyController::class, 'editEmergency'])->name('editEmergency');
             Route::put('/profile/emergency/update/{id}', [EmergencyController::class, 'updateEmergency'])->name('updateEmergency');
             Route::delete('/profile/emergency/destroy/{id}', [EmergencyController::class, 'destroyEmergency'])->name('destroyEmergency');
+
+            //REFERENCE
+            Route::get('/profile/reference/add', [ReferenceController::class, 'addReference'])->name('addReference');
+            Route::post('/profile/reference/store', [ReferenceController::class, 'storeReference'])->name('storeReference');
+            Route::get('/profile/reference/edit/{id}', [ReferenceController::class, 'editReference'])->name('editReference');
+            Route::put('/profile/reference/update/{id}', [ReferenceController::class, 'updateReference'])->name('updateReference');
+            Route::delete('/profile/reference/destroy/{id}', [ReferenceController::class, 'destroyReference'])->name('destroyReference');
 
             //ABOUT
             Route::get('/profile/about/add', [AboutController::class, 'addAbout'])->name('addAbout');
@@ -288,6 +297,14 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/skilltest/destroy/{id}', [SkillTestAdminController::class, 'destroySkillTest'])->name('destroySkillTest');
             Route::get('/skilltest/export', [SkillTestAdminController::class, 'exportSkillTest'])->name('exportSkillTest');
             Route::get('/skilltest/dateexport', [SkillTestAdminController::class, 'exportdateSkillTest'])->name('exportdateSkillTest');
+
+            // PHONE SCREEN
+            Route::get('/phonescreen', [PhoneScreenAdminController::class, 'getPhoneScreen'])->name('getPhoneScreen');
+            Route::post('/phonescreen/create', [PhoneScreenAdminController::class, 'storePhoneScreen'])->name('storePhoneScreen');
+            Route::put('/phonescreen/update/{id}', [PhoneScreenAdminController::class, 'updatePhoneScreen'])->name('updatePhoneScreen');
+            Route::delete('/phonescreen/destroy/{id}', [PhoneScreenAdminController::class, 'destroyPhoneScreen'])->name('destroyPhoneScreen');
+            Route::get('/phonescreen/export', [PhoneScreenAdminController::class, 'exportPhoneScreen'])->name('exportPhoneScreen');
+            Route::get('/phonescreen/dateexport', [PhoneScreenAdminController::class, 'exportdatePhoneScreen'])->name('exportdatePhoneScreen');
 
         });
     });

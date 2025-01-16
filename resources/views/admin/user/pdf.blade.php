@@ -148,7 +148,15 @@
         </div>
     </div>
 
-    <p><strong>Link:</strong> {{ $user->link }}</p>
+    <p class="tight">
+        <strong>Social:</strong>
+        @foreach ($user->link as $index => $lin)
+            <a href="{{ $lin->media_url }}" target="_blank" rel="noopener noreferrer">
+                {{ $lin->media }}
+            </a>
+            @if (!$loop->last) | @endif
+        @endforeach
+    </p>
 
     <p class="tight">
         <strong>Source:</strong>
@@ -180,7 +188,7 @@
 
     <p class="tight">
         <strong>Skills:</strong>
-        {{ $user->skill->pluck('skill_name')->implode(', ') }}
+        {{ $user->workskill->pluck('skill.skill_name')->implode(', ') }}
     </p>
 
     <div class="other-container">
@@ -189,7 +197,7 @@
                 <h3 class="left">Education</h3>
                 @foreach ($user->education as $edu)
                     <p class="tight"><strong>{{ $edu->university }}</strong></p>
-                    <p class="tight">{{ $edu->degree }} - {{ $edu->major }}</p>
+                    <p class="tight">{{ ucwords(str_replace('_', ' ', $edu->degree))}} - {{ $edu->major }}</p>
                     <p class="tight">{{ $edu->start_date }} - {{ $edu->end_date }}</p>
                 @endforeach
             </div>
@@ -314,6 +322,12 @@
             @endif
         </div>
     </div>
+    <h3 class="left">Reference Contact</h3>
+    @foreach ($user->reference as $ref)
+        <p class="tight"><strong>{{ $ref->reference_name }}</strong></p>
+        <p class="tight">{{ $ref->relation }} - {{ $ref->company_name }}</p>
+        <p class="tight mb-1">{{ $ref->phone }} - {{ ucwords(str_replace('_', ' ', $ref->is_call))}}</p>
+    @endforeach
     <h3 class="left">Emergency Contact</h3>
     @foreach ($user->emergency as $eme)
         <p class="tight"><strong>{{ $eme->emergency_name }}</strong></p>

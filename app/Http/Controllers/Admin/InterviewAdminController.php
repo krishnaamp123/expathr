@@ -262,7 +262,6 @@ class InterviewAdminController extends Controller
                 return response()->json(['message' => 'You are not authorized to rate this interview.'], 403);
             }
 
-            \Log::info('Button action received: ' . $request->button_action);
             \Log::info('Request data received:', $request->all());
 
             // Validasi input
@@ -271,6 +270,8 @@ class InterviewAdminController extends Controller
                 'comment' => 'nullable|string|max:1000',
             ]);
 
+            \Log::info('Button action received: ' . $request->button_action);
+
             // Perbarui rating dan komentar di tabel Interview
             $interview->rating = $validated['rating'];
             $interview->comment = $validated['comment'];
@@ -278,9 +279,6 @@ class InterviewAdminController extends Controller
 
             // Perbarui status di tabel UserHrjob
             $userHrjob = $interview->userHrjob;
-            if (!$userHrjob) {
-                throw new \Exception('UserHrjob record not found.');
-            }
 
             if ($request->button_action === 'reject') {
                 $userHrjob->status = 'rejected';
@@ -306,7 +304,7 @@ class InterviewAdminController extends Controller
                     'modalType' => 'user_interview',
                     'modalData' => [
                         'userJobId' => $userHrjob->id,
-                        'userJobName' => $userhrjob->user->fullname,
+                        'userJobName' => $userHrjob->user->fullname,
                     ],
                     'updatedRow' => [
                         'id' => $interview->id,
@@ -421,6 +419,8 @@ class InterviewAdminController extends Controller
             $jobName = $interview->userHrjob->hrjob->job_name ?? 'No Job';
             $date = $interview->interview_date ?? 'No Date';
             $time = $interview->time ?? 'No Time';
+            $location = $interview->location ?? 'No Location';
+            $link = $interview->link ?? 'No Link';
             $phone = $interview->userHrjob->user->phone ?? 'No Phone';
             $city = $interview->userHrjob->hrjob->city->city_name  ?? 'No Location';
             $interviewerNames = $interview->interviewers->pluck('fullname')->implode(', ') ?: 'No Interviewers';
@@ -433,22 +433,23 @@ class InterviewAdminController extends Controller
             $sheet->setCellValue('F' . $rowNumber, $interview->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
             $sheet->setCellValue('G' . $rowNumber, $date);
             $sheet->setCellValue('H' . $rowNumber, $time);
-            $sheet->setCellValue('I' . $rowNumber, $interview->location ?? 'No Location');
-            $sheet->setCellValue('J' . $rowNumber, $interview->link ?? 'No Link');
+            $sheet->setCellValue('I' . $rowNumber, $location);
+            $sheet->setCellValue('J' . $rowNumber, $link);
             $sheet->setCellValue('K' . $rowNumber, $phone);
             $sheet->setCellValue('M' . $rowNumber, $interview->arrival ?? 'No Confirm');
 
             // Tambahkan formula HYPERLINK di kolom J
             $whatsappMessage = "Halo {$applicantName},
 
-Terima kasih telah melamar di Expat. Roasters. Perkenalkan kami dari HR Expat. Roasters. Selanjutnya kami mengundang Anda untuk mengikuti proses Phone Screen Interview untuk posisi {$jobName} ($city) pada:
+Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the HR Interview process for the position of {$jobName} ($city) at:
 
-Tanggal: {$date}
-Waktu: {$time}
-Platform: Whatsapp Call, sekitar 10-15 menit
+Date: {$date}
+Time: {$time}
+Location: {$location}
+Link: {$link}
 
-Dimohon untuk melakukan konfirmasi dengan mengirimkan format berikut:
-Nama Lengkap_Hadir/Tidak Hadir
+Please confirm your attendance via our website on the following page:
+http://127.0.0.1:8000/user/myjob/get?status=hr_interview
 
 Regards,
 
@@ -522,6 +523,8 @@ Expat. Roasters";
             $jobName = $interview->userHrjob->hrjob->job_name ?? 'No Job';
             $date = $interview->interview_date ?? 'No Date';
             $time = $interview->time ?? 'No Time';
+            $location = $interview->location ?? 'No Location';
+            $link = $interview->link ?? 'No Link';
             $phone = $interview->userHrjob->user->phone ?? 'No Phone';
             $city = $interview->userHrjob->hrjob->city->city_name  ?? 'No Location';
             $interviewerNames = $interview->interviewers->pluck('fullname')->implode(', ') ?: 'No Interviewers';
@@ -534,22 +537,23 @@ Expat. Roasters";
             $sheet->setCellValue('F' . $rowNumber, $interview->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
             $sheet->setCellValue('G' . $rowNumber, $date);
             $sheet->setCellValue('H' . $rowNumber, $time);
-            $sheet->setCellValue('I' . $rowNumber, $interview->location ?? 'No Location');
-            $sheet->setCellValue('J' . $rowNumber, $interview->link ?? 'No Link');
+            $sheet->setCellValue('I' . $rowNumber, $location);
+            $sheet->setCellValue('J' . $rowNumber, $link);
             $sheet->setCellValue('K' . $rowNumber, $phone);
             $sheet->setCellValue('M' . $rowNumber, $interview->arrival ?? 'No Confirm');
 
             // Tambahkan formula HYPERLINK di kolom J
             $whatsappMessage = "Halo {$applicantName},
 
-Terima kasih telah melamar di Expat. Roasters. Perkenalkan kami dari HR Expat. Roasters. Selanjutnya kami mengundang Anda untuk mengikuti proses Phone Screen Interview untuk posisi {$jobName} ($city) pada:
+Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the HR Interview process for the position of {$jobName} ($city) at:
 
-Tanggal: {$date}
-Waktu: {$time}
-Platform: Whatsapp Call, sekitar 10-15 menit
+Date: {$date}
+Time: {$time}
+Location: {$location}
+Link: {$link}
 
-Dimohon untuk melakukan konfirmasi dengan mengirimkan format berikut:
-Nama Lengkap_Hadir/Tidak Hadir
+Please confirm your attendance via our website on the following page:
+http://127.0.0.1:8000/user/myjob/get?status=hr_interview
 
 Regards,
 

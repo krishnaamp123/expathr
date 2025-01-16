@@ -300,11 +300,21 @@
                     <span>User Job History</span>
                 </a>
             </li>
+            @endif
 
             <li class="nav-item {{ Request::routeIs('getInterview') ? 'active' : '' }} {{ Request::routeIs('getUserInterview') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getInterview') }}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Interview</span>
+                </a>
+            </li>
+
+            @if(Auth::user()->role !== 'interviewer')
+
+            <li class="nav-item {{ Request::routeIs('getPhoneScreen') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getPhoneScreen') }}">
+                    <i class="fas fa-fw fa-mobile"></i>
+                    <span>Phone Screen</span>
                 </a>
             </li>
 
@@ -314,6 +324,7 @@
                     <span>Skill Test</span>
                 </a>
             </li>
+
             @endif
 
              <!-- Divider -->

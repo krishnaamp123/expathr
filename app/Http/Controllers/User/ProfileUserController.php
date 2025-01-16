@@ -22,6 +22,7 @@ use App\Models\WorkSkill;
 use App\Models\Skill;
 use App\Models\Source;
 use App\Models\Link;
+use App\Models\Reference;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -39,6 +40,7 @@ class ProfileUserController extends Controller
         $language = Language::where('id_user', $user->id)->get();
         $workfield = WorkField::where('id_user', $user->id)->get();
         $workskill = WorkSkill::where('id_user', $user->id)->get();
+        $reference = Reference::where('id_user', $user->id)->get();
         $education = Education::where('id_user', $user->id)
         ->get()
         ->map(function ($education) {
@@ -84,7 +86,7 @@ class ProfileUserController extends Controller
         });
         $source = Source::where('id_user', $user->id)->get();
 
-        return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language',
+        return view('user.profile.index', compact('user', 'cities', 'fields', 'worklocation', 'emergency', 'about', 'language','reference',
         'workfield', 'education', 'project', 'organization', 'volunteer', 'experience', 'certification', 'skills', 'workskill', 'source', 'link'));
     }
 

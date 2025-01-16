@@ -8,7 +8,6 @@
                         @foreach ($link as $linkk)
                         <li class="list-group-item city-item position-relative">
                             <span class="kaem-subheading">{{ ucwords(str_replace('_', ' ', $linkk->media)) ?? 'Unknown Social' }}</span><br>
-                            <span class="kaem-text">{{ $linkk->media_url }}</span><br>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
                                 <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editLinkModal{{ $linkk->id }}">

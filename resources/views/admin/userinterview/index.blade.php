@@ -137,7 +137,7 @@
                             <th>Interview Time</th>
                             <th>Location</th>
                             <th>Link</th>
-                            <th>Confirm Attendance</th>
+                            <th>Confirmed</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Rating</th>
@@ -174,7 +174,13 @@
                                     No Link
                                 @endif
                             </td>
-                            <td data-field="arrival">{{$row->arrival ?? 'No Arrival'}}</td>
+                            <td data-field="arrival">
+                                @if ($row->arrival === 'yes')
+                                    <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
+                                @elseif ($row->arrival === 'no' || is_null($row->arrival))
+                                    <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                @endif
+                            </td>
                             <td data-field="created_at">{{$row->created_at}}</td>
                             <td data-field="updated_at">{{$row->updated_at}}</td>
                             <td data-field="rating">{{$row->rating ?? 'No Rating'}}</td>
@@ -201,12 +207,12 @@
                                     class="btn btn-sm my-1"
                                     style="background-color: #FFA500; color: white;"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#editUserRatingModal{{ $row->id }}">
+                                    data-bs-target="#editUserRatingsmModal{{ $row->id }}">
                                     <i class="fas fa-star"></i>
                                 </button>
 
                                 <!-- Include Modal -->
-                                @include('admin.userinterview.ratingmodal', [
+                                @include('admin.userinterview.ratingsmmodal', [
                                     'id' => $row->id,
                                     'rating' => $row->rating,
                                     'comment' => $row->comment

@@ -19,6 +19,8 @@ use App\Models\Volunteer;
 use App\Models\Experience;
 use App\Models\Certification;
 use App\Models\Skill;
+use App\Models\WorkSkill;
+use App\Models\Reference;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -228,8 +230,8 @@ class UserAdminController extends Controller
 
     public function generatePdf($id)
     {
-        $user = User::with(['city', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education',
-            'project', 'organization', 'volunteer', 'experience', 'certification', 'skill', 'source'])->findOrFail($id);
+        $user = User::with(['city', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education', 'reference',
+            'project', 'organization', 'volunteer', 'experience', 'certification', 'workskill', 'source', 'link'])->findOrFail($id);
 
         if ($user->role !== 'applicant') {
         return redirect()->route('getUser')->with('error', 'PDF can only be generated for applicants.');

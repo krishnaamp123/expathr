@@ -63,13 +63,16 @@
                 @include('user.profile.project.index', ['project' => $project])
             </div>
             <div class="col-lg-3 mb-3">
-                @include('user.profile.link.index', ['link' => $link])
+                @include('user.profile.reference.index', ['reference' => $reference])
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-4 mb-3">
                 @include('user.profile.organization.index', ['organization' => $organization])
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-5 mb-3">
                 @include('user.profile.certification.index', ['certification' => $certification])
+            </div>
+            <div class="col-lg-3 mb-3">
+                @include('user.profile.link.index', ['link' => $link])
             </div>
         </div>
     </div>

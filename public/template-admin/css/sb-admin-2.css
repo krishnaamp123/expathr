@@ -5799,6 +5799,19 @@ a.close.disabled {
   line-height: 1.5;
 }
 
+.modal-subtitle {
+  margin-bottom: 0;
+  line-height: var(--bs-modal-title-line-height);
+  font-size: 1rem;
+  color: #72A28A;
+}
+
+.modal-subtitlegrey {
+  margin-bottom: 0;
+  line-height: var(--bs-modal-title-line-height);
+  font-size: 0.9em;
+}
+
 .modal-body {
   position: relative;
   flex: 1 1 auto;

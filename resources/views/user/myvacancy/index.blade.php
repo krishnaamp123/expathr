@@ -88,7 +88,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Answer Questions for {{ $vacancy->hrjob->job_title }}</h5>
+                    <h5 class="modal-title">Form Questions for {{ $vacancy->hrjob->job_name }}</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -99,11 +99,11 @@
                         <input type="hidden" name="id_user_job" value="{{ $vacancy->id }}">
 
                         @foreach ($formsByJob[$vacancy->id_job] as $formHrjob)
-                            <h5>{{ $formHrjob->form->form_name }}</h5>
+                            <h6 class="modal-subtitle">{{ $formHrjob->form->form_name }}</h6>
 
                             @foreach ($formHrjob->form->questions as $question)
                                 <div class="form-group">
-                                    <label for="question_{{ $question->id }}">{{ $question->question_name }}</label>
+                                    <label class="modal-subtitlewhite" for="question_{{ $question->id }}">{{ $question->question_name }}</label>
                                     <div class="form-check">
                                         @foreach ($question->answers as $answer)
                                             <div class="form-check">
@@ -113,7 +113,7 @@
                                                     name="answers[{{ $question->id }}]"
                                                     value="{{ $answer->id }}"
                                                     required>
-                                                <label class="form-check-label" for="answer_{{ $question->id }}_{{ $answer->id }}">
+                                                <label class="form-check-label modal-subtitlewhite" for="answer_{{ $question->id }}_{{ $answer->id }}">
                                                     {{ $answer->answer_name }}
                                                 </label>
                                             </div>
@@ -123,52 +123,13 @@
                             @endforeach
                         @endforeach
 
-                        <button type="submit" class="btn btn-primary">Submit Answers</button>
+                        <button type="submit" class="btn btn-primary kaem-subheading">Submit Answers</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- @if ($vacancy->status === 'applicant' && isset($formsByJob[$vacancy->id_job]))
-        <div class="modal fade" id="portfolioModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Answer Questions</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('storeMyAnswer') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_user_job" value="{{ $vacancy->id }}">
-                            @foreach ($formsByJob[$vacancy->id_job] as $form)
-                                <div class="form-group">
-                                    <label class="kaem-subheading" for="answer_{{ $form->id }}">{{ $form->question->question }}</label>
-                                    <div class="form-check">
-                                        @foreach ([5 => 'Sangat Baik', 4 => 'Baik', 3 => 'Netral', 2 => 'Tidak Baik', 1 => 'Sangat Tidak Baik'] as $value => $label)
-                                            <div class="form-check kaem-text">
-                                                <input class="form-check-input"
-                                                    type="radio"
-                                                    id="answer_{{ $form->id }}_{{ $value }}"
-                                                    name="answers[{{ $loop->parent->index }}][answer]"
-                                                    value="{{ $value }}"
-                                                    required>
-                                                <input type="hidden" name="answers[{{ $loop->parent->index }}][id_form]" value="{{ $form->id }}">
-                                                <label class="form-check-label" for="answer_{{ $form->id }}_{{ $value }}">{{ $label }}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endforeach
-                            <button type="submit" class="btn btn-primary kaem-subheading">Submit Answers</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
     @elseif ($vacancy->status === 'hr_interview')
         <!-- Portfolio Modal for hrinterview -->
         <div class="modal fade" id="hrinterviewModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">

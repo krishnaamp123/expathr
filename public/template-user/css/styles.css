@@ -5363,6 +5363,20 @@ textarea.form-control-lg {
   color: #72A28A;
 }
 
+.modal-subtitle {
+  margin-bottom: 0;
+  line-height: var(--bs-modal-title-line-height);
+  font-size: 0.9em;
+  color: #72A28A;
+}
+
+.modal-subtitlewhite {
+  margin-bottom: 0;
+  line-height: var(--bs-modal-title-line-height);
+  font-size: 0.8em;
+  color: #FFF;
+}
+
 .modal-body {
   position: relative;
   flex: 1 1 auto;

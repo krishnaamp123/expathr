@@ -15,7 +15,7 @@
 
                         <!-- Form Name -->
                         <div class="form-group">
-                            <label>Form Name</label>
+                            <label><strong>Form Name</strong></label>
                             <input type="text" name="form_name" class="form-control" value="{{ $form->form_name }}" placeholder="Enter Form Name">
                             @error('form_name')
                                 <div class="text-danger">{{ $message }}</div>
@@ -49,13 +49,17 @@
                                         @endforeach
                                     </div>
 
-                                    <button type="button" class="btn btn-sm btn-secondary add-answer">Add Answer</button>
+                                    <button type="button" class="btn btn-sm add-answer" style="background-color: #858796; color: white;">
+                                        <i class="fas fa-plus"></i> Add Answer
+                                    </button>
                                     <hr>
                                 </div>
                             @endforeach
                         </div>
 
-                        <button type="button" id="add-question" class="btn btn-sm btn-primary">Add Question</button>
+                        <button type="button" id="add-question" class="btn btn-sm" style="background-color: #000; color: white;">
+                            <i class="fas fa-plus"></i> Add Question
+                        </button>
                         <hr>
 
                         <!-- Submit Button -->

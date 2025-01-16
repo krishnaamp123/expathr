@@ -30,7 +30,7 @@ class VacancyController extends Controller
         $user = auth()->user();
         $isProfileComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
                         $user->workSkill->count() > 0 && $user->workField->count() > 0 && $user->source->count() > 0 &&
-                        $user->education->count() > 0 && $user->experience->count() > 0;
+                        $user->education->count() > 0 && $user->reference->count() >= 2 && $user->experience->count() > 0;
 
         return view('user.vacancy.index', compact('vacancies', 'isProfileComplete'));
     }
@@ -82,7 +82,7 @@ class VacancyController extends Controller
 
         $isDataComplete = $user->workLocation->count() > 0 && $user->emergency->count() > 0 && $user->language->count() > 0 &&
                         $user->workSkill->count() > 0 && $user->workField->count() > 0 && $user->source->count() > 0 &&
-                        $user->education->count() > 0 && $user->experience->count() > 0;
+                        $user->education->count() > 0 && $user->reference->count() >= 2 && $user->experience->count() > 0;
 
         if (!$isDataComplete) {
             return redirect()->route('getVacancy')->with('error', 'Please complete your profile before applying for a job.');

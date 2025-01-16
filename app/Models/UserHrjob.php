@@ -47,6 +47,11 @@ class UserHrjob extends Model
         return $this->hasMany(SkillTest::class, 'id_user_job');
     }
 
+    public function phonescreens()
+    {
+        return $this->hasMany(PhoneScreen::class, 'id_user_job');
+    }
+
     public function userAnswer()
     {
         return $this->hasMany(UserAnswer::class, 'id_user_job');
