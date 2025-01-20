@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\UserHrjobHistoryAdminController;
 use App\Http\Controllers\Admin\SkillTestAdminController;
 use App\Http\Controllers\Admin\PhoneScreenAdminController;
 use App\Http\Controllers\Admin\SkillAdminController;
+use App\Http\Controllers\Admin\ReferenceCheckAdminController;
 
 
 //AUTH
@@ -305,6 +306,14 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/phonescreen/destroy/{id}', [PhoneScreenAdminController::class, 'destroyPhoneScreen'])->name('destroyPhoneScreen');
             Route::get('/phonescreen/export', [PhoneScreenAdminController::class, 'exportPhoneScreen'])->name('exportPhoneScreen');
             Route::get('/phonescreen/dateexport', [PhoneScreenAdminController::class, 'exportdatePhoneScreen'])->name('exportdatePhoneScreen');
+
+            // REFERENCE CHECK
+            Route::get('/referencecheck', [ReferenceCheckAdminController::class, 'getReferenceCheck'])->name('getReferenceCheck');
+            Route::post('/referencecheck/create', [ReferenceCheckAdminController::class, 'storeReferenceCheck'])->name('storeReferenceCheck');
+            Route::put('/referencecheck/update/{id}', [ReferenceCheckAdminController::class, 'updateReferenceCheck'])->name('updateReferenceCheck');
+            Route::delete('/referencecheck/destroy/{id}', [ReferenceCheckAdminController::class, 'destroyReferenceCheck'])->name('destroyReferenceCheck');
+            Route::get('/referencecheck/export', [ReferenceCheckAdminController::class, 'exportReferenceCheck'])->name('exportReferenceCheck');
+            Route::get('/referencecheck/dateexport', [ReferenceCheckAdminController::class, 'exportdateReferenceCheck'])->name('exportdateReferenceCheck');
 
         });
     });

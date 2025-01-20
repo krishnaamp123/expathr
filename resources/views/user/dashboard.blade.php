@@ -8,7 +8,7 @@
         <header class="masthead">
             <div class="container">
                 <div class="masthead-subheading">Expat. Roasters</div>
-                <div class="masthead-heading text-uppercase">Good Coffe All Around</div>
+                <div class="masthead-heading text-uppercase">Good Coffee All Around</div>
                 <a class="btn btn-primary btn-xl text-uppercase" href="#portfolio">Find Job</a>
             </div>
         </header>

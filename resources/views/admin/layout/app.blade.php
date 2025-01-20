@@ -215,62 +215,74 @@
             </li>
 
             @if(Auth::user()->role !== 'interviewer')
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+                <!-- Divider -->
+                <hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Master
-            </div>
+                <div class="sidebar-heading">
+                    Master
+                </div>
 
-            <li class="nav-item {{ Request::routeIs('getUser') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getUser') }}">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>User</span>
-                </a>
-            </li>
+                @if(Auth::user()->role === 'recruiter')
+                    <!-- Recruiter Only: View Job -->
+                    <li class="nav-item {{ Request::routeIs('getHrjob') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getHrjob') }}">
+                            <i class="fas fa-fw fa-suitcase"></i>
+                            <span>Job</span>
+                        </a>
+                    </li>
+                @else
+                    <!-- Non-Recruiter: Show All Options -->
+                    <li class="nav-item {{ Request::routeIs('getUser') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getUser') }}">
+                            <i class="fas fa-fw fa-user"></i>
+                            <span>User</span>
+                        </a>
+                    </li>
 
-            <li class="nav-item {{ Request::routeIs('getSkill') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getSkill') }}">
-                    <i class="fas fa-fw fa-wrench "></i>
-                    <span>Skill</span>
-                </a>
-            </li>
+                    <li class="nav-item {{ Request::routeIs('getSkill') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getSkill') }}">
+                            <i class="fas fa-fw fa-wrench "></i>
+                            <span>Skill</span>
+                        </a>
+                    </li>
 
-            <li class="nav-item {{ Request::routeIs('getHrjobCategory') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getHrjobCategory') }}">
-                    <i class="fas fa-fw fa-cubes "></i>
-                    <span>Job Category</span>
-                </a>
-            </li>
+                    <li class="nav-item {{ Request::routeIs('getHrjobCategory') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getHrjobCategory') }}">
+                            <i class="fas fa-fw fa-cubes "></i>
+                            <span>Job Category</span>
+                        </a>
+                    </li>
 
-            <li class="nav-item {{ Request::routeIs('getOutlet') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getOutlet') }}">
-                    <i class="fas fa-fw fa-building "></i>
-                    <span>Placement</span>
-                </a>
-            </li>
+                    <li class="nav-item {{ Request::routeIs('getOutlet') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getOutlet') }}">
+                            <i class="fas fa-fw fa-building "></i>
+                            <span>Placement</span>
+                        </a>
+                    </li>
 
-            <li class="nav-item {{ Request::routeIs('getHrjob') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getHrjob') }}">
-                    <i class="fas fa-fw fa-suitcase"></i>
-                    <span>Job</span>
-                </a>
-            </li>
+                    <li class="nav-item {{ Request::routeIs('getHrjob') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getHrjob') }}">
+                            <i class="fas fa-fw fa-suitcase"></i>
+                            <span>Job</span>
+                        </a>
+                    </li>
 
-            <li class="nav-item {{ Request::routeIs('getForm') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getForm') }}">
-                    <i class="fas fa-fw fa-question-circle "></i>
-                    <span>Form</span>
-                </a>
-            </li>
+                    <li class="nav-item {{ Request::routeIs('getForm') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getForm') }}">
+                            <i class="fas fa-fw fa-question-circle "></i>
+                            <span>Form</span>
+                        </a>
+                    </li>
 
-            <li class="nav-item {{ Request::routeIs('getFormHrjob') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('getFormHrjob') }}">
-                    <i class="fas fa-fw fa-clipboard "></i>
-                    <span>Form Job</span>
-                </a>
-            </li>
+                    <li class="nav-item {{ Request::routeIs('getFormHrjob') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getFormHrjob') }}">
+                            <i class="fas fa-fw fa-clipboard "></i>
+                            <span>Form Job</span>
+                        </a>
+                    </li>
+                @endif
             @endif
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -322,6 +334,13 @@
                 <a class="nav-link" href="{{ route('getSkillTest') }}">
                     <i class="fas fa-fw fa-file-code"></i>
                     <span>Skill Test</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ Request::routeIs('getReferenceCheck') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getReferenceCheck') }}">
+                    <i class="fas fa-fw fa-address-book"></i>
+                    <span>Reference Check</span>
                 </a>
             </li>
 

@@ -31,6 +31,7 @@
         <div class="row">
 
             <div class="col-xl-3 col-md-6">
+
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
@@ -64,16 +65,43 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-xl-12 col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Candidate Source</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-pie pt-0 pb-0"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                <canvas id="sourceChart" width="447" height="306" style="display: block; height: 245px; width: 358px;" class="chartjs-render-monitor"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-xl-6 col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Recruitment Funnel</h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="funnelChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div class="col-xl-3 col-md-6">
+
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                        Hiring Success Rate</div>
+                                        Conversion Rate</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ number_format($hiringSuccessRate, 0) }}%</p></div>
                                 </div>
                                 <div class="col-auto">
@@ -100,9 +128,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-md-6">
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
@@ -119,6 +145,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
@@ -135,37 +162,13 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-pie pt-0 pb-0"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                            <canvas id="sourceChart" width="447" height="306" style="display: block; height: 245px; width: 358px;" class="chartjs-render-monitor"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Recruitment Funnel</h6>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="funnelChart" width="400" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6 col-md-6 mb-4">
+            {{-- <div class="col-xl-6 col-md-6 mb-4">
                 <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Referal Hires</h6>
+                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Hired vs Rejected</h6>
                         </div>
                         <div class="card-body">
                             <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
@@ -173,7 +176,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
 @endsection
@@ -275,54 +278,6 @@
                     }
                 }
             }
-        });
-    });
-
-    // Script untuk Hired vs Rejected Chart
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctxHiredRejected = document.getElementById('hiredRejectedChart').getContext('2d');
-        const hiredRejectedData = @json($hiredRejectedData);
-
-        // Ambil semua label (misalnya, "2024-12") dari hired dan rejected
-        const labelsHiredRejected = Array.from(new Set([
-            ...Object.entries(hiredRejectedData.hired || {}).flatMap(([year, months]) => Object.keys(months)),
-            ...Object.entries(hiredRejectedData.rejected || {}).flatMap(([year, months]) => Object.keys(months)),
-        ])).sort();
-
-        // Buat chart dengan data yang disesuaikan
-        new Chart(ctxHiredRejected, {
-            type: 'line',
-            data: {
-                labels: labelsHiredRejected, // Gunakan label dari semua bulan-tahun
-                datasets: [
-                    {
-                        label: 'Hired',
-                        data: labelsHiredRejected.map(label => {
-                            const [year, month] = label.split('-');
-                            return hiredRejectedData.hired?.[year]?.[label] || 0;
-                        }),
-                        borderColor: 'rgba(131, 230, 145, 1)',
-                        backgroundColor: 'rgba(131, 230, 145, 0.5)',
-                    },
-                    {
-                        label: 'Rejected',
-                        data: labelsHiredRejected.map(label => {
-                            const [year, month] = label.split('-');
-                            return hiredRejectedData.rejected?.[year]?.[label] || 0;
-                        }),
-                        borderColor: 'rgba(143, 143, 143, 1)',
-                        backgroundColor: 'rgba(143, 143, 143, 0.5)',
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                },
-            },
         });
     });
 

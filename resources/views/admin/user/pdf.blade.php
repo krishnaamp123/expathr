@@ -149,6 +149,12 @@
     </div>
 
     <p class="tight">
+        @foreach ($user->userhrjobs as $uhj)
+            <p class="tight"><strong>{{ $uhj->hrjob->job_name }}</strong> | {{ $uhj->created_at }}</p>
+        @endforeach
+    </p>
+
+    <p class="tight">
         <strong>Social:</strong>
         @foreach ($user->link as $index => $lin)
             <a href="{{ $lin->media_url }}" target="_blank" rel="noopener noreferrer">

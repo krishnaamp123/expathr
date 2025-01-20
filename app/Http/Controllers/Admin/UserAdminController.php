@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserHrjob;
 use App\Models\City;
 use App\Models\Field;
 use App\Models\WorkLocation;
@@ -230,7 +231,7 @@ class UserAdminController extends Controller
 
     public function generatePdf($id)
     {
-        $user = User::with(['city', 'worklocation', 'emergency', 'about', 'language', 'workfield', 'education', 'reference',
+        $user = User::with(['city', 'worklocation', 'userhrjobs', 'emergency', 'about', 'language', 'workfield', 'education', 'reference',
             'project', 'organization', 'volunteer', 'experience', 'certification', 'workskill', 'source', 'link'])->findOrFail($id);
 
         if ($user->role !== 'applicant') {

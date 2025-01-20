@@ -931,6 +931,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
+
+                        @php
+                            // Menghitung total jawaban benar dan salah
+                            $totalCorrect = $row->userAnswer->filter(function ($answer) {
+                                return $answer->answer->is_answer === 'yes';
+                            })->count();
+
+                            $totalWrong = $row->userAnswer->filter(function ($answer) {
+                                return $answer->answer->is_answer === 'no';
+                            })->count();
+                        @endphp
+
+                        <p class="modal-subtitlegrey"><strong>Total Correct:</strong> <span class="text-kaem">{{ $totalCorrect }}</span></p>
+                        <p class="modal-subtitlegrey"><strong>Total Wrong:</strong> <span class="text-danger">{{ $totalWrong }}</span></p><br>
+
                         @foreach ($row->userAnswer->groupBy('question.form.form_name') as $formName => $answersByForm)
                             <h6 class="modal-subtitle"><strong>{{ $formName }}</strong></h6>
                             @foreach ($answersByForm as $answer)
@@ -939,16 +954,20 @@
                                     <p class="modal-subtitlegrey"></p>
                                     <ul>
                                         @foreach ($answer->question->answers as $possibleAnswer)
-                                            <li class="modal-subtitlegrey">{{ $possibleAnswer->answer_name }}</li>
+                                            <li class="modal-subtitlegrey {{ $possibleAnswer->is_answer === 'yes' ? 'text-kaem' : '' }}">
+                                                {{ $possibleAnswer->answer_name }}
+                                            </li>
                                         @endforeach
                                     </ul>
-                                    <p class="modal-subtitlegrey"><strong>User Selected:</strong> {{ $answer->answer->answer_name ?? 'No Answer Selected' }}</p>
+                                    <p class="modal-subtitlegrey">
+                                        <strong>Selected:</strong>
+                                        <span class="{{ $answer->answer->is_answer === 'yes' ? 'text-kaem' : 'text-danger' }}">
+                                            {{ $answer->answer->answer_name ?? 'No Answer Selected' }}
+                                        </span>
+                                    </p>
                                 </div>
                             @endforeach
                         @endforeach
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

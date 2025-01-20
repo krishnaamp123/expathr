@@ -24,4 +24,9 @@ class Reference extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function referencechecks()
+    {
+        return $this->hasMany(ReferenceCheck::class, 'id_reference');
+    }
 }

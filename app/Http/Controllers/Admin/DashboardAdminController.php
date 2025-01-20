@@ -91,42 +91,19 @@ class DashboardAdminController extends Controller
             : 0;
 
         // Menghitung Hired vs Rejected per bulan
-        $hiredRejectedData = $applyupDateFilter(
-            UserHrjob::query()
-        )
-            ->selectRaw('MONTH(updated_at) as month, YEAR(updated_at) as year, status, COUNT(*) as count')
-            ->groupBy('month', 'year', 'status')
-            ->get()
-            ->groupBy('status')
-            ->map(function ($group) {
-                return $group->groupBy('year')->map(function ($yearGroup) {
-                    return $yearGroup->mapWithKeys(function ($item) {
-                        return [sprintf('%04d-%02d', $item->year, $item->month) => $item->count];
-                    });
-                });
-            });
-
-        // $hiredRejectedData = $applyDateFilter(
-        //     UserHrjobStatusHistory::query()
+        // $hiredRejectedData = $applyupDateFilter(
+        //     UserHrjob::query()
         // )
-        //     ->selectRaw('id_user_job, status, MAX(updated_at) as latest_update')
-        //     ->groupBy('id_user_job', 'status')
+        //     ->selectRaw('MONTH(updated_at) as month, YEAR(updated_at) as year, status, COUNT(*) as count')
+        //     ->groupBy('month', 'year', 'status')
         //     ->get()
         //     ->groupBy('status')
-        //     ->map(function ($statusGroup) {
-        //         return $statusGroup
-        //             ->groupBy(function ($item) {
-        //                 // Kelompokkan berdasarkan tahun dari updated_at
-        //                 return \Carbon\Carbon::parse($item->latest_update)->year;
-        //             })
-        //             ->map(function ($yearGroup) {
-        //                 return $yearGroup
-        //                     ->groupBy(function ($item) {
-        //                         // Kelompokkan berdasarkan bulan dari updated_at
-        //                         return \Carbon\Carbon::parse($item->latest_update)->format('Y-m');
-        //                     })
-        //                     ->map->count();
+        //     ->map(function ($group) {
+        //         return $group->groupBy('year')->map(function ($yearGroup) {
+        //             return $yearGroup->mapWithKeys(function ($item) {
+        //                 return [sprintf('%04d-%02d', $item->year, $item->month) => $item->count];
         //             });
+        //         });
         //     });
 
         // Menghitung funnel chart
@@ -164,7 +141,7 @@ class DashboardAdminController extends Controller
             'averageDayToHire' => $averageDayToHire,
             'percentageData' => $percentageData,
             'percentageFilledOnTime' => $percentageFilledOnTime,
-            'hiredRejectedData' => $hiredRejectedData,
+            // 'hiredRejectedData' => $hiredRejectedData,
             'funnelData' => $funnelData,
             'startDate' => $startDate,
             'endDate' => $endDate,

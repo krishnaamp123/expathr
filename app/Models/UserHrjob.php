@@ -52,6 +52,11 @@ class UserHrjob extends Model
         return $this->hasMany(PhoneScreen::class, 'id_user_job');
     }
 
+    public function referencechecks()
+    {
+        return $this->hasMany(ReferenceCheck::class, 'id_user_job');
+    }
+
     public function userAnswer()
     {
         return $this->hasMany(UserAnswer::class, 'id_user_job');

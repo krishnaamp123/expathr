@@ -455,7 +455,7 @@ Location: {$location}
 Link: {$link}
 
 Please confirm your attendance via our website on the following page:
-http://127.0.0.1:8000/user/myjob/get?status=hr_interview
+http://127.0.0.1:8000/user/myjob/get?status=user_interview
 
 Regards,
 
@@ -559,7 +559,7 @@ Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expa
     Link: {$link}
 
     Please confirm your attendance via our website on the following page:
-    http://127.0.0.1:8000/user/myjob/get?status=hr_interview
+    http://127.0.0.1:8000/user/myjob/get?status=user_interview
 
     Regards,
 

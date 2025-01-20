@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\SkillTest;
+use App\Models\ReferenceCheck;
+use App\Models\Reference;
 use App\Models\UserHrjob;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class SkillTestAdminController extends Controller
+class ReferenceCheckAdminController extends Controller
 {
-    public function getSkillTest(Request $request)
+    public function getReferenceCheck(Request $request)
     {
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
@@ -22,10 +23,10 @@ class SkillTestAdminController extends Controller
         // Tentukan role pengguna
         $role = Auth::user()->role;
 
-        $skillTestsQuery = SkillTest::with('userHrjob.user', 'userHrjob.hrjob', 'userHrjob.interviews.interviewers', 'userHrjob.userinterviews.user_interviewers');
+        $referenceCheckQuery = ReferenceCheck::with('userHrjob.user', 'userHrjob.hrjob', 'userHrjob.interviews.interviewers', 'userHrjob.userinterviews.user_interviewers');
 
         if ($role === 'hiring_manager') {
-            $skillTestsQuery->whereHas('userHrjob.hrjob.user', function ($query) {
+            $referenceCheckQuery->whereHas('userHrjob.hrjob.user', function ($query) {
                 $query->where('role', '!=', 'super_admin');
                 $query->whereHas('userHrjobs.interviews.interviewers', function ($subQuery) {
                     $subQuery->where('role', '!=', 'super_admin');
@@ -37,7 +38,7 @@ class SkillTestAdminController extends Controller
                 ->orWhereDoesntHave('userHrjobs.userinterviews');
             });
         } elseif ($role === 'recruiter') {
-            $skillTestsQuery->whereHas('userHrjob.hrjob.user', function ($query) {
+            $referenceCheckQuery->whereHas('userHrjob.hrjob.user', function ($query) {
                 $query->where('role', 'recruiter');
                 $query->whereHas('userHrjobs.interviews.interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
@@ -49,7 +50,7 @@ class SkillTestAdminController extends Controller
                 ->orWhereDoesntHave('userHrjobs.userinterviews');
             });
         } elseif ($role === 'interviewer') {
-            $skillTestsQuery->whereHas('userHrjob.hrjob.user', function ($query) {
+            $referenceCheckQuery->whereHas('userHrjob.hrjob.user', function ($query) {
                 $query->whereHas('userHrjobs.interviews.interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
                 })
@@ -60,49 +61,49 @@ class SkillTestAdminController extends Controller
         }
 
         if ($hrjobId) {
-            $skillTestsQuery->whereHas('userHrjob', function ($query) use ($hrjobId) {
+            $referenceCheckQuery->whereHas('userHrjob', function ($query) use ($hrjobId) {
                 $query->where('id_job', $hrjobId);
             });
         }
 
         if ($startDate) {
-            $skillTestsQuery->whereDate('created_at', '>=', $startDate);
+            $referenceCheckQuery->whereDate('created_at', '>=', $startDate);
         }
         if ($endDate) {
-            $skillTestsQuery->whereDate('created_at', '<=', $endDate);
+            $referenceCheckQuery->whereDate('created_at', '<=', $endDate);
         }
 
-        $skilltests = $skillTestsQuery->get();
+        $referencechecks = $referenceCheckQuery->get();
         $userhrjobs = UserHrJob::with('user', 'hrjob')->get();
+        $userIds = $userhrjobs->pluck('id_user')->unique();
+        $references = Reference::whereIn('id_user', $userIds)->get();
 
-        return view('admin.skilltest.index', compact('skilltests', 'userhrjobs'));
+        return view('admin.referencecheck.index', compact('referencechecks', 'userhrjobs', 'references'));
     }
 
-    public function storeSkillTest(Request $request)
+    public function storeReferenceCheck(Request $request)
     {
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
                 session()->flash('toast_type', 'failed');
-                session()->flash('toast_message', 'You are not authorized to rate this skill test.');
+                session()->flash('toast_message', 'You are not authorized to manage this reference check.');
                 return back()->withInput();
             }
 
             $validated = $request->validate([
                 'id_user_job' => 'required',
-                'score' => 'required|integer|min:1|max:10',
-                'rating' => 'required|integer|min:1|max:5',
-                'comment' => 'required|string|max:1000',
+                'id_reference' => 'required',
+                'comment' => 'nullable',
             ]);
 
-            $skilltest = SkillTest::create([
+            $referencecheck = ReferenceCheck::create([
                 'id_user_job' => $request->id_user_job,
-                'score' => $request->score,
-                'rating' => $request->rating,
+                'id_reference' => $request->id_reference,
                 'comment' => $request->comment,
             ]);
 
             session()->flash('toast_type', 'success');
-            session()->flash('toast_message', 'Skill Test rated successfully!');
+            session()->flash('toast_message', 'Reference Check added successfully!');
             return back()->withInput();
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
@@ -120,38 +121,35 @@ class SkillTestAdminController extends Controller
         return back()->withInput();
     }
 
-    public function updateSkillTest(Request $request, $id)
+    public function updateReferenceCheck(Request $request, $id)
     {
-        $skilltest = SkillTest::findOrFail($id);
+        $referencecheck = ReferenceCheck::findOrFail($id);
 
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                return response()->json(['message' => 'You are not authorized to edit this skill test.'], 403);
+                return response()->json(['message' => 'You are not authorized to edit this reference check.'], 403);
             }
 
             $validated = $request->validate([
                 'id_user_job' => 'required',
-                'score' => 'nullable|integer|min:1|max:10',
-                'rating' => 'nullable|integer|min:1|max:5',
-                'comment' => 'nullable|string|max:1000',
+                'id_reference' => 'required',
+                'comment' => 'nullable',
             ]);
 
-            $skilltest->update([
+            $referencecheck->update([
                 'id_user_job' => $request->id_user_job,
-                'score' => $request->score,
-                'rating' => $request->rating,
+                'id_reference' => $request->id_reference,
                 'comment' => $request->comment,
             ]);
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Skill Test updated successfully!',
+                'message' => 'Reference Check updated successfully!',
                 'updatedRow' => [
-                    'id' => $skilltest->id,
-                    'id_user_job' => $skilltest->id_user_job,
-                    'score' => $skilltest->score,
-                    'rating' => $skilltest->rating,
-                    'comment' => $skilltest->comment,
+                    'id' => $referencecheck->id,
+                    'id_user_job' => $referencecheck->id_user_job,
+                    'id_reference' => $referencecheck->id_reference,
+                    'comment' => $referencecheck->comment,
                 ],
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -165,16 +163,16 @@ class SkillTestAdminController extends Controller
         }
     }
 
-    public function destroySkillTest($id)
+    public function destroyReferenceCheck($id)
     {
-        $skilltest = SkillTest::findOrFail($id);
+        $referencecheck = ReferenceCheck::findOrFail($id);
 
         try {
             if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
-                return response()->json(['message' => 'You are not authorized to delete this skill test.'], 403);
+                return response()->json(['message' => 'You are not authorized to delete this reference check.'], 403);
             }
-            $skilltest->delete();
-            return response()->json(['message' => 'Skill Test deleted successfully.'], 200);
+            $referencecheck->delete();
+            return response()->json(['message' => 'Reference Check deleted successfully.'], 200);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
             $errors = [];
@@ -184,15 +182,15 @@ class SkillTestAdminController extends Controller
             return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
-            return response()->json(['message' => 'An error occurred while deleting the skill tests.'], 500);
+            return response()->json(['message' => 'An error occurred while deleting the reference checks.'], 500);
         }
     }
 
-    public function exportSkillTest()
+    public function exportReferenceCheck()
     {
-        $skilltests = SkillTest::with(['userHrjob.hrjob', 'userHrjob.user'])
+        $referencechecks = ReferenceCheck::with(['userHrjob.hrjob', 'userHrjob.user'])
             ->whereHas('userHrjob', function ($query) {
-                $query->where('status', 'skill_test');
+                $query->where('status', 'reference_check');
             })
             ->get();
 
@@ -205,29 +203,39 @@ class SkillTestAdminController extends Controller
         $sheet->setCellValue('B1', 'Applicant Name');
         $sheet->setCellValue('C1', 'Job Name');
         $sheet->setCellValue('D1', 'Location');
-        $sheet->setCellValue('E1', 'Outlet');
-        $sheet->setCellValue('F1', 'Applied At');
-        $sheet->setCellValue('G1', 'Score');
-        $sheet->setCellValue('H1', 'Rating');
-        $sheet->setCellValue('I1', 'Comment');
+        $sheet->setCellValue('E1', 'Reference Name');
+        $sheet->setCellValue('F1', 'Relation');
+        $sheet->setCellValue('G1', 'Company Name');
+        $sheet->setCellValue('H1', 'Reference Phone');
+        $sheet->setCellValue('I1', 'Can Be Called');
+        $sheet->setCellValue('J1', 'Comment');
 
         // Membuat header bold
-        $headerRange = 'A1:I1';
+        $headerRange = 'A1:J1';
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
 
         // Isi data dari database ke dalam file Excel
         $rowNumber = 2; // Baris pertama adalah header
-        foreach ($skilltests as $skilltest) {
+        foreach ($referencechecks as $referencecheck) {
+            $applicantName = $referencecheck->userHrjob->user->fullname ?? 'No Applicant';
+            $jobName = $referencecheck->userHrjob->hrjob->job_name ?? 'No Job';
+            $city = $referencecheck->userHrjob->hrjob->city->city_name  ?? 'No Location';
+            $referenceName = $referencecheck->reference->reference_name  ?? 'No Reference Name';
+            $relation = $referencecheck->reference->relation  ?? 'No Relation';
+            $companyName = $referencecheck->reference->company_name  ?? 'No Company Name';
+            $referencePhone = $referencecheck->reference->phone  ?? 'No Reference Phone';
+            $canBeCalled = $referencecheck->reference->is_call  ?? 'No Can Be Called';
 
-            $sheet->setCellValue('A' . $rowNumber, $skilltest->id);
-            $sheet->setCellValue('B' . $rowNumber, $skilltest->userHrjob->user->fullname ?? 'No Applicant');
-            $sheet->setCellValue('C' . $rowNumber, $skilltest->userHrjob->hrjob->job_name ?? 'No Job');
-            $sheet->setCellValue('D' . $rowNumber, $skilltest->userHrjob->hrjob->city->city_name  ?? 'No Location');
-            $sheet->setCellValue('E' . $rowNumber, $skilltest->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
-            $sheet->setCellValue('F' . $rowNumber, $skilltest->userHrjob->created_at ?? 'No Applied');
-            $sheet->setCellValue('G' . $rowNumber, $skilltest->score ?? 'No Score');
-            $sheet->setCellValue('H' . $rowNumber, $skilltest->rating ?? 'No Rating');
-            $sheet->setCellValue('I' . $rowNumber, $skilltest->comment ?? 'No Comment');
+            $sheet->setCellValue('A' . $rowNumber, $referencecheck->id);
+            $sheet->setCellValue('B' . $rowNumber, $applicantName);
+            $sheet->setCellValue('C' . $rowNumber, $jobName);
+            $sheet->setCellValue('D' . $rowNumber, $city);
+            $sheet->setCellValue('E' . $rowNumber, $referenceName);
+            $sheet->setCellValue('F' . $rowNumber, $relation);
+            $sheet->setCellValue('G' . $rowNumber, $companyName);
+            $sheet->setCellValue('H' . $rowNumber, $referencePhone);
+            $sheet->setCellValue('I' . $rowNumber, $canBeCalled);
+            $sheet->setCellValue('J' . $rowNumber, $referencecheck->comment  ?? 'No Comment');
 
             $rowNumber++;
         }
@@ -241,13 +249,13 @@ class SkillTestAdminController extends Controller
 
         // Konfigurasi headers
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment;filename="skill_tests.xlsx"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="reference_checks.xlsx"');
         $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;
     }
 
-    public function exportdateSkillTest(Request $request)
+    public function exportdateReferenceCheck(Request $request)
     {
         // Validasi input tanggal
         $validated = $request->validate([
@@ -256,15 +264,16 @@ class SkillTestAdminController extends Controller
         ]);
 
         // Filter data berdasarkan rentang tanggal dan status
-        $skilltests = SkillTest::with(['userHrjob.hrjob', 'userHrjob.user'])
+        $referencechecks = ReferenceCheck::with(['userHrjob.hrjob', 'userHrjob.user'])
             ->whereBetween('created_at', [
                 Carbon::parse($validated['start_date'])->startOfDay(),
                 Carbon::parse($validated['end_date'])->endOfDay()
             ])
             ->whereHas('userHrjob', function ($query) {
-                $query->where('status', 'skill_test');
+                $query->where('status', 'reference_check');
             })
             ->get();
+
 
         // Membuat spreadsheet dan isi data
         $spreadsheet = new Spreadsheet();
@@ -275,28 +284,39 @@ class SkillTestAdminController extends Controller
         $sheet->setCellValue('B1', 'Applicant Name');
         $sheet->setCellValue('C1', 'Job Name');
         $sheet->setCellValue('D1', 'Location');
-        $sheet->setCellValue('E1', 'Outlet');
-        $sheet->setCellValue('F1', 'Applied At');
-        $sheet->setCellValue('G1', 'Score');
-        $sheet->setCellValue('H1', 'Rating');
-        $sheet->setCellValue('I1', 'Comment');
+        $sheet->setCellValue('E1', 'Reference Name');
+        $sheet->setCellValue('F1', 'Relation');
+        $sheet->setCellValue('G1', 'Company Name');
+        $sheet->setCellValue('H1', 'Reference Phone');
+        $sheet->setCellValue('I1', 'Can Be Called');
+        $sheet->setCellValue('J1', 'Comment');
 
         // Membuat header bold
-        $headerRange = 'A1:I1'; // Range dari header
+        $headerRange = 'A1:J1'; // Range dari header
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
 
         // Isi data
         $rowNumber = 2;
-        foreach ($skilltests as $skilltest) {
-            $sheet->setCellValue('A' . $rowNumber, $skilltest->id);
-            $sheet->setCellValue('B' . $rowNumber, $skilltest->userHrjob->user->fullname ?? 'No Applicant');
-            $sheet->setCellValue('C' . $rowNumber, $skilltest->userHrjob->hrjob->job_name ?? 'No Job');
-            $sheet->setCellValue('D' . $rowNumber, $skilltest->userHrjob->hrjob->city->city_name  ?? 'No Location');
-            $sheet->setCellValue('E' . $rowNumber, $skilltest->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
-            $sheet->setCellValue('F' . $rowNumber, $skilltest->userHrjob->created_at ?? 'No Applied');
-            $sheet->setCellValue('G' . $rowNumber, $skilltest->score ?? 'No Score');
-            $sheet->setCellValue('H' . $rowNumber, $skilltest->rating ?? 'No Rating');
-            $sheet->setCellValue('I' . $rowNumber, $skilltest->comment ?? 'No Comment');
+        foreach ($referencechecks as $referencecheck) {
+            $applicantName = $referencecheck->userHrjob->user->fullname ?? 'No Applicant';
+            $jobName = $referencecheck->userHrjob->hrjob->job_name ?? 'No Job';
+            $city = $referencecheck->userHrjob->hrjob->city->city_name  ?? 'No Location';
+            $referenceName = $referencecheck->reference->reference_name  ?? 'No Reference Name';
+            $relation = $referencecheck->reference->relation  ?? 'No Relation';
+            $companyName = $referencecheck->reference->company_name  ?? 'No Company Name';
+            $referencePhone = $referencecheck->reference->phone  ?? 'No Reference Phone';
+            $canBeCalled = $referencecheck->reference->is_call  ?? 'No Can Be Called';
+
+            $sheet->setCellValue('A' . $rowNumber, $referencecheck->id);
+            $sheet->setCellValue('B' . $rowNumber, $applicantName);
+            $sheet->setCellValue('C' . $rowNumber, $jobName);
+            $sheet->setCellValue('D' . $rowNumber, $city);
+            $sheet->setCellValue('E' . $rowNumber, $referenceName);
+            $sheet->setCellValue('F' . $rowNumber, $relation);
+            $sheet->setCellValue('G' . $rowNumber, $companyName);
+            $sheet->setCellValue('H' . $rowNumber, $referencePhone);
+            $sheet->setCellValue('I' . $rowNumber, $canBeCalled);
+            $sheet->setCellValue('J' . $rowNumber, $referencecheck->comment  ?? 'No Comment');
 
             $rowNumber++;
         }
@@ -310,7 +330,7 @@ class SkillTestAdminController extends Controller
 
         // Konfigurasi headers
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->headers->set('Content-Disposition', 'attachment;filename="skill_tests_date.xlsx"');
+        $response->headers->set('Content-Disposition', 'attachment;filename="reference_checks_date.xlsx"');
         $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;

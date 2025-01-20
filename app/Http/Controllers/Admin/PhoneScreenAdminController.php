@@ -27,33 +27,33 @@ class PhoneScreenAdminController extends Controller
         if ($role === 'hiring_manager') {
             $phoneScreenQuery->whereHas('userHrjob.hrjob.user', function ($query) {
                 $query->where('role', '!=', 'super_admin');
-                $query->whereHas('userHrjob.interviews.interviewers', function ($subQuery) {
+                $query->whereHas('userHrjobs.interviews.interviewers', function ($subQuery) {
                     $subQuery->where('role', '!=', 'super_admin');
                 })
-                ->orWhereHas('userHrjob.userinterviews.user_interviewers', function ($subQuery) {
+                ->orWhereHas('userHrjobs.userinterviews.user_interviewers', function ($subQuery) {
                     $subQuery->where('role', '!=', 'super_admin');
                 })
-                ->orWhereDoesntHave('userHrjob.interviews')
-                ->orWhereDoesntHave('userHrjob.userinterviews');
+                ->orWhereDoesntHave('userHrjobs.interviews')
+                ->orWhereDoesntHave('userHrjobs.userinterviews');
             });
         } elseif ($role === 'recruiter') {
             $phoneScreenQuery->whereHas('userHrjob.hrjob.user', function ($query) {
                 $query->where('role', 'recruiter');
-                $query->whereHas('userHrjob.interviews.interviewers', function ($subQuery) {
+                $query->whereHas('userHrjobs.interviews.interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
                 })
-                ->orWhereHas('userHrjob.userinterviews.user_interviewers', function ($subQuery) {
+                ->orWhereHas('userHrjobs.userinterviews.user_interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
                 })
-                ->orWhereDoesntHave('userHrjob.interviews')
-                ->orWhereDoesntHave('userHrjob.userinterviews');
+                ->orWhereDoesntHave('userHrjobs.interviews')
+                ->orWhereDoesntHave('userHrjobs.userinterviews');
             });
         } elseif ($role === 'interviewer') {
             $phoneScreenQuery->whereHas('userHrjob.hrjob.user', function ($query) {
-                $query->whereHas('userHrjob.interviews.interviewers', function ($subQuery) {
+                $query->whereHas('userHrjobs.interviews.interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
                 })
-                ->orWhereHas('userHrjob.userinterviews.user_interviewers', function ($subQuery) {
+                ->orWhereHas('userHrjobs.userinterviews.user_interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
                 });
             });

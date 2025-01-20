@@ -70,10 +70,7 @@ class HrjobAdminController extends Controller
 
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
-            $selectedUser = User::find($validated['id_user']);
-            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
-            }
+            return redirect()->route('getHrjob')->with('error', 'Recruiters are not allowed to create jobs.');
         }
 
         // Jika user yang login adalah hiring_manager
@@ -150,10 +147,7 @@ class HrjobAdminController extends Controller
 
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
-            $selectedUser = User::find($validated['id_user']);
-            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
-            }
+            return redirect()->route('getHrjob')->with('error', 'Recruiters are not allowed to update jobs.');
         }
 
         // Jika user yang login adalah hiring_manager
@@ -200,10 +194,7 @@ class HrjobAdminController extends Controller
 
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
-            $selectedUser = User::find($validated['id_user']);
-            if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
-            }
+            return redirect()->route('getHrjob')->with('error', 'Recruiters are not allowed to delete jobs.');
         }
 
         // Jika user yang login adalah hiring_manager
