@@ -289,6 +289,12 @@
                 }
             }
 
+            @if(session('toast_type') && session('toast_message'))
+                const toastId = "{{ session('toast_type') === 'success' ? 'successToast' : 'failedToast' }}";
+                const message = "{{ session('toast_message') }}";
+                showToast(toastId, message);
+            @endif
+
         });
 
     </script>

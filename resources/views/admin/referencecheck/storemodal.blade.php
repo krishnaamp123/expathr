@@ -12,7 +12,7 @@
 
                     <div class="form-group">
                         <label>Applicant</label>
-                        <select id="applicantDropdown" name="id_user_job" class="form-control inside-modal">
+                        <select id="applicantDropdown" name="id_user_job" class="form-control select2 inside-modal">
                             <option value="">Select Applicant</option>
                             @foreach($userhrjobs as $applicant)
                                 <option value="{{ $applicant->id }}" data-user-id="{{ $applicant->id_user }}">
@@ -27,10 +27,10 @@
 
                     <div class="form-group">
                         <label>Reference Contact</label>
-                        <select id="referenceDropdown" name="id_reference" class="form-control inside-modal">
+                        <select id="referenceDropdown" name="id_reference" class="form-control select2 inside-modal">
                             <option value="">Select Reference</option>
                             @foreach($references as $reference)
-                                <option value="{{ $reference->id }}" data-user-id="{{ $reference->id_user }}">
+                                <option value="{{ $reference->id }}" data-user-id="{{ $reference->id_user}}">
                                     {{ $reference->reference_name }} | {{ $reference->phone }}
                                 </option>
                             @endforeach
@@ -90,28 +90,33 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const applicantDropdown = document.getElementById('applicantDropdown');
-        const referenceDropdown = document.getElementById('referenceDropdown');
-
-        applicantDropdown.addEventListener('change', function () {
-            const selectedUserId = this.options[this.selectedIndex].getAttribute('data-user-id');
-            console.log('Selected User ID:', selectedUserId); // Debugging
-
-            // Filter references based on selected user ID
-            Array.from(referenceDropdown.options).forEach(option => {
-                const optionUserId = option.getAttribute('data-user-id');
-                console.log('Reference Option User ID:', optionUserId); // Debugging
-
-                if (optionUserId === selectedUserId || option.value === '') {
-                    option.style.display = '';
-                } else {
-                    option.style.display = 'none';
-                }
-            });
-
-            // Reset reference dropdown value
-            referenceDropdown.value = '';
+   $(document).ready(function () {
+    $('#addReferenceCheckModal').on('shown.bs.modal', function () {
+        $('.select2.inside-modal').select2({
+            dropdownParent: $('#addReferenceCheckModal')
         });
     });
+
+    // Event listener untuk Applicant dropdown
+    $('#applicantDropdown').on('select2:select', function () {
+        const selectedUserId = $(this).find(':selected').data('user-id');
+        const referenceDropdown = $('#referenceDropdown');
+
+        const allOptions = referenceDropdown.data('all-options') || referenceDropdown.html();
+        if (!referenceDropdown.data('all-options')) {
+            referenceDropdown.data('all-options', allOptions);
+        }
+
+        referenceDropdown.empty();
+
+        $(allOptions).each(function () {
+            const optionUserId = $(this).data('user-id');
+            if (String(optionUserId) === String(selectedUserId) || !optionUserId) {
+                referenceDropdown.append($(this));
+            }
+        });
+
+        referenceDropdown.val(null).trigger('change.select2');
+    });
+});
 </script>

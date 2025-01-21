@@ -9,6 +9,7 @@ use App\Models\Hrjob;
 use App\Models\User;
 use App\Models\Interview;
 use App\Models\UserHrjobStatusHistory;
+use App\Models\Reference;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -123,8 +124,10 @@ class UserHrjobAdminController extends Controller
         $hrjobss = Hrjob::all();
         $userss = User::where('role', '=', 'applicant')->get();
         $users = User::where('role', '!=', 'applicant')->get();
+        $userIds = $userhrjobss->pluck('id_user')->unique();
+        $references = Reference::whereIn('id_user', $userIds)->get();
 
-        return view('admin.userhrjob.index', compact('userhrjobs', 'userhrjobss', 'hrjobss', 'statuses', 'status', 'users', 'userss'));
+        return view('admin.userhrjob.index', compact('userhrjobs', 'userhrjobss', 'hrjobss', 'statuses', 'status', 'users', 'userss', 'references'));
     }
 
     public function getInterviewModal(Request $request)

@@ -298,6 +298,61 @@
                         </div>
                     </div>
                     </div>
+                    @elseif (request('status') === 'reference_check')
+                    <div class="d-flex align-items-center">
+                        <button
+                            type="button"
+                            class="btn btn-sm mr-2"
+                            style="background-color: #72A28A; color: white;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addReferenceCheckModal">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+
+                        @include('admin.referencecheck.storemodal', [
+                            'userhrjobs' => $userhrjobss,
+                            'references' => $references,
+                        ])
+                    <a href="{{ route('exportReferenceCheck') }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
+                        <i class="fas fa-file-excel"></i> Export All
+                    </a>
+                    <!-- Tombol Export -->
+                    <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
+                        <i class="fas fa-calendar-check"></i> Export Date
+                    </button>
+
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
+
+                    <!-- Modal Popup -->
+                    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exportModalLabel">Export Date Range</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ route('exportdateReferenceCheck') }}" method="GET">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Export</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                     @else
                     <button
                         type="button"
@@ -420,6 +475,15 @@
                             @elseif (request('status') === 'phone_screen')
                                 <th>Phone Screen Date</th>
                                 <th>Phone Screen Time</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                            @elseif (request('status') === 'reference_check')
+                                <th>Reference Name</th>
+                                <th>Relation</th>
+                                <th>Company Name</th>
+                                <th>Reference Phone</th>
+                                <th>Can Be Called</th>
+                                <th>Comment</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @else
@@ -702,8 +766,8 @@
                                                 Not Commented
                                             @endif
                                         </td>
-                                        <td data-field="updated_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td data-field="created_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="updated_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -759,8 +823,8 @@
                                         <td data-field="time">
                                             {{ $row->phonescreens->first()->time ?? 'Not Timed' }}
                                         </td>
-                                        <td data-field="updated_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td data-field="created_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="updated_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -807,6 +871,82 @@
                                                 </form>
                                             @else
                                                 <span class="text-danger">Create a valid phone screen first !</span>
+                                            @endif
+                                        </td>
+                                    @elseif (request('status') === 'reference_check')
+                                        <td data-field="reference_name">{{ $row->referencechecks->first()->reference->reference_name ?? 'No Reference Name' }}</td>
+                                        <td data-field="relation">{{ $row->referencechecks->first()->reference->relation ?? 'No Relation' }}</td>
+                                        <td data-field="company_name">{{ $row->referencechecks->first()->reference->company_name ?? 'No Company Name' }}</td>
+                                        <td data-field="phone">{{ $row->referencechecks->first()->reference->phone ?? 'No Reference Phone' }}</td>
+                                        <td data-field="is_call">
+                                            @php
+                                                $isCall = $row->referencechecks->first()?->reference?->is_call;
+                                            @endphp
+                                            @if ($isCall === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
+                                            @elseif ($isCall === 'no' || is_null($isCall))
+                                                <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                            @endif
+                                        </td>
+                                        <td data-field="comment">
+                                            @if ($row->referencechecks->first()?->comment)
+                                            <span
+                                                title="{{ $row->referencechecks->first()->comment }}">
+                                                {{ \Illuminate\Support\Str::limit($row->referencechecks->first()->comment, 20, '...') }}
+                                            </span>
+                                            @else
+                                                Not Commented
+                                            @endif
+                                        </td>
+                                        <td data-field="created_at">{{ $row->referencechecks->first()->updated_at ?? 'Not Created' }}</td>
+                                        <td data-field="updated_at">{{ $row->referencechecks->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td>
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $referencecheck = $row->referencechecks->first();
+                                            @endphp
+
+                                            @if ($referencecheck && $referencecheck->id)
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #969696; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editReferenceCheckModal{{ $referencecheck->id }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+
+                                                @include('admin.referencecheck.updatemodal', [
+                                                    'id' => $referencecheck->id,
+                                                    'referencecheck' => $referencecheck,
+                                                    'userhrjobs' => $userhrjobss,
+                                                    'comment' => $referencecheck->comment,
+                                                ])
+
+                                                <form method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                            class="btn btn-sm delete-btn"
+                                                            style="background-color: #c03535; color: white;"
+                                                            data-url="{{ route('destroyReferenceCheck', $referencecheck->id) }}"
+                                                            data-confirm-message="Are you sure you want to delete this reference check?">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-danger">Create a valid reference check first !</span>
                                             @endif
                                         </td>
                                     @else

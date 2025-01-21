@@ -315,6 +315,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/referencecheck/export', [ReferenceCheckAdminController::class, 'exportReferenceCheck'])->name('exportReferenceCheck');
             Route::get('/referencecheck/dateexport', [ReferenceCheckAdminController::class, 'exportdateReferenceCheck'])->name('exportdateReferenceCheck');
 
+            // OFFERING
+            Route::get('/offering', [OfferingAdminController::class, 'getOffering'])->name('getOffering');
+            Route::post('/offering/create', [OfferingAdminController::class, 'storeOffering'])->name('storeOffering');
+            Route::put('/offering/update/{id}', [OfferingAdminController::class, 'updateOffering'])->name('updateOffering');
+            Route::delete('/offering/destroy/{id}', [OfferingAdminController::class, 'destroyOffering'])->name('destroyOffering');
+            Route::get('/offering/export', [OfferingAdminController::class, 'exportOffering'])->name('exportOffering');
+            Route::get('/offering/dateexport', [OfferingAdminController::class, 'exportdateOffering'])->name('exportdateOffering');
+
         });
     });
 });

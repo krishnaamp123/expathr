@@ -184,7 +184,16 @@
                             <td data-field="created_at">{{$row->created_at}}</td>
                             <td data-field="updated_at">{{$row->updated_at}}</td>
                             <td data-field="rating">{{$row->rating ?? 'No Rating'}}</td>
-                            <td data-field="comment">{{$row->comment ?? 'No Comment'}}</td>
+                            <td data-field="comment">
+                                @if ($row->comment)
+                                <span
+                                    title="{{ $row->comment }}">
+                                    {{ \Illuminate\Support\Str::limit($row->comment, 20, '...') }}
+                                </span>
+                                @else
+                                    Not Commented
+                                @endif
+                            </td>
                             <td>
                                 <button
                                     type="button"
@@ -371,6 +380,12 @@
                 console.error(`Toast element with ID ${toastId} not found`);
             }
         }
+
+        @if(session('toast_type') && session('toast_message'))
+            const toastId = "{{ session('toast_type') === 'success' ? 'successToast' : 'failedToast' }}";
+            const message = "{{ session('toast_message') }}";
+            showToast(toastId, message);
+        @endif
 
     });
 

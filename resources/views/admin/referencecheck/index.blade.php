@@ -4,7 +4,7 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Reference Check</h1>
 
-    <!-- Toast Container -->
+   <!-- Toast Container -->
     <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">
         <div id="successToast" class="toast text-white" style="background-color: #72A28A; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
             <div class="toast-header text-white" style="background-color: #72A28A;">
@@ -137,8 +137,23 @@
                             <td data-field="relation">{{ $row->reference->relation ?? 'No Relation' }}</td>
                             <td data-field="company_name">{{ $row->reference->company_name ?? 'No Company Name' }}</td>
                             <td data-field="phone">{{ $row->reference->phone ?? 'No Reference Phone' }}</td>
-                            <td data-field="is_call">{{ $row->reference->is_call ?? 'No Can Be Called' }}</td>
-                            <td data-field="comment">{{ $row->reference->comment ?? 'No Comment' }}</td>
+                            <td data-field="is_call">
+                                @if ($row->reference->is_call === 'yes')
+                                    <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
+                                @elseif ($row->reference->is_call === 'no' || is_null($row->reference->is_call))
+                                    <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                @endif
+                            </td>
+                            <td data-field="comment">
+                                @if ($row->comment)
+                                <span
+                                    title="{{ $row->comment }}">
+                                    {{ \Illuminate\Support\Str::limit($row->comment, 20, '...') }}
+                                </span>
+                                @else
+                                    Not Commented
+                                @endif
+                            </td>
                             <td data-field="created_at">{{ $row->created_at }}</td>
                             <td data-field="updated_at">{{ $row->updated_at }}</td>
                             <td>
@@ -155,6 +170,7 @@
                                     'id' => $row->id,
                                     'referencecheck' => $row,
                                     'userhrjobs' => $userhrjobs,
+                                    'comment' => $row->comment
                                 ])
 
                                 <form method="POST">
@@ -297,6 +313,12 @@
                     console.error(`Toast element with ID ${toastId} not found`);
                 }
             }
+
+            @if(session('toast_type') && session('toast_message'))
+                const toastId = "{{ session('toast_type') === 'success' ? 'successToast' : 'failedToast' }}";
+                const message = "{{ session('toast_message') }}";
+                showToast(toastId, message);
+            @endif
 
         });
 
