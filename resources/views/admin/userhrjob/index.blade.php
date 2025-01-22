@@ -353,6 +353,62 @@
                         </div>
                     </div>
                     </div>
+
+                    @elseif (request('status') === 'offering')
+                    <div class="d-flex align-items-center">
+                        <button
+                            type="button"
+                            class="btn btn-sm mr-2"
+                            style="background-color: #72A28A; color: white;"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addOfferingModal">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+
+                        @include('admin.offering.storemodal', [
+                            'userhrjobs' => $userhrjobss,
+                        ])
+                    <a href="{{ route('exportOffering') }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
+                        <i class="fas fa-file-excel"></i> Export All
+                    </a>
+                    <!-- Tombol Export -->
+                    <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
+                        <i class="fas fa-calendar-check"></i> Export Date
+                    </button>
+
+                    <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
+
+                    <!-- Modal Popup -->
+                    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exportModalLabel">Export Date Range</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ route('exportdateOffering') }}" method="GET">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Export</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
                     @else
                     <button
                         type="button"
@@ -484,6 +540,10 @@
                                 <th>Reference Phone</th>
                                 <th>Can Be Called</th>
                                 <th>Comment</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                            @elseif (request('status') === 'offering')
+                                <th>Offering File</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @else
@@ -947,6 +1007,66 @@
                                                 </form>
                                             @else
                                                 <span class="text-danger">Create a valid reference check first !</span>
+                                            @endif
+                                        </td>
+                                    @elseif (request('status') === 'offering')
+                                        <td data-field="offering_file">
+                                            @if($row->offerings->isNotEmpty() && $row->offerings->first()->offering_file)
+                                                <a href="{{ asset($row->offerings->first()->offering_file) }}" target="_blank">
+                                                    View File
+                                                </a>
+                                            @else
+                                                No File
+                                            @endif
+                                        </td>
+                                        <td data-field="created_at">{{ $row->offerings->first()->updated_at ?? 'Not Created' }}</td>
+                                        <td data-field="updated_at">{{ $row->offerings->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td>
+                                            <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
+                                                @csrf
+                                                <select name="status" class="form-control form-control-sm" data-id="{{ $row->id }}">
+                                                    @foreach ($statuses as $availableStatus)
+                                                        <option value="{{ $availableStatus }}" {{ $row->status === $availableStatus ? 'selected' : '' }}>
+                                                            {{ ucwords(str_replace('_', ' ', $availableStatus)) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $offering = $row->offerings->first();
+                                            @endphp
+
+                                            @if ($offering && $offering->id)
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm my-1"
+                                                    style="background-color: #969696; color: white;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editOfferingModal{{ $offering->id }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+
+                                                @include('admin.offering.updatemodal', [
+                                                    'id' => $offering->id,
+                                                    'offering' => $offering,
+                                                    'userhrjobs' => $userhrjobss,
+                                                ])
+
+                                                <form method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                            class="btn btn-sm delete-btn"
+                                                            style="background-color: #c03535; color: white;"
+                                                            data-url="{{ route('destroyOffering', $offering->id) }}"
+                                                            data-confirm-message="Are you sure you want to delete this offering?">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-danger">Create a valid offering first !</span>
                                             @endif
                                         </td>
                                     @else
@@ -1467,6 +1587,62 @@
                         });
                 });
             });
+
+            document.querySelectorAll('.update-form-offering').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(form); // Ambil semua input dalam form
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                    // Debugging: Periksa isi FormData
+                    for (const [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value}`);
+                    }
+
+                    fetch(form.action, {
+                        method: 'POST', // Gunakan POST untuk kompatibilitas dengan FormData
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken, // Tambahkan token CSRF
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: formData, // Kirim FormData (termasuk file)
+                    })
+                        .then(response => {
+                            const isOk = response.ok;
+                            return response.json().then(data => ({ isOk, data }));
+                        })
+                        .then(({ isOk, data }) => {
+                            console.log('Server Response:', data);
+                            if (isOk) {
+                                updateTableOfferingRow(data.updatedRow);
+                                showToast('successToast', data.message);
+                                // Tutup modal jika ada
+                                if (form.closest('.modal')) {
+                                    $(form.closest('.modal')).modal('hide');
+                                }
+                            } else {
+                                showToast('failedToast', data.message || 'Failed to update offering.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showToast('failedToast', 'An error occurred. Please try again.');
+                        });
+                });
+            });
+
+                function updateTableOfferingRow(updatedRow) {
+                    const row = document.querySelector(`tr[data-id="${updatedRow.id}"]`);
+                    if (row) {
+                        Object.keys(updatedRow).forEach(key => {
+                            const cell = row.querySelector(`[data-field="${key}"]`);
+                            if (cell) {
+                                cell.textContent = updatedRow[key];
+                            }
+                        });
+                    }
+                }
 
             function showToast(toastId, message) {
                 const toastEl = document.getElementById(toastId);

@@ -68,4 +68,9 @@ class Hrjob extends Model
     {
         return $this->belongsTo(City::class, 'id_city');
     }
+
+    public function offerings()
+    {
+        return $this->hasMany(Offering::class, 'id_job');
+    }
 }

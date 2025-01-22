@@ -8,6 +8,7 @@ use App\Models\Offering;
 use App\Models\Hrjob;
 use App\Models\UserHrjob;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class OfferingAdminController extends Controller
 {
@@ -88,7 +89,7 @@ class OfferingAdminController extends Controller
 
             $validated = $request->validate([
                 'id_user_job' => 'required',
-                'id_job' => 'required',
+                'id_job' => 'nullable',
                 'file' => 'nullable|mimes:pdf|max:5120',
             ]);
 
@@ -101,7 +102,7 @@ class OfferingAdminController extends Controller
                 $extension = $request->file('file')->getClientOriginalExtension();
                 $offeringName = $filename . '.' . $extension;
 
-                // Tentukan lokasi penyimpanan di public/storage/images
+                // Tentukan lokasi penyimpanan di public/storage/offerings
                 $destinationPath = public_path('storage/offerings');
 
                 // Buat folder jika belum ada
@@ -151,7 +152,7 @@ class OfferingAdminController extends Controller
 
             $validated = $request->validate([
                 'id_user_job' => 'required',
-                'id_job' => 'required',
+                'id_job' => 'nullable',
                 'file' => 'nullable|mimes:pdf|max:5120',
             ]);
 
@@ -224,7 +225,7 @@ class OfferingAdminController extends Controller
             return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
-            return response()->json(['message' => 'An error occurred while deleting the reference checks.'], 500);
+            return response()->json(['message' => 'An error occurred while deleting the offerings.'], 500);
         }
     }
 

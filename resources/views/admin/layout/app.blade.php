@@ -344,6 +344,13 @@
                 </a>
             </li>
 
+            <li class="nav-item {{ Request::routeIs('getOffering') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('getOffering') }}">
+                    <i class="fas fa-fw fa-paint-brush"></i>
+                    <span>Offering</span>
+                </a>
+            </li>
+
             @endif
 
              <!-- Divider -->

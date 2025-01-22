@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('offerings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user_job');
-            $table->unsignedBigInteger('id_job');
+            $table->unsignedBigInteger('id_job')->nullable();
             $table->string('offering_file')->nullable();
             $table->timestamps();
 

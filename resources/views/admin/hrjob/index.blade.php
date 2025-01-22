@@ -96,6 +96,7 @@
                                     style="background-color: #72A28A; color: white;">
                                     <i class="fas fa-tag"></i>
                                 </button>
+
                                 <form action="{{ route('destroyHrjob', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -133,6 +134,12 @@
         });
     </script>
 
+    <style>
+        .select2-container--default .select2-selection--single {
+            width: 100%;
+        }
+    </style>
+
     <!-- Modal -->
     <div class="modal fade" id="updateIsEndedModal" tabindex="-1" aria-labelledby="updateIsEndedLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -147,6 +154,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="is_ended" value="yes">
+
                         <div class="form-group">
                             <label for="hiring_cost">Hiring Cost</label>
                             <input type="number" id="hiring_cost" name="hiring_cost" class="form-control"required>
@@ -154,6 +162,46 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        {{-- <div class="form-group">
+                            <label>Applicant Hired</label>
+                                <select name="selected_offerings[]" class="form-control select2 inside-modal" multiple>
+                                    @foreach ($offerings as $offering)
+                                        @if ($offering->userHrjob && $offering->userHrjob->id_job === $row->id)
+                                            <option value="{{ $offering->id }}" {{ $offering->id_job === $row->id ? 'selected' : '' }}>
+                                                {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }} | {{ $offering->userHrjob->hrjob->job_name ?? 'Unknown User' }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            @error('selected_offerings')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
+
+                        <div class="form-group">
+                            <label>Applicant Hired</label>
+                            <select name="selected_offerings[]" class="form-control select2 inside-modal" multiple>
+                                @if ($row->offerings->isNotEmpty())
+                                    @foreach ($row->offerings as $offering)
+                                        @if ($offering->userHrjob)
+                                            <option value="{{ $offering->id }}">
+                                                {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }} |
+                                                {{ $row->job_name ?? 'Unknown Job' }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <option disabled>No offerings available</option>
+                                @endif
+                            </select>
+
+                            @error('selected_offerings')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

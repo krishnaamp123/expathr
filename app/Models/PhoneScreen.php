@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PhoneScreen extends Model
 {
+    use HasFactory;
+
     protected $table = 'phone_screens';
 
     protected $fillable = [

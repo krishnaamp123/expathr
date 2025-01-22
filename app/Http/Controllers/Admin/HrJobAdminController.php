@@ -9,6 +9,7 @@ use App\Models\Hrjob;
 use App\Models\HrjobCategory;
 use App\Models\City;
 use App\Models\Outlet;
+use App\Models\Offering;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,19 +19,19 @@ class HrjobAdminController extends Controller
     {
         // Tentukan logika penyaringan berdasarkan role pengguna
         if (Auth::user()->role === 'hiring_manager') {
-            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet')
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings.userHrjob.user')
                 ->whereHas('user', function ($query) {
                     $query->where('role', '!=', 'super_admin');
                 })
                 ->get();
         } elseif (Auth::user()->role === 'recruiter') {
-            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet')
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings.userHrjob.user')
                 ->whereHas('user', function ($query) {
                     $query->where('id', Auth::id());
                 })
                 ->get();
         } else {
-            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet')->get();
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings.userHrjob.user')->get();
         }
 
         return view('admin.hrjob.index', compact('hrjobs'));
@@ -234,17 +235,27 @@ class HrjobAdminController extends Controller
 
         // Validasi input
         $validated = $request->validate([
-            'is_ended' => 'required|in:yes,no',
+            'is_ended' => 'required|in:yes,no', // Harus selalu diberikan
             'hiring_cost' => 'required_if:is_ended,yes|numeric',
+            'selected_offerings' => 'array', // Tidak wajib
+            'selected_offerings.*' => 'exists:offerings,id', // Pastikan ID valid jika diisi
         ]);
 
-        $hrjob->is_ended = $validated['is_ended'];
+        // Tetapkan status pekerjaan
         if ($validated['is_ended'] === 'yes') {
+            $hrjob->is_ended = 'yes';
             $hrjob->hiring_cost = $validated['hiring_cost'];
+
+            // Jika ada kandidat yang dipilih
+            if (!empty($validated['selected_offerings'])) {
+                Offering::whereIn('id', $validated['selected_offerings'])
+                    ->update(['id_job' => $hrjob->id]);
+            }
         }
 
         $hrjob->save();
 
         return redirect()->route('getHrjob')->with('message', 'Job status updated successfully!');
     }
+
 }

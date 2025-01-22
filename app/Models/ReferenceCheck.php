@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReferenceCheck extends Model
 {
+    use HasFactory;
+
     protected $table = 'reference_checks';
 
     protected $fillable = [

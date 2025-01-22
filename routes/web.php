@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\SkillTestAdminController;
 use App\Http\Controllers\Admin\PhoneScreenAdminController;
 use App\Http\Controllers\Admin\SkillAdminController;
 use App\Http\Controllers\Admin\ReferenceCheckAdminController;
+use App\Http\Controllers\Admin\OfferingAdminController;
 
 
 //AUTH
@@ -318,7 +319,7 @@ Route::middleware(['auth'])->group(function () {
             // OFFERING
             Route::get('/offering', [OfferingAdminController::class, 'getOffering'])->name('getOffering');
             Route::post('/offering/create', [OfferingAdminController::class, 'storeOffering'])->name('storeOffering');
-            Route::put('/offering/update/{id}', [OfferingAdminController::class, 'updateOffering'])->name('updateOffering');
+            Route::post('/offering/update/{id}', [OfferingAdminController::class, 'updateOffering'])->name('updateOffering');
             Route::delete('/offering/destroy/{id}', [OfferingAdminController::class, 'destroyOffering'])->name('destroyOffering');
             Route::get('/offering/export', [OfferingAdminController::class, 'exportOffering'])->name('exportOffering');
             Route::get('/offering/dateexport', [OfferingAdminController::class, 'exportdateOffering'])->name('exportdateOffering');

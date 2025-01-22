@@ -60,28 +60,6 @@
 
 <!-- Custom CSS -->
 <style>
-    .rating-stars {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-    }
-
-    .star {
-        font-size: 2rem;
-        color: #ddd;
-        cursor: pointer;
-        margin: 0 2px;
-    }
-
-    .star:hover,
-    .star:hover ~ .star,
-    input[type="radio"]:checked ~ .star {
-        color: #ffc107;
-    }
-
-    input[type="radio"] {
-        display: none;
-    }
 
     .select2-container--default .select2-selection--single {
         width: 100%;

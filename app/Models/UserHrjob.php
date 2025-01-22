@@ -57,6 +57,11 @@ class UserHrjob extends Model
         return $this->hasMany(ReferenceCheck::class, 'id_user_job');
     }
 
+    public function offerings()
+    {
+        return $this->hasMany(Offering::class, 'id_user_job');
+    }
+
     public function userAnswer()
     {
         return $this->hasMany(UserAnswer::class, 'id_user_job');
