@@ -107,10 +107,14 @@ class DashboardAdminController extends Controller
         //     });
 
         // Menghitung funnel chart
+        // $statuses = [
+        //     'applicant', 'shortlist', 'phone_screen', 'hr_interview',
+        //     'user_interview', 'skill_test', 'reference_check',
+        //     'offering', 'rejected', 'hired'
+        // ];
         $statuses = [
             'applicant', 'shortlist', 'phone_screen', 'hr_interview',
-            'user_interview', 'skill_test', 'reference_check',
-            'offering', 'rejected', 'hired'
+            'user_interview', 'hired'
         ];
 
         $funnelData = collect($statuses)->mapWithKeys(function ($status) use ($applyDateFilter) {
@@ -133,6 +137,23 @@ class DashboardAdminController extends Controller
             return [$status => $count];
         });
 
+         // Menghitung total interview dengan applyDateFilter
+        $totalHrInterviews = $applyDateFilter(
+            UserHrjobStatusHistory::query()
+                ->where('status', 'hr_interview')
+                ->distinct('id_user_job')
+        )->count();
+
+        $totalUserInterviews = $applyDateFilter(
+            UserHrjobStatusHistory::query()
+                ->where('status', 'user_interview')
+                ->distinct('id_user_job')
+        )->count();
+
+        $totalInterviews = $totalHrInterviews + $totalUserInterviews;
+
+
+
         return view('admin.dashboardadmin', [
             'applicantCount' => $applicantCount,
             'jobCount' => $jobCount,
@@ -143,6 +164,7 @@ class DashboardAdminController extends Controller
             'percentageFilledOnTime' => $percentageFilledOnTime,
             // 'hiredRejectedData' => $hiredRejectedData,
             'funnelData' => $funnelData,
+            'totalInterviews' => $totalInterviews,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);

@@ -42,7 +42,7 @@
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ $applicantCount }}</p></div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-users fa-2x text-gray-300"></i>
+                                    <i class="fas fa-user fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -66,34 +66,22 @@
                     </div>
                 </div>
 
-                <div class="col-xl-12 col-md-6">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Candidate Source</h6>
-                        </div>
+                <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
                         <div class="card-body">
-                            <div class="chart-pie pt-0 pb-0"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                <canvas id="sourceChart" width="447" height="306" style="display: block; height: 245px; width: 358px;" class="chartjs-render-monitor"></canvas>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                        Total Interviews</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ $totalInterviews }}</p></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-            </div>
-
-            <div class="col-xl-6 col-md-6">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Recruitment Funnel</h6>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="funnelChart" width="400" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
 
                 <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
@@ -112,18 +100,71 @@
                     </div>
                 </div>
 
-                <div class="col-xl-12 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+            </div>
+
+            <div class="col-xl-6 col-md-6">
+
+                <div class="col-xl-12 col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Recruitment Funnel</h6>
+                        </div>
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                        Average Hiring Cost</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">Rp {{ number_format($averageHiringCost, 0, ',', '.') }}</p></div>
+                            <canvas id="funnelChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                            Positions Timeframe Rate</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ number_format($percentageFilledOnTime, 0) }}%</p></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-tags fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
+                                            Average Hiring Cost</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">Rp {{ number_format($averageHiringCost, 0, ',', '.') }}</p></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tags fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="col-xl-12 col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Candidate Source</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-pie pt-0 pb-0"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                <canvas id="sourceChart" width="447" height="306" style="display: block; height: 245px; width: 358px;" class="chartjs-render-monitor"></canvas>
                             </div>
                         </div>
                     </div>
@@ -140,23 +181,6 @@
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-12 col-md-6 mb-4">
-                    <div class="card shadow h-100 py-2" style="border-left: 4px solid #72A28A;">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-uppercase mb-1" style="color: #72A28A;">
-                                        Positions Timeframe Rate</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="card-text">{{ number_format($percentageFilledOnTime, 0) }}%</p></div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>

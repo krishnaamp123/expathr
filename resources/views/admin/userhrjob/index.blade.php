@@ -40,7 +40,7 @@
         <input type="hidden" name="end_date" value="{{ request('end_date') }}">
 
         <div class="me-3">
-            <label for="id_job">Filter by HR Job</label>
+            <label for="id_job">Filter by Job</label>
             <select name="id_job" id="id_job" class="form-control select2">
                 <option value="">All Jobs</option>
                 @foreach($hrjobss as $hrjob)
@@ -51,7 +51,7 @@
             </select>
         </div>
         <div>
-            <button type="submit" class="btn btn-primary">Apply Filter</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
         </div>
     </form>
 
@@ -608,13 +608,14 @@
                                             @endif
                                         </td>
                                         <td data-field="arrival">
-                                            @if ($row->interviews->first()->arrival === 'yes')
-                                                <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
-                                            @elseif ($row->interviews->first()->arrival === 'no' || is_null($row->interviews->first()->arrival))
-                                                <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                            @if ($row->interviews->isNotEmpty() && $row->interviews->first()->arrival === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            @elseif ($row->interviews->isNotEmpty() && ($row->interviews->first()->arrival === 'no' || is_null($row->interviews->first()->arrival)))
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @else
+                                                <i class="fas fa-times-circle text-danger"></i>
                                             @endif
                                         </td>
-                                        {{-- <td>{{ $row->interviews->first()->created_at ?? 'Not Created' }}</td> --}}
                                         <td data-field="updated_at">{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
                                         <td data-field="rating">
                                             {{ $row->interviews->first()->rating ?? 'Not Rated' }}
@@ -725,10 +726,12 @@
                                             @endif
                                         </td>
                                         <td data-field="arrival">
-                                            @if ($row->userinterviews->first()->arrival === 'yes')
-                                                <i class="fas fa-check-circle text-success"></i> <!-- Centang Hijau -->
-                                            @elseif ($row->userinterviews->first()->arrival === 'no' || is_null($row->userinterviews->first()->arrival))
-                                                <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
+                                            @if ($row->userinterviews->isNotEmpty() && $row->userinterviews->first()->arrival === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            @elseif ($row->userinterviews->isNotEmpty() && ($row->userinterviews->first()->arrival === 'no' || is_null($row->userinterviews->first()->arrival)))
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @else
+                                                <i class="fas fa-times-circle text-danger"></i>
                                             @endif
                                         </td>
                                         <td data-field="updated_at">{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>

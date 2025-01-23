@@ -15,6 +15,28 @@
 
     <p class="mb-3">Assign form into job</p>
 
+    <!-- Filter Form -->
+    <div class="mb-3">
+        <form method="GET" action="{{ route('getFormHrjob') }}">
+            <div class="form-row align-items-center">
+                <div class="col-lg-2 col-auto">
+                    <label for="id_job" class="sr-only">Filter by Job</label>
+                    <select class="form-control select2" id="id_job" name="id_job">
+                        <option value="">-- Select Job --</option>
+                        @foreach ($hrjobs as $hrjob)
+                            <option value="{{ $hrjob->id }}" {{ request('id_job') == $hrjob->id ? 'selected' : '' }}>
+                                {{ $hrjob->job_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">

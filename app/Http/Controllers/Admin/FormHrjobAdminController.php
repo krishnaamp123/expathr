@@ -10,11 +10,23 @@ use App\Models\Hrjob;
 
 class FormHrjobAdminController extends Controller
 {
-    public function getFormHrjob()
+    public function getFormHrjob(Request $request)
     {
-        $formhrjobs = FormHrjob::with('hrjob', 'form')->get();
-        return view('admin.formhrjob.index', compact('formhrjobs'));
+        $query = FormHrjob::with('hrjob', 'form');
+
+        // Cek apakah ada parameter filter
+        if ($request->has('id_job') && !empty($request->id_job)) {
+            $query->where('id_job', $request->id_job);
+        }
+
+        $formhrjobs = $query->get();
+
+        // Ambil daftar hrjobs untuk dropdown filter
+        $hrjobs = Hrjob::all();
+
+        return view('admin.formhrjob.index', compact('formhrjobs', 'hrjobs'));
     }
+
 
     public function addFormHrjob()
     {

@@ -4,23 +4,32 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Job</h1>
 
-    @if (session('message'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{session('message')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    @endif
+   <!-- Toast Container -->
+   <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">
+        <div id="successToast" class="toast text-white" style="background-color: #72A28A; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #72A28A;">
+                <strong class="mr-auto">Success</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan sukses -->
+            </div>
+        </div>
 
-    @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{session('error')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    @endif
+        <div id="failedToast" class="toast text-white" style="background-color: #c03535; min-width: 300px;" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true">
+            <div class="toast-header text-white" style="background-color: #c03535;">
+                <strong class="mr-auto">Error</strong>
+                <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <!-- Pesan gagal -->
+            </div>
+        </div>
+    </div>
 
     <p class="mb-3">Master data job</p>
 
@@ -59,30 +68,30 @@
                     </thead>
                     <tbody>
                         @foreach ($hrjobs as $row)
-                        <tr class="small">
+                        <tr class="small" data-id="{{ $row->id }}">
                             <td>{{$row->id}}</td>
-                            <td>{{$row->category->category_name ?? 'No Category'}}</td>
-                            <td>
+                            <td data-field="category_name">{{$row->category->category_name ?? 'No Category'}}</td>
+                            <td data-field="job_name">
                                 <a href="{{ route('getUserHrjob', ['id_job' => $row->id]) }}" class="btn p-0" style="font-size: 0.8rem;">
                                     {{$row->job_name}}
                                 </a>
                             </td>
-                            <td>{{ ucwords(str_replace('_', ' ', $row->job_type)) }}</td>
+                            <td data-field="job_type">{{ ucwords(str_replace('_', ' ', $row->job_type)) }}</td>
                             {{-- <td>{{$row->job_report}}</td>
                             <td data-job="{{ $row->price }}">Rp {{ number_format($row->price, 0, ',', '.') }}</td>
                             <td>{{$row->description}}</td>
                             <td>{{$row->qualification}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td> --}}
-                            <td>{{$row->city->city_name ?? 'No City'}}</td>
-                            <td>{{$row->outlet->outlet_name ?? 'No Outlet'}}</td>
+                            <td data-field="city_name">{{$row->city->city_name ?? 'No City'}}</td>
+                            <td data-field="outlet_name">{{$row->outlet->outlet_name ?? 'No Outlet'}}</td>
                             {{-- <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>
                             <td>{{$row->number_hired}}</td> --}}
-                            <td>{{$row->is_ended}}</td>
+                            <td data-field="is_ended">{{$row->is_ended}}</td>
                             {{-- <td>{{$row->hiring_cost ?? 'No Cost'}}</td> --}}
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->expired}}</td>
-                            <td>{{$row->job_closed ?? 'Not Closed'}}</td>
+                            <td data-field="created_at">{{$row->created_at}}</td>
+                            <td data-field="expired">{{$row->expired}}</td>
+                            <td data-field="job_closed">{{$row->job_closed ?? 'Not Closed'}}</td>
                             {{-- <td>{{$row->updated_at}}</td> --}}
                             <td>
                                 <a href="{{ route('editHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
@@ -90,12 +99,19 @@
                                     {{-- Edit --}}
                                 </a>
                                 <button
-                                    class="btn btn-sm my-1 update-is-ended"
-                                    data-id="{{ $row->id }}"
-                                    data-is-ended="{{ $row->is_ended }}"
-                                    style="background-color: #72A28A; color: white;">
+                                    type="button"
+                                    class="btn btn-sm my-1"
+                                    style="background-color: #72A28A; color: white;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editIsEndedModal{{ $row->id }}">
                                     <i class="fas fa-tag"></i>
                                 </button>
+
+                                @include('admin.hrjob.isendedmodal', [
+                                    'id' => $row->id,
+                                    'hrjobs' => $row,
+                                    'offerings' => $offerings,
+                                ])
 
                                 <form action="{{ route('destroyHrjob', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
@@ -113,103 +129,93 @@
             </div>
         </div>
     </div>
-
+@endsection
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const modal = $('#updateIsEndedModal');
-            const form = $('#updateIsEndedForm');
+            document.querySelectorAll('.update-form').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const form = event.target;
+                    const formData = new FormData(form);
 
-            $('.update-is-ended').on('click', function () {
-                const jobId = $(this).data('id');
-                const isEnded = $(this).data('is-ended');
+                    // Ambil semua data dari form
+                    const formDataObject = Object.fromEntries(formData.entries());
+                    formDataObject.selected_offerings = formData.getAll('selected_offerings[]'); // Ambil array dari multiple select
 
-                if (isEnded === 'yes') {
-                    alert('This job is already ended!');
-                    return;
+                    console.log('Data yang akan dikirim:', formDataObject);
+
+                    const url = form.action;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formDataObject), // Kirim data dalam format JSON
+                    })
+                        .then(response => {
+                            const isOk = response.ok;
+                            return response.json().then(data => ({ isOk, data }));
+                        })
+                        .then(({ isOk, data }) => {
+                            if (isOk) {
+                                updateTableRow(data.updatedRow); // Fungsi untuk update tabel
+                                showToast('successToast', data.message); // Tampilkan notifikasi sukses
+
+                                // Tutup modal
+                                const modal = form.closest('.modal');
+                                if (modal) {
+                                    $(modal).modal('hide');
+                                }
+                            } else {
+                                console.error('Error Response:', data);
+                                showToast('failedToast', data.message); // Tampilkan notifikasi error
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error.message || error);
+                            showToast('failedToast', 'An error occurred. Please try again.');
+                        });
+                });
+            });
+
+                function updateTableRow(updatedRow) {
+                    const row = document.querySelector(`tr[data-id="${updatedRow.id}"]`);
+                    if (row) {
+                        Object.keys(updatedRow).forEach(key => {
+                            const cell = row.querySelector(`[data-field="${key}"]`);
+                            if (cell) {
+                                cell.textContent = updatedRow[key];
+                            }
+                        });
+                    }
                 }
 
-                form.attr('action', `/job/update-is-ended/${jobId}`);
-                modal.modal('show');
-            });
+            function showToast(toastId, message) {
+                const toastEl = document.getElementById(toastId);
+                if (toastEl) {
+                    toastEl.querySelector('.toast-body').textContent = message;
+                    toastEl.classList.add('show'); // Tambahkan kelas 'show'
+                    toastEl.style.pointerEvents = 'auto'; // Aktifkan pointer-events
+
+                    setTimeout(() => {
+                        toastEl.classList.remove('show'); // Hilangkan kelas 'show'
+                        toastEl.style.pointerEvents = 'none'; // Matikan pointer-events
+                    }, 3000); // Hilangkan setelah 3 detik
+                } else {
+                    console.error(`Toast element with ID ${toastId} not found`);
+                }
+            }
+
+            @if(session('toast_type') && session('toast_message'))
+                const toastId = "{{ session('toast_type') === 'success' ? 'successToast' : 'failedToast' }}";
+                const message = "{{ session('toast_message') }}";
+                showToast(toastId, message);
+            @endif
         });
     </script>
-
-    <style>
-        .select2-container--default .select2-selection--single {
-            width: 100%;
-        }
-    </style>
-
-    <!-- Modal -->
-    <div class="modal fade" id="updateIsEndedModal" tabindex="-1" aria-labelledby="updateIsEndedLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="updateIsEndedForm" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="updateIsEndedLabel">Update Job Ended</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" name="is_ended" value="yes">
-
-                        <div class="form-group">
-                            <label for="hiring_cost">Hiring Cost</label>
-                            <input type="number" id="hiring_cost" name="hiring_cost" class="form-control"required>
-                            @error('hiring_cost')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        {{-- <div class="form-group">
-                            <label>Applicant Hired</label>
-                                <select name="selected_offerings[]" class="form-control select2 inside-modal" multiple>
-                                    @foreach ($offerings as $offering)
-                                        @if ($offering->userHrjob && $offering->userHrjob->id_job === $row->id)
-                                            <option value="{{ $offering->id }}" {{ $offering->id_job === $row->id ? 'selected' : '' }}>
-                                                {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }} | {{ $offering->userHrjob->hrjob->job_name ?? 'Unknown User' }}
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                            @error('selected_offerings')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div> --}}
-
-                        <div class="form-group">
-                            <label>Applicant Hired</label>
-                            <select name="selected_offerings[]" class="form-control select2 inside-modal" multiple>
-                                @if ($row->offerings->isNotEmpty())
-                                    @foreach ($row->offerings as $offering)
-                                        @if ($offering->userHrjob)
-                                            <option value="{{ $offering->id }}">
-                                                {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }} |
-                                                {{ $row->job_name ?? 'Unknown Job' }}
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                @else
-                                    <option disabled>No offerings available</option>
-                                @endif
-                            </select>
-
-                            @error('selected_offerings')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-@endsection

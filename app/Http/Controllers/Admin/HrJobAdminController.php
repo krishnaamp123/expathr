@@ -19,22 +19,24 @@ class HrjobAdminController extends Controller
     {
         // Tentukan logika penyaringan berdasarkan role pengguna
         if (Auth::user()->role === 'hiring_manager') {
-            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings.userHrjob.user')
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings')
                 ->whereHas('user', function ($query) {
                     $query->where('role', '!=', 'super_admin');
                 })
                 ->get();
         } elseif (Auth::user()->role === 'recruiter') {
-            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings.userHrjob.user')
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings')
                 ->whereHas('user', function ($query) {
                     $query->where('id', Auth::id());
                 })
                 ->get();
         } else {
-            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings.userHrjob.user')->get();
+            $hrjobs = Hrjob::with('user', 'category', 'city', 'outlet', 'offerings')->get();
         }
 
-        return view('admin.hrjob.index', compact('hrjobs'));
+        $offerings = Offering::with('hrjob', 'userHrjob')->get();
+
+        return view('admin.hrjob.index', compact('hrjobs', 'offerings'));
     }
 
     public function addHrjob()
@@ -71,14 +73,18 @@ class HrjobAdminController extends Controller
 
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
-            return redirect()->route('getHrjob')->with('error', 'Recruiters are not allowed to create jobs.');
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', 'Recruiters are not allowed to create jobs.');
+            return redirect()->route('getHrjob');
         }
 
         // Jika user yang login adalah hiring_manager
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
+                session()->flash('toast_type', 'failed');
+                session()->flash('toast_message', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob');
             }
         }
 
@@ -104,7 +110,9 @@ class HrjobAdminController extends Controller
 
         $hrjob->save();
 
-        return redirect()->route('getHrjob')->with('message', 'Data Added Successfully');
+        session()->flash('toast_type', 'success');
+        session()->flash('toast_message', 'Job Added Successfully!');
+        return redirect()->route('getHrjob');
     }
 
     public function editHrjob($id)
@@ -148,14 +156,18 @@ class HrjobAdminController extends Controller
 
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
-            return redirect()->route('getHrjob')->with('error', 'Recruiters are not allowed to update jobs.');
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', 'Recruiters are not allowed to update jobs.');
+            return redirect()->route('getHrjob');
         }
 
         // Jika user yang login adalah hiring_manager
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
+                session()->flash('toast_type', 'failed');
+                session()->flash('toast_message', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob');
             }
         }
 
@@ -184,7 +196,9 @@ class HrjobAdminController extends Controller
 
         $hrjob->save();
 
-        return redirect()->route('getHrjob')->with('message', 'Job Updated Successfully');
+        session()->flash('toast_type', 'success');
+        session()->flash('toast_message', 'Job Updated Successfully!');
+        return redirect()->route('getHrjob');
     }
 
     public function destroyHrjob($id)
@@ -195,20 +209,26 @@ class HrjobAdminController extends Controller
 
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
-            return redirect()->route('getHrjob')->with('error', 'Recruiters are not allowed to delete jobs.');
+            session()->flash('toast_type', 'failed');
+            session()->flash('toast_message', 'Recruiters are not allowed to delete jobs.');
+            return redirect()->route('getHrjob');
         }
 
         // Jika user yang login adalah hiring_manager
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
+                session()->flash('toast_type', 'failed');
+                session()->flash('toast_message', 'You cannot manage job for Super Admin.');
+                return redirect()->route('getHrjob');
             }
         }
 
         $hrjob->delete();
 
-        return redirect()->route('getHrjob')->with('message', 'Job deleted successfully');
+        session()->flash('toast_type', 'success');
+        session()->flash('toast_message', 'Job Deleted Successfully!');
+        return redirect()->route('getHrjob');
     }
 
     public function updateIsEnded(Request $request, $id)
@@ -217,11 +237,12 @@ class HrjobAdminController extends Controller
 
         $loggedInUser = Auth::user();
 
+        try {
         // Jika user yang login adalah recruiter
         if ($loggedInUser->role === 'recruiter') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && in_array($selectedUser->role, ['super_admin', 'hiring_manager'])) {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin & Hiring Manager.');
+                return response()->json(['message' => 'You cannot manage job for Super Admin & Hiring Manager.'], 403);
             }
         }
 
@@ -229,33 +250,61 @@ class HrjobAdminController extends Controller
         if ($loggedInUser->role === 'hiring_manager') {
             $selectedUser = User::find($validated['id_user']);
             if ($selectedUser && $selectedUser->role === 'super_admin') {
-                return redirect()->route('getHrjob')->with('error', 'You cannot manage job for Super Admin.');
+                return response()->json(['message' => 'You cannot manage job for Super Admin.'], 403);
             }
         }
 
         // Validasi input
         $validated = $request->validate([
-            'is_ended' => 'required|in:yes,no', // Harus selalu diberikan
+            'is_ended' => 'required|in:yes,no',
             'hiring_cost' => 'required_if:is_ended,yes|numeric',
-            'selected_offerings' => 'array', // Tidak wajib
-            'selected_offerings.*' => 'exists:offerings,id', // Pastikan ID valid jika diisi
+            'selected_offerings' => 'array',
+            'selected_offerings.*' => 'exists:offerings,id',
         ]);
 
-        // Tetapkan status pekerjaan
+        $hrjob->is_ended = $validated['is_ended'];
         if ($validated['is_ended'] === 'yes') {
-            $hrjob->is_ended = 'yes';
             $hrjob->hiring_cost = $validated['hiring_cost'];
 
-            // Jika ada kandidat yang dipilih
+            // Update kandidat terpilih
             if (!empty($validated['selected_offerings'])) {
+                // Hapus `id_job` untuk kandidat sebelumnya (jika ada)
+                Offering::where('id_job', $hrjob->id)->update(['id_job' => null]);
+
+                // Tambahkan kandidat baru ke pekerjaan ini
                 Offering::whereIn('id', $validated['selected_offerings'])
                     ->update(['id_job' => $hrjob->id]);
             }
+        } else {
+            // Reset jika pekerjaan tidak selesai
+            $hrjob->hiring_cost = null;
+
+            // Hapus semua kandidat terkait
+            Offering::where('id_job', $hrjob->id)->update(['id_job' => null]);
         }
 
         $hrjob->save();
 
-        return redirect()->route('getHrjob')->with('message', 'Job status updated successfully!');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Job status updated successfully!',
+            'updatedRow' => [
+                'id' => $hrjob->id,
+                'is_ended' => $hrjob->is_ended,
+                'hiring_cost' => $hrjob->hiring_cost,
+                'job_closed' => $hrjob->job_closed->format('Y-m-d H:i:s'),
+                'selected_offerings' => Offering::where('id_job', $hrjob->id)->pluck('id'),
+            ],
+        ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $errors = [];
+            foreach ($e->errors() as $fieldErrors) {
+                $errors = array_merge($errors, $fieldErrors);
+            }
+            return response()->json(['message' => implode(' ', $errors)], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An unexpected error occurred. Please try again.'], 500);
+        }
     }
 
 }

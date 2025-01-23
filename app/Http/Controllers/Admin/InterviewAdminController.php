@@ -262,7 +262,7 @@ class InterviewAdminController extends Controller
                 return response()->json(['message' => 'You are not authorized to rate this interview.'], 403);
             }
 
-            \Log::info('Request data received:', $request->all());
+            // \Log::info('Request data received:', $request->all());
 
             // Validasi input
             $validated = $request->validate([
@@ -270,7 +270,7 @@ class InterviewAdminController extends Controller
                 'comment' => 'nullable|string|max:1000',
             ]);
 
-            \Log::info('Button action received: ' . $request->button_action);
+            // \Log::info('Button action received: ' . $request->button_action);
 
             // Perbarui rating dan komentar di tabel Interview
             $interview->rating = $validated['rating'];

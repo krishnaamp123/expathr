@@ -270,14 +270,14 @@
                     <li class="nav-item {{ Request::routeIs('getForm') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('getForm') }}">
                             <i class="fas fa-fw fa-question-circle "></i>
-                            <span>Form</span>
+                            <span>Test</span>
                         </a>
                     </li>
 
                     <li class="nav-item {{ Request::routeIs('getFormHrjob') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('getFormHrjob') }}">
                             <i class="fas fa-fw fa-clipboard "></i>
-                            <span>Form Job</span>
+                            <span>Job Test Setting</span>
                         </a>
                     </li>
                 @endif

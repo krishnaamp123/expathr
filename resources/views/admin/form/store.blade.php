@@ -33,13 +33,17 @@
                                 </div>
 
                                 <div class="answers-container">
-                                    <div class="form-group">
-                                        <label>Answer</label>
-                                        <input type="text" name="questions[0][answers][0][answer_name]" class="form-control" placeholder="Enter Answer">
-                                        <input type="hidden" name="questions[0][answers][0][is_answer]" value="no">
-                                        <label class="form-check-label">
-                                            <input type="radio" name="questions[0][correct_answer]" value="0" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
-                                        </label>
+                                    <div class="form-group d-flex align-items-end">
+                                        <div class="flex-grow-1">
+                                            <label>Answer</label>
+                                            <input type="text" name="questions[0][answers][0][answer_name]" class="form-control" placeholder="Enter Answer">
+                                            <input type="hidden" name="questions[0][answers][0][is_answer]" value="no">
+                                        </div>
+                                        <div class="ml-4 mb-2">
+                                            <label class="form-check-label">
+                                                <input type="radio" name="questions[0][correct_answer]" value="0" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -78,13 +82,17 @@
                         <input type="text" name="questions[${questionIndex}][question_name]" class="form-control" placeholder="Enter Question">
                     </div>
                     <div class="answers-container">
-                        <div class="form-group">
-                            <label>Answer</label>
-                            <input type="text" name="questions[${questionIndex}][answers][0][answer_name]" class="form-control" placeholder="Enter Answer">
-                            <input type="hidden" name="questions[${questionIndex}][answers][0][is_answer]" value="no">
-                            <label class="form-check-label">
-                                <input type="radio" name="questions[${questionIndex}][correct_answer]" value="0" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
-                            </label>
+                        <div class="form-group d-flex align-items-end">
+                            <div class="flex-grow-1">
+                                <label>Answer</label>
+                                <input type="text" name="questions[${questionIndex}][answers][0][answer_name]" class="form-control" placeholder="Enter Answer">
+                                <input type="hidden" name="questions[${questionIndex}][answers][0][is_answer]" value="no">
+                            </div>
+                            <div class="ml-4 mb-2">
+                                <label class="form-check-label">
+                                    <input type="radio" name="questions[${questionIndex}][correct_answer]" value="0" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-sm btn-secondary add-answer">Add Answer</button>
@@ -103,13 +111,17 @@
                 const answerCount = answersContainer.querySelectorAll('.form-group').length;
 
                 const newAnswer = `
-                    <div class="form-group">
-                        <label>Answer</label>
-                        <input type="text" name="questions[${questionIndex}][answers][${answerCount}][answer_name]" class="form-control" placeholder="Enter Answer">
-                        <input type="hidden" name="questions[${questionIndex}][answers][${answerCount}][is_answer]" value="no">
-                        <label class="form-check-label">
-                            <input type="radio" name="questions[${questionIndex}][correct_answer]" value="${answerCount}" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
-                        </label>
+                    <div class="form-group d-flex align-items-end">
+                        <div class="flex-grow-1">
+                            <label>Answer</label>
+                            <input type="text" name="questions[${questionIndex}][answers][${answerCount}][answer_name]" class="form-control" placeholder="Enter Answer">
+                            <input type="hidden" name="questions[${questionIndex}][answers][${answerCount}][is_answer]" value="no">
+                        </div>
+                        <div class="ml-4 mb-2">
+                            <label class="form-check-label">
+                                <input type="radio" name="questions[${questionIndex}][correct_answer]" value="${answerCount}" class="form-check-input" onclick="setCorrectAnswer(this)"> Correct Answer
+                            </label>
+                        </div>
                     </div>
                 `;
                 answersContainer.insertAdjacentHTML('beforeend', newAnswer);
