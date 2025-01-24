@@ -75,9 +75,9 @@
                             <td>{{$row->birth_date}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->gender)) }}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->role)) }}</td>
-                            <td>{{$row->email_verified_at}}</td>
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->updated_at}}</td>
+                            <td>{{ $row->email_verified_at->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <a href="{{ route('editUser', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
                                     <i class="fas fa-edit"></i>

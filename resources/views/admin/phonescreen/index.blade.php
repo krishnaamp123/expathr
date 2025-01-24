@@ -130,8 +130,8 @@
                             <td data-field="applicant_name">{{ $row->userHrjob->user->fullname ?? 'No Applicant' }}</td>
                             <td data-field="phonescreen_date">{{ $row->phonescreen_date ?? 'No Date' }}</td>
                             <td data-field="time">{{ $row->time ?? 'No Time' }}</td>
-                            <td data-field="created_at">{{ $row->created_at }}</td>
-                            <td data-field="updated_at">{{ $row->updated_at }}</td>
+                            <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <button
                                     type="button"

@@ -253,9 +253,16 @@
                         </a>
                     </li>
 
+                    <li class="nav-item {{ Request::routeIs('getCompany') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('getCompany') }}">
+                            <i class="fas fa-fw fa-building "></i>
+                            <span>Company</span>
+                        </a>
+                    </li>
+
                     <li class="nav-item {{ Request::routeIs('getOutlet') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('getOutlet') }}">
-                            <i class="fas fa-fw fa-building "></i>
+                            <i class="fas fa-fw fa-home "></i>
                             <span>Placement</span>
                         </a>
                     </li>

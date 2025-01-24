@@ -224,7 +224,10 @@ class SkillTestAdminController extends Controller
             $sheet->setCellValue('C' . $rowNumber, $skilltest->userHrjob->hrjob->job_name ?? 'No Job');
             $sheet->setCellValue('D' . $rowNumber, $skilltest->userHrjob->hrjob->city->city_name  ?? 'No Location');
             $sheet->setCellValue('E' . $rowNumber, $skilltest->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
-            $sheet->setCellValue('F' . $rowNumber, $skilltest->userHrjob->created_at ?? 'No Applied');
+            $appliedAt = $skilltest->userHrjob->created_at
+                ? $skilltest->userHrjob->created_at->format('d-m-Y H:i:s')
+                : 'No Applied';
+            $sheet->setCellValue('F' . $rowNumber, $appliedAt);
             $sheet->setCellValue('G' . $rowNumber, $skilltest->score ?? 'No Score');
             $sheet->setCellValue('H' . $rowNumber, $skilltest->rating ?? 'No Rating');
             $sheet->setCellValue('I' . $rowNumber, $skilltest->comment ?? 'No Comment');
@@ -293,7 +296,10 @@ class SkillTestAdminController extends Controller
             $sheet->setCellValue('C' . $rowNumber, $skilltest->userHrjob->hrjob->job_name ?? 'No Job');
             $sheet->setCellValue('D' . $rowNumber, $skilltest->userHrjob->hrjob->city->city_name  ?? 'No Location');
             $sheet->setCellValue('E' . $rowNumber, $skilltest->userHrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
-            $sheet->setCellValue('F' . $rowNumber, $skilltest->userHrjob->created_at ?? 'No Applied');
+            $appliedAt = $skilltest->userHrjob->created_at
+                ? $skilltest->userHrjob->created_at->format('d-m-Y H:i:s')
+                : 'No Applied';
+            $sheet->setCellValue('F' . $rowNumber, $appliedAt);
             $sheet->setCellValue('G' . $rowNumber, $skilltest->score ?? 'No Score');
             $sheet->setCellValue('H' . $rowNumber, $skilltest->rating ?? 'No Rating');
             $sheet->setCellValue('I' . $rowNumber, $skilltest->comment ?? 'No Comment');

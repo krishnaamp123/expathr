@@ -12,6 +12,12 @@ class Outlet extends Model
     protected $table = 'outlets';
 
     protected $fillable = [
+        'id_company',
         'outlet_name'
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'id_company');
+    }
 }

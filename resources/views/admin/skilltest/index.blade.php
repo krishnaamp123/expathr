@@ -132,8 +132,8 @@
                             <td data-field="score">{{ $row->score ?? 'No Score' }}</td>
                             <td data-field="rating">{{ $row->rating ?? 'No Rating' }}</td>
                             <td data-field="comment">{{ $row->comment ?? 'No Comment' }}</td>
-                            <td data-field="created_at">{{ $row->created_at }}</td>
-                            <td data-field="updated_at">{{ $row->updated_at }}</td>
+                            <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <button
                                     type="button"

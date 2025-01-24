@@ -14,6 +14,21 @@
                         @method('PUT')
 
                         <div class="form-group">
+                            <label>Company</label>
+                            <select name="id_company" class="form-control select2">
+                                <option value="">Select Company</option>
+                                @foreach($companies as $company)
+                                    <option value="{{ $company->id }}" {{ $company->id == $outlet->id_company ? 'selected' : '' }}>
+                                        {{ $company->company_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_company')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Placement</label>
                             <input type="text" name="outlet_name" class="form-control" value="{{ old('outlet_name', $outlet->outlet_name) }}">
                             @error('outlet_name')

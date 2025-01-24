@@ -57,8 +57,8 @@
                             <td>{{$row->userhrjob->hrjob->job_name ?? 'No Job'}}</td>
                             <td>{{$row->userhrjob->user->fullname ?? 'No Applicant'}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->status)) ?? 'No Status' }}</td>
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->updated_at}}</td>
+                            <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <form method="POST">
                                     @csrf

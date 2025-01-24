@@ -130,6 +130,15 @@ class UserHrjobAdminController extends Controller
         return view('admin.userhrjob.index', compact('userhrjobs', 'userhrjobss', 'hrjobss', 'statuses', 'status', 'users', 'userss', 'references'));
     }
 
+    public function getPhoneScreenModal(Request $request)
+    {
+        $users = User::where('role', '!=', 'applicant')->get();
+
+        return view('admin.userhrjob.phonescreenmodal', [
+            'users' => $users,
+        ]);
+    }
+
     public function getInterviewModal(Request $request)
     {
         $users = User::where('role', '!=', 'applicant')->get();
@@ -318,6 +327,24 @@ class UserHrjobAdminController extends Controller
 
             $status = $request->status;
 
+            if ($request->status === 'phone_screen') {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Status updated successfully!',
+                    'modalType' => 'phone_screen',
+                    'modalData' => [
+                        'userJobId' => $id,
+                        'userJobName' => $userhrjob->user->fullname,
+                    ],
+                    'updatedRow' => [
+                        'id' => $userhrjob->id,
+                        'status' => $userhrjob->status,
+                        'updated_at' => $userhrjob->updated_at->format('Y-m-d H:i:s'),
+                        'previous_status' => $previousStatus,
+                    ],
+                ]);
+            }
+
             if ($request->status === 'hr_interview') {
                 return response()->json([
                     'status' => 'success',
@@ -485,7 +512,10 @@ class UserHrjobAdminController extends Controller
             $sheet->setCellValue('E' . $rowNumber, $userhrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
             $sheet->setCellValue('F' . $rowNumber, $userhrjob->hrjob->price ?? 'No Job Salary');
             $sheet->setCellValue('G' . $rowNumber, $userhrjob->salary_expectation ?? 'No Salary Expectation');
-            $sheet->setCellValue('H' . $rowNumber, $userhrjob->created_at ?? 'No Applied');
+            $appliedAt = $userhrjob->created_at
+                ? $userhrjob->created_at->format('d-m-Y H:i:s')
+                : 'No Applied';
+            $sheet->setCellValue('H' . $rowNumber, $appliedAt);
             $sheet->setCellValue('I' . $rowNumber, $userhrjob->availability ?? 'No Availability');
             $sheet->setCellValue('J' . $rowNumber, $userhrjob->status ?? 'No Status');
 

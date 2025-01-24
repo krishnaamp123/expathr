@@ -616,7 +616,11 @@
                                                 <i class="fas fa-times-circle text-danger"></i>
                                             @endif
                                         </td>
-                                        <td data-field="updated_at">{{ $row->interviews->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="updated_at">
+                                            {{ $row->interviews && $row->interviews->first() && $row->interviews->first()->updated_at
+                                                ? $row->interviews->first()->updated_at->format('d-m-Y H:i:s')
+                                                : 'Not Updated' }}
+                                        </td>
                                         <td data-field="rating">
                                             {{ $row->interviews->first()->rating ?? 'Not Rated' }}
                                         </td>
@@ -734,7 +738,11 @@
                                                 <i class="fas fa-times-circle text-danger"></i>
                                             @endif
                                         </td>
-                                        <td data-field="updated_at">{{ $row->userinterviews->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="updated_at">
+                                            {{ $row->userinterviews && $row->userinterviews->first() && $row->userinterviews->first()->updated_at
+                                                ? $row->userinterviews->first()->updated_at->format('d-m-Y H:i:s')
+                                                : 'Not Updated' }}
+                                        </td>
                                         <td data-field="rating">
                                             {{ $row->userinterviews->first()->rating ?? 'Not Rated' }}
                                         </td>
@@ -829,8 +837,16 @@
                                                 Not Commented
                                             @endif
                                         </td>
-                                        <td data-field="created_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
-                                        <td data-field="updated_at">{{ $row->skilltests->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="created_at">
+                                            {{ $row->skilltests && $row->skilltests->first() && $row->skilltests->first()->created_at
+                                                ? $row->skilltests->first()->created_at->format('d-m-Y H:i:s')
+                                                : 'Not Created' }}
+                                        </td>
+                                        <td data-field="updated_at">
+                                            {{ $row->skilltests && $row->skilltests->first() && $row->skilltests->first()->updated_at
+                                                ? $row->skilltests->first()->updated_at->format('d-m-Y H:i:s')
+                                                : 'Not Updated' }}
+                                        </td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -886,8 +902,16 @@
                                         <td data-field="time">
                                             {{ $row->phonescreens->first()->time ?? 'Not Timed' }}
                                         </td>
-                                        <td data-field="created_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
-                                        <td data-field="updated_at">{{ $row->phonescreens->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="created_at">
+                                            {{ $row->phonescreens && $row->phonescreens->first() && $row->phonescreens->first()->created_at
+                                                ? $row->phonescreens->first()->created_at->format('d-m-Y H:i:s')
+                                                : 'Not Created' }}
+                                        </td>
+                                        <td data-field="updated_at">
+                                            {{ $row->phonescreens && $row->phonescreens->first() && $row->phonescreens->first()->updated_at
+                                                ? $row->phonescreens->first()->updated_at->format('d-m-Y H:i:s')
+                                                : 'Not Updated' }}
+                                        </td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -961,8 +985,16 @@
                                                 Not Commented
                                             @endif
                                         </td>
-                                        <td data-field="created_at">{{ $row->referencechecks->first()->updated_at ?? 'Not Created' }}</td>
-                                        <td data-field="updated_at">{{ $row->referencechecks->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="created_at">
+                                            {{ $row->referencechecks && $row->referencechecks->first() && $row->referencechecks->first()->created_at
+                                                ? $row->referencechecks->first()->created_at->format('d-m-Y H:i:s')
+                                                : 'Not Created' }}
+                                        </td>
+                                        <td data-field="updated_at">
+                                            {{ $row->referencechecks && $row->referencechecks->first() && $row->referencechecks->first()->updated_at
+                                                ? $row->referencechecks->first()->updated_at->format('d-m-Y H:i:s')
+                                                : 'Not Updated' }}
+                                        </td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -1022,8 +1054,16 @@
                                                 No File
                                             @endif
                                         </td>
-                                        <td data-field="created_at">{{ $row->offerings->first()->updated_at ?? 'Not Created' }}</td>
-                                        <td data-field="updated_at">{{ $row->offerings->first()->updated_at ?? 'Not Updated' }}</td>
+                                        <td data-field="created_at">
+                                            {{ $row->offerings && $row->offerings->first() && $row->offerings->first()->created_at
+                                                ? $row->offerings->first()->created_at->format('d-m-Y H:i:s')
+                                                : 'Not Created' }}
+                                        </td>
+                                        <td data-field="updated_at">
+                                            {{ $row->offerings && $row->offerings->first() && $row->offerings->first()->updated_at
+                                                ? $row->offerings->first()->updated_at->format('d-m-Y H:i:s')
+                                                : 'Not Updated' }}
+                                        </td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -1075,8 +1115,8 @@
                                     @else
                                         <td data-field="salary_expectation" data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
                                         <td data-field="availability">{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
-                                        <td data-field="created_at">{{ $row->created_at }}</td>
-                                        <td data-field="updated_at">{{ $row->updated_at }}</td>
+                                        <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                                        <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -1345,11 +1385,18 @@
                                 showToast('successToast', data.message);
 
                                 // Tangani modal
-                                if (data.modalType === 'hr_interview' || data.modalType === 'user_interview') {
-                                    const modalId = data.modalType === 'hr_interview' ? 'interviewModal' : 'userInterviewModal';
+                                if (data.modalType === 'hr_interview' || data.modalType === 'user_interview' || data.modalType === 'phone_screen') {
+                                    const modalId = data.modalType === 'hr_interview'
+                                        ? 'interviewModal'
+                                        : data.modalType === 'user_interview'
+                                        ? 'userInterviewModal'
+                                        : 'phoneScreenModal';
+
                                     const modalUrl = data.modalType === 'hr_interview'
                                         ? '{{ route("getInterviewModal") }}'
-                                        : '{{ route("getUserInterviewModal") }}';
+                                        : data.modalType === 'user_interview'
+                                        ? '{{ route("getUserInterviewModal") }}'
+                                        : '{{ route("getPhoneScreenModal") }}';
 
                                     loadModal(modalId, modalUrl, (modalElement) => {
                                         const modalInstance = new bootstrap.Modal(modalElement);
@@ -1536,11 +1583,18 @@
 
                             if (data.status === 'success') {
                                 // Tangani modal
-                                if (data.modalType === 'hr_interview' || data.modalType === 'user_interview') {
-                                    const modalId = data.modalType === 'hr_interview' ? 'interviewModal' : 'userInterviewModal';
+                                if (data.modalType === 'hr_interview' || data.modalType === 'user_interview' || data.modalType === 'phone_screen') {
+                                    const modalId = data.modalType === 'hr_interview'
+                                        ? 'interviewModal'
+                                        : data.modalType === 'user_interview'
+                                        ? 'userInterviewModal'
+                                        : 'phoneScreenModal';
+
                                     const modalUrl = data.modalType === 'hr_interview'
                                         ? '{{ route("getInterviewModal") }}'
-                                        : '{{ route("getUserInterviewModal") }}';
+                                        : data.modalType === 'user_interview'
+                                        ? '{{ route("getUserInterviewModal") }}'
+                                        : '{{ route("getPhoneScreenModal") }}';
 
                                     loadModal(modalId, modalUrl, (modalElement) => {
                                         const modalInstance = new bootstrap.Modal(modalElement);

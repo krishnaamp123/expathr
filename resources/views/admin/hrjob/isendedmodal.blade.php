@@ -15,7 +15,7 @@
 
                     <div class="form-group">
                         <label for="hiring_cost">Hiring Cost</label>
-                        <input type="number" id="hiring_cost" name="hiring_cost" class="form-control"required>
+                        <input type="number" id="hiring_cost" name="hiring_cost" class="form-control" value="{{ old('hiring_cost', $hrjobs->hiring_cost) }}"required>
                         @error('hiring_cost')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -26,9 +26,10 @@
                         <select name="selected_offerings[]" class="form-control select2 inside-modal" multiple>
                             @foreach ($offerings as $offering)
                                 @if ($offering->userHrjob && $offering->userHrjob->id_job == $hrjobs->id)
-                                    <option value="{{ $offering->id }}">
+                                    <option value="{{ $offering->id }}"
+                                        {{ in_array($offering->id, $hrjobs->offerings->pluck('id')->toArray()) ? 'selected' : '' }}>
                                         {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }} |
-                                        {{ $offering->userHrjob->hrjob->job_name ?? 'Unknown Job' }}
+                                        {{-- {{ $offering->userHrjob->hrjob->job_name ?? 'Unknown Job' }} --}}
                                     </option>
                                 @endif
                             @endforeach

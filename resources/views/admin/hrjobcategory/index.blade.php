@@ -37,8 +37,8 @@
                         <tr class="small">
                             <td>{{$row->id}}</td>
                             <td>{{$row->category_name}}</td>
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->updated_at}}</td>
+                            <td>{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <a href="{{ route('editHrjobCategory', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
                                     <i class="fas fa-edit"></i>

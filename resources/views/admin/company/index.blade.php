@@ -1,8 +1,8 @@
 @extends('admin.layout.app')
-@section('title', 'Skill')
+@section('title', 'Company')
 @section('content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Skill</h1>
+    <h1 class="h3 mb-2 text-gray-800">Company</h1>
 
     @if (session('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -13,12 +13,12 @@
       </div>
     @endif
 
-    <p class="mb-3">Master data skill</p>
+    <p class="mb-3">Master data company</p>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('addSkill')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            <a href="{{route('addCompany')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -26,28 +26,28 @@
                     <thead>
                         <tr class="small text-center">
                             <th>ID</th>
-                            <th>Skill</th>
+                            <th>Company</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($skills as $row)
+                        @foreach ($companies as $row)
                         <tr class="small">
                             <td>{{$row->id}}</td>
-                            <td>{{$row->skill_name}}</td>
+                            <td>{{$row->company_name}}</td>
                             <td>{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
                             <td>{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
-                                <a href="{{ route('editSkill', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
+                                <a href="{{ route('editCompany', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
                                     <i class="fas fa-edit"></i>
                                     {{-- Edit --}}
                                 </a>
-                                <form action="{{ route('destroySkill', $row->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('destroyCompany', $row->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this skill?')">
+                                    <button type="submit" class="btn btn-sm" style="background-color: #c03535; color: white;" onclick="return confirm('Are you sure you want to delete this company?')">
                                         <i class="fas fa-trash"></i>
                                         {{-- Delete --}}
                                     </button>

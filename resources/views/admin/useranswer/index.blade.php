@@ -59,8 +59,8 @@
                             <td>{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
                             <td>{{$row->question->question_name ?? 'No Question'}}</td>
                             <td>{{$row->answer->answer_name ?? 'No Question'}}</td>
-                            <td>{{$row->created_at}}</td>
-                            <td>{{$row->updated_at}}</td>
+                            <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <form method="POST">
                                     @csrf

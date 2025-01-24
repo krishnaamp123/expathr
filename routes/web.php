@@ -24,6 +24,7 @@ use App\Http\Controllers\User\ReferenceController;
 // ADMIN
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\UserAdminController;
+use App\Http\Controllers\Admin\CompanyAdminController;
 use App\Http\Controllers\Admin\OutletAdminController;
 use App\Http\Controllers\Admin\HrJobCategoryAdminController;
 use App\Http\Controllers\Admin\HrJobAdminController;
@@ -202,6 +203,14 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/user/destroy/{id}', [UserAdminController::class, 'destroyUser'])->name('destroyUser');
             Route::get('/user/{id}/pdf', [UserAdminController::class, 'generatePdf'])->name('profile.pdf');
 
+            // COMPANY
+            Route::get('/company', [CompanyAdminController::class, 'getCompany'])->name('getCompany');
+            Route::get('/company/create', [CompanyAdminController::class, 'addCompany'])->name('addCompany');
+            Route::post('/company/create', [CompanyAdminController::class, 'storeCompany'])->name('storeCompany');
+            Route::get('/company/update/{id}', [CompanyAdminController::class, 'editCompany'])->name('editCompany');
+            Route::put('/company/update/{id}', [CompanyAdminController::class, 'updateCompany'])->name('updateCompany');
+            Route::delete('/company/destroy/{id}', [CompanyAdminController::class, 'destroyCompany'])->name('destroyCompany');
+
             // OUTLET
             Route::get('/outlet', [OutletAdminController::class, 'getOutlet'])->name('getOutlet');
             Route::get('/outlet/create', [OutletAdminController::class, 'addOutlet'])->name('addOutlet');
@@ -264,6 +273,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/userjob/dateexport', [UserHrjobAdminController::class, 'exportdateUserHrjob'])->name('exportdateUserHrjob');
             Route::get('/modal/interview', [UserHrjobAdminController::class, 'getInterviewModal'])->name('getInterviewModal');
             Route::get('/modal/userinterview', [UserHrjobAdminController::class, 'getUserInterviewModal'])->name('getUserInterviewModal');
+            Route::get('/modal/phonescreen', [UserHrjobAdminController::class, 'getPhoneScreenModal'])->name('getPhoneScreenModal');
 
 
             // USERHRJOBHISTORY

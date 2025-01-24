@@ -89,9 +89,15 @@
                             <td>{{$row->number_hired}}</td> --}}
                             <td data-field="is_ended">{{$row->is_ended}}</td>
                             {{-- <td>{{$row->hiring_cost ?? 'No Cost'}}</td> --}}
-                            <td data-field="created_at">{{$row->created_at}}</td>
-                            <td data-field="expired">{{$row->expired}}</td>
-                            <td data-field="job_closed">{{$row->job_closed ?? 'Not Closed'}}</td>
+                            <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td data-field="expired">
+                                @if ($row->expired)
+                                    {{ \Carbon\Carbon::parse($row->expired)->format('d-m-Y') }}
+                                @else
+                                    Not Expired
+                                @endif
+                            </td>
+                            <td data-field="job_closed">{{ $row->job_closed->format('d-m-Y H:i:s') }}</td>
                             {{-- <td>{{$row->updated_at}}</td> --}}
                             <td>
                                 <a href="{{ route('editHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">

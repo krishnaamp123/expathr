@@ -9,6 +9,7 @@ use App\Models\Hrjob;
 use App\Models\UserHrjob;
 use App\Models\Source;
 use App\Models\UserHrjobStatusHistory;
+use App\Models\Offering;
 
 class DashboardAdminController extends Controller
 {
@@ -43,14 +44,14 @@ class DashboardAdminController extends Controller
             Hrjob::query()
         )->count();
 
-        // Menghitung Hiring Success Rate
+        // Menghitung Conversion Rate
         $hiredCount = $applyDateFilter(
             UserHrjob::where('status', 'hired')
         )->count();
         $totalJobApplicants = $applyDateFilter(
             UserHrjob::query()
         )->count();
-        $hiringSuccessRate = $totalJobApplicants > 0 ? ($hiredCount / $totalJobApplicants) * 100 : 0;
+        $conversionRate = $totalJobApplicants > 0 ? ($hiredCount / $totalJobApplicants) * 100 : 0;
 
         // Menghitung rata-rata hiring_cost
         $averageHiringCost = $applyDateFilter(
@@ -137,7 +138,7 @@ class DashboardAdminController extends Controller
             return [$status => $count];
         });
 
-         // Menghitung total interview dengan applyDateFilter
+        // Menghitung total interview
         $totalHrInterviews = $applyDateFilter(
             UserHrjobStatusHistory::query()
                 ->where('status', 'hr_interview')
@@ -152,11 +153,33 @@ class DashboardAdminController extends Controller
 
         $totalInterviews = $totalHrInterviews + $totalUserInterviews;
 
+        // Menghitung Offering Success Rate
+        $totalOfferings = $applyDateFilter(
+            Offering::query()
+        )->count();
 
+        $successfulOfferings = $applyDateFilter(
+            Offering::query()
+                ->whereNotNull('id_job')
+        )->count();
+
+        $offeringSuccessRate = $totalOfferings > 0
+            ? ($successfulOfferings / $totalOfferings) * 100
+            : 0;
+
+        //Menghitung Hiring Success Rate
+        $hiredCountHSR = $applyDateFilter(
+            UserHrjob::where('status', 'hired')
+        )->count();
+        $jobCountHSR = $applyDateFilter(
+            Hrjob::query()
+        )->count();
+        $hiringSuccessRate = $jobCountHSR > 0 ? ($hiredCountHSR / $jobCountHSR) * 100 : 0;
 
         return view('admin.dashboardadmin', [
             'applicantCount' => $applicantCount,
             'jobCount' => $jobCount,
+            'conversionRate' => $conversionRate,
             'hiringSuccessRate' => $hiringSuccessRate,
             'averageHiringCost' => $averageHiringCost,
             'averageDayToHire' => $averageDayToHire,
@@ -165,6 +188,7 @@ class DashboardAdminController extends Controller
             // 'hiredRejectedData' => $hiredRejectedData,
             'funnelData' => $funnelData,
             'totalInterviews' => $totalInterviews,
+            'offeringSuccessRate' => $offeringSuccessRate,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);

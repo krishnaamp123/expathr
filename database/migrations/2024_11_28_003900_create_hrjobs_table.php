@@ -31,6 +31,7 @@ return new class extends Migration
             $table->timestamp('job_closed')->nullable();
             $table->enum('is_ended',['yes','no'])->default('no');
             $table->bigInteger('hiring_cost')->nullable();
+            $table->enum('is_approved',['yes','no'])->default('no');
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
