@@ -483,6 +483,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
     <script>
+        $.extend(true, $.fn.dataTable.defaults, {
+            order: [[0, 'desc']] // Default descending pada kolom pertama untuk semua tabel
+        });
+    </script>
+
+    <script>
         $(document).ready(function () {
             // Inisialisasi datepicker untuk semua input dengan class .datepicker
             $('.datepicker').datepicker({

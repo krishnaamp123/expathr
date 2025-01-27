@@ -151,13 +151,20 @@
                             <td>{{$row->id}}</td>
                             <td data-field="job_name">{{$row->userHrjob->hrjob->job_name ?? 'No Applicant'}}</td>
                             <td data-field="applicant_name">{{$row->userHrjob->user->fullname ?? 'No Applicant'}}</td>
-                            <td data-field="user_interviewers">
+                            {{-- <td data-field="user_interviewers">
                                 @if ($row->user_interviewers->isNotEmpty())
                                     <ul>
                                         @foreach ($row->user_interviewers as $interviewer)
                                             <li>{{ $interviewer->fullname }}</li>
                                         @endforeach
                                     </ul>
+                                @else
+                                    <span>No Interviewers</span>
+                                @endif
+                            </td> --}}
+                            <td data-field="user_interviewers">
+                                @if ($row->user_interviewers->isNotEmpty())
+                                    {{ $row->user_interviewers->pluck('fullname')->implode(', ') }}
                                 @else
                                     <span>No Interviewers</span>
                                 @endif

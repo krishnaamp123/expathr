@@ -154,11 +154,7 @@
                             <td data-field="applicant_name">{{ $row->userHrjob->user->fullname ?? 'No Applicant' }}</td>
                             <td data-field="interviewers">
                                 @if ($row->interviewers->isNotEmpty())
-                                    <ul>
-                                        @foreach ($row->interviewers as $interviewer)
-                                            <li>{{ $interviewer->fullname }}</li>
-                                        @endforeach
-                                    </ul>
+                                    {{ $row->interviewers->pluck('fullname')->implode(', ') }}
                                 @else
                                     <span>No Interviewers</span>
                                 @endif

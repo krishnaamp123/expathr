@@ -578,13 +578,7 @@
                                     @if (request('status') === 'hr_interview')
                                         <td data-field="interviewers">
                                             @if ($row->interviews->isNotEmpty())
-                                                <ul>
-                                                    @foreach ($row->interviews as $interview)
-                                                        @foreach ($interview->interviewers as $interviewer)
-                                                            <li>{{ $interviewer->fullname }} </li>
-                                                        @endforeach
-                                                    @endforeach
-                                                </ul>
+                                                {{ $row->interviews->flatMap(fn($interview) => $interview->interviewers->pluck('fullname'))->implode(', ') }}
                                             @else
                                                 <span>No Interviewers</span>
                                             @endif
@@ -698,7 +692,7 @@
                                             @endif
                                         </td>
                                     @elseif (request('status') === 'user_interview')
-                                        <td data-field="user_interviewers">
+                                        {{-- <td data-field="user_interviewers">
                                             @if ($row->userinterviews->isNotEmpty())
                                                 <ul>
                                                     @foreach ($row->userinterviews as $userinterview)
@@ -707,6 +701,13 @@
                                                         @endforeach
                                                     @endforeach
                                                 </ul>
+                                            @else
+                                                <span>No Interviewers</span>
+                                            @endif
+                                        </td> --}}
+                                        <td data-field="user_interviewers">
+                                            @if ($row->userinterviews->isNotEmpty())
+                                                {{ $row->userinterviews->flatMap(fn($userinterview) => $userinterview->user_interviewers->pluck('fullname'))->implode(', ') }}
                                             @else
                                                 <span>No Interviewers</span>
                                             @endif
@@ -1774,6 +1775,10 @@
                     console.error('Error:', error);
                     showToast('failedToast', 'An unexpected error occurred. Please try again.');
                 });
+        });
+
+        $.extend(true, $.fn.dataTable.defaults, {
+            order: [[1, 'desc']] // Default descending pada kolom pertama untuk semua tabel
         });
 
     });

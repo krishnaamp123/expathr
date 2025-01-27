@@ -97,7 +97,13 @@
                                     Not Expired
                                 @endif
                             </td>
-                            <td data-field="job_closed">{{ $row->job_closed->format('d-m-Y H:i:s') }}</td>
+                            <td data-field="job_closed">
+                                @if ($row->job_closed)
+                                    {{ \Carbon\Carbon::parse($row->job_closed)->format('d-m-Y H:i:s') }}
+                                @else
+                                    Not Closed
+                                @endif
+                            </td>
                             {{-- <td>{{$row->updated_at}}</td> --}}
                             <td>
                                 <a href="{{ route('editHrjob', $row->id) }}" class="btn btn-sm my-1" style="background-color: #969696; color: white;">
