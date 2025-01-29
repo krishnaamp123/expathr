@@ -7,7 +7,7 @@
                 <ul class="list-group">
                     @foreach ($about as $aboutt)
                     <li class="list-group-item city-item position-relative">
-                        <span class="kaem-subheading">{{ $aboutt->about ?? 'Unknown About' }}</span><br>
+                        <span class="kaem-text">{{ $aboutt->about ?? 'Unknown About' }}</span><br>
                         <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
                             <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editAboutModal{{ $aboutt->id }}">
                                 <i class="fas fa-edit"></i>
@@ -52,7 +52,7 @@
                 <label class="kaem-text">Write a summary that describes yourself, minimum 50 characters!</label>
                 <div class="form-group">
                     <label for="about" class="kaem-subheading">About</label>
-                    <textarea name="about" class="form-control" id="about" rows="5" required>{{ $aboutt->about }}</textarea>
+                    <textarea name="about" class="form-control kaem-sub" id="about" rows="5" required>{{ $aboutt->about }}</textarea>
                     @error('about')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror

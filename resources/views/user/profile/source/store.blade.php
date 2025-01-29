@@ -26,7 +26,7 @@
 
         <div class="form-group">
             <label for="referal" class="kaem-subheading">Referal</label>
-            <input name="referal" type="text" class="form-control form-control-user"
+            <input name="referal" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputReferalName">
             @error('referal')
                 <div class="text-danger">{{$message}}</div>
@@ -35,7 +35,7 @@
 
         <div class="form-group">
             <label for="other" class="kaem-subheading">Other</label>
-            <input name="other" type="text" class="form-control form-control-user"
+            <input name="other" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputOtherName">
             @error('other')
                 <div class="text-danger">{{$message}}</div>

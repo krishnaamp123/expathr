@@ -14,7 +14,7 @@
                 </button>
             </div>
             @endif
-            <h2 class="section-heading text-uppercase">All Job</h2>
+            <h2 class="section-heading text-uppercase-libre">All Job</h2>
             <h3 class="section-subheading">Here are all our job openings!</h3>
             <h3 class="section-subheading-kaem mb-5">Make sure you have completed your profile first!</h3>
         </div>

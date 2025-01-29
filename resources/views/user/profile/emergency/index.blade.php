@@ -55,7 +55,7 @@
                     <label class="kaem-text">Emergency contact number that can be contacted!</label>
                     <div class="form-group">
                         <label for="emergency_name" class="kaem-subheading">Name</label>
-                        <input type="text" class="form-control" id="emergency_name" name="emergency_name"  value="{{ $emergencyy->emergency_name }}" required>
+                        <input type="text" class="form-control kaem-sub" id="emergency_name" name="emergency_name"  value="{{ $emergencyy->emergency_name }}" required>
                         @error('emergency_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -63,7 +63,7 @@
 
                     <div class="form-group">
                         <label for="emergency_relation" class="kaem-subheading">Relation</label>
-                        <input type="text" class="form-control" id="emergency_relation" name="emergency_relation" value="{{ $emergencyy->emergency_relation }}" required>
+                        <input type="text" class="form-control kaem-sub" id="emergency_relation" name="emergency_relation" value="{{ $emergencyy->emergency_relation }}" required>
                         @error('emergency_relation')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -71,7 +71,7 @@
 
                     <div class="form-group">
                         <label for="emergency_phone" class="kaem-subheading">Phone</label>
-                        <input type="text" class="form-control" id="emergency_phone" name="emergency_phone" value="{{ $emergencyy->emergency_phone }}" required>
+                        <input type="text" class="form-control kaem-sub" id="emergency_phone" name="emergency_phone" value="{{ $emergencyy->emergency_phone }}" required>
                         @error('emergency_phone')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

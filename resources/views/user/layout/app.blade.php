@@ -30,6 +30,8 @@
             <!-- Font Awesome icons (free version)-->
             <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
             <!-- Google fonts-->
+            <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
             <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
             <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
 
@@ -47,7 +49,8 @@
                 .select2-container .select2-selection--single {
                     height: 40px; /* Mengubah tinggi dari select */
                     padding: 8px; /* Mengatur padding agar lebih proporsional */
-                    font-size: 14px; /* Ukuran font yang lebih besar */
+                    font-size: 13px; /* Ukuran font yang lebih besar */
+                    font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
                 }
 
                 .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -67,6 +70,12 @@
                     right: 24px; /* Geser posisi clear ke kiri */
                     font-size: 12px; /* Sesuaikan ukuran font jika perlu */
                     color: #666; /* Warna tombol clear */
+                }
+
+                .select2-container .select2-dropdown,
+                .select2-container .select2-results__option {
+                    font-size: 13px;
+                    font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
                 }
 
                 /* Tambahkan padding atau margin untuk logo dan menu */

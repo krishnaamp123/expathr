@@ -70,7 +70,7 @@
 
                     <div class="form-group">
                         <label for="media_url" class="kaem-subheading">Url</label>
-                        <input type="url" class="form-control" id="media_url" name="media_url"  value="{{ $linkk->media_url }}" required>
+                        <input type="url" class="form-control kaem-sub" id="media_url" name="media_url"  value="{{ $linkk->media_url }}" required>
                         @error('media_url')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

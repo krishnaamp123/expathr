@@ -60,7 +60,7 @@
                     <label class="kaem-text">Edit the education you have taken!</label>
                     <div class="form-group">
                         <label for="university" class="kaem-subheading">Institution</label>
-                        <input type="text" class="form-control" id="university" name="university"  value="{{ $educationn->university }}" required>
+                        <input type="text" class="form-control kaem-sub" id="university" name="university"  value="{{ $educationn->university }}" required>
                         @error('university')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -84,7 +84,7 @@
 
                     <div class="form-group">
                         <label for="major" class="kaem-subheading">Major</label>
-                        <input type="text" class="form-control" id="major" name="major"  value="{{ $educationn->major }}" required>
+                        <input type="text" class="form-control kaem-sub" id="major" name="major"  value="{{ $educationn->major }}" required>
                         @error('major')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -92,7 +92,7 @@
 
                     <div class="form-group">
                         <label for="start_date" class="kaem-subheading">Start Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $educationn->start_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $educationn->start_date }}" required>
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -100,7 +100,7 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $educationn->end_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $educationn->end_date }}" required>
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

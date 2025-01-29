@@ -7,9 +7,9 @@
         <!-- Masthead-->
         <header class="masthead">
             <div class="container">
-                <div class="masthead-subheading">Expat. Roasters</div>
                 <div class="masthead-heading text-uppercase">Good Coffee All Around</div>
-                <a class="btn btn-primary btn-xl text-uppercase" href="#portfolio">Find Job</a>
+                <div class="masthead-subheading">Expat. Roasters</div>
+                <a class="btn btn-primary btn-xl" href="#portfolio">FIND JOB</a>
             </div>
         </header>
         <!-- Portfolio Grid-->
@@ -24,7 +24,7 @@
                         </button>
                     </div>
                     @endif
-                    <h2 class="section-heading text-uppercase">Job Vacancy</h2>
+                    <h2 class="section-heading text-uppercase-libre">Job Vacancy</h2>
                     <h3 class="section-subheading">Here are our latest job!</h3>
                     <h3 class="section-subheading-kaem mb-5">Make sure you have completed your profile first!</h3>
                 </div>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-md-1 mb-4">
                         <label for="button" class="kaem-subheading">&nbsp;</label>
-                        <button type="button" class="btn btn-secondary" onclick="resetFilters()">&nbsp;&nbsp;&nbsp;Clear&nbsp;&nbsp;&nbsp;</button>
+                        <button type="button" class="btn btn-secondary btn-md" onclick="resetFilters()">&nbsp;&nbsp;&nbsp;Clear&nbsp;&nbsp;&nbsp;</button>
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@
                     @endforeach
                 </div>
                 <div class="text-center mt-4">
-                    <a href="{{ route('getVacancy') }}" class="btn btn-primary btn-xl text-uppercase">See All Jobs</a>
+                    <a href="{{ route('getVacancy') }}" class="btn btn-primary btn-xl">SEE ALL JOBS</a>
                 </div>
             </div>
         </section>
@@ -104,7 +104,7 @@
         <section class="page-section" id="about">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">About</h2>
+                    <h2 class="section-heading text-uppercase-libre">About</h2>
                     <h3 class="section-subheading mb-5">Our Story</h3>
                 </div>
                 <ul class="timeline">
@@ -153,7 +153,7 @@
         <section class="page-section" id="store">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Store</h2>
+                    <h2 class="section-heading text-uppercase-libre">Store</h2>
                     <h3 class="section-subheading mb-5">Here is our location!</h3>
                 </div>
                 <div class="row">

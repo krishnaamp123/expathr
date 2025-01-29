@@ -3,7 +3,7 @@
     <label class="kaem-text">Add the language you speak!</label>
         <div class="form-group">
             <label for="language" class="kaem-subheading">Language</label>
-            <input name="language" type="text" class="form-control form-control-user"
+            <input name="language" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputLanguageName">
             @error('language')
                 <div class="text-danger">{{$message}}</div>

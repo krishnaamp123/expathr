@@ -65,7 +65,7 @@
                     <label class="kaem-text">Edit any certifications or training you have taken that are related to the job you want!</label>
                     <div class="form-group">
                         <label for="lisence_name" class="kaem-subheading">Lisence Name</label>
-                        <input type="text" class="form-control" id="lisence_name" name="lisence_name"  value="{{ $certificationn->lisence_name }}" required>
+                        <input type="text" class="form-control kaem-sub" id="lisence_name" name="lisence_name"  value="{{ $certificationn->lisence_name }}" required>
                         @error('lisence_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -73,7 +73,7 @@
 
                     <div class="form-group">
                         <label for="organization" class="kaem-subheading">Organization</label>
-                        <input type="text" class="form-control" id="organization" name="organization"  value="{{ $certificationn->organization }}" required>
+                        <input type="text" class="form-control kaem-sub" id="organization" name="organization"  value="{{ $certificationn->organization }}" required>
                         @error('organization')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -81,7 +81,7 @@
 
                     <div class="form-group">
                         <label for="id_credentials" class="kaem-subheading">Id Credentials</label>
-                        <input type="text" class="form-control" id="id_credentials" name="id_credentials"  value="{{ $certificationn->id_credentials }}" required>
+                        <input type="text" class="form-control kaem-sub" id="id_credentials" name="id_credentials"  value="{{ $certificationn->id_credentials }}" required>
                         @error('id_credentials')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -89,7 +89,7 @@
 
                     <div class="form-group">
                         <label for="url_credentials" class="kaem-subheading">Url Credentials</label>
-                        <input type="text" class="form-control" id="url_credentials" name="url_credentials"  value="{{ $certificationn->url_credentials }}" required>
+                        <input type="text" class="form-control kaem-sub" id="url_credentials" name="url_credentials"  value="{{ $certificationn->url_credentials }}" required>
                         @error('url_credentials')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -97,7 +97,7 @@
 
                     <div class="form-group">
                         <label for="description" class="kaem-subheading">Description</label>
-                        <textarea name="description" class="form-control" id="description" rows="5" required>{{ $certificationn->description }}</textarea>
+                        <textarea name="description" class="form-control kaem-sub" id="description" rows="5" required>{{ $certificationn->description }}</textarea>
                         @error('description')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -105,7 +105,7 @@
 
                     <div class="form-group">
                         <label for="start_date" class="kaem-subheading">Start Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $certificationn->start_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $certificationn->start_date }}" required>
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -113,7 +113,7 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $certificationn->end_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $certificationn->end_date }}" required>
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

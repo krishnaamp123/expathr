@@ -67,7 +67,7 @@
                     <label class="kaem-text">Edit the experience you have had so far that is related to the job you are looking for!</label>
                     <div class="form-group">
                         <label for="position" class="kaem-subheading">Position</label>
-                        <input type="text" class="form-control" id="position" name="position"  value="{{ $experiencee->position }}" required>
+                        <input type="text" class="form-control kaem-sub" id="position" name="position"  value="{{ $experiencee->position }}" required>
                         @error('position')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -92,7 +92,7 @@
 
                     <div class="form-group">
                         <label for="company_name" class="kaem-subheading">Company Name</label>
-                        <input type="text" class="form-control" id="company_name" name="company_name"  value="{{ $experiencee->company_name }}" required>
+                        <input type="text" class="form-control kaem-sub" id="company_name" name="company_name"  value="{{ $experiencee->company_name }}" required>
                         @error('company_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -100,7 +100,7 @@
 
                     <div class="form-group">
                         <label for="location" class="kaem-subheading">Location</label>
-                        <input type="text" class="form-control" id="location" name="location"  value="{{ $experiencee->location }}" required>
+                        <input type="text" class="form-control kaem-sub" id="location" name="location"  value="{{ $experiencee->location }}" required>
                         @error('location')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -121,7 +121,7 @@
 
                     <div class="form-group">
                         <label for="responsibility" class="kaem-subheading">Responsibility</label>
-                        <textarea name="responsibility" class="form-control" id="responsibility" rows="5" required>{{ $experiencee->responsibility }}</textarea>
+                        <textarea name="responsibility" class="form-control kaem-sub" id="responsibility" rows="5" required>{{ $experiencee->responsibility }}</textarea>
                         @error('responsibility')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -129,7 +129,7 @@
 
                     <div class="form-group">
                         <label for="job_report" class="kaem-subheading">Job Report</label>
-                        <textarea name="job_report" class="form-control" id="job_report" rows="5" required>{{ $experiencee->job_report }}</textarea>
+                        <textarea name="job_report" class="form-control kaem-sub" id="job_report" rows="5" required>{{ $experiencee->job_report }}</textarea>
                         @error('job_report')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -137,7 +137,7 @@
 
                     <div class="form-group">
                         <label for="start_date" class="kaem-subheading">Start Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $experiencee->start_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $experiencee->start_date }}" required>
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -145,7 +145,7 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $experiencee->end_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $experiencee->end_date }}" required>
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

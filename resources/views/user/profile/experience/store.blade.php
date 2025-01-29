@@ -3,7 +3,7 @@
     <label class="kaem-text">Add the experience you have had so far that is related to the job you are looking for!</label>
         <div class="form-group">
             <label for="position" class="kaem-subheading">Position</label>
-            <input name="position" type="text" class="form-control form-control-user"
+            <input name="position" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputPosition">
             @error('position')
                 <div class="text-danger">{{$message}}</div>
@@ -29,7 +29,7 @@
 
         <div class="form-group">
             <label for="company_name" class="kaem-subheading">Company Name</label>
-            <input name="company_name" type="text" class="form-control form-control-user"
+            <input name="company_name" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputCompanyName">
             @error('company_name')
                 <div class="text-danger">{{$message}}</div>
@@ -38,7 +38,7 @@
 
         <div class="form-group">
             <label for="location" class="kaem-subheading">Location</label>
-            <input name="location" type="text" class="form-control form-control-user"
+            <input name="location" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputLocation">
             @error('location')
                 <div class="text-danger">{{$message}}</div>
@@ -60,7 +60,7 @@
 
         <div class="form-group">
             <label for="responsibility" class="kaem-subheading">Responsibility</label>
-            <textarea name="responsibility" class="form-control form-control-user" id="exampleInputResponsibility" rows="5"></textarea>
+            <textarea name="responsibility" class="form-control kaem-sub form-control-user" id="exampleInputResponsibility" rows="5"></textarea>
             @error('responsibility')
                 <div class="text-danger">{{$message}}</div>
             @enderror
@@ -68,7 +68,7 @@
 
         <div class="form-group">
             <label for="job_report" class="kaem-subheading">Job Report</label>
-            <textarea name="job_report" class="form-control form-control-user" id="exampleInputJobReport" rows="5"></textarea>
+            <textarea name="job_report" class="form-control kaem-sub form-control-user" id="exampleInputJobReport" rows="5"></textarea>
             @error('job_report')
                 <div class="text-danger">{{$message}}</div>
             @enderror
@@ -76,14 +76,14 @@
 
         <div class="form-group">
             <label for="start_date" class="kaem-subheading">Start Date</label>
-            <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date">
+            <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="start_date" name="start_date">
             @error('start_date')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group">
             <label for="end_date" class="kaem-subheading">End Date</label>
-            <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date">
+            <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date">
             @error('end_date')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

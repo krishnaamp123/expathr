@@ -58,7 +58,7 @@
                     <label class="kaem-text">Edit organizations you've been involved with that are related to the job you're looking for!</label>
                     <div class="form-group">
                         <label for="organization" class="kaem-subheading">Organization</label>
-                        <input type="text" class="form-control" id="organization" name="organization"  value="{{ $organizationn->organization }}" required>
+                        <input type="text" class="form-control kaem-sub" id="organization" name="organization"  value="{{ $organizationn->organization }}" required>
                         @error('organization')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -66,7 +66,7 @@
 
                     <div class="form-group">
                         <label for="position" class="kaem-subheading">Position</label>
-                        <input type="text" class="form-control" id="position" name="position"  value="{{ $organizationn->position }}" required>
+                        <input type="text" class="form-control kaem-sub" id="position" name="position"  value="{{ $organizationn->position }}" required>
                         @error('position')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -74,7 +74,7 @@
 
                     <div class="form-group">
                         <label for="associated" class="kaem-subheading">Associated</label>
-                        <input type="text" class="form-control" id="associated" name="associated"  value="{{ $organizationn->associated }}" required>
+                        <input type="text" class="form-control kaem-sub" id="associated" name="associated"  value="{{ $organizationn->associated }}" required>
                         @error('associated')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -82,7 +82,7 @@
 
                     <div class="form-group">
                         <label for="description" class="kaem-subheading">Description</label>
-                        <textarea name="description" class="form-control" id="description" rows="5" required>{{ $organizationn->description }}</textarea>
+                        <textarea name="description" class="form-control kaem-sub" id="description" rows="5" required>{{ $organizationn->description }}</textarea>
                         @error('description')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -90,7 +90,7 @@
 
                     <div class="form-group">
                         <label for="start_date" class="kaem-subheading">Start Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $organizationn->start_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $organizationn->start_date }}" required>
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -98,7 +98,7 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $organizationn->end_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $organizationn->end_date }}" required>
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

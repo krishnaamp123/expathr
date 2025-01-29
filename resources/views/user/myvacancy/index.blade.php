@@ -14,7 +14,7 @@
                     </button>
                 </div>
             @endif
-            <h2 class="section-heading text-uppercase">My Job</h2>
+            <h2 class="section-heading text-uppercase-libre">My Job</h2>
             <h3 class="section-subheading mb-5">Here are all your applications!</h3>
         </div>
     </div>
@@ -65,11 +65,11 @@
                                 <div class="row">
                                     <div class="col-12 text-end">
                                         @if (!isset($formsByJob[$vacancy->id_job]))
-                                            <span class="badge bg-warning">No Form</span>
+                                            <span class="badge bg-warning portfolio-caption-location">No Form</span>
                                         @elseif ($vacancy->userAnswer->isEmpty())
-                                            <span class="badge bg-danger">Form Not Filled</span>
+                                            <span class="badge bg-danger portfolio-caption-location">Form Not Filled</span>
                                         @else
-                                            <span class="badge bg-success">Form Filled</span>
+                                            <span class="badge bg-success portfolio-caption-location">Form Filled</span>
                                         @endif
                                     </div>
                                 </div>

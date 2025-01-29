@@ -82,7 +82,7 @@
 
                     <div class="form-group">
                         <label for="referal" class="kaem-subheading">Referal</label>
-                        <input type="text" class="form-control" id="referal" name="referal"  value="{{ $sourcee->referal }}">
+                        <input type="text" class="form-control kaem-sub" id="referal" name="referal"  value="{{ $sourcee->referal }}">
                         @error('referal')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -90,7 +90,7 @@
 
                     <div class="form-group">
                         <label for="other" class="kaem-subheading">Other</label>
-                        <input type="text" class="form-control" id="other" name="other"  value="{{ $sourcee->other }}">
+                        <input type="text" class="form-control kaem-sub" id="other" name="other"  value="{{ $sourcee->other }}">
                         @error('other')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

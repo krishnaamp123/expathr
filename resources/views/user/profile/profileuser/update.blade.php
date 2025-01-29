@@ -15,7 +15,7 @@
 
     <div class="form-group">
         <label class="kaem-subheading">New Profile Picture</label>
-        <input type="file" name="file" class="form-control">
+        <input type="file" name="file" class="form-control kaem-sub">
         @error('file')
             <div class="text-danger">{{ $message }}</div>
         @enderror
@@ -38,7 +38,7 @@
 
     <div class="form-group">
         <label for="fullname" class="kaem-subheading">Fullname</label>
-        <input type="text" class="form-control" id="fullname" name="fullname" value="{{ $user->fullname }}" required>
+        <input type="text" class="form-control kaem-sub" id="fullname" name="fullname" value="{{ $user->fullname }}" required>
         @error('fullname')
             <span class="text-danger">{{ $message }}</span>
         @enderror
@@ -46,7 +46,7 @@
 
     <div class="form-group">
         <label for="nickname" class="kaem-subheading">Nickname</label>
-        <input type="text" class="form-control" id="nickname" name="nickname" value="{{ $user->nickname }}" required>
+        <input type="text" class="form-control kaem-sub" id="nickname" name="nickname" value="{{ $user->nickname }}" required>
         @error('nickname')
             <span class="text-danger">{{ $message }}</span>
         @enderror
@@ -54,7 +54,7 @@
 
     <div class="form-group">
         <label for="phone" class="kaem-subheading">Phone</label>
-        <input type="text" class="form-control" id="phone" name="phone" value="{{ $user->phone }}" required>
+        <input type="text" class="form-control kaem-sub" id="phone" name="phone" value="{{ $user->phone }}" required>
         @error('phone')
             <span class="text-danger">{{ $message }}</span>
         @enderror
@@ -62,7 +62,7 @@
 
     <div class="form-group">
         <label for="address" class="kaem-subheading">Address</label>
-        <input type="text" class="form-control" id="address" name="address" value="{{ $user->address }}" required>
+        <input type="text" class="form-control kaem-sub" id="address" name="address" value="{{ $user->address }}" required>
         @error('address')
             <span class="text-danger">{{ $message }}</span>
         @enderror
@@ -70,7 +70,7 @@
 
     <div class="form-group">
         <label for="birth_date" class="kaem-subheading">Birth Date</label>
-        <input type="text" class="form-control datepicker datepicker-yyyy-mm-dd" id="birth_date" name="birth_date" value="{{ $user->birth_date }}" required>
+        <input type="text" class="form-control kaem-sub datepicker datepicker-yyyy-mm-dd" id="birth_date" name="birth_date" value="{{ $user->birth_date }}" required>
         @error('birth_date')
             <span class="text-danger">{{ $message }}</span>
         @enderror

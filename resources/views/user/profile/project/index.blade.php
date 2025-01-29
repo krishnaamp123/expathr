@@ -58,7 +58,7 @@
                     <label class="kaem-text">Edit projects that you have worked on that relate to the job you are looking for!</label>
                     <div class="form-group">
                         <label for="project_name" class="kaem-subheading">Name</label>
-                        <input type="text" class="form-control" id="project_name" name="project_name"  value="{{ $projectt->project_name }}" required>
+                        <input type="text" class="form-control kaem-sub" id="project_name" name="project_name"  value="{{ $projectt->project_name }}" required>
                         @error('project_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -66,7 +66,7 @@
 
                     <div class="form-group">
                         <label for="description" class="kaem-subheading">Description</label>
-                        <textarea name="description" class="form-control" id="description" rows="5" required>{{ $projectt->description }}</textarea>
+                        <textarea name="description" class="form-control kaem-sub" id="description" rows="5" required>{{ $projectt->description }}</textarea>
                         @error('description')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -74,7 +74,7 @@
 
                     <div class="form-group">
                         <label for="start_date" class="kaem-subheading">Start Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $projectt->start_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="start_date" name="start_date" value="{{ $projectt->start_date }}" required>
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -82,7 +82,7 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $projectt->end_date }}" required>
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $projectt->end_date }}" required>
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

@@ -55,7 +55,7 @@
                     <label class="kaem-text">Contact references must added at least 2 contacts!</label>
                     <div class="form-group">
                         <label for="reference_name" class="kaem-subheading">Reference Name</label>
-                        <input type="text" class="form-control" id="reference_name" name="reference_name"  value="{{ $referencee->reference_name }}" required>
+                        <input type="text" class="form-control kaem-sub" id="reference_name" name="reference_name"  value="{{ $referencee->reference_name }}" required>
                         @error('reference_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -63,7 +63,7 @@
 
                     <div class="form-group">
                         <label for="relation" class="kaem-subheading">Relation</label>
-                        <input type="text" class="form-control" id="relation" name="relation" value="{{ $referencee->relation }}" required>
+                        <input type="text" class="form-control kaem-sub" id="relation" name="relation" value="{{ $referencee->relation }}" required>
                         @error('relation')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -71,7 +71,7 @@
 
                     <div class="form-group">
                         <label for="company_name" class="kaem-subheading">Company Name</label>
-                        <input type="text" class="form-control" id="company_name" name="company_name"  value="{{ $referencee->company_name }}" required>
+                        <input type="text" class="form-control kaem-sub" id="company_name" name="company_name"  value="{{ $referencee->company_name }}" required>
                         @error('company_name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -79,7 +79,7 @@
 
                     <div class="form-group">
                         <label for="phone" class="kaem-subheading">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" value="{{ $referencee->phone }}" required>
+                        <input type="text" class="form-control kaem-sub" id="phone" name="phone" value="{{ $referencee->phone }}" required>
                         @error('phone')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

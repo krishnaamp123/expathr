@@ -22,7 +22,7 @@
                 </button>
             </div>
             @endif
-            <h2 class="section-heading text-uppercase">Profile</h2>
+            <h2 class="section-heading text-uppercase-libre">Profile</h2>
             <h3 class="section-subheading mb-5">Complete your profile first before applying!</h3>
         </div>
         <div class="row">

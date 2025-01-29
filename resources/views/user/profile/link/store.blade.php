@@ -19,7 +19,7 @@
 
         <div class="form-group">
             <label for="media_url" class="kaem-subheading">Url</label>
-            <input name="media_url" type="url" class="form-control form-control-user"
+            <input name="media_url" type="url" class="form-control kaem-sub form-control-user"
                 id="exampleInputMediaUrlName">
             @error('media_url')
                 <div class="text-danger">{{$message}}</div>
