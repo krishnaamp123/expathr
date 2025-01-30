@@ -36,9 +36,9 @@
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('template-admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* Gaya khusus untuk halaman register */
@@ -61,6 +61,7 @@
             border-radius: 0.35rem;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             font-size: 0.8rem;
+            font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             border-radius: 10rem;
             padding-top: 0.5rem;
             padding-bottom: 2.5rem;
@@ -88,6 +89,13 @@
             color: white; /* Text color when hovered */
         }
 
+        .select2-container .select2-dropdown,
+        .select2-container .select2-results__option {
+            font-size: 13px;
+            font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+
         .custom-text-danger {
             font-size: 0.8rem; /* Adjust the font size as needed */
             color: #e74a3b; /* Ensure the color is still red */
@@ -108,6 +116,17 @@
         .datepicker table tr td.active,
         .datepicker table tr td.active:hover {
             color: white !important;
+        }
+
+        .kaem-sub {
+            font-weight: 400;
+            font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        .login-box-msg {
+            font-size: 0.8rem;
+            font-weight: 400;
+            font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
 
     </style>
@@ -132,7 +151,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-4">
-                                    <hr class="my-5">
+                                    <hr class="my-4">
                                     <div class="text-center">
                                     @if(session('error'))
                                         <div class="text-danger text-center" style="color: #c03535;">{{ session('error') }}</div>
@@ -158,7 +177,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input name="email" type="email" class="form-control form-control-user"
+                                        <input name="email" type="email" class="form-control kaem-sub form-control-user"
                                                id="exampleInputEmail" aria-describedby="emailHelp"
                                                placeholder="Email">
                                         @error('email')
@@ -166,16 +185,18 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group">
-                                        <input name="password" type="password" class="form-control form-control-user"
+                                    <div class="form-group position-relative">
+                                        <input name="password" type="password" class="form-control kaem-sub form-control-user"
                                                id="exampleInputPassword" placeholder="Password">
+                                        <i class="fa fa-eye position-absolute" id="togglePassword"
+                                           style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                                         @error('password')
-                                            <div class="custom-text-danger">{{$message}}</div>
+                                            <div class="text-danger">{{$message}}</div>
                                         @enderror
                                     </div>
 
                                     <div class="form-group">
-                                        <input name="fullname" type="text" class="form-control form-control-user"
+                                        <input name="fullname" type="text" class="form-control kaem-sub form-control-user"
                                                id="exampleInputFullname" placeholder="Fullname">
                                         @error('fullname')
                                             <div class="custom-text-danger">{{$message}}</div>
@@ -183,7 +204,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input name="nickname" type="text" class="form-control form-control-user"
+                                        <input name="nickname" type="text" class="form-control kaem-sub form-control-user"
                                                id="exampleInputNickname" placeholder="Nickname">
                                         @error('nickname')
                                             <div class="custom-text-danger">{{$message}}</div>
@@ -191,7 +212,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input name="phone" type="number" class="form-control form-control-user"
+                                        <input name="phone" type="number" class="form-control kaem-sub form-control-user"
                                                id="exampleInputPhone" placeholder="Phone">
                                         @error('phone')
                                             <div class="custom-text-danger">{{$message}}</div>
@@ -199,7 +220,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input name="address" type="text" class="form-control form-control-user"
+                                        <input name="address" type="text" class="form-control kaem-sub form-control-user"
                                                id="exampleInputAddress" placeholder="Address">
                                         @error('address')
                                             <div class="custom-text-danger">{{$message}}</div>
@@ -207,7 +228,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input name="birth_date" type="text" class="form-control form-control-user"
+                                        <input name="birth_date" type="text" class="form-control kaem-sub form-control-user"
                                                id="datepicker" placeholder="Birth Date">
                                         @error('birth_date')
                                             <div class="custom-text-danger">{{ $message }}</div>
@@ -227,11 +248,11 @@
 
 
                                     <hr class="sidebar-divider">
-                                        <button type="submit" class="btn btn-user btn-block" style="background-color: #72A28A; color: white;">Sign Up</button>
+                                        <button type="submit" class="btn btn-user kaem-sub btn-block" style="background-color: #72A28A; color: white;">Sign Up</button>
 
                                         <hr>
-                                        <div class="text-center">
-                                            <a class="small" href="{{route('login')}}" style="color: #72A28A;">Already have an account? Login!</a>
+                                        <div class="text-center my-3">
+                                            <a class="small kaem-sub" href="{{route('login')}}" style="color: #72A28A;">Already have an account? Login!</a>
                                         </div>
                                     </form>
                                 </div>
@@ -294,7 +315,21 @@
         });
     </script>
 
-
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function() {
+            var passwordInput = document.getElementById("exampleInputPassword");
+            var icon = this;
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    </script>
 
 </body>
 

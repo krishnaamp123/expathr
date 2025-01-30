@@ -184,6 +184,21 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Forms</label>
+                            <select name="id_form[]" class="form-control select2" multiple>
+                                <option value="">Select Form</option>
+                                @foreach($forms as $form)
+                                    <option value="{{ $form->id }}" {{ in_array($form->id, $selectedForms) ? 'selected' : '' }}>
+                                        {{ $form->form_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_form')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label>Is Ended</label>
                             <select name="is_ended" class="form-control select2">
                                 <option value="">Select Is Ended</option>

@@ -18,6 +18,7 @@ class DashboardAdminController extends Controller
         // Filter tanggal jika ada input
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
+        $isEnded = $request->get('is_ended');
 
         // Fungsi reusable untuk filter tanggal
         $applyDateFilter = function ($query) use ($startDate, $endDate) {
@@ -27,12 +28,40 @@ class DashboardAdminController extends Controller
             return $query;
         };
 
-        $applyupDateFilter = function ($query) use ($startDate, $endDate) {
-            if ($startDate && $endDate) {
-                $query->whereBetween('updated_at', [$startDate, $endDate]); // Ganti created_at dengan updated_at
+        // $applyupDateFilter = function ($query) use ($startDate, $endDate) {
+        //     if ($startDate && $endDate) {
+        //         $query->whereBetween('updated_at', [$startDate, $endDate]); // Ganti created_at dengan updated_at
+        //     }
+        //     return $query;
+        // };
+
+        $applyIsEndedFilter = function ($query) use ($isEnded) {
+            if ($isEnded !== null) {
+                $query->where('is_ended', $isEnded);
             }
             return $query;
         };
+
+        $applyuserIsEndedFilter = function ($query) use ($isEnded) {
+            if ($isEnded !== null) {
+                $query->whereHas('hrjob', function ($q) use ($isEnded) {
+                    $q->where('is_ended', $isEnded);
+                });
+            }
+            return $query;
+        };
+
+        $applyuserhrjobIsEndedFilter = function ($query) use ($isEnded) {
+            if ($isEnded !== null) {
+                $query->whereHas('userHrjob', function ($q) use ($isEnded) {
+                    $q->whereHas('hrjob', function ($qq) use ($isEnded) {
+                        $qq->where('is_ended', $isEnded);
+                    });
+                });
+            }
+            return $query;
+        };
+
 
         // Menghitung jumlah applicant
         $applicantCount = $applyDateFilter(
@@ -40,31 +69,39 @@ class DashboardAdminController extends Controller
         )->count();
 
         // Menghitung jumlah job
-        $jobCount = $applyDateFilter(
-            Hrjob::query()
+        $jobCount = $applyIsEndedFilter(
+            $applyDateFilter(
+                Hrjob::query()
+            )
         )->count();
 
         // Menghitung Conversion Rate
-        $hiredCount = $applyDateFilter(
-            UserHrjob::where('status', 'hired')
+        $hiredCount = $applyuserIsEndedFilter(
+            $applyDateFilter(
+                UserHrjob::where('status', 'hired')
+            )
         )->count();
-        $totalJobApplicants = $applyDateFilter(
-            UserHrjob::query()
+        $totalJobApplicants = $applyuserIsEndedFilter(
+            $applyDateFilter(
+                UserHrjob::query()
+            )
         )->count();
         $conversionRate = $totalJobApplicants > 0 ? ($hiredCount / $totalJobApplicants) * 100 : 0;
 
         // Menghitung rata-rata hiring_cost
-        $averageHiringCost = $applyDateFilter(
-            Hrjob::query()
+        $averageHiringCost = $applyIsEndedFilter(
+            $applyDateFilter(
+                Hrjob::query()
+            )
         )->avg('hiring_cost');
 
         // Menghitung rata-rata day to hire dengan penyesuaian hari penuh
-        $averageDayToHire = $applyDateFilter(
-            Hrjob::whereNotNull('job_closed')
+        $averageDayToHire = $applyIsEndedFilter(
+            $applyDateFilter(
+                Hrjob::whereNotNull('job_closed')
+            )
         )->get()
-        ->map(function ($job) {
-            return $job->created_at->startOfDay()->diffInDays($job->job_closed->startOfDay()) + 1;
-        })
+        ->map(fn($job) => $job->created_at->startOfDay()->diffInDays($job->job_closed->startOfDay()) + 1)
         ->avg();
 
         // Menghitung Percentage of Referral Hires
@@ -80,13 +117,19 @@ class DashboardAdminController extends Controller
         ];
 
         // Menghitung Percentage of Positions Filled within Target Timeframe
-        $onTimeCount = $applyDateFilter(Hrjob::query())
-            ->whereNotNull('expired')
-            ->whereRaw('DATE(job_closed) = DATE(expired)')
-            ->count();
-        $totalJobsWithExpiredDate = $applyDateFilter(Hrjob::query())
-            ->whereNotNull('expired')
-            ->count();
+        $onTimeCount = $applyIsEndedFilter(
+            $applyDateFilter(
+                Hrjob::query()
+            )
+        )->whereNotNull('expired')
+        ->whereRaw('DATE(job_closed) = DATE(expired)')
+        ->count();
+        $totalJobsWithExpiredDate = $applyIsEndedFilter(
+            $applyDateFilter(
+                Hrjob::query()
+            )
+        )->whereNotNull('expired')
+        ->count();
         $percentageFilledOnTime = $totalJobsWithExpiredDate > 0
             ? ($onTimeCount / $totalJobsWithExpiredDate) * 100
             : 0;
@@ -107,31 +150,36 @@ class DashboardAdminController extends Controller
         //         });
         //     });
 
-        // Menghitung funnel chart
         // $statuses = [
         //     'applicant', 'shortlist', 'phone_screen', 'hr_interview',
         //     'user_interview', 'skill_test', 'reference_check',
         //     'offering', 'rejected', 'hired'
         // ];
+
+        // Menghitung funnel chart
         $statuses = [
             'applicant', 'shortlist', 'phone_screen', 'hr_interview',
             'user_interview', 'hired'
         ];
 
-        $funnelData = collect($statuses)->mapWithKeys(function ($status) use ($applyDateFilter) {
+        $funnelData = collect($statuses)->mapWithKeys(function ($status) use ($applyDateFilter, $applyuserIsEndedFilter, $applyuserhrjobIsEndedFilter) {
             if ($status === 'applicant') {
                 // Jika status adalah applicant, hitung dari total id_user_job
-                $count = $applyDateFilter(
-                    UserHrjob::query()
-                        ->distinct('id')
+                $count = $applyuserIsEndedFilter(
+                    $applyDateFilter(
+                        UserHrjob::query()
+                            ->distinct('id')
+                    )
                 )->count();
             } else {
                 // Untuk status lainnya, lakukan filter berdasarkan status
-                $count = $applyDateFilter(
-                    UserHrjobStatusHistory::query()
-                        ->select('id_user_job')
-                        ->where('status', $status)
-                        ->distinct('id_user_job')
+                $count = $applyuserhrjobIsEndedFilter(
+                    $applyDateFilter(
+                        UserHrjobStatusHistory::query()
+                            ->select('id_user_job')
+                            ->where('status', $status)
+                            ->distinct('id_user_job')
+                    )
                 )->count();
             }
 
@@ -139,28 +187,35 @@ class DashboardAdminController extends Controller
         });
 
         // Menghitung total interview
-        $totalHrInterviews = $applyDateFilter(
-            UserHrjobStatusHistory::query()
-                ->where('status', 'hr_interview')
-                ->distinct('id_user_job')
+        $totalHrInterviews = $applyuserhrjobIsEndedFilter(
+            $applyDateFilter(
+                UserHrjobStatusHistory::query()
+                    ->where('status', 'hr_interview')
+                    ->distinct('id_user_job')
+            )
         )->count();
 
-        $totalUserInterviews = $applyDateFilter(
-            UserHrjobStatusHistory::query()
-                ->where('status', 'user_interview')
-                ->distinct('id_user_job')
+        $totalUserInterviews = $applyuserhrjobIsEndedFilter(
+            $applyDateFilter(
+                UserHrjobStatusHistory::query()
+                    ->where('status', 'user_interview')
+                    ->distinct('id_user_job')
+            )
         )->count();
 
         $totalInterviews = $totalHrInterviews + $totalUserInterviews;
 
         // Menghitung Offering Success Rate
-        $totalOfferings = $applyDateFilter(
-            Offering::query()
+        $totalOfferings = $applyuserhrjobIsEndedFilter(
+            $applyDateFilter(
+                Offering::query()
+            )
         )->count();
 
-        $successfulOfferings = $applyDateFilter(
-            Offering::query()
-                ->whereNotNull('id_job')
+        $successfulOfferings = $applyuserhrjobIsEndedFilter(
+            $applyDateFilter(
+                Offering::query()->whereNotNull('id_job')
+            )
         )->count();
 
         $offeringSuccessRate = $totalOfferings > 0
@@ -168,11 +223,15 @@ class DashboardAdminController extends Controller
             : 0;
 
         //Menghitung Hiring Success Rate
-        $hiredCountHSR = $applyDateFilter(
-            UserHrjob::where('status', 'hired')
+        $hiredCountHSR = $applyuserIsEndedFilter(
+            $applyDateFilter(
+                UserHrjob::where('status', 'hired')
+            )
         )->count();
-        $jobCountHSR = $applyDateFilter(
-            Hrjob::query()
+        $jobCountHSR = $applyIsEndedFilter(
+            $applyDateFilter(
+                Hrjob::query()
+            )
         )->count();
         $hiringSuccessRate = $jobCountHSR > 0 ? ($hiredCountHSR / $jobCountHSR) * 100 : 0;
 

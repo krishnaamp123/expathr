@@ -10,6 +10,8 @@ use App\Models\HrjobCategory;
 use App\Models\City;
 use App\Models\Outlet;
 use App\Models\Offering;
+use App\Models\Form;
+use App\Models\FormHrjob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,7 +47,8 @@ class HrjobAdminController extends Controller
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
         $outlets = Outlet::all();
-        return view('admin.hrjob.store', compact('users','hrjobcategories', 'cities', 'outlets'));
+        $forms = Form::all();
+        return view('admin.hrjob.store', compact('users','hrjobcategories', 'cities', 'outlets', 'forms'));
     }
 
     public function storeHrjob(Request $request)
@@ -67,6 +70,8 @@ class HrjobAdminController extends Controller
             'education_min' => 'required|string|max:255',
             'expired' => 'required',
             'number_hired' => 'required',
+            'id_form' => 'nullable|array',
+            'id_form.*' => 'exists:forms,id',
         ]);
 
         $loggedInUser = Auth::user();
@@ -110,6 +115,15 @@ class HrjobAdminController extends Controller
 
         $hrjob->save();
 
+        if (!empty($validated['id_form'])) {
+            foreach ($validated['id_form'] as $formId) {
+                FormHrjob::create([
+                    'id_job' => $hrjob->id,
+                    'id_form' => $formId,
+                ]);
+            }
+        }
+
         session()->flash('toast_type', 'success');
         session()->flash('toast_message', 'Job Added Successfully!');
         return redirect()->route('getHrjob');
@@ -122,8 +136,10 @@ class HrjobAdminController extends Controller
         $hrjobcategories = HrjobCategory::all();
         $cities = City::all();
         $outlets = Outlet::all();
+        $forms = Form::all();
+        $selectedForms = FormHrjob::where('id_job', $id)->pluck('id_form')->toArray();
 
-        return view('admin.hrjob.update', compact('hrjob', 'users', 'hrjobcategories', 'cities', 'outlets'));
+        return view('admin.hrjob.update', compact('hrjob', 'users', 'hrjobcategories', 'cities', 'outlets', 'forms', 'selectedForms'));
     }
 
     public function updateHrjob(Request $request, $id)
@@ -150,6 +166,8 @@ class HrjobAdminController extends Controller
             'is_ended' => 'nullable|in:yes,no',
             'hiring_cost' => 'nullable',
             'job_closed' => 'nullable',
+            'id_form' => 'nullable|array',
+            'id_form.*' => 'exists:forms,id',
         ]);
 
         $loggedInUser = Auth::user();
@@ -195,6 +213,16 @@ class HrjobAdminController extends Controller
         $hrjob->job_closed = $validated['job_closed'];
 
         $hrjob->save();
+
+        FormHrjob::where('id_job', $id)->delete();
+        if (!empty($validated['id_form'])) {
+            foreach ($validated['id_form'] as $formId) {
+                FormHrjob::create([
+                    'id_job' => $hrjob->id,
+                    'id_form' => $formId,
+                ]);
+            }
+        }
 
         session()->flash('toast_type', 'success');
         session()->flash('toast_message', 'Job Updated Successfully!');

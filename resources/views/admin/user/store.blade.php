@@ -48,9 +48,19 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label>Password</label>
                             <input type="password" name="password" class="form-control">
+                            @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
+
+                        <div class="form-group position-relative">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control pr-5" id="passwordField">
+                            <i class="fa fa-eye position-absolute toggle-password"
+                               style="right: 15px; top: 75%; transform: translateY(-50%); cursor: pointer;"></i>
                             @error('password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -137,3 +147,22 @@
         </div>
     </div>
 @endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const togglePassword = document.querySelector(".toggle-password");
+        const passwordField = document.getElementById("passwordField");
+
+        togglePassword.addEventListener("click", function() {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                togglePassword.classList.remove("fa-eye");
+                togglePassword.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                togglePassword.classList.remove("fa-eye-slash");
+                togglePassword.classList.add("fa-eye");
+            }
+        });
+    });
+</script>

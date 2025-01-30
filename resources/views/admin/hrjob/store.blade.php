@@ -173,6 +173,19 @@
                             @enderror
                         </div>
 
+                        <div class="form-group">
+                            <label>Form</label>
+                            <select name="id_form[]" class="form-control select2" multiple>
+                                <option value="">Select Form</option>
+                                @foreach($forms as $form)
+                                    <option value="{{ $form->id }}">{{ $form->form_name }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_form')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-save"></i> Save</button>
                     </form>
                 </div>

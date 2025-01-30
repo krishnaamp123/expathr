@@ -21,8 +21,16 @@
                 <input type="date" id="end_date" name="end_date" class="form-control" value="{{ request('end_date', $endDate) }}">
             </div>
             <div class="form-group mx-sm-2">
+                <label for="is_ended" class="sr-only">Is Ended</label>
+                <select id="is_ended" name="is_ended" class="form-control select2">
+                    <option value="" {{ request('is_ended') === null ? 'selected' : '' }}>All</option>
+                    <option value="yes" {{ request('is_ended') === 'yes' ? 'selected' : '' }}>Yes</option>
+                    <option value="no" {{ request('is_ended') === 'no' ? 'selected' : '' }}>No</option>
+                </select>
+            </div>
+            <div class="form-group mx-sm-2">
                 <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;">Filter</button>
-                <a href="{{ route('getDashboardAdmin') }}" class="btn btn-sm" style="background-color: #8f8f8f; color: white;" onclick="document.getElementById('start_date').value='';document.getElementById('end_date').value='';">Clear Date</a>
+                <a href="{{ route('getDashboardAdmin') }}" class="btn btn-sm" style="background-color: #8f8f8f; color: white;" onclick="document.getElementById('start_date').value='';document.getElementById('end_date').value='';">Clear</a>
                 <a href="{{ route('getDashboardAdmin', ['all_time' => 1]) }}" class="btn btn-sm" style="background-color: #000; color: white;">View All Time</a>
             </div>
         </div>

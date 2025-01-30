@@ -14,13 +14,26 @@
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('template-admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="{{asset('template-admin/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
+    <style>
+        .kaem-sub {
+            font-weight: 400;
+            font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        .login-box-msg {
+            font-size: 0.8rem;
+            font-weight: 400;
+            font-family: "Roboto Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+    </style>
 </head>
 
 <body style="background-color: black;">
@@ -58,29 +71,31 @@
                                     <form class="user" action="{{ route('postLogin') }}" method="post">
                                     @csrf
                                     <div class="form-group">
-                                        <input name="email" type="email" class="form-control form-control-user"
+                                        <input name="email" type="email" class="form-control kaem-sub form-control-user"
                                                id="exampleInputEmail" aria-describedby="emailHelp"
                                                placeholder="Email">
                                         @error('email')
                                             <div class="text-danger">{{$message}}</div>
                                         @enderror
                                     </div>
-                                    <div class="form-group">
-                                        <input name="password" type="password" class="form-control form-control-user"
+                                    <div class="form-group position-relative">
+                                        <input name="password" type="password" class="form-control kaem-sub form-control-user"
                                                id="exampleInputPassword" placeholder="Password">
+                                        <i class="fa fa-eye position-absolute" id="togglePassword"
+                                           style="right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                                         @error('password')
                                             <div class="text-danger">{{$message}}</div>
                                         @enderror
                                     </div>
                                     <hr class="sidebar-divider">
-                                        <button type="submit" class="btn btn-user btn-block" style="background-color: #72A28A; color: white;">Sign In</button>
+                                        <button type="submit" class="btn btn-user kaem-sub btn-block" style="background-color: #72A28A; color: white;">Sign In</button>
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="{{route('getRegister')}}" style="color: #72A28A;">Create an Account!</a>
+                                        <a class="small kaem-sub" href="{{route('getRegister')}}" style="color: #72A28A;">Create an Account!</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="{{route('password.request')}}" style="color: #72A28A;">Forgot Password?</a>
+                                        <a class="small kaem-sub" href="{{route('password.request')}}" style="color: #72A28A;">Forgot Password?</a>
                                     </div>
                                 </div>
                             </div>
@@ -103,6 +118,22 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{asset('template-admin/js/sb-admin-2.min.js')}}"></script>
+
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function() {
+            var passwordInput = document.getElementById("exampleInputPassword");
+            var icon = this;
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    </script>
 
 </body>
 
