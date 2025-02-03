@@ -120,8 +120,8 @@
                         <label for="end_date" class="sr-only">End Date</label>
                         <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request('end_date') }}" placeholder="End Date">
                     </div>
-                    <a href="{{ route('getInterview') }}" class="btn btn-secondary btn-sm mb-2 mr-2">Clear Date</a>
-                    <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
+                    <a href="{{ route('getInterview') }}" class="btn btn-secondary btn-sm mb-2 mr-2"><i class="fas fa-times"></i> Clear Date</a>
+                    <button type="submit" class="btn btn-primary btn-sm mb-2"><i class="fas fa-filter"></i> Filter</button>
                 </form>
             </div>
         </div>

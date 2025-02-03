@@ -29,9 +29,10 @@
                 </select>
             </div>
             <div class="form-group mx-sm-2">
-                <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;">Filter</button>
-                <a href="{{ route('getDashboardAdmin') }}" class="btn btn-sm" style="background-color: #8f8f8f; color: white;" onclick="document.getElementById('start_date').value='';document.getElementById('end_date').value='';">Clear</a>
-                <a href="{{ route('getDashboardAdmin', ['all_time' => 1]) }}" class="btn btn-sm" style="background-color: #000; color: white;">View All Time</a>
+                <a href="{{ route('getDashboardAdmin', ['all_time' => 1]) }}" class="btn btn-sm" style="background-color: #8f8f8f; color: white;"><i class="fas fa-times"></i> Clear</a>
+                <button type="submit" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-filter"></i> Filter</button>
+                {{-- <a href="{{ route('getDashboardAdmin') }}" class="btn btn-sm" style="background-color: #8f8f8f; color: white;" onclick="document.getElementById('start_date').value='';document.getElementById('end_date').value='';">Clear</a> --}}
+                {{-- <a href="{{ route('getDashboardAdmin', ['all_time' => 1]) }}" class="btn btn-sm" style="background-color: #000; color: white;">View All Time</a> --}}
             </div>
         </div>
     </form>
@@ -253,7 +254,32 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .select2-container .select2-selection--single {
+        height: 33px !important; /* Sesuaikan tinggi input Select2 */
+        line-height: 30px !important;
+        padding: 2px 10px !important; /* Sesuaikan padding agar lebih rapi */
+        font-size: 14px; /* Sesuaikan ukuran font jika perlu */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 28px !important; /* Sesuaikan line-height agar teks sejajar */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 28px !important; /* Sesuaikan tinggi ikon dropdown */
+    }
+</style>
 <script>
+
+    $(document).ready(function() {
+        // Inisialisasi Select2 untuk elemen di luar modal
+        $('.select2').select2({
+            placeholder: "Job Ended",
+            allowClear: false
+        });
+    });
+
     // Script untuk Source Chart
     const ctxSource = document.getElementById('sourceChart').getContext('2d');
     const sourceData = @json($percentageData);

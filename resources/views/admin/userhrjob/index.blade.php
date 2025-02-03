@@ -485,8 +485,8 @@
                     <a href="{{ route('getUserHrjob', [
                         'status' => request('status'),
                         'id_job' => request('id_job')
-                    ]) }}" class="btn btn-secondary btn-sm mb-2 mr-2">Clear Date</a>
-                    <button type="submit" class="btn btn-primary btn-sm mb-2">Filter</button>
+                    ]) }}" class="btn btn-secondary btn-sm mb-2 mr-2"><i class="fas fa-times"></i> Clear Date</a>
+                    <button type="submit" class="btn btn-primary btn-sm mb-2"><i class="fas fa-filter"></i> Filter</button>
                 </form>
             </div>
         </div>
