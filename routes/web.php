@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Landing\LandingController;
 // USER
 use App\Http\Controllers\User\DashboardUserController;
 use App\Http\Controllers\User\ProfileUserController;
@@ -41,6 +42,8 @@ use App\Http\Controllers\Admin\SkillAdminController;
 use App\Http\Controllers\Admin\ReferenceCheckAdminController;
 use App\Http\Controllers\Admin\OfferingAdminController;
 
+//LANDING
+Route::get('/',[LandingController::class,'getLanding'])->name('getLanding');
 
 //AUTH
 Route::get('/login',[AuthController::class,'getLogin'])->name('login');
@@ -60,9 +63,6 @@ Route::get('email/verify', [AuthController::class, 'showVerificationNotice'])->n
 Route::post('email/resend', [AuthController::class, 'resendVerificationEmail'])->name('verification.resend')->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        // return view('welcome');
-    });
     Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
 
     Route::middleware(['verified'])->group(function () {

@@ -51,7 +51,7 @@
             </div>
             <div class="col-md-1 mb-4">
                 <label for="button" class="kaem-subheading">&nbsp;</label>
-                <button type="button" class="btn btn-secondary" onclick="resetFilters()">&nbsp;&nbsp;&nbsp;Clear&nbsp;&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-secondary" onclick="resetFilters()">&nbsp;Clear&nbsp;</button>
             </div>
         </div>
 

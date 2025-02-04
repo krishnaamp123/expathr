@@ -1,5 +1,5 @@
-@extends('user.layout.app')
-@section('title', 'Dashboard')
+@extends('landing.layout.app')
+@section('title', 'Landing')
 <link rel="icon" type="image/png" href="{{ asset('storage/image/logokotakkecil.png') }}">
 
 @section('content')
@@ -16,17 +16,8 @@
         <section class="page-section" id="portfolio">
             <div class="container">
                 <div class="text-center">
-                    @if (session('message'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{session('message')}}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    @endif
                     <h2 class="section-heading text-uppercase-libre">Job Vacancy</h2>
-                    <h3 class="section-subheading">Here are our latest job!</h3>
-                    <h3 class="section-subheading-kaem mb-5">Make sure you have completed your profile first!</h3>
+                    <h3 class="section-subheading mb-5">Here are our latest job!</h3>
                 </div>
 
                 <div class="row">
@@ -43,7 +34,7 @@
                         <label for="cityFilter" class="kaem-subheading">Search by City</label>
                         <select id="cityFilter" class="form-control select2">
                             <option value="">Select City</option>
-                            @foreach ($davacancies->pluck('city')->unique('id')->filter() as $city)
+                            @foreach ($landingjobs->pluck('city')->unique('id')->filter() as $city)
                                 <option value="{{ $city->id }}">{{ $city->city_name }}</option>
                             @endforeach
                         </select>
@@ -52,7 +43,7 @@
                         <label for="categoryFilter" class="kaem-subheading">Search by Category</label>
                         <select id="categoryFilter" class="form-control select2">
                             <option value="">Select Category</option>
-                            @foreach ($davacancies->pluck('category')->unique('id')->filter() as $category)
+                            @foreach ($landingjobs->pluck('category')->unique('id')->filter() as $category)
                                 <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                             @endforeach
                         </select>
@@ -64,7 +55,7 @@
                 </div>
 
                 <div class="row">
-                    @foreach ($davacancies as $vacancy)
+                    @foreach ($landingjobs as $vacancy)
                             <div class="col-12 col-sm-6 col-md-4 col-lg-4 portfolio-item mb-4" data-city-id="{{ $vacancy->id_city }}" data-category-id="{{ $vacancy->id_category }}" data-bs-toggle="modal" href="#portfolioModal{{ $vacancy->id }}">
                                 <div class="portfolio-caption">
                                     <div class="portfolio-caption-heading">{{ $vacancy->job_name }}</div>
@@ -96,7 +87,7 @@
                     @endforeach
                 </div>
                 <div class="text-center mt-4">
-                    <a href="{{ route('getVacancy') }}" class="btn btn-primary btn-xl">SEE ALL JOBS</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary btn-xl">SEE ALL JOBS</a>
                 </div>
             </div>
         </section>
@@ -233,7 +224,7 @@
             </div>
         </section>
 <!-- Portfolio Modals -->
-@foreach ($davacancies as $vacancy)
+@foreach ($landingjobs as $vacancy)
 <!-- Modal Edit Work Location -->
 <div class="modal fade" id="portfolioModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -248,28 +239,6 @@
                 <!-- Job details -->
                 <h2 class="kaem-jobtitle">{{ $vacancy->job_name }}</h2>
                 <p class="kaem-jobtext text-muted mb-1">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
-                <button class="btn btn-primary kaem-subheading mb-3"
-                    @if (!$isProfileComplete)
-                        disabled
-                        title="Please complete your profile to apply for this job."
-                    @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
-                        disabled
-                    @elseif ($vacancy->is_ended === 'yes')
-                        disabled
-                        title="This job has ended."
-                    @else
-                        data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}"
-                    @endif>
-                    @if (!$isProfileComplete)
-                        Complete Your Profile
-                    @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
-                        Already Applied
-                    @elseif ($vacancy->is_ended === 'yes')
-                        Job Ended
-                    @else
-                        Apply for Job
-                    @endif
-                </button>
                 <ul class="list-inline">
                     <li class="d-flex align-items-center mb-1">
                         <i class="fas fa-briefcase" style="width: 20px;"></i>
@@ -322,50 +291,6 @@
                         <p>{{ $vacancy->job_report }}</p>
                     </li>
                 </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Apply for Job -->
-<div class="modal fade" id="applyModal{{ $vacancy->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Apply for Job</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="color: white">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('storeVacancy') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="id_job" value="{{ $vacancy->id }}">
-
-                    <div class="form-group">
-                        <label for="salary_expectation" class="kaem-subheading">Salary Expectation</label>
-                        <input name="salary_expectation" type="number" class="form-control form-control-user"
-                            id="exampleInputSalaryExpectation">
-                        @error('salary_expectation')
-                            <div class="text-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="availability" class="kaem-subheading">Availability</label>
-                        <select name="availability" class="form-control select2">
-                            <option value="">Select Availability</option>
-                            <option value="immediately">Immediately</option>
-                            <option value="<1_month_notice">< 1 Month Notice</option>
-                            <option value="1_month_notice">1 Month Notice</option>
-                            <option value=">1_month_notice">> 1 Month Notice</option>
-                        </select>
-                        @error('availability')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <button type="submit" class="btn btn-primary kaem-subheading">Submit Application</button>
-                </form>
             </div>
         </div>
     </div>
