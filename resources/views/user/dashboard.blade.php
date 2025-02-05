@@ -4,11 +4,11 @@
 
 @section('content')
 
-        <!-- Masthead-->
-        <header class="masthead">
+        <!-- inMasthead-->
+        <header class="inmasthead">
             <div class="container">
-                <div class="masthead-heading text-uppercase">Good Coffee All Around</div>
-                <div class="masthead-subheading">Expat. Roasters</div>
+                <div class="inmasthead-heading text-uppercase">Good Coffee All Around</div>
+                <div class="inmasthead-subheading">Expat. Roasters</div>
                 <a class="btn btn-primary btn-xl" href="#portfolio">FIND JOB</a>
             </div>
         </header>
@@ -250,7 +250,7 @@
                 <p class="kaem-jobtext text-muted mb-1">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
                 <button class="btn btn-primary kaem-subheading mb-3"
                     @if (!$isProfileComplete)
-                        disabled
+                        onclick="window.location.href='{{ route('getProfile') }}'"
                         title="Please complete your profile to apply for this job."
                     @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
                         disabled
