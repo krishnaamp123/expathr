@@ -3,6 +3,7 @@
 
 @section('content')
 
+<div class="page-wrapper">
 <section class="page-section" id="portfolio">
     <div class="container">
         <div class="text-center">
@@ -20,7 +21,7 @@
     </div>
     <div class="container d-flex">
         <!-- Filter Status (Kiri) -->
-        <div class="filter-section me-3">
+        {{-- <div class="filter-section me-3">
             <ul class="nav nav-pills flex-column custom-nav">
                 @foreach ($statuses as $filterStatus)
                     <li class="nav-item">
@@ -31,13 +32,13 @@
                     </li>
                 @endforeach
             </ul>
-        </div>
+        </div> --}}
 
         <!-- Main Content (Kanan) -->
         <div class="content-section">
             <div class="row">
                 @foreach ($userhrjobs as $vacancy)
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-4 mb-4">
                         <div class="portfolio-item"
                                 {{ ($vacancy->status === 'applicant' && $vacancy->userAnswer->isEmpty()) || $vacancy->status === 'hr_interview' || $vacancy->status === 'user_interview' ? '' : 'disabled' }}
                                 data-bs-toggle="modal"
@@ -55,21 +56,24 @@
                                 </div>
                                 <div class="divider"></div>
                                 <div class="row">
-                                    <div class="col-6 text-center">
-                                        <div class="portfolio-caption-price card border-light shadow-sm">{{ ucwords(str_replace('_', ' ', $vacancy->status)) }}</div>
+                                    <div class="col-6 text-start">
+                                        <div class="portfolio-caption-date">Stage:</div>
                                     </div>
                                     <div class="col-6 text-end">
                                         <div class="portfolio-caption-date">Expired: {{ $vacancy->hrjob->expired }}</div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 text-end">
+                                    <div class="col-6 text-center mt-1">
+                                        <div class="portfolio-caption-price card border-light shadow-sm">{{ ucwords(str_replace('_', ' ', $vacancy->status)) }}</div>
+                                    </div>
+                                    <div class="col-6 text-end">
                                         @if (!isset($formsByJob[$vacancy->id_job]))
-                                            <span class="badge bg-warning portfolio-caption-location">No Form</span>
+                                            {{-- <span class="badge bg-warning portfolio-caption-location">No Form</span> --}}
                                         @elseif ($vacancy->userAnswer->isEmpty())
-                                            <span class="badge bg-danger portfolio-caption-location">Form Not Filled</span>
+                                            <span class="badge bg-danger portfolio-caption-assessment">Assessment Not Required</span>
                                         @else
-                                            <span class="badge bg-success portfolio-caption-location">Form Filled</span>
+                                            <span class="badge bg-success portfolio-caption-assessment">Assessment Completed</span>
                                         @endif
                                     </div>
                                 </div>
@@ -81,6 +85,7 @@
         </div>
     </div>
 </section>
+</div>
 
 @foreach ($userhrjobs as $vacancy)
     @if ($vacancy->status === 'applicant' && isset($formsByJob[$vacancy->id_job]))
@@ -250,6 +255,12 @@
 <style>
     .portfolio-item {
         cursor: pointer; /* Mengubah kursor menjadi pointer saat berada di atas elemen portfolio-item */
+    }
+
+    .page-wrapper {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
     }
 </style>
 

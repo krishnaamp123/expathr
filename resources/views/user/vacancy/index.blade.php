@@ -3,6 +3,7 @@
 
 @section('content')
 
+<div class="page-wrapper">
 <section class="page-section" id="portfolio">
     <div class="container">
         <div class="text-center">
@@ -89,6 +90,7 @@
         </div>
     </div>
 </section>
+</div>
 
 <!-- Vacancies Modals -->
 @foreach ($vacancies as $vacancy)
@@ -233,6 +235,12 @@
 <style>
     .portfolio-item {
         cursor: pointer; /* Mengubah kursor menjadi pointer saat berada di atas elemen portfolio-item */
+    }
+
+    .page-wrapper {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
     }
 </style>
 @endsection

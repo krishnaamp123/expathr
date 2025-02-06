@@ -1,5 +1,9 @@
 <div class="card">
-    <div class="card-header" style="color: white;">Information Source</div>
+    <div class="card-header" style="color: white;">Information Source
+        @if ($source->isEmpty())
+            <p class="text-danger fst-italic kaem-text mb-0">Required</p>
+        @endif
+    </div>
     <div class="card-body">
         <div class="">
             @if ($source->isNotEmpty())

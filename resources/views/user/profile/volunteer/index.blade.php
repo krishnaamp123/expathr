@@ -1,5 +1,9 @@
     <div class="card">
-        <div class="card-header" style="color: white;">Volunteer</div>
+        <div class="card-header" style="color: white;">Volunteer
+            @if ($volunteer->isEmpty())
+                <p class="text-muted fst-italic kaem-text mb-0">Optional</p>
+            @endif
+        </div>
         <div class="card-body">
             <div class="">
 

@@ -1,5 +1,9 @@
     <div class="card">
-        <div class="card-header" style="color: white;">Language</div>
+        <div class="card-header" style="color: white;">Language
+            @if ($language->isEmpty())
+                <p class="text-danger fst-italic kaem-text mb-0">Required</p>
+            @endif
+        </div>
         <div class="card-body">
             <div class="">
 

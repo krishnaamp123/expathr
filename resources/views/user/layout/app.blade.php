@@ -211,9 +211,7 @@
                             </li>
                             @auth
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('getProfile') ? 'active' : '' }}" href="{{ route('getProfile') }}">
-                                    <i class="fas fa-user"></i>
-                                </a>
+                                <a class="nav-link {{ request()->routeIs('getProfile') ? 'active' : '' }}" href="{{ route('getProfile') }}">My Profile</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -232,7 +230,7 @@
                 <div class="divider2"></div>
                 <div class="container">
                     <div class="row align-items-center">
-                        <div class="col-lg-4 text-lg-start" style="color: white">Copyright &copy; 2024 Expat. Roasters</div>
+                        <div class="col-lg-4 text-lg-start" style="color: white">Copyright &copy; 2025 Expat. Roasters</div>
                         <div class="col-lg-4 my-3 my-lg-0">
                             <a class="btn btn-primary btn-social mx-2" href="https://www.instagram.com/expatroasters" aria-label="Twitter"><i class="fab fa-instagram"></i></a>
                             <a class="btn btn-primary btn-social mx-2" href="https://www.facebook.com/expatroasters" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>

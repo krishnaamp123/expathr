@@ -1,5 +1,9 @@
     <div class="card">
-        <div class="card-header" style="color: white;">Reference Contact</div>
+        <div class="card-header" style="color: white;">Reference Contact
+            @if ($reference->isEmpty())
+                <p class="text-danger fst-italic kaem-text mb-0">Required</p>
+            @endif
+        </div>
         <div class="card-body">
             <div class="">
 

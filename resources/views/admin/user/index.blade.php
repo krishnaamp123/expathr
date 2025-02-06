@@ -75,7 +75,13 @@
                             <td>{{$row->birth_date}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->gender)) }}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->role)) }}</td>
-                            <td>{{ $row->email_verified_at->format('d-m-Y H:i:s') }}</td>
+                            <td>
+                                @if ($row->email_verified_at)
+                                    {{ $row->email_verified_at->format('d-m-Y H:i:s') }}
+                                @else
+                                    Not Verified
+                                @endif
+                            </td>
                             <td>{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
                             <td>{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td>
