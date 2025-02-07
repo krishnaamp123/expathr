@@ -11,14 +11,14 @@
         <div class="row mb-4">
             <div class="form-group mx-sm-2">
                 <label for="start_date" class="sr-only">Start Date</label>
-                <input type="date" id="start_date" name="start_date" class="form-control" value="{{ request('start_date', $startDate) }}">
+                <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" style="width: 100px;" placeholder="Start Date" value="{{ request('start_date', $startDate) }}">
             </div>
             <span class="mx-2 mt-1">
                 <i class="fas fa-arrow-right"></i>
             </span>
             <div class="form-group mx-sm-2">
                 <label for="end_date" class="sr-only">End Date</label>
-                <input type="date" id="end_date" name="end_date" class="form-control" value="{{ request('end_date', $endDate) }}">
+                <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" style="width: 100px;" placeholder="End Date" value="{{ request('end_date', $endDate) }}">
             </div>
             <div class="form-group mx-sm-2">
                 <label for="is_ended" class="sr-only">Is Ended</label>
@@ -376,6 +376,7 @@
             }
         });
     });
+
 
 </script>
 @endsection

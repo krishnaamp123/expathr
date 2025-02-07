@@ -204,9 +204,10 @@
                     <div class="collapse navbar-collapse" id="navbarResponsive">
                         <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}" href="{{ route('login') }}">
-                                    <i class="fas fa-sign-in-alt"></i> Login
-                                </a>
+                                <a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}" href="{{ route('login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('getRegister') ? 'active' : '' }}" href="{{ route('getRegister') }}">Sign Up</a>
                             </li>
                         </ul>
                     </div>
@@ -226,7 +227,7 @@
                             <a class="btn btn-primary btn-social mx-2" href="https://www.linkedin.com/company/expat-roasters" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                         <div class="col-lg-4 text-lg-end">
-                            <a class="text-decoration-none" style="color: white" href="https://expatroasters.com/pages/terms">Terms and Conditions</a>
+                            <a class="text-decoration-none" style="color: white" href="{{ route('getLandingPnP') }}">Privacy & Policy</a>
                         </div>
                     </div>
                 </div>

@@ -204,10 +204,10 @@
                     <div class="collapse navbar-collapse" id="navbarResponsive">
                         <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('getVacancy') ? 'active' : '' }}" href="{{ route('getVacancy') }}">Job</a>
+                                <a class="nav-link {{ request()->routeIs('getVacancy') ? 'active' : '' }}" href="{{ route('getVacancy') }}">Available Job</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('getMyVacancy') ? 'active' : '' }}" href="{{ route('getMyVacancy') }}">My Job</a>
+                                <a class="nav-link {{ request()->routeIs('getMyVacancy') ? 'active' : '' }}" href="{{ route('getMyVacancy') }}">My Application</a>
                             </li>
                             @auth
                             <li class="nav-item">

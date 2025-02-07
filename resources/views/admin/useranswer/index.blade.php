@@ -1,9 +1,9 @@
 @extends('admin.layout.app')
-@section('title', 'User Answer')
+@section('title', 'Test Log')
 @section('content')
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">User Answer</h1>
+    <h1 class="h3 mb-2 text-gray-800">Test Log</h1>
 
     <!-- Toast Container -->
     <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">

@@ -44,6 +44,8 @@ use App\Http\Controllers\Admin\OfferingAdminController;
 
 //LANDING
 Route::get('/',[LandingController::class,'getLanding'])->name('getLanding');
+Route::get('/termsncondition',[LandingController::class,'getLandingTnC'])->name('getLandingTnC');
+Route::get('/privacynpolicy',[LandingController::class,'getLandingPnP'])->name('getLandingPnP');
 
 //AUTH
 Route::get('/login',[AuthController::class,'getLogin'])->name('login');

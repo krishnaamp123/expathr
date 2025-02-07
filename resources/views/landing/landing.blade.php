@@ -141,7 +141,7 @@
             </div>
         </section>
         <!-- Store -->
-        <section class="page-section" id="store">
+        {{-- <section class="page-section" id="store">
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase-libre">Store</h2>
@@ -222,7 +222,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 <!-- Portfolio Modals -->
 @foreach ($landingjobs as $vacancy)
 <!-- Modal Edit Work Location -->
@@ -256,7 +256,7 @@
                         <i class="fas fa-briefcase" style="width: 20px;"></i>
                         <span class="kaem-jobtext ms-2">{{ $vacancy->experience_min }} Years</span>
                     </li>
-                    <li class="d-flex align-items-center mb-1">
+                    {{-- <li class="d-flex align-items-center mb-1">
                         <i class="fas fa-money-bill-wave" style="width: 20px;"></i>
                         <span class="kaem-jobtext ms-2">
                             @if (!empty($vacancy->price))
@@ -269,7 +269,7 @@
                                 -
                             @endif
                         </span>
-                    </li>
+                    </li> --}}
                     <li class="d-flex align-items-center mb-1">
                         <i class="fas fa-calendar-alt" style="width: 20px;"></i>
                         <span class="kaem-jobtext ms-2">{{ $vacancy->expired }}</span>
@@ -291,6 +291,13 @@
                         <p>{{ $vacancy->job_report }}</p>
                     </li>
                 </ul>
+                <div class="text-center mt-4">
+                    <p class="kaem-jobtext text-muted">
+                        You must login to apply!<br>
+                        Click to <a href="{{ route('login') }}" style="color: #72A28A">Login</a> or
+                        <a href="{{ route('getRegister') }}" style="color: #72A28A">Sign Up</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

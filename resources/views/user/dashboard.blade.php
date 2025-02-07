@@ -150,7 +150,7 @@
             </div>
         </section>
         <!-- Store -->
-        <section class="page-section" id="store">
+        {{-- <section class="page-section" id="store">
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase-libre">Store</h2>
@@ -231,7 +231,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 <!-- Portfolio Modals -->
 @foreach ($davacancies as $vacancy)
 <!-- Modal Edit Work Location -->

@@ -17,4 +17,14 @@ class LandingController extends Controller
 
         return view('landing.landing', compact('landingjobs'));
     }
+
+    public function getLandingTnC()
+    {
+        return view('landing.tnc');
+    }
+
+    public function getLandingPnP()
+    {
+        return view('landing.pnp');
+    }
 }

@@ -1,5 +1,5 @@
 @extends('user.layout.app')
-@section('title', 'My Job')
+@section('title', 'My Application')
 
 @section('content')
 
@@ -15,7 +15,7 @@
                     </button>
                 </div>
             @endif
-            <h2 class="section-heading text-uppercase-libre">My Job</h2>
+            <h2 class="section-heading text-uppercase-libre">My Application</h2>
             <h3 class="section-subheading mb-5">Here are all your applications!</h3>
         </div>
     </div>
@@ -51,7 +51,7 @@
                                         <p class="kaem-jobtext text-muted mb-0">{{ $vacancy->hrjob->category->category_name ?? 'No Category' }}</p>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <div class="portfolio-caption-date">Sent On: {{ \Carbon\Carbon::parse($vacancy->created_at)->format('Y-m-d') }}</div>
+                                        <div class="portfolio-caption-date">Applied: {{ \Carbon\Carbon::parse($vacancy->created_at)->format('Y-m-d') }}</div>
                                     </div>
                                 </div>
                                 <div class="divider"></div>

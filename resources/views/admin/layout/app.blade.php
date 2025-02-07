@@ -219,7 +219,7 @@
                 <hr class="sidebar-divider">
 
                 <div class="sidebar-heading">
-                    Master
+                    Setting
                 </div>
 
                 @if(Auth::user()->role === 'recruiter')
@@ -301,15 +301,15 @@
             <li class="nav-item {{ Request::routeIs('getUserHrjob') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getUserHrjob') }}">
                     <i class="fas fa-fw fa-handshake"></i>
-                    <span>User Job</span>
+                    <span>Pipeline</span>
                 </a>
             </li>
 
-            @if(Auth::user()->role !== 'interviewer')
+            @if(!in_array(Auth::user()->role, ['interviewer', 'recruiter']))
             <li class="nav-item {{ Request::routeIs('getUserAnswer') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('getUserAnswer') }}">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>User Answer</span>
+                    <span>Test Log</span>
                 </a>
             </li>
 

@@ -1,9 +1,9 @@
 @extends('admin.layout.app')
-@section('title', 'User Job')
+@section('title', 'Pipeline')
 @section('content')
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">User Job</h1>
+    <h1 class="h3 mb-2 text-gray-800">Pipeline</h1>
 
     <!-- Toast Container -->
     <div aria-live="polite" aria-atomic="true" class="position-fixed" style="top: 4.5rem; right: 20rem; z-index: 1050;">
@@ -116,12 +116,12 @@
                                 <form action="{{ route('exportdateInterview') }}" method="GET">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -171,12 +171,12 @@
                                 <form action="{{ route('exportdateUserInterview') }}" method="GET">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -226,12 +226,12 @@
                                 <form action="{{ route('exportdateSkillTest') }}" method="GET">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -281,12 +281,12 @@
                                 <form action="{{ route('exportdatePhoneScreen') }}" method="GET">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -336,12 +336,12 @@
                                 <form action="{{ route('exportdateReferenceCheck') }}" method="GET">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -391,12 +391,12 @@
                                 <form action="{{ route('exportdateOffering') }}" method="GET">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -448,12 +448,12 @@
                                     <input type="hidden" name="status" value="{{ $status ?? 'all' }}">
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="start_date" class="mb-0"><strong>Start Date:</strong></label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="end_date" class="mb-0"><strong>End Date:</strong></label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -475,13 +475,14 @@
 
                     <div class="form-group mx-sm-2 mb-2">
                         <label for="start_date" class="sr-only">Start Date</label>
-                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request('start_date') }}" placeholder="Start Date">
+                        <input class="form-control datepicker datepicker-input" style="width: 100px;" id="start_date" name="start_date" value="{{ request('start_date') }}" placeholder="Start Date">
                     </div>
                     <span class="mx-2"><i class="fas fa-arrow-right"></i></span>
                     <div class="form-group mx-sm-2 mb-2">
                         <label for="end_date" class="sr-only">End Date</label>
-                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request('end_date') }}" placeholder="End Date">
+                        <input class="form-control datepicker datepicker-input" style="width: 100px;" id="end_date" name="end_date" value="{{ request('end_date') }}" placeholder="End Date">
                     </div>
+
                     <a href="{{ route('getUserHrjob', [
                         'status' => request('status'),
                         'id_job' => request('id_job')
