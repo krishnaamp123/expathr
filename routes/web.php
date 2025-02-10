@@ -70,6 +70,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['verified'])->group(function () {
         Route::middleware(['applicant'])->group(function () {
             Route::get('/dashboarduser', [DashboardUserController::class, 'getDashboardUser'])->name('getDashboardUser');
+            Route::get('/dashboarduser/termsncondition',[DashboardUserController::class,'getDashboardTnC'])->name('getDashboardTnC');
+            Route::get('/dashboarduser/privacynpolicy',[DashboardUserController::class,'getDashboardPnP'])->name('getDashboardPnP');
 
             //PROFILE USER
             Route::get('/profile', [ProfileUserController::class, 'getProfile'])->name('getProfile');

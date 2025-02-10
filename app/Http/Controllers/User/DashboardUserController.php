@@ -24,4 +24,14 @@ class DashboardUserController extends Controller
 
         return view('user.dashboard', compact('davacancies', 'isProfileComplete'));
     }
+
+    public function getDashboardTnC()
+    {
+        return view('user.tnc');
+    }
+
+    public function getDashboardPnP()
+    {
+        return view('user.pnp');
+    }
 }

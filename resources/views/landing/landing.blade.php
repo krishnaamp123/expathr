@@ -7,8 +7,9 @@
         <!-- Masthead-->
         <header class="masthead">
             <div class="container">
-                <div class="masthead-heading text-uppercase">Good Coffee All Around</div>
-                <div class="masthead-subheading">Expat. Roasters</div>
+                <div class="masthead-heading text-uppercase">Let's Be Part Of</div>
+                <div class="masthead-heading text-uppercase">Expat. Roasters Family</div>
+                {{-- <div class="masthead-subheading">Expat. Roasters</div> --}}
                 <a class="btn btn-primary btn-xl" href="#portfolio">FIND JOB</a>
             </div>
         </header>
@@ -95,48 +96,65 @@
         <section class="page-section" id="about">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase-libre">About</h2>
-                    <h3 class="section-subheading mb-5">Our Story</h3>
+                    <h2 class="section-heading text-uppercase-libre">Your Journey to Expat. Roasters Starts Here</h2>
+                    <h3 class="section-subheading mb-5">We value your time and are committed to a respectful and transparent hiring process. Here's what you can expect when you apply to Expat. Roasters</h3>
                 </div>
                 <ul class="timeline">
                     <li>
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat4.png" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat1.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="subheading">Expat. Roasters</h4>
+                                <h4 class="subheading">Submit Your Application</h4>
                             </div>
-                            <div class="timeline-body"><p class="text-muted">Is a specialty coffee producer driven by desire to produce an exceptional, unpretentious brew, from the ground up.</p></div>
+                            <div class="timeline-body"><p class="text-muted">Find the perfect role for you and apply easily through our website. Share your resume and a compelling cover letter highlighting your relevant skills and experience.</p></div>
                         </div>
                     </li>
                     <li class="timeline-inverted">
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat2.png" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat2.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="subheading">As residents of "the island"</h4>
+                                <h4 class="subheading">We'll Review Your Application</h4>
                             </div>
-                            <div class="timeline-body"><p class="text-muted">Expat. Roasters works closely and respectfully with Balinese farmers and producers to source finest local product to compliment their nomadic collections of beans around the globe.</p></div>
+                            <div class="timeline-body"><p class="text-muted">Our team carefully considers every application. You'll hear from us if your profile is a good match for the role.</p></div>
                         </div>
                     </li>
                     <li>
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat3.png" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat3.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="subheading">Strive to foster</h4>
+                                <h4 class="subheading">Meet the Team</h4>
                             </div>
-                            <div class="timeline-body"><p class="text-muted">The burgeoning coffee & barista community of Indonesia. Introducing the culture of making a good brew across the island, our mission is to give access to education and training to coffee professionals and coffee lovers!</p></div>
+                            <div class="timeline-body"><p class="text-muted">If your application is shortlisted, you'll have the opportunity to interview with our hiring team. This is a chance for us to connect and for you to learn more about Expat. Roasters. Some roles may involve skills assessments.</p></div>
                         </div>
                     </li>
                     <li class="timeline-inverted">
-                        <div class="timeline-image">
-                            <h4>
-                                Be Part
-                                <br />
-                                Of Our
-                                <br />
-                                Story!
-                            </h4>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat4.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading">Background Checks</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">For most positions, we conduct background and reference checks to ensure a strong fit.</p></div>
                         </div>
                     </li>
+                    <li>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat5.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4 class="subheading">Welcome Aboard!</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">We'll extend a competitive offer to the successful candidate and provide a comprehensive onboarding program to help you thrive at Expat. Roasters.</p></div>
+                        </div>
+                    </li>
+                    {{-- <li class="timeline-inverted">
+                        <div class="timeline-image">
+                            <h4>
+                                Welcome
+                                <br />
+                                Aboard!
+                            </h4>
+                        </div>
+                        <div class="timeline-body"><p class="text-muted">We'll extend a competitive offer to the successful candidate and provide a comprehensive onboarding program to help you thrive at Expat. Roasters.</p></div>
+                    </li> --}}
                 </ul>
             </div>
         </section>

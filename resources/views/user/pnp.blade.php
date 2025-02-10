@@ -1,4 +1,4 @@
-@extends('landing.layout.app')
+@extends('user.layout.app')
 @section('title', 'Privacy & Policy')
 
 @section('content')

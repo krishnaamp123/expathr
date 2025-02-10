@@ -147,7 +147,7 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block bg-login-image" style="background: white;">
-                                <img src="{{ asset('storage/image/expatlanding2.png') }}" alt="Brand Icon" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="{{ asset('storage/image/expatlanding2.webp') }}" alt="Brand Icon" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-4">

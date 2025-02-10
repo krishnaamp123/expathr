@@ -237,7 +237,8 @@
                             <a class="btn btn-primary btn-social mx-2" href="https://www.linkedin.com/company/expat-roasters" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                         </div>
                         <div class="col-lg-4 text-lg-end">
-                            <a class="text-decoration-none" style="color: white" href="https://expatroasters.com/pages/terms">Terms and Conditions</a>
+                            <a class="text-decoration-none" style="color: white" href="{{ route('getDashboardPnP') }}">Privacy & Policy | </a>
+                            <a class="text-decoration-none" style="color: white" href="{{ route('getDashboardTnC') }}">Terms & Conditions</a>
                         </div>
                     </div>
                 </div>

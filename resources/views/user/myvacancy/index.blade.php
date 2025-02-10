@@ -71,7 +71,7 @@
                                         @if (!isset($formsByJob[$vacancy->id_job]))
                                             {{-- <span class="badge bg-warning portfolio-caption-location">No Form</span> --}}
                                         @elseif ($vacancy->userAnswer->isEmpty())
-                                            <span class="badge bg-danger portfolio-caption-assessment">Assessment Not Required</span>
+                                            <span class="badge bg-danger portfolio-caption-assessment">Assessment Not Completed</span>
                                         @else
                                             <span class="badge bg-success portfolio-caption-assessment">Assessment Completed</span>
                                         @endif
