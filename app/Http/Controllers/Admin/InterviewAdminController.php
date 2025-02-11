@@ -258,7 +258,7 @@ class InterviewAdminController extends Controller
         $interview = Interview::findOrFail($id);
 
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter', 'interviewer'])) {
                 return response()->json(['message' => 'You are not authorized to rate this interview.'], 403);
             }
 

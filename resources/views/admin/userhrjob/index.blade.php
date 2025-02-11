@@ -535,13 +535,7 @@
                                 <th>Created At</th>
                                 <th>Updated At</th>
                             @elseif (request('status') === 'reference_check')
-                                <th>Reference Name</th>
-                                <th>Relation</th>
-                                <th>Company Name</th>
-                                <th>Reference Phone</th>
-                                <th>Can Be Called</th>
-                                <th>Comment</th>
-                                <th>Created At</th>
+                                <th>Reference Check</th>
                                 <th>Updated At</th>
                             @elseif (request('status') === 'offering')
                                 <th>Offering File</th>
@@ -963,7 +957,25 @@
                                             @endif
                                         </td>
                                     @elseif (request('status') === 'reference_check')
-                                        <td data-field="reference_name">{{ $row->referencechecks->first()->reference->reference_name ?? 'No Reference Name' }}</td>
+                                        <td data-field="reference_check_status">
+                                            @php
+                                                $totalReferences = count($row->referencechecks); // Jumlah referensi yang telah diisi
+                                                $requiredReferences = count($row->user->reference); // Jumlah referensi yang diharapkan dari user
+                                            @endphp
+                                            {{ $totalReferences }} / {{ $requiredReferences }}&nbsp;
+
+                                            @if ($totalReferences === 0)
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @elseif ($totalReferences === $requiredReferences)
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            @elseif ($totalReferences < $requiredReferences)
+                                                <i class="fas fa-minus-circle text-warning"></i>
+                                            @else
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @endif
+
+                                        </td>
+                                        {{-- <td data-field="reference_name">{{ $row->referencechecks->first()->reference->reference_name ?? 'No Reference Name' }}</td>
                                         <td data-field="relation">{{ $row->referencechecks->first()->reference->relation ?? 'No Relation' }}</td>
                                         <td data-field="company_name">{{ $row->referencechecks->first()->reference->company_name ?? 'No Company Name' }}</td>
                                         <td data-field="phone">{{ $row->referencechecks->first()->reference->phone ?? 'No Reference Phone' }}</td>
@@ -991,7 +1003,7 @@
                                             {{ $row->referencechecks && $row->referencechecks->first() && $row->referencechecks->first()->created_at
                                                 ? $row->referencechecks->first()->created_at->format('d-m-Y H:i:s')
                                                 : 'Not Created' }}
-                                        </td>
+                                        </td> --}}
                                         <td data-field="updated_at">
                                             {{ $row->referencechecks && $row->referencechecks->first() && $row->referencechecks->first()->updated_at
                                                 ? $row->referencechecks->first()->updated_at->format('d-m-Y H:i:s')
@@ -1010,6 +1022,22 @@
                                             </form>
                                         </td>
                                         <td>
+                                            <!-- Tombol View References -->
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm my-1"
+                                                style="background-color: #72A28A; color: white;"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewReferenceModal{{ $row->id }}">
+                                                <i class="fas fa-eye"></i> <!-- Icon untuk melihat -->
+                                            </button>
+
+                                            <!-- Include modal dari file terpisah -->
+                                            @include('admin.referencecheck.viewmodal', ['row' => $row])
+                                        </td>
+
+
+                                        {{-- <td>
                                             @php
                                                 $referencecheck = $row->referencechecks->first();
                                             @endphp
@@ -1045,7 +1073,7 @@
                                             @else
                                                 <span class="text-danger">Create a valid reference check first !</span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                     @elseif (request('status') === 'offering')
                                         <td data-field="offering_file">
                                             @if($row->offerings->isNotEmpty() && $row->offerings->first()->offering_file)
@@ -1329,6 +1357,18 @@
             });
 
             document.querySelectorAll('#updateRatingForm button[type="submit"]').forEach(button => {
+                button.addEventListener('click', function () {
+                    // Tambahkan value tombol yang diklik ke dalam form
+                    const form = this.closest('form');
+                    const hiddenField = document.createElement('input');
+                    hiddenField.type = 'hidden';
+                    hiddenField.name = 'button_action';
+                    hiddenField.value = this.value;
+                    form.appendChild(hiddenField);
+                });
+            });
+
+            document.querySelectorAll('#updateUserRatingForm button[type="submit"]').forEach(button => {
                 button.addEventListener('click', function () {
                     // Tambahkan value tombol yang diklik ke dalam form
                     const form = this.closest('form');

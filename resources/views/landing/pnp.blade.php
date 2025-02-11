@@ -1,5 +1,5 @@
 @extends('landing.layout.app')
-@section('title', 'Privacy & Policy')
+@section('title', 'Privacy Policy')
 
 @section('content')
 
@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="text-left col-md-6">
-                    <h2 class="section-heading-tcpp text-uppercase-libre text-center mb-5">Privacy & Policy</h2>
+                    <h2 class="section-heading-tcpp text-uppercase-libre text-center mb-5">Privacy Policy</h2>
                     <h3 class="section-subheading-tcpp font-weight-bold mb-3">
                         <strong>Introduction</strong> <br>
                     </h3>

@@ -14,7 +14,7 @@
 
                     <div class="form-group">
                         <label>Applicant</label>
-                        <select id="applicantDropdown{{ $id }}" name="id_user_job" class="form-control select2 inside-modal">
+                        <select id="applicantDropdown{{ $id }}" name="id_user_job" class="form-control select2 inside-modal" disabled>
                             <option value="">Select Applicant</option>
                             @foreach ($userhrjobs as $applicant)
                                 <option value="{{ $applicant->id }}" data-user-id="{{ $applicant->id_user }}" {{ $applicant->id == $referencecheck->id_user_job ? 'selected' : '' }}>
@@ -22,6 +22,7 @@
                                 </option>
                             @endforeach
                         </select>
+                        <input type="hidden" name="id_user_job" value="{{ $referencecheck->id_user_job }}">
                         @error('id_user_job')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -29,7 +30,7 @@
 
                     <div class="form-group">
                         <label>Reference Contact</label>
-                        <select id="referenceDropdown{{ $id }}" name="id_reference" class="form-control select2 inside-modal">
+                        <select id="referenceDropdown{{ $id }}" name="id_reference" class="form-control select2 inside-modal" disabled>
                             <option value="">Select Reference</option>
                             @foreach($references as $reference)
                                 <option value="{{ $reference->id }}" data-user-id="{{ $reference->id_user }}" {{ $reference->id == $referencecheck->id_reference ? 'selected' : '' }}>
@@ -37,6 +38,7 @@
                                 </option>
                             @endforeach
                         </select>
+                        <input type="hidden" name="id_reference" value="{{ $referencecheck->id_reference }}">
                         @error('id_reference')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

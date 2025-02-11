@@ -47,6 +47,7 @@
                             <i class="fas fa-save"></i> Save
                         </button>
 
+                        @if(auth()->user()->role !== 'interviewer')
                         <!-- Reject Button -->
                         <button type="submit" name="button_action" value="reject" class="btn btn-sm mr-2" style="background-color: #c03535; color: white;">
                             <i class="fas fa-times"></i> Reject
@@ -56,7 +57,9 @@
                         <button type="submit" name="button_action" value="next" class="btn btn-sm" style="background-color: #969696; color: white;">
                             <i class="fas fa-arrow-right"></i> Next
                         </button>
+                        @endif
                     </div>
+
                 </form>
             </div>
         </div>

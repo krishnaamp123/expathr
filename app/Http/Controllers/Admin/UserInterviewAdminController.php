@@ -257,7 +257,7 @@ class UserInterviewAdminController extends Controller
         $userinterview = UserInterview::findOrFail($id);
 
         try {
-            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter'])) {
+            if (!in_array(Auth::user()->role, ['super_admin', 'hiring_manager', 'recruiter', 'interviewer'])) {
                 return response()->json(['message' => 'You are not authorized to rate this user interview.'], 403);
             }
             // Validasi input
@@ -266,6 +266,7 @@ class UserInterviewAdminController extends Controller
                 'comment' => 'nullable|string|max:1000',
             ]);
 
+
             // Perbarui rating dan komentar di tabel Interview
             $userinterview->rating = $validated['rating'];
             $userinterview->comment = $validated['comment'];
@@ -273,9 +274,6 @@ class UserInterviewAdminController extends Controller
 
             // Perbarui status di tabel UserHrjob
             $userHrjob = $userinterview->userHrjob;
-            if (!$userHrjob) {
-                throw new \Exception('UserHrjob record not found.');
-            }
 
             if ($request->button_action === 'reject') {
                 $userHrjob->status = 'rejected';
@@ -292,17 +290,12 @@ class UserInterviewAdminController extends Controller
                     ],
                 ]);
             } elseif ($request->button_action === 'next') {
-                $userHrjob->status = 'user_interview';
+                $userHrjob->status = 'skill_test';
                 $userHrjob->save();
 
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Status updated to Skill Test!',
-                    'modalType' => 'user_interview',
-                    'modalData' => [
-                        'userJobId' => $userHrjob->id,
-                        'userJobName' => $userhrjob->user->fullname,
-                    ],
                     'updatedRow' => [
                         'id' => $userinterview->id,
                         'rating' => $userinterview->rating,
@@ -323,23 +316,17 @@ class UserInterviewAdminController extends Controller
                 ]);
             }
 
-            $userHrjob->save();
-
-            // Pesan sukses
-            session()->flash('success', $message);
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Gabungkan semua pesan validasi
             $errors = [];
             foreach ($e->errors() as $fieldErrors) {
                 $errors = array_merge($errors, $fieldErrors);
             }
-            session()->flash('failed', implode(' ', $errors));
+            return response()->json(['message' => implode(' ', $errors)], 422);
         } catch (\Exception $e) {
             // Pesan error untuk kesalahan umum
             session()->flash('failed', 'An unexpected error occurred. Please try again.');
         }
-
-        return back()->withInput(); // Kembali ke posisi semula dengan input
     }
 
     public function destroyUserInterview($id)
