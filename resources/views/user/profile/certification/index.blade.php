@@ -16,7 +16,9 @@
                                 @if (!empty($certificationn->description))
                                     <span class="kaem-text">{{ $certificationn->description }}</span><br>
                                 @endif
-                                <span class="kaem-text">{{ $certificationn->start_date }} - {{ $certificationn->end_date }}</span><br>
+                                <span class="kaem-text">
+                                    {{ $certificationn->start_date }} - {{ $certificationn->end_date === null ? 'Present' : $certificationn->end_date }}
+                                </span><br>
                                 @if (!empty($certificationn->id_credentials))
                                     <span class="kaem-text">{{ $certificationn->id_credentials }}</span><br>
                                 @endif
@@ -117,10 +119,15 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $certificationn->end_date }}" required>
-                        @error('end_date')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy end-date-input"
+                            id="end_date_ce{{ $certificationn->id }}"
+                            name="end_date"
+                            value="{{ $certificationn->end_date }}">
+
+                        <input type="checkbox"
+                            class="present-checkbox"
+                            data-target="end_date_ce{{ $certificationn->id }}"
+                            {{ is_null($certificationn->end_date) ? 'checked' : '' }}> Present
                     </div>
 
                     <button type="submit" class="btn btn-primary kaem-subheading">Update</button>

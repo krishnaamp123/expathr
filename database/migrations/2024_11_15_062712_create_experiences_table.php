@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('responsibility')->nullable();
             $table->text('job_report')->nullable();
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');

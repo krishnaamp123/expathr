@@ -18,7 +18,7 @@ class SourceController extends Controller
     public function storeSource(Request $request)
     {
         $validated = $request->validate([
-            'platform' => 'nullable|in:linkedin,indeed,glassdoor,jobstreet,kalibrr,glints,instagram,loker.id,monster,fiverr,upwork,urbanhire,karir.com',
+            'platform' => 'nullable|in:jobstreet,indeed,linkedin,glints,glassdoor,whatsapp,telegram,facebook,instagram,tiktok,google',
             'referal' => 'nullable|string|max:255',
             'other' => 'nullable|string|max:255',
         ]);
@@ -57,7 +57,7 @@ class SourceController extends Controller
         $source = Source::findOrFail($id);
 
         $validated = $request->validate([
-            'platform' => 'nullable|in:linkedin,indeed,glassdoor,jobstreet,kalibrr,glints,instagram,loker.id,monster,fiverr,upwork,urbanhire,karir.com',
+            'platform' => 'nullable|in:jobstreet,indeed,linkedin,glints,glassdoor,whatsapp,telegram,facebook,instagram,tiktok,google',
             'referal' => 'nullable|string|max:255',
             'other' => 'nullable|string|max:255',
         ]);

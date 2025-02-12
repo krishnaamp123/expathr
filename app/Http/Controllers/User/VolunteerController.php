@@ -26,11 +26,14 @@ class VolunteerController extends Controller
             'issue' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         Volunteer::create([
             'id_user' => Auth::id(),
@@ -50,7 +53,9 @@ class VolunteerController extends Controller
     {
         $volunteer = Volunteer::findOrFail($id);
         $volunteer->start_date = Carbon::parse($volunteer->start_date)->format('m/Y');
-        $volunteer->end_date = Carbon::parse($volunteer->end_date)->format('m/Y');
+        $volunteer->end_date = $volunteer->end_date
+        ? Carbon::parse($volunteer->end_date)->format('m/Y')
+        : null;
 
         return view('user.profile.volunteer.update', compact('volunteer'));
     }
@@ -65,11 +70,14 @@ class VolunteerController extends Controller
             'issue' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         $volunteer->update([
             'organization' => $validated['organization'],

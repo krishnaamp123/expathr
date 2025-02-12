@@ -28,11 +28,14 @@ class ExperienceController extends Controller
             'responsibility' => 'nullable|string|max:1000',
             'job_report' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         Experience::create([
             'id_user' => Auth::id(),
@@ -55,7 +58,9 @@ class ExperienceController extends Controller
     {
         $experience = Experience::findOrFail($id);
         $experience->start_date = Carbon::parse($experience->start_date)->format('m/Y');
-        $experience->end_date = Carbon::parse($experience->end_date)->format('m/Y');
+        $experience->end_date = $experience->end_date
+        ? Carbon::parse($experience->end_date)->format('m/Y')
+        : null;
 
         return view('user.profile.experience.update', compact('experience'));
     }
@@ -73,11 +78,14 @@ class ExperienceController extends Controller
             'responsibility' => 'nullable|string|max:1000',
             'job_report' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         $experience->update([
             'position' => $validated['position'],

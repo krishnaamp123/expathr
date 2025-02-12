@@ -329,15 +329,15 @@
                     </li>
                     <li class="mb-2 kaem-jobtext">
                         <strong>Description :</strong>
-                        <p>{{ $vacancy->description }}</p>
+                        <p>{!! nl2br(e($vacancy->description)) !!}</p>
                     </li>
                     <li class="mb-2 kaem-jobtext">
                         <strong>Qualification :</strong>
-                        <p>{{ $vacancy->qualification }}</p>
+                        <p>{!! nl2br(e($vacancy->qualification)) !!}</p>
                     </li>
                     <li class="mb-2 kaem-jobtext">
                         <strong>Job Report :</strong>
-                        <p>{{ $vacancy->job_report }}</p>
+                        <p>{!! nl2br(e($vacancy->job_report)) !!}</p>
                     </li>
                 </ul>
             </div>

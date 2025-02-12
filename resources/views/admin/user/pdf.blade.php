@@ -204,7 +204,7 @@
                 @foreach ($user->education as $edu)
                     <p class="tight"><strong>{{ $edu->university }}</strong></p>
                     <p class="tight">{{ ucwords(str_replace('_', ' ', $edu->degree))}} - {{ $edu->major }}</p>
-                    <p class="tight">{{ $edu->start_date }} - {{ $edu->end_date }}</p>
+                    <p class="tight">{{ $edu->start_date }} - {{ $edu->end_date === null ? 'Present' : $edu->end_date }}</p>
                 @endforeach
             </div>
             <div class="other-col-text2">
@@ -230,7 +230,7 @@
                 <div class="lain-col-text">
                     @foreach ($user->project as $pro)
                         <p class="tight"><strong>{{ $pro->project_name }}</strong></p>
-                        <p class="tight">{{ $pro->start_date }} - {{ $pro->end_date }}</p>
+                        <p class="tight">{{ $pro->start_date }} - {{ $pro->end_date === null ? 'Present' : $pro->end_date }}</p>
                         <p class="tight">{{ $pro->description }}</p>
                     @endforeach
                 </div>
@@ -238,7 +238,7 @@
                 <div class="lain-col-text-full">
                     @foreach ($user->project as $pro)
                         <p class="tight"><strong>{{ $pro->project_name }}</strong></p>
-                        <p class="tight">{{ $pro->start_date }} - {{ $pro->end_date }}</p>
+                        <p class="tight">{{ $pro->start_date }} - {{ $pro->end_date === null ? 'Present' : $pro->end_date }}</p>
                         <p class="tight">{{ $pro->description }}</p>
                     @endforeach
                 </div>
@@ -249,7 +249,7 @@
     @foreach ($user->experience as $exp)
         <p class="tight"><strong>{{ $exp->position }}</strong></p>
         <p class="tight">{{ $exp->company_name }} - {{ ucwords(str_replace('_', ' ', $exp->job_type))}}</p>
-        <p class="tight">{{ $exp->start_date }} - {{ $exp->end_date }}</p>
+        <p class="tight">{{ $exp->start_date }} - {{ $exp->end_date === null ? 'Present' : $exp->end_date }}</p>
         <p class="tight">{{ $exp->location }} - {{ ucwords(str_replace('_', ' ', $exp->location_type))}}</p>
         <p class="tight">Responsibility: {{ $exp->responsibility }}</p>
         <p class="tight mb-1">Job Report: {{ $exp->job_report }}</p>
@@ -269,7 +269,7 @@
                     @foreach ($user->certification as $crt)
                         <p class="tight"><strong>{{ $crt->lisence_name }}</strong></p>
                         <p class="tight">{{ $crt->organization }}</p>
-                        <p class="tight">{{ $crt->start_date }} - {{ $crt->end_date }}</p>
+                        <p class="tight">{{ $crt->start_date }} - {{ $crt->end_date === null ? 'Present' : $crt->end_date }}</p>
                         <p class="tight">{{ $crt->description }}</p>
                         <p class="tight">ID Credential: {{ $crt->id_credentials }}</p>
                         <p class="tight">URL Credential: {{ $crt->url_credentials }}</p>
@@ -280,7 +280,7 @@
                     @foreach ($user->certification as $crt)
                     <p class="tight"><strong>{{ $crt->licence_name }}</strong></p>
                     <p class="tight">{{ $crt->organization }}</p>
-                    <p class="tight">{{ $crt->start_date }} - {{ $crt->end_date }}</p>
+                    <p class="tight">{{ $crt->start_date }} - {{ $crt->end_date === null ? 'Present' : $crt->end_date }}</p>
                     <p class="tight">{{ $crt->description }}</p>
                     <p class="tight">ID Credential: {{ $crt->id_credentials }}</p>
                     <p class="tight">URL Credential: {{ $crt->url_credentials }}</p>
@@ -293,7 +293,7 @@
     @foreach ($user->organization as $org)
         <p class="tight"><strong>{{ $org->organization }}</strong></p>
         <p class="tight">{{ $org->position }} - {{ $org->associated }}</p>
-        <p class="tight">{{ $org->start_date }} - {{ $org->end_date }}</p>
+        <p class="tight">{{ $org->start_date }} - {{ $org->end_date === null ? 'Present' : $org->end_date }}</p>
         <p class="tight"> {{ $org->responsibility }}</p>
         <p class="tight mb-1">{{ $org->description }}</p>
     @endforeach
@@ -312,7 +312,7 @@
                     @foreach ($user->volunteer as $vol)
                         <p class="tight"><strong>{{ $vol->organization }}</strong></p>
                         <p class="tight">{{ $vol->role }} - {{ $vol->issue }}</p>
-                        <p class="tight">{{ $vol->start_date }} - {{ $vol->end_date }}</p>
+                        <p class="tight">{{ $vol->start_date }} - {{ $vol->end_date === null ? 'Present' : $vol->end_date }}</p>
                         <p class="tight">{{ $vol->description }}</p>
                     @endforeach
                 </div>
@@ -321,7 +321,7 @@
                     @foreach ($user->volunteer as $vol)
                         <p class="tight"><strong>{{ $vol->organization }}</strong></p>
                         <p class="tight">{{ $vol->role }} - {{ $vol->issue }}</p>
-                        <p class="tight">{{ $vol->start_date }} - {{ $vol->end_date }}</p>
+                        <p class="tight">{{ $vol->start_date }} - {{ $vol->end_date === null ? 'Present' : $vol->end_date }}</p>
                         <p class="tight">{{ $vol->description }}</p>
                     @endforeach
                 </div>

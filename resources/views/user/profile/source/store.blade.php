@@ -5,19 +5,17 @@
             <label for="platform" class="kaem-subheading">Platform</label>
             <select name='platform' id="platform" class="form-control select2">
                 <option value="">Select Platform</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="indeed">Indeed</option>
-                <option value="glassdoor">Glassdoor</option>
                 <option value="jobstreet">JobStreet</option>
-                <option value="kalibrr">Kalibrr</option>
+                <option value="indeed">Indeed</option>
+                <option value="linkedin">LinkedIn</option>
                 <option value="glints">Glints</option>
+                <option value="glassdoor">Glassdoor</option>
+                <option value="whatsapp">Whatsapp</option>
+                <option value="telegram">Telegram</option>
+                <option value="facebook">Facebook</option>
                 <option value="instagram">Instagram</option>
-                <option value="loker.id">Loker.id</option>
-                <option value="monster">Monster</option>
-                <option value="fiverr">Fiverr</option>
-                <option value="upwork">Upwork</option>
-                <option value="urbanhire">Urbanhire</option>
-                <option value="karir.com">Karir.com</option>
+                <option value="tiktok">TikTok</option>
+                <option value="google">Google</option>
             </select>
             @error('platform')
                 <div class="text-danger">{{ $message }}</div>

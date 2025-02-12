@@ -10,7 +10,7 @@
             <div class="modal-body">
                 @foreach ($row->user->reference as $reference)
                     <p class="text-kaem mb-0">{{ $reference->reference_name }}</p>
-                    <p class="text-kaem mb-0">{{ $reference->relation }}</p>
+                    <p class="mb-0">{{ $reference->relation }}</p>
                     <p class="text-kaem mb-0">{{ $reference->company_name }}</p>
                     <p class="text-kaem mb-0">{{ $reference->phone }}</p>
                     <p class="text-kaem mb-0">{{ $reference->is_call }}</p>

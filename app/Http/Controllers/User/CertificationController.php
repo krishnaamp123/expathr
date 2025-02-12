@@ -26,11 +26,14 @@ class CertificationController extends Controller
             'url_credentials' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         Certification::create([
             'id_user' => Auth::id(),
@@ -51,7 +54,9 @@ class CertificationController extends Controller
     {
         $certification = Certification::findOrFail($id);
         $certification->start_date = Carbon::parse($certification->start_date)->format('m/Y');
-        $certification->end_date = Carbon::parse($certification->end_date)->format('m/Y');
+        $certification->end_date = $certification->end_date
+        ? Carbon::parse($certification->end_date)->format('m/Y')
+        : null;
 
         return view('user.profile.certification.update', compact('certification'));
     }
@@ -67,11 +72,14 @@ class CertificationController extends Controller
             'url_credentials' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         $organization->update([
             'lisence_name' => $validated['lisence_name'],

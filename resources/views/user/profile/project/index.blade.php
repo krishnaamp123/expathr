@@ -15,7 +15,9 @@
                                     @if (!empty($projectt->description))
                                     <span class="kaem-text">{{ $projectt->description }}</span><br>
                                     @endif
-                                    <span class="kaem-text">{{ $projectt->start_date }} - {{ $projectt->end_date }}</span>
+                                    <span class="kaem-text">
+                                        {{ $projectt->start_date }} - {{ $projectt->end_date === null ? 'Present' : $projectt->end_date }}
+                                    </span>
                             <div class="city-hover d-flex justify-content-end position-absolute top-0 start-0 w-100 h-100 align-items-center" style="display: none; background-color: rgba(35, 34, 34, 0.5)">
 
                                 <button type="button" class="btn btn-sm btn-warning me-2" data-toggle="modal" data-target="#editProjectModal{{ $projectt->id }}">
@@ -86,10 +88,15 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $projectt->end_date }}" required>
-                        @error('end_date')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy end-date-input"
+                            id="end_date_pr{{ $projectt->id }}"
+                            name="end_date"
+                            value="{{ $projectt->end_date }}">
+
+                        <input type="checkbox"
+                            class="present-checkbox"
+                            data-target="end_date_pr{{ $projectt->id }}"
+                            {{ is_null($projectt->end_date) ? 'checked' : '' }}> Present
                     </div>
 
                     <button type="submit" class="btn btn-primary kaem-subheading">Update</button>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sources', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->enum('platform',['linkedin','indeed','glassdoor','jobstreet','kalibrr','glints','instagram','loker.id','monster','fiverr','upwork','urbanhire','karir.com'])->nullable();
+            $table->enum('platform',['jobstreet','indeed','linkedin','glints','glassdoor','whatsapp','telegram','facebook','instagram','tiktok','google'])->nullable();
             $table->string('referal')->nullable();
             $table->string('other')->nullable();
             $table->timestamps();

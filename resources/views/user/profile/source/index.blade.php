@@ -65,19 +65,17 @@
                         <label for="editplatform" class="kaem-subheading">Platform</label>
                         <select name="platform" class="form-control select2 editplatform">
                             <option value="">Select Platform</option>
-                            <option value="linkedin" {{ $sourcee->platform == 'linkedin' ? 'selected' : '' }}>LinkedIn</option>
-                            <option value="indeed" {{ $sourcee->platform == 'indeed' ? 'selected' : '' }}>Indeed</option>
-                            <option value="glassdoor" {{ $sourcee->platform == 'glassdoor' ? 'selected' : '' }}>Glassdoor</option>
                             <option value="jobstreet" {{ $sourcee->platform == 'jobstreet' ? 'selected' : '' }}>JobStreet</option>
-                            <option value="kalibrr" {{ $sourcee->platform == 'kalibrr' ? 'selected' : '' }}>Kalibrr</option>
+                            <option value="indeed" {{ $sourcee->platform == 'indeed' ? 'selected' : '' }}>Indeed</option>
+                            <option value="linkedin" {{ $sourcee->platform == 'linkedin' ? 'selected' : '' }}>LinkedIn</option>
                             <option value="glints" {{ $sourcee->platform == 'glints' ? 'selected' : '' }}>Glints</option>
+                            <option value="glassdoor" {{ $sourcee->platform == 'glassdoor' ? 'selected' : '' }}>Glassdoor</option>
+                            <option value="whatsapp" {{ $sourcee->platform == 'whatsapp' ? 'selected' : '' }}>Whatsapp</option>
+                            <option value="telegram" {{ $sourcee->platform == 'telegram' ? 'selected' : '' }}>Telegram</option>
+                            <option value="facebook" {{ $sourcee->platform == 'facebook' ? 'selected' : '' }}>Facebook</option>
                             <option value="instagram" {{ $sourcee->platform == 'instagram' ? 'selected' : '' }}>Instagram</option>
-                            <option value="loker.id" {{ $sourcee->platform == 'loker.id' ? 'selected' : '' }}>Loker.id</option>
-                            <option value="monster" {{ $sourcee->platform == 'monster' ? 'selected' : '' }}>Monster</option>
-                            <option value="fiverr" {{ $sourcee->platform == 'fiverr' ? 'selected' : '' }}>Fiverr</option>
-                            <option value="upwork" {{ $sourcee->platform == 'upwork' ? 'selected' : '' }}>Upwork</option>
-                            <option value="urbanhire" {{ $sourcee->platform == 'urbanhire' ? 'selected' : '' }}>Urbanhire</option>
-                            <option value="karir.com" {{ $sourcee->platform == 'karir.com' ? 'selected' : '' }}>Karir.com</option>
+                            <option value="tiktok" {{ $sourcee->platform == 'tiktok' ? 'selected' : '' }}>TikTok</option>
+                            <option value="google" {{ $sourcee->platform == 'google' ? 'selected' : '' }}>Google</option>
                         </select>
                         @error('editplatform')
                             <span class="text-danger">{{ $message }}</span>

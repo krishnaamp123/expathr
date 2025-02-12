@@ -25,8 +25,6 @@
             <!-- Bootstrap CSS -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
-            <!-- Favicon-->
-            <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
             <!-- Font Awesome icons (free version)-->
             <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
             <!-- Google fonts-->
@@ -390,6 +388,32 @@
                 }
             </script>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('.present-checkbox').forEach(checkbox => {
+                        const targetId = checkbox.getAttribute('data-target');
+                        const endDateInput = document.getElementById(targetId);
+
+                        console.log("Target ID:", targetId);
+                        console.log("End Date Input:", endDateInput);
+
+                        if (endDateInput) {
+                            // Set kondisi awal saat halaman dimuat
+                            endDateInput.disabled = checkbox.checked;
+
+                            // Event Listener untuk perubahan checkbox
+                            checkbox.addEventListener('change', function () {
+                                if (this.checked) {
+                                    endDateInput.value = '';
+                                    endDateInput.disabled = true;
+                                } else {
+                                    endDateInput.disabled = false;
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>
 
             @yield('scripts')
         </body>

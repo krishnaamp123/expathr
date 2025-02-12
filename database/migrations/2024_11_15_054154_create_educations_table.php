@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('degree',['elementary','juniorhigh','seniorhigh','bachelor','master','doctoral']);
             $table->string('major')->nullable();
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
 
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');

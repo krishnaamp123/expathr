@@ -24,11 +24,14 @@ class ProjectController extends Controller
             'project_name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         Project::create([
             'id_user' => Auth::id(),
@@ -46,7 +49,9 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
         $project->start_date = Carbon::parse($project->start_date)->format('m/Y');
-        $project->end_date = Carbon::parse($project->end_date)->format('m/Y');
+        $project->end_date = $project->end_date
+        ? Carbon::parse($project->end_date)->format('m/Y')
+        : null;
 
         return view('user.profile.project.update', compact('project'));
     }
@@ -59,11 +64,14 @@ class ProjectController extends Controller
             'project_name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         $project->update([
             'project_name' => $validated['project_name'],

@@ -47,6 +47,17 @@ Route::get('/',[LandingController::class,'getLanding'])->name('getLanding');
 Route::get('/termsncondition',[LandingController::class,'getLandingTnC'])->name('getLandingTnC');
 Route::get('/privacynpolicy',[LandingController::class,'getLandingPnP'])->name('getLandingPnP');
 
+// Tambahkan di web.php untuk sementara
+// Route::get('/clear-cache', function() {
+//     Artisan::call('cache:clear');
+//     Artisan::call('config:clear');
+//     Artisan::call('view:clear');
+//     Artisan::call('route:clear');
+//     Artisan::call('optimize:clear');
+//     return "Cache Cleared!";
+// });
+
+
 //AUTH
 Route::get('/login',[AuthController::class,'getLogin'])->name('login');
 Route::post('/login',[AuthController::class,'postLogin'])->name('postLogin');

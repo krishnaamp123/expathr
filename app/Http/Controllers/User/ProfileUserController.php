@@ -45,28 +45,36 @@ class ProfileUserController extends Controller
         ->get()
         ->map(function ($education) {
             $education->start_date = Carbon::parse($education->start_date)->format('m/Y');
-            $education->end_date = Carbon::parse($education->end_date)->format('m/Y');
+            $education->end_date = $education->end_date
+                ? Carbon::parse($education->end_date)->format('m/Y')
+                : null;
             return $education;
         });
         $experience = Experience::where('id_user', $user->id)
         ->get()
         ->map(function ($experience) {
             $experience->start_date = Carbon::parse($experience->start_date)->format('m/Y');
-            $experience->end_date = Carbon::parse($experience->end_date)->format('m/Y');
+            $experience->end_date = $experience->end_date
+                ? Carbon::parse($experience->end_date)->format('m/Y')
+                : null;
             return $experience;
         });
         $volunteer = Volunteer::where('id_user', $user->id)
         ->get()
         ->map(function ($volunteer) {
             $volunteer->start_date = Carbon::parse($volunteer->start_date)->format('m/Y');
-            $volunteer->end_date = Carbon::parse($volunteer->end_date)->format('m/Y');
+            $volunteer->end_date = $volunteer->end_date
+                ? Carbon::parse($volunteer->end_date)->format('m/Y')
+                : null;
             return $volunteer;
         });
         $project = Project::where('id_user', $user->id)
         ->get()
         ->map(function ($project) {
             $project->start_date = Carbon::parse($project->start_date)->format('m/Y');
-            $project->end_date = Carbon::parse($project->end_date)->format('m/Y');
+            $project->end_date = $project->end_date
+                ? Carbon::parse($project->end_date)->format('m/Y')
+                : null;
             return $project;
         });
         $link = Link::where('id_user', $user->id)->get();
@@ -74,14 +82,18 @@ class ProfileUserController extends Controller
         ->get()
         ->map(function ($organization) {
             $organization->start_date = Carbon::parse($organization->start_date)->format('m/Y');
-            $organization->end_date = Carbon::parse($organization->end_date)->format('m/Y');
+            $organization->end_date = $organization->end_date
+                ? Carbon::parse($organization->end_date)->format('m/Y')
+                : null;
             return $organization;
         });
         $certification = Certification::where('id_user', $user->id)
         ->get()
         ->map(function ($certification) {
             $certification->start_date = Carbon::parse($certification->start_date)->format('m/Y');
-            $certification->end_date = Carbon::parse($certification->end_date)->format('m/Y');
+            $certification->end_date = $certification->end_date
+                ? Carbon::parse($certification->end_date)->format('m/Y')
+                : null;
             return $certification;
         });
         $source = Source::where('id_user', $user->id)->get();

@@ -25,11 +25,14 @@ class OrganizationController extends Controller
             'associated' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->startOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         Organization::create([
             'id_user' => Auth::id(),
@@ -49,7 +52,9 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findOrFail($id);
         $organization->start_date = Carbon::parse($organization->start_date)->format('m/Y');
-        $organization->end_date = Carbon::parse($organization->end_date)->format('m/Y');
+        $organization->end_date = $organization->end_date
+        ? Carbon::parse($organization->end_date)->format('m/Y')
+        : null;
 
         return view('user.profile.organization.update', compact('organization'));
     }
@@ -64,11 +69,14 @@ class OrganizationController extends Controller
             'associated' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'nullable',
         ]);
 
         $startDate = Carbon::createFromFormat('m/Y', $validated['start_date'])->startOfMonth()->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('m/Y', $validated['end_date'])->endOfMonth()->format('Y-m-d');
+        $endDate = $validated['end_date'] ?? null;
+        if ($endDate) {
+            $endDate = Carbon::createFromFormat('m/Y', $endDate)->endOfMonth()->format('Y-m-d');
+        }
 
         $organization->update([
             'organization' => $validated['organization'],

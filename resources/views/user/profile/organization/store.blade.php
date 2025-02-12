@@ -43,7 +43,12 @@
         </div>
         <div class="form-group">
             <label for="end_date" class="kaem-subheading">End Date</label>
-            <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date">
+            <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy end-date-input"
+                    id="end_date_or"
+                    name="end_date">
+            <input type="checkbox"
+                    class="present-checkbox"
+                    data-target="end_date_or"> Present
             @error('end_date')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

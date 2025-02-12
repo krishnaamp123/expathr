@@ -13,7 +13,9 @@
                         <li class="list-group-item city-item position-relative">
                             <span class="kaem-heading">{{ $experiencee->position ?? 'Unknown Experience' }}</span><br>
                             <span class="kaem-subheading">{{ $experiencee->company_name }} - {{ ucwords(str_replace('_', ' ', $experiencee->job_type)) }}</span><br>
-                            <span class="kaem-text">{{ $experiencee->start_date }} - {{ $experiencee->end_date }}</span><br>
+                            <span class="kaem-text">
+                                {{ $experiencee->start_date }} - {{ $experiencee->end_date === null ? 'Present' : $experiencee->end_date }}
+                            </span><br>
                             <span class="kaem-text">
                                 @if (!empty($experiencee->location))
                                     {{ $experiencee->location }} -
@@ -149,10 +151,15 @@
 
                     <div class="form-group">
                         <label for="end_date" class="kaem-subheading">End Date</label>
-                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy" id="end_date" name="end_date" value="{{ $experiencee->end_date }}" required>
-                        @error('end_date')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+                        <input type="text" class="form-control kaem-sub datepicker datepicker-mm-yyyy end-date-input"
+                            id="end_date_ex{{ $experiencee->id }}"
+                            name="end_date"
+                            value="{{ $experiencee->end_date }}">
+
+                        <input type="checkbox"
+                            class="present-checkbox"
+                            data-target="end_date_ex{{ $experiencee->id }}"
+                            {{ is_null($experiencee->end_date) ? 'checked' : '' }}> Present
                     </div>
 
                     <button type="submit" class="btn btn-primary kaem-subheading">Update</button>
