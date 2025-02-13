@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Carbon\Carbon;
 
 class PhoneScreenAdminController extends Controller
 {
@@ -233,7 +234,7 @@ class PhoneScreenAdminController extends Controller
 Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the Phone Screen Interview process for the position of {$jobName} ($city) at:
 
 Date: {$date}
-Time: {$time}
+Time: {$time} WITA
 Platform: Whatsapp Call, around 10-15 minutes
 
 Please confirm by sending the following format:
@@ -323,7 +324,7 @@ Expat. Roasters";
 Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the Phone Screen Interview process for the position of {$jobName} ($city) at:
 
 Date: {$date}
-Time: {$time}
+Time: {$time} WITA
 Platform: Whatsapp Call, around 10-15 minutes
 
 Please confirm by sending the following format:

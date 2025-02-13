@@ -9,12 +9,26 @@
             </div>
             <div class="modal-body">
                 @foreach ($row->user->reference as $reference)
-                    <p class="text-kaem mb-0">{{ $reference->reference_name }}</p>
-                    <p class="mb-0">{{ $reference->relation }}</p>
-                    <p class="text-kaem mb-0">{{ $reference->company_name }}</p>
-                    <p class="text-kaem mb-0">{{ $reference->phone }}</p>
-                    <p class="text-kaem mb-0">{{ $reference->is_call }}</p>
+                    <p class="text-kaem mb-2" style="font-size: 16px;"><strong>{{ $reference->reference_name }}</strong></p>
+                    <p class="mb-0" style="font-size: 15px;"><strong>Relation:</strong></p>
+                    <p class="mb-1" style="font-size: 16px;">{{ $reference->relation }}</p>
+                    <p class="mb-0" style="font-size: 15px;"><strong>Company Name:</strong></p>
+                    <p class="mb-1" style="font-size: 16px;">{{ $reference->company_name }}</p>
+                    <p class="mb-0" style="font-size: 15px;"><strong>Phone / Can Be Called:</strong></p>
+                    <p class="mb-1" style="font-size: 16px;">{{ $reference->phone }} / {{ $reference->is_call }}</p>
+                    @php
+                        $comment = $row->referencechecks->where('id_reference', $reference->id)->first()?->comment;
+                    @endphp
+                    <p class="mb-0" style="font-size: 15px;"><strong>Comment:</strong></p>
+                    @if ($comment)
+                        <p class="mb-3" style="font-size: 16px;">
+                            {{$comment}}
+                        </p>
+                    @else
+                        <p class="mb-3" style="font-size: 16px;">Not Commented</p>
+                    @endif
                 @endforeach
+
             </div>
             <div class="modal-footer">
                 {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}

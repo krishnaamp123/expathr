@@ -424,13 +424,23 @@
                         'user' => $userss,
                     ])
 
-                    <a href="{{ route('exportUserHrjob', ['status' => request('status')]) }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
-                        <i class="fas fa-file-excel"></i> Export All
-                    </a>
-                    <!-- Tombol Export -->
-                    <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
-                        <i class="fas fa-calendar-check"></i> Export Date
-                    </button>
+                        @if(request('status') === 'rejected')
+                            <a href="{{ route('exportRejected', ['status' => request('status')]) }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
+                                <i class="fas fa-file-excel"></i> Export All
+                            </a>
+                            <!-- Tombol Export -->
+                            <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModalRejected">
+                                <i class="fas fa-calendar-check"></i> Export Date
+                            </button>
+                        @else
+                            <a href="{{ route('exportUserHrjob', ['status' => request('status')]) }}" class="btn btn-sm mr-2" style="background-color: #000; color: white;">
+                                <i class="fas fa-file-excel"></i> Export All
+                            </a>
+                            <!-- Tombol Export -->
+                            <button class="btn btn-sm mr-2" style="background-color: #858796; color: white;" data-toggle="modal" data-target="#exportModal">
+                                <i class="fas fa-calendar-check"></i> Export Date
+                            </button>
+                        @endif
 
                     <button id="reject-selected" class="btn btn-sm"  style="background-color: #c03535; color: white;"><i class="fas fa-times"></i> Reject Selected</button>
 
@@ -445,6 +455,36 @@
                                     </button>
                                 </div>
                                 <form action="{{ route('exportdateUserHrjob') }}" method="GET">
+                                    <input type="hidden" name="status" value="{{ $status ?? 'all' }}">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="start_date" class="mb-2"><strong>Start Date:</strong></label>
+                                            <input id="start_date" name="start_date" class="form-control datepicker datepicker-input" placeholder="Start Date" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="end_date" class="mb-2"><strong>End Date:</strong></label>
+                                            <input id="end_date" name="end_date" class="form-control datepicker datepicker-input" placeholder="End Date" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Export</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="exportModalRejected" tabindex="-1" aria-labelledby="exportModalRejectedLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exportModalRejectedLabel">Export Date Range</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="{{ route('exportdateRejected') }}" method="GET">
                                     <input type="hidden" name="status" value="{{ $status ?? 'all' }}">
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -1596,7 +1636,24 @@
 
             // Fungsi untuk memperbarui status di tabel
             document.querySelectorAll('.update-status-form select').forEach(select => {
+                // Simpan nilai sebelumnya saat select mendapatkan fokus
+                select.addEventListener('focus', function() {
+                    this.dataset.previousValue = this.value;
+                });
+
                 select.addEventListener('change', function () {
+                    const previousValue = this.dataset.previousValue;
+                    const newValue = this.value;
+
+                    // Jika status baru adalah 'rejected', tampilkan konfirmasi
+                    if (newValue === 'rejected') {
+                        const confirmed = confirm('Apakah Anda yakin ingin menolak?');
+                        if (!confirmed) {
+                            this.value = previousValue; // Kembalikan ke nilai sebelumnya
+                            return; // Hentikan proses
+                        }
+                    }
+
                     const form = this.closest('form'); // Ambil form terdekat
                     const url = form.action; // URL untuk pengiriman form
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').content; // CSRF token
@@ -1615,7 +1672,7 @@
                         .then(response => {
                             if (!response.ok) {
                                 return response.json().then(errorData => {
-                                    throw new Error(errorData.message || 'Failed to update status.');
+                                    throw new Error(errorData.message || 'Gagal memperbarui status.');
                                 });
                             }
                             return response.json();
@@ -1629,14 +1686,14 @@
                                     const modalId = data.modalType === 'hr_interview'
                                         ? 'interviewModal'
                                         : data.modalType === 'user_interview'
-                                        ? 'userInterviewModal'
-                                        : 'phoneScreenModal';
+                                            ? 'userInterviewModal'
+                                            : 'phoneScreenModal';
 
                                     const modalUrl = data.modalType === 'hr_interview'
                                         ? '{{ route("getInterviewModal") }}'
                                         : data.modalType === 'user_interview'
-                                        ? '{{ route("getUserInterviewModal") }}'
-                                        : '{{ route("getPhoneScreenModal") }}';
+                                            ? '{{ route("getUserInterviewModal") }}'
+                                            : '{{ route("getPhoneScreenModal") }}';
 
                                     loadModal(modalId, modalUrl, (modalElement) => {
                                         const modalInstance = new bootstrap.Modal(modalElement);
@@ -1650,7 +1707,7 @@
 
                                         // Inisialisasi Select2
                                         $(modalElement).find('.select2.inside-modal').select2({
-                                            dropdownParent: $(modalElement) // Attach dropdown to modal
+                                            dropdownParent: $(modalElement) // Attach dropdown ke modal
                                         });
 
                                         // Inisialisasi Datepicker
@@ -1675,14 +1732,14 @@
                                 }
 
                                 // Tampilkan toast sukses
-                                showToast('successToast', data.message || 'Status updated successfully!');
+                                showToast('successToast', data.message || 'Status berhasil diperbarui!');
                             } else {
-                                showToast('failedToast', data.message || 'Failed to update status.');
+                                showToast('failedToast', data.message || 'Gagal memperbarui status.');
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            showToast('failedToast', error.message || 'An error occurred. Please try again.');
+                            showToast('failedToast', error.message || 'Terjadi kesalahan. Silakan coba lagi.');
                         });
                 });
             });
@@ -1773,19 +1830,24 @@
 
         // Kirim data yang dipilih
         document.getElementById('reject-selected').addEventListener('click', function () {
+            // Ambil semua job yang dipilih
             const selectedJobs = Array.from(document.querySelectorAll('.select-job:checked')).map(
                 checkbox => checkbox.value
             );
 
+            // Jika tidak ada job yang dipilih, tampilkan pesan dan hentikan proses
             if (selectedJobs.length === 0) {
                 alert('No jobs selected!');
                 return;
             }
 
-            if (!confirm('Are you sure you want to reject the selected jobs?')) {
-                return;
+            // Tampilkan popup konfirmasi
+            const confirmed = confirm('Are you sure you want to reject the selected jobs?');
+            if (!confirmed) {
+                return; // Hentikan proses jika pengguna membatalkan
             }
 
+            // Kirim permintaan ke server untuk menolak job yang dipilih
             fetch('{{ route('bulkRejectStatus') }}', {
                 method: 'POST',
                 headers: {

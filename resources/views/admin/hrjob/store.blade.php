@@ -6,16 +6,16 @@
         <div class="col-12 col-md-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Add Job Form</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Add a New Job Opening</h6>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('storeHrjob') }}" method="post">
                         @csrf
 
                         <div class="form-group">
-                            <label>User</label>
+                            <label>Recruiter</label>
                             <select name="id_user" class="form-control select2">
-                                <option value="">Select User</option>
+                                <option value="">Select Recruiter</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->fullname }}</option>
                                 @endforeach
@@ -65,7 +65,7 @@
 
                         <div class="form-group">
                             <label for="job_report">Job Report</label>
-                            <textarea name="job_report" class="form-control" id="exampleInputJobReport" rows="5"></textarea>
+                            <textarea name="job_report" class="form-control" id="exampleInputJobReport" rows="1"></textarea>
                             @error('job_report')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror
@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">Responsibilities</label>
                             <textarea name="description" class="form-control" id="exampleInputDescription" rows="5"></textarea>
                             @error('description')
                                 <div class="text-danger">{{$message}}</div>
@@ -129,9 +129,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Outlet</label>
+                            <label>Placement</label>
                             <select name="id_outlet" class="form-control select2">
-                                <option value="">Select Outlet</option>
+                                <option value="">Select Placement</option>
                                 @foreach($outlets as $outlet)
                                     <option value="{{ $outlet->id }}">{{ $outlet->outlet_name }}</option>
                                 @endforeach
@@ -166,7 +166,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Number Hired</label>
+                            <label>Number of Hire</label>
                             <input type="number" name="number_hired" class="form-control">
                             @error('number_hired')
                                 <div class="text-danger">{{ $message }}</div>
@@ -174,7 +174,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Form</label>
+                            <label>Choose Assessment / Test</label>
                             <select name="id_form[]" class="form-control select2" multiple>
                                 <option value="">Select Form</option>
                                 @foreach($forms as $form)

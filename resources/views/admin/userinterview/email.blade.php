@@ -9,7 +9,7 @@
     <p><strong>Details:</strong></p>
     <ul>
         <li>Date: {{ $interview_date }}</li>
-        <li>Time: {{ $time }}</li>
+        <li>Time: {{ $time }} WITA</li>
         <li>Location: {{ $location }}</li>
         <li>Link: {{ $link }}</li>
     </ul>

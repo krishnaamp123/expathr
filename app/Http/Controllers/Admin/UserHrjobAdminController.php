@@ -596,7 +596,10 @@ class UserHrjobAdminController extends Controller
             $sheet->setCellValue('E' . $rowNumber, $userhrjob->hrjob->outlet->outlet_name ?? 'No Outlet');
             $sheet->setCellValue('F' . $rowNumber, $userhrjob->hrjob->price ?? 'No Job Salary');
             $sheet->setCellValue('G' . $rowNumber, $userhrjob->salary_expectation ?? 'No Salary Expectation');
-            $sheet->setCellValue('H' . $rowNumber, $userhrjob->created_at ?? 'No Applied');
+            $appliedAt = $userhrjob->created_at
+                ? $userhrjob->created_at->format('d-m-Y H:i:s')
+                : 'No Applied';
+            $sheet->setCellValue('H' . $rowNumber, $appliedAt);
             $sheet->setCellValue('I' . $rowNumber, $userhrjob->availability ?? 'No Availability');
             $sheet->setCellValue('J' . $rowNumber, $userhrjob->status ?? 'No Status');
             $rowNumber++;
@@ -612,6 +615,185 @@ class UserHrjobAdminController extends Controller
         // Konfigurasi headers
         $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $response->headers->set('Content-Disposition', 'attachment;filename="user_job_date.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
+    public function exportRejected()
+    {
+        // Ambil data dari model UserHrjob berdasarkan status
+        $rejecteds = UserHrjob::with(['hrjob', 'user'])
+            ->where('status', 'rejected')
+            ->get();
+
+        // Buat Spreadsheet baru
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Tambahkan header untuk file Excel
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Applicant Name');
+        $sheet->setCellValue('C1', 'Job Name');
+        $sheet->setCellValue('D1', 'Location');
+        $sheet->setCellValue('E1', 'Outlet');
+        $sheet->setCellValue('F1', 'Job Salary');
+        $sheet->setCellValue('G1', 'Salary Expectation');
+        $sheet->setCellValue('H1', 'Applied At');
+        $sheet->setCellValue('I1', 'Availability');
+        $sheet->setCellValue('J1', 'Whatsapp Link');
+
+        // Membuat header bold
+        $headerRange = 'A1:J1';
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+
+        // Isi data dari database ke dalam file Excel
+        $rowNumber = 2; // Baris pertama adalah header
+        foreach ($rejecteds as $rejected) {
+            $applicantName = $rejected->user->fullname ?? 'No Applicant';
+            $phone = $rejected->user->phone ?? 'No Phone';
+
+            $sheet->setCellValue('A' . $rowNumber, $rejected->id);
+            $sheet->setCellValue('B' . $rowNumber, $applicantName);
+            $sheet->setCellValue('C' . $rowNumber, $rejected->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('D' . $rowNumber, $rejected->hrjob->city->city_name  ?? 'No Location');
+            $sheet->setCellValue('E' . $rowNumber, $rejected->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('F' . $rowNumber, $rejected->hrjob->price ?? 'No Job Salary');
+            $sheet->setCellValue('G' . $rowNumber, $rejected->salary_expectation ?? 'No Salary Expectation');
+            $appliedAt = $rejected->created_at
+                ? $rejected->created_at->format('d-m-Y H:i:s')
+                : 'No Applied';
+            $sheet->setCellValue('H' . $rowNumber, $appliedAt);
+            $sheet->setCellValue('I' . $rowNumber, $rejected->availability ?? 'No Availability');
+
+            // Tambahkan formula HYPERLINK di kolom J
+            $whatsappMessage = "Halo {$applicantName},
+
+Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the at:
+
+Text terimakasih namun anda rejected
+
+Please confirm by sending the following format:
+Full Name Present/Absent
+
+Regards,
+
+HR
+Expat. Roasters";
+            $whatsappLink = "https://api.whatsapp.com/send?phone=62{$phone}&text=" . urlencode($whatsappMessage);
+
+            $sheet->setCellValue('J' . $rowNumber, "=HYPERLINK(\"{$whatsappLink}\", \"WHATSAPP\")");
+
+            $rowNumber++;
+        }
+
+        // Simpan file dan buat response untuk download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        // Konfigurasi headers
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="rejected.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
+    public function exportdateRejected(Request $request)
+    {
+        // Validasi input tanggal
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $status = request('status','all');
+
+        // Filter data berdasarkan rentang tanggal dan status rejected saja
+        $rejecteds = UserHrjob::with(['hrjob', 'user'])
+            ->whereBetween('created_at', [
+                Carbon::parse($validated['start_date'])->startOfDay(),
+                Carbon::parse($validated['end_date'])->endOfDay()
+            ])
+            ->when($status === 'rejected', function ($query) {
+                $query->where('status', 'rejected');
+            })
+            ->get();
+
+
+        // Membuat spreadsheet dan isi data
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Tambahkan header
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Applicant Name');
+        $sheet->setCellValue('C1', 'Job Name');
+        $sheet->setCellValue('D1', 'Location');
+        $sheet->setCellValue('E1', 'Outlet');
+        $sheet->setCellValue('F1', 'Job Salary');
+        $sheet->setCellValue('G1', 'Salary Expectation');
+        $sheet->setCellValue('H1', 'Applied At');
+        $sheet->setCellValue('I1', 'Availability');
+        $sheet->setCellValue('J1', 'Whatsapp Link');
+
+        // Membuat header bold
+        $headerRange = 'A1:J1'; // Range dari header
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+
+        // Isi data
+        $rowNumber = 2;
+        foreach ($rejecteds as $rejected) {
+            $applicantName = $rejected->user->fullname ?? 'No Applicant';
+            $phone = $rejected->user->phone ?? 'No Phone';
+
+            $sheet->setCellValue('A' . $rowNumber, $rejected->id);
+            $sheet->setCellValue('B' . $rowNumber, $applicantName);
+            $sheet->setCellValue('C' . $rowNumber, $rejected->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('D' . $rowNumber, $rejected->hrjob->city->city_name  ?? 'No Location');
+            $sheet->setCellValue('E' . $rowNumber, $rejected->hrjob->outlet->outlet_name ?? 'No Outlet');
+            $sheet->setCellValue('F' . $rowNumber, $rejected->hrjob->price ?? 'No Job Salary');
+            $sheet->setCellValue('G' . $rowNumber, $rejected->salary_expectation ?? 'No Salary Expectation');
+            $appliedAt = $rejected->created_at
+                ? $rejected->created_at->format('d-m-Y H:i:s')
+                : 'No Applied';
+            $sheet->setCellValue('H' . $rowNumber, $appliedAt);
+            $sheet->setCellValue('I' . $rowNumber, $rejected->availability ?? 'No Availability');
+
+            // Tambahkan formula HYPERLINK di kolom J
+            $whatsappMessage = "Halo {$applicantName},
+
+Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the at:
+
+Text terimakasih namun anda rejected
+
+Please confirm by sending the following format:
+Full Name Present/Absent
+
+Regards,
+
+HR
+Expat. Roasters";
+            $whatsappLink = "https://api.whatsapp.com/send?phone=62{$phone}&text=" . urlencode($whatsappMessage);
+
+            $sheet->setCellValue('J' . $rowNumber, "=HYPERLINK(\"{$whatsappLink}\", \"WHATSAPP\")");
+
+            $rowNumber++;
+        }
+
+        // Simpan file dan buat response untuk download
+        $writer = new Xlsx($spreadsheet);
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        // Konfigurasi headers
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="rejected_date.xlsx"');
         $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;

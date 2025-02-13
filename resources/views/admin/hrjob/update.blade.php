@@ -6,7 +6,7 @@
         <div class="col-12 col-md-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Job Form</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #72A28A;">Update Job Opening</h6>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('updateHrjob', $hrjob->id) }}" method="post">
@@ -14,9 +14,9 @@
                         @method('PUT')
 
                         <div class="form-group">
-                            <label>User</label>
+                            <label>Recruiter</label>
                             <select name="id_user" class="form-control select2">
-                                <option value="">Select User</option>
+                                <option value="">Select Recruiter</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}" {{ $user->id == $hrjob->id_user ? 'selected' : '' }}>
                                         {{ $user->fullname }}
@@ -70,7 +70,7 @@
 
                         <div class="form-group">
                             <label for="job_report">Job Report</label>
-                            <textarea name="job_report" class="form-control" id="job_report" rows="5" required>{{ $hrjob->job_report }}</textarea>
+                            <textarea name="job_report" class="form-control" id="job_report" rows="1" required>{{ $hrjob->job_report }}</textarea>
                             @error('job_report')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -93,7 +93,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">Responsibilities</label>
                             <textarea name="description" class="form-control" id="description" rows="5" required>{{ $hrjob->description }}</textarea>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -137,9 +137,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Outlet</label>
+                            <label>Placement</label>
                             <select name="id_outlet" class="form-control select2">
-                                <option value="">Select Outlet</option>
+                                <option value="">Select Placement</option>
                                 @foreach($outlets as $outlet)
                                     <option value="{{ $outlet->id }}" {{ $outlet->id == $hrjob->id_outlet ? 'selected' : '' }}>
                                         {{ $outlet->outlet_name }}
@@ -176,7 +176,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Number Hired</label>
+                            <label>Number of Hire</label>
                             <input type="number" name="number_hired" class="form-control" value="{{ old('number_hired', $hrjob->number_hired) }}">
                             @error('number_hired')
                                 <div class="text-danger">{{ $message }}</div>
@@ -184,7 +184,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Forms</label>
+                            <label>Choose Assessment / Test</label>
                             <select name="id_form[]" class="form-control select2" multiple>
                                 <option value="">Select Form</option>
                                 @foreach($forms as $form)

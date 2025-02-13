@@ -289,6 +289,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/modal/interview', [UserHrjobAdminController::class, 'getInterviewModal'])->name('getInterviewModal');
             Route::get('/modal/userinterview', [UserHrjobAdminController::class, 'getUserInterviewModal'])->name('getUserInterviewModal');
             Route::get('/modal/phonescreen', [UserHrjobAdminController::class, 'getPhoneScreenModal'])->name('getPhoneScreenModal');
+            Route::get('/rejected/export', [UserHrjobAdminController::class, 'exportRejected'])->name('exportRejected');
+            Route::get('/rejected/dateexport', [UserHrjobAdminController::class, 'exportdateRejected'])->name('exportdateRejected');
+
 
 
             // USERHRJOBHISTORY

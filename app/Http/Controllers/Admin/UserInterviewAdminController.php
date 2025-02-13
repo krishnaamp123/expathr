@@ -437,7 +437,7 @@ class UserInterviewAdminController extends Controller
 Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the User Interview process for the position of {$jobName} ($city) at:
 
 Date: {$date}
-Time: {$time}
+Time: {$time} WITA
 Location: {$location}
 Link: {$link}
 
@@ -541,7 +541,7 @@ Expat. Roasters";
 Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the User Interview process for the position of {$jobName} ($city) at:
 
     Date: {$date}
-    Time: {$time}
+    Time: {$time} WITA
     Location: {$location}
     Link: {$link}
 

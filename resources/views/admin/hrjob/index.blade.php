@@ -82,8 +82,8 @@
                             <td>{{$row->description}}</td>
                             <td>{{$row->qualification}}</td>
                             <td>{{ ucwords(str_replace('_', ' ', $row->location_type)) }}</td> --}}
-                            <td data-field="city_name">{{$row->city->city_name ?? 'No City'}}</td>
-                            <td data-field="outlet_name">{{$row->outlet->outlet_name ?? 'No Outlet'}}</td>
+                            <td data-field="city_name">{{$row->city->city_name ?? 'No Location'}}</td>
+                            <td data-field="outlet_name">{{$row->outlet->outlet_name ?? 'No Placement'}}</td>
                             {{-- <td>{{$row->experience_min}}</td>
                             <td>{{$row->education_min}}</td>
                             <td>{{$row->number_hired}}</td> --}}

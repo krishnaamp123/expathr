@@ -266,7 +266,7 @@
                 <!-- Job details -->
                 <h2 class="kaem-jobtitle">{{ $vacancy->job_name }}</h2>
                 <p class="kaem-jobtext text-muted mb-1">{{ $vacancy->category->category_name ?? 'No Category' }}</p>
-                <button class="btn btn-primary kaem-subheading mb-3"
+                {{-- <button class="btn btn-primary kaem-subheading mb-3"
                     @if (!$isProfileComplete)
                         onclick="window.location.href='{{ route('getProfile') }}'"
                         title="Please complete your profile to apply for this job."
@@ -278,6 +278,35 @@
                     @else
                         data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}"
                     @endif>
+                    @if (!$isProfileComplete)
+                        Complete Your Profile
+                    @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
+                        Already Applied
+                    @elseif ($vacancy->is_ended === 'yes')
+                        Job Ended
+                    @else
+                        Apply for Job
+                    @endif
+                </button> --}}
+                <button class="btn
+                        @if (!$isProfileComplete) btn-secondary
+                        @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id)) btn-secondary
+                        @elseif ($vacancy->is_ended === 'yes') btn-secondary
+                        @else btn-primary
+                        @endif
+                        kaem-subheading mb-3"
+                    @if (!$isProfileComplete)
+                        onclick="window.location.href='{{ route('getProfile') }}'"
+                        title="Please complete your profile to apply for this job."
+                    @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
+                        disabled
+                    @elseif ($vacancy->is_ended === 'yes')
+                        disabled
+                        title="This job has ended."
+                    @else
+                        data-bs-toggle="modal" data-bs-target="#applyModal{{ $vacancy->id }}"
+                    @endif>
+
                     @if (!$isProfileComplete)
                         Complete Your Profile
                     @elseif (auth()->user() && auth()->user()->hasAppliedFor($vacancy->id))
@@ -328,7 +357,7 @@
                         <span class="kaem-jobtext ms-2">{{ $vacancy->number_hired }} Person</span>
                     </li>
                     <li class="mb-2 kaem-jobtext">
-                        <strong>Description :</strong>
+                        <strong>Responsibilities :</strong>
                         <p>{!! nl2br(e($vacancy->description)) !!}</p>
                     </li>
                     <li class="mb-2 kaem-jobtext">
