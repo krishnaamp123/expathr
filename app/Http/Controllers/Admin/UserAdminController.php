@@ -244,4 +244,31 @@ class UserAdminController extends Controller
 
         return $pdf->download('CV - ' . $user->fullname . '.pdf');
     }
+
+    public function generateJobPdf($id)
+    {
+
+        $user = User::with(['city', 'worklocation', 'userhrjobs', 'emergency', 'about', 'language', 'workfield', 'education', 'reference',
+                'project', 'organization', 'volunteer', 'experience', 'certification', 'workskill', 'source', 'link', 'userhrjobs.hrjob'])->findOrFail($id);
+
+        // Pastikan hanya role applicant yang bisa mengakses
+        if ($user->role !== 'applicant') {
+            return redirect()->route('getUser')->with('error', 'PDF can only be generated for applicants.');
+        }
+
+        // Cek apakah ada query string userhrjob_id
+        $selectedUserHrJobId = request()->query('userhrjob_id');
+        if ($selectedUserHrJobId) {
+            // Ambil hanya userhrjob yang dipilih
+            $userhrjobs = $user->userhrjobs->where('id', $selectedUserHrJobId);
+        } else {
+            // Jika tidak ada query string, ambil semua userhrjob
+            $userhrjobs = $user->userhrjobs;
+        }
+
+        // Generate PDF
+        $pdf = Pdf::loadView('admin.user.jobpdf', compact('user', 'userhrjobs'));
+
+        return $pdf->download('CV - ' . $user->fullname . '.pdf');
+    }
 }

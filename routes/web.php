@@ -217,6 +217,7 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/user/update/{id}', [UserAdminController::class, 'updateUser'])->name('updateUser');
             Route::delete('/user/destroy/{id}', [UserAdminController::class, 'destroyUser'])->name('destroyUser');
             Route::get('/user/{id}/pdf', [UserAdminController::class, 'generatePdf'])->name('profile.pdf');
+            Route::get('/user/{id}/jobpdf', [UserAdminController::class, 'generateJobPdf'])->name('profilejob.pdf');
 
             // COMPANY
             Route::get('/company', [CompanyAdminController::class, 'getCompany'])->name('getCompany');

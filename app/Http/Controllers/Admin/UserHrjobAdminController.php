@@ -652,10 +652,11 @@ class UserHrjobAdminController extends Controller
         foreach ($rejecteds as $rejected) {
             $applicantName = $rejected->user->fullname ?? 'No Applicant';
             $phone = $rejected->user->phone ?? 'No Phone';
+            $jobName = $rejected->hrjob->job_name ?? 'No Job';
 
             $sheet->setCellValue('A' . $rowNumber, $rejected->id);
             $sheet->setCellValue('B' . $rowNumber, $applicantName);
-            $sheet->setCellValue('C' . $rowNumber, $rejected->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('C' . $rowNumber, $jobName);
             $sheet->setCellValue('D' . $rowNumber, $rejected->hrjob->city->city_name  ?? 'No Location');
             $sheet->setCellValue('E' . $rowNumber, $rejected->hrjob->outlet->outlet_name ?? 'No Outlet');
             $sheet->setCellValue('F' . $rowNumber, $rejected->hrjob->price ?? 'No Job Salary');
@@ -667,19 +668,19 @@ class UserHrjobAdminController extends Controller
             $sheet->setCellValue('I' . $rowNumber, $rejected->availability ?? 'No Availability');
 
             // Tambahkan formula HYPERLINK di kolom J
-            $whatsappMessage = "Halo {$applicantName},
+            $whatsappMessage = "Dear {$applicantName},
 
-Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the at:
+Thank you for your interest in the {$jobName} role at Expat. Roasters. We appreciate the time and effort you invested in applying for this position.
 
-Text terimakasih namun anda rejected
+After careful consideration, we have decided not to move forward with your application at this time.
+However, we do hope you'll stay connected with us and keep an eye on our future career opportunities. If a suitable position opens up again, we would be happy to hear from you and consider your application.
 
-Please confirm by sending the following format:
-Full Name Present/Absent
+We wish you all the best in your job search.
 
-Regards,
+Best Regards,
 
-HR
 Expat. Roasters";
+
             $whatsappLink = "https://api.whatsapp.com/send?phone=62{$phone}&text=" . urlencode($whatsappMessage);
 
             $sheet->setCellValue('J' . $rowNumber, "=HYPERLINK(\"{$whatsappLink}\", \"WHATSAPP\")");
@@ -749,10 +750,11 @@ Expat. Roasters";
         foreach ($rejecteds as $rejected) {
             $applicantName = $rejected->user->fullname ?? 'No Applicant';
             $phone = $rejected->user->phone ?? 'No Phone';
+            $jobName = $rejected->hrjob->job_name ?? 'No Job';
 
             $sheet->setCellValue('A' . $rowNumber, $rejected->id);
             $sheet->setCellValue('B' . $rowNumber, $applicantName);
-            $sheet->setCellValue('C' . $rowNumber, $rejected->hrjob->job_name ?? 'No Job');
+            $sheet->setCellValue('C' . $rowNumber, $jobName);
             $sheet->setCellValue('D' . $rowNumber, $rejected->hrjob->city->city_name  ?? 'No Location');
             $sheet->setCellValue('E' . $rowNumber, $rejected->hrjob->outlet->outlet_name ?? 'No Outlet');
             $sheet->setCellValue('F' . $rowNumber, $rejected->hrjob->price ?? 'No Job Salary');
@@ -764,19 +766,19 @@ Expat. Roasters";
             $sheet->setCellValue('I' . $rowNumber, $rejected->availability ?? 'No Availability');
 
             // Tambahkan formula HYPERLINK di kolom J
-            $whatsappMessage = "Halo {$applicantName},
+            $whatsappMessage = "Dear {$applicantName},
 
-Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the at:
+Thank you for your interest in the {$jobName} role at Expat. Roasters. We appreciate the time and effort you invested in applying for this position.
 
-Text terimakasih namun anda rejected
+After careful consideration, we have decided not to move forward with your application at this time.
+However, we do hope you'll stay connected with us and keep an eye on our future career opportunities. If a suitable position opens up again, we would be happy to hear from you and consider your application.
 
-Please confirm by sending the following format:
-Full Name Present/Absent
+We wish you all the best in your job search.
 
-Regards,
+Best Regards,
 
-HR
 Expat. Roasters";
+
             $whatsappLink = "https://api.whatsapp.com/send?phone=62{$phone}&text=" . urlencode($whatsappMessage);
 
             $sheet->setCellValue('J' . $rowNumber, "=HYPERLINK(\"{$whatsappLink}\", \"WHATSAPP\")");

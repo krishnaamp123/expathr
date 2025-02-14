@@ -152,7 +152,7 @@
     </div>
 
     <p class="tight">
-        @foreach ($user->userhrjobs as $uhj)
+        @foreach ($userhrjobs as $uhj)
             <p class="tight"><strong>{{ $uhj->hrjob->job_name }}</strong> | {{ $uhj->created_at->format('d-m-Y H:i:s') }}</p>
         @endforeach
     </p>

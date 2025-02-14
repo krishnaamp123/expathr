@@ -585,7 +585,11 @@
                                 <th>Salary Expectation</th>
                                 <th>Availability</th>
                                 <th>Applied At</th>
-                                <th>Updated At</th>
+                                @if (request('status') === 'applicant')
+                                    <th>Average Score</th>
+                                @else
+                                    <th>Updated At</th>
+                                @endif
                             @endif
                             <th>Status</th>
                             <th>Action</th>
@@ -1186,7 +1190,45 @@
                                         <td data-field="salary_expectation" data-salary="{{ $row->salary_expectation }}">Rp {{ number_format($row->salary_expectation, 0, ',', '.') }}</td>
                                         <td data-field="availability">{{ ucwords(str_replace('_', ' ', $row->availability)) }}</td>
                                         <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
-                                        <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
+                                        @php
+                                            // Mengelompokkan jawaban berdasarkan form dan menghitung total benar, salah, dan rata-rata
+                                            $totalsByForm = $row->userAnswer->groupBy('question.form.form_name')->map(function ($answers) {
+                                                $totalCorrect = $answers->filter(function ($answer) {
+                                                    return $answer->answer->is_answer === 'yes';
+                                                })->count();
+
+                                                $totalWrong = $answers->filter(function ($answer) {
+                                                    return $answer->answer->is_answer === 'no';
+                                                })->count();
+
+                                                $totalAll = $totalCorrect + $totalWrong;
+
+                                                // Menghitung rata-rata per form
+                                                $average = $totalAll > 0 ? ($totalCorrect / $totalAll) * 10 : 0;
+
+                                                return [
+                                                    'totalCorrect' => $totalCorrect,
+                                                    'totalWrong' => $totalWrong,
+                                                    'totalAll' => $totalAll,
+                                                    'average' => $average
+                                                ];
+                                            });
+
+                                            // Menghitung rata-rata semua form
+                                            $totalAverage = $totalsByForm->pluck('average')->sum();
+                                            $totalForms = $totalsByForm->count();
+                                            $overallAverage = $totalForms > 0 ? $totalAverage / $totalForms : 0;
+                                        @endphp
+
+                                        @if (request('status') === 'applicant')
+                                            <!-- Tampilkan rata-rata semua form jika statusnya 'applicant' -->
+                                            <td data-field="average">
+                                                <span class="text-kaem">{{ number_format($overallAverage, 2) }}</span>
+                                            </td>
+                                        @else
+                                            <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
+                                        @endif
+
                                         <td>
                                             <form action="{{ route('updateStatus', $row->id) }}" method="POST" class="update-status-form">
                                                 @csrf
@@ -1268,11 +1310,17 @@
                         <p class="mb-1"> {{ $row->user->city->city_name ?? 'No City' }}</p>
                     </div>
                     <div class="modal-footer">
-                        @if ($row->user->role === 'applicant')
+                        {{-- @if ($row->user->role === 'applicant')
                         <a href="{{ route('profile.pdf', $row->user->id) }}" class="btn btn-sm" style="background-color: #000; color: white;">
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>
+                        @endif --}}
+                        @if ($row->user->role === 'applicant')
+                            <a href="{{ route('profilejob.pdf', ['id' => $row->user->id, 'userhrjob_id' => $row->id]) }}" class="btn btn-sm" style="background-color: #000; color: white;">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </a>
                         @endif
+
                         @if ($row->userAnswer->isNotEmpty())
                             <a
                                 href="#"
@@ -1291,7 +1339,7 @@
         </div>
     @endforeach
 
-    @foreach ($userhrjobs as $row)
+    {{-- @foreach ($userhrjobs as $row)
         <div class="modal fade" id="userAnswerModal-{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="userAnswerModalLabel-{{ $row->id }}" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -1345,7 +1393,73 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @endforeach --}}
+
+
+    @foreach ($userhrjobs as $row)
+    <div class="modal fade" id="userAnswerModal-{{ $row->id }}" tabindex="-1" role="dialog" aria-labelledby="userAnswerModalLabel-{{ $row->id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userAnswerModalLabel-{{ $row->id }}">
+                        Answers for {{ $row->hrjob->job_name ?? 'No Job Title' }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        // Mengelompokkan jawaban berdasarkan form dan menghitung total benar dan salah
+                        $totalsByForm = $row->userAnswer->groupBy('question.form.form_name')->map(function ($answers) {
+                            $totalCorrect = $answers->filter(function ($answer) {
+                                return $answer->answer->is_answer === 'yes';
+                            })->count();
+
+                            $totalWrong = $answers->filter(function ($answer) {
+                                return $answer->answer->is_answer === 'no';
+                            })->count();
+
+                            return [
+                                'totalCorrect' => $totalCorrect,
+                                'totalWrong' => $totalWrong,
+                                'answers' => $answers
+                            ];
+                        });
+                    @endphp
+
+                    @foreach ($totalsByForm as $formName => $data)
+                        <h6 class="modal-subtitle"><strong>{{ $formName }}</strong></h6>
+                        <p class="modal-subtitlegrey"><strong>Total Correct:</strong> <span class="text-kaem">{{ $data['totalCorrect'] }}</span></p>
+                        <p class="modal-subtitlegrey"><strong>Total Wrong:</strong> <span class="text-danger">{{ $data['totalWrong'] }}</span></p>
+                        <br>
+
+                        @foreach ($data['answers'] as $answer)
+                            <div class="mb-3">
+                                <p class="modal-subtitlegrey"><strong>{{ $answer->question->question_name ?? 'No Question' }}</strong></p>
+                                <ul>
+                                    @foreach ($answer->question->answers as $possibleAnswer)
+                                        <li class="modal-subtitlegrey {{ $possibleAnswer->is_answer === 'yes' ? 'text-kaem' : '' }}">
+                                            {{ $possibleAnswer->answer_name }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <p class="modal-subtitlegrey">
+                                    <strong>Selected:</strong>
+                                    <span class="{{ $answer->answer->is_answer === 'yes' ? 'text-kaem' : 'text-danger' }}">
+                                        {{ $answer->answer->answer_name ?? 'No Answer Selected' }}
+                                    </span>
+                                </p>
+                            </div>
+                        @endforeach
+                        <hr>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
 
 
 @endsection
@@ -1647,7 +1761,7 @@
 
                     // Jika status baru adalah 'rejected', tampilkan konfirmasi
                     if (newValue === 'rejected') {
-                        const confirmed = confirm('Apakah Anda yakin ingin menolak?');
+                        const confirmed = confirm('Are you sure you want to reject the candidate?');
                         if (!confirmed) {
                             this.value = previousValue; // Kembalikan ke nilai sebelumnya
                             return; // Hentikan proses
