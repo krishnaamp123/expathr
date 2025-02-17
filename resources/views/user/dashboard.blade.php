@@ -110,7 +110,7 @@
                 </div>
                 <ul class="timeline">
                     <li>
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat1.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat1.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="" /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="subheading">Submit Your Application</h4>
@@ -119,7 +119,7 @@
                         </div>
                     </li>
                     <li class="timeline-inverted">
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat2.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat2.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="" /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="subheading">We'll Review Your Application</h4>
@@ -128,7 +128,7 @@
                         </div>
                     </li>
                     <li>
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat3.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat3.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="" /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="subheading">Meet the Team</h4>
@@ -137,7 +137,7 @@
                         </div>
                     </li>
                     <li class="timeline-inverted">
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat4.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat4.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="" /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="subheading">Background Checks</h4>
@@ -146,7 +146,7 @@
                         </div>
                     </li>
                     <li>
-                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat5.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="..." /></div>
+                        <div class="timeline-image"><img class="rounded-circle img-fluid" src="storage/image/expat5.webp" style="width: 100%; height: 100%; object-fit: cover;" alt="" /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
                                 <h4 class="subheading">Welcome Aboard!</h4>

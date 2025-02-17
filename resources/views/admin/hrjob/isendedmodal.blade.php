@@ -28,7 +28,7 @@
                                 @if ($offering->userHrjob && $offering->userHrjob->id_job == $hrjobs->id)
                                     <option value="{{ $offering->id }}"
                                         {{ in_array($offering->id, $hrjobs->offerings->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                        {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }} |
+                                        {{ $offering->userHrjob->user->fullname ?? 'Unknown User' }}
                                         {{-- {{ $offering->userHrjob->hrjob->job_name ?? 'Unknown Job' }} --}}
                                     </option>
                                 @endif
