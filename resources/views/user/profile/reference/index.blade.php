@@ -2,6 +2,8 @@
         <div class="card-header" style="color: white;">Reference Contact
             @if ($reference->isEmpty())
                 <p class="text-danger fst-italic kaem-text mb-0">Required</p>
+            @elseif ($reference->count() === 1)
+                <p class="text-danger fst-italic kaem-text mb-0">1 More Reference Contact Required</p>
             @endif
         </div>
         <div class="card-body">

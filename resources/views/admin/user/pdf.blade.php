@@ -335,7 +335,8 @@
                 <div class="lain-col-text">
                     @foreach ($user->volunteer as $vol)
                         <p class="tight"><strong>{{ $vol->organization }}</strong></p>
-                        <p class="tight">{{ $vol->role }} - {{ $vol->issue }}</p>
+                        <p class="tight">{{ $vol->role }}</p>
+                        <p class="tight">{{ $vol->issue }}</p>
                         <p class="tight">
                             {{ Carbon::parse($vol->start_date)->format('m-Y') }} -
                             {{ $vol->end_date === null ? 'Present' : Carbon::parse($vol->end_date)->format('m-Y') }}
@@ -347,7 +348,8 @@
                 <div class="lain-col-text-full">
                     @foreach ($user->volunteer as $vol)
                         <p class="tight"><strong>{{ $vol->organization }}</strong></p>
-                        <p class="tight">{{ $vol->role }} - {{ $vol->issue }}</p>
+                        <p class="tight">{{ $vol->role }}</p>
+                        <p class="tight">{{ $vol->issue }}</p>
                         <p class="tight">
                             {{ Carbon::parse($vol->start_date)->format('m-Y') }} -
                             {{ $vol->end_date === null ? 'Present' : Carbon::parse($vol->end_date)->format('m-Y') }}

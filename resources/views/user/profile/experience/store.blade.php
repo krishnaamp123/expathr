@@ -67,8 +67,8 @@
         </div>
 
         <div class="form-group">
-            <label for="job_report" class="kaem-subheading">Job Report</label>
-            <textarea name="job_report" class="form-control kaem-sub form-control-user" id="exampleInputJobReport" rows="5"></textarea>
+            <label for="job_report" class="kaem-subheading">Reporting To</label>
+            <textarea name="job_report" class="form-control kaem-sub form-control-user" id="exampleInputJobReport" rows="1"></textarea>
             @error('job_report')
                 <div class="text-danger">{{$message}}</div>
             @enderror

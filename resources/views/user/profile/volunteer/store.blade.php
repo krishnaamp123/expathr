@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-group">
-            <label for="issue" class="kaem-subheading">Issue</label>
+            <label for="issue" class="kaem-subheading">Certificate Number</label>
             <input name="issue" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputIssueName">
             @error('issue')

@@ -70,7 +70,7 @@
 
                     <label class="kaem-text">Edit any certifications or training you have taken that are related to the job you want!</label>
                     <div class="form-group">
-                        <label for="lisence_name" class="kaem-subheading">Lisence Name</label>
+                        <label for="lisence_name" class="kaem-subheading">License Name</label>
                         <input type="text" class="form-control kaem-sub" id="lisence_name" name="lisence_name"  value="{{ $certificationn->lisence_name }}" required>
                         @error('lisence_name')
                             <span class="text-danger">{{ $message }}</span>

@@ -15,7 +15,7 @@
 
                         <div class="form-group">
                             <label>Recruiter</label>
-                            <select name="id_user" class="form-control select2">
+                            <select name="id_user" class="form-control select2" required>
                                 <option value="">Select Recruiter</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}" {{ $user->id == $hrjob->id_user ? 'selected' : '' }}>
@@ -30,7 +30,7 @@
 
                         <div class="form-group">
                             <label>Job Category</label>
-                            <select name="id_category" class="form-control select2">
+                            <select name="id_category" class="form-control select2" required>
                                 <option value="">Select Category</option>
                                 @foreach($hrjobcategories as $category)
                                     <option value="{{ $category->id }}" {{ $category->id == $hrjob->id_category ? 'selected' : '' }}>
@@ -45,7 +45,7 @@
 
                         <div class="form-group">
                             <label>Job Title</label>
-                            <input type="text" name="job_name" class="form-control" value="{{ old('job_name', $hrjob->job_name) }}">
+                            <input type="text" name="job_name" class="form-control" value="{{ old('job_name', $hrjob->job_name) }}" required>
                             @error('job_name')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -53,7 +53,7 @@
 
                         <div class="form-group">
                             <label>Job Type</label>
-                            <select name="job_type" class="form-control select2">
+                            <select name="job_type" class="form-control select2" required>
                                 <option value="">Select Job Type</option>
                                 <option value="full_time" {{ old('job_type', $hrjob->job_type) == 'full_time' ? 'selected' : '' }}>Full Time</option>
                                 <option value="part_time" {{ old('job_type', $hrjob->job_type) == 'part_time' ? 'selected' : '' }}>Part Time</option>
@@ -69,8 +69,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="job_report">Job Report</label>
-                            <textarea name="job_report" class="form-control" id="job_report" rows="1" required>{{ $hrjob->job_report }}</textarea>
+                            <label for="job_report">Reporting To</label>
+                            <textarea name="job_report" class="form-control" id="job_report" rows="1">{{ $hrjob->job_report }}</textarea>
                             @error('job_report')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -94,7 +94,7 @@
 
                         <div class="form-group">
                             <label for="description">Responsibilities</label>
-                            <textarea name="description" class="form-control" id="description" rows="5" required>{{ $hrjob->description }}</textarea>
+                            <textarea name="description" class="form-control" id="description" rows="5">{{ $hrjob->description }}</textarea>
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -102,7 +102,7 @@
 
                         <div class="form-group">
                             <label for="qualification">Qualification</label>
-                            <textarea name="qualification" class="form-control" id="qualification" rows="5" required>{{ $hrjob->qualification }}</textarea>
+                            <textarea name="qualification" class="form-control" id="qualification" rows="5">{{ $hrjob->qualification }}</textarea>
                             @error('qualification')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -110,7 +110,7 @@
 
                         <div class="form-group">
                             <label>Location Type</label>
-                            <select name="location_type" class="form-control select2">
+                            <select name="location_type" class="form-control select2" required>
                                 <option value="">Select Location Type</option>
                                 <option value="on_site" {{ old('location_type', $hrjob->location_type) == 'on_site' ? 'selected' : '' }}>On Site</option>
                                 <option value="hybrid" {{ old('location_type', $hrjob->location_type) == 'hybrid' ? 'selected' : '' }}>Hybrid</option>
@@ -123,7 +123,7 @@
 
                         <div class="form-group">
                             <label>Location</label>
-                            <select name="id_city" class="form-control select2">
+                            <select name="id_city" class="form-control select2" required>
                                 <option value="">Select Location</option>
                                 @foreach($cities as $city)
                                     <option value="{{ $city->id }}" {{ $city->id == $hrjob->id_city ? 'selected' : '' }}>
@@ -138,7 +138,7 @@
 
                         <div class="form-group">
                             <label>Placement</label>
-                            <select name="id_outlet" class="form-control select2">
+                            <select name="id_outlet" class="form-control select2" required>
                                 <option value="">Select Placement</option>
                                 @foreach($outlets as $outlet)
                                     <option value="{{ $outlet->id }}" {{ $outlet->id == $hrjob->id_outlet ? 'selected' : '' }}>
@@ -153,7 +153,7 @@
 
                         <div class="form-group">
                             <label>Experience Min</label>
-                            <input type="text" name="experience_min" class="form-control" value="{{ old('experience_min', $hrjob->experience_min) }}">
+                            <input type="text" name="experience_min" class="form-control" value="{{ old('experience_min', $hrjob->experience_min) }}" required>
                             @error('experience_min')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -161,7 +161,7 @@
 
                         <div class="form-group">
                             <label>Education Min</label>
-                            <input type="text" name="education_min" class="form-control" value="{{ old('education_min', $hrjob->education_min) }}">
+                            <input type="text" name="education_min" class="form-control" value="{{ old('education_min', $hrjob->education_min) }}" required>
                             @error('education_min')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -177,7 +177,7 @@
 
                         <div class="form-group">
                             <label>Number of Hire</label>
-                            <input type="number" name="number_hired" class="form-control" value="{{ old('number_hired', $hrjob->number_hired) }}">
+                            <input type="number" name="number_hired" class="form-control" value="{{ old('number_hired', $hrjob->number_hired) }}" required>
                             @error('number_hired')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

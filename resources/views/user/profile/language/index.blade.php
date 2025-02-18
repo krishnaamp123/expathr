@@ -57,9 +57,27 @@
                     @method('PUT')
 
                     <label class="kaem-text">Edit the language you speak!</label>
+
                     <div class="form-group">
                         <label for="language" class="kaem-subheading">Language</label>
-                        <input type="text" class="form-control kaem-sub" id="language" name="language"  value="{{ $languagee->language }}" required>
+                        <select name="language" class="form-control select2 language-select" data-target="#language-other-{{ $languagee->id }}">
+                            <option value="">Select Language</option>
+                            <option value="English" {{ $languagee->language == 'English' ? 'selected' : '' }}>English</option>
+                            <option value="Indonesia" {{ $languagee->language == 'Indonesia' ? 'selected' : '' }}>Indonesia</option>
+                            <option value="Mandarin" {{ $languagee->language == 'Mandarin' ? 'selected' : '' }}>Mandarin</option>
+                            <option value="Korean" {{ $languagee->language == 'Korean' ? 'selected' : '' }}>Korean</option>
+                            <option value="Japanese" {{ $languagee->language == 'Japanese' ? 'selected' : '' }}>Japanese</option>
+                            <option value="Spanish" {{ $languagee->language == 'Spanish' ? 'selected' : '' }}>Spanish</option>
+                            <option value="Italian" {{ $languagee->language == 'Italian' ? 'selected' : '' }}>Italian</option>
+                            <option value="Others" {{ !in_array($languagee->language, ['English', 'Indonesia', 'Mandarin', 'Korean', 'Japanese', 'Spanish', 'Italian']) ? 'selected' : '' }}>Others</option>
+                        </select>
+
+                        <!-- Input Text untuk Others -->
+                        <input name="language" type="text" class="form-control kaem-sub form-control-user mt-2"
+                               id="language-other-{{ $languagee->id }}"
+                               placeholder="Type your language"
+                               value="{{ !in_array($languagee->language, ['English', 'Indonesia', 'Mandarin', 'Korean', 'Japanese', 'Spanish', 'Italian']) ? $languagee->language : '' }}"
+                               style="display: {{ !in_array($languagee->language, ['English', 'Indonesia', 'Mandarin', 'Korean', 'Japanese', 'Spanish', 'Italian']) ? 'block' : 'none' }};">
                         @error('language')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -104,3 +122,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Inisialisasi Select2 pada semua elemen dengan class .select2
+        $('.select2').select2();
+
+        // Event Listener untuk Select2 Language
+        $('.language-select').on('change', function() {
+            const selectedValue = $(this).val();
+            const targetInput = $($(this).data('target'));
+
+            if (selectedValue === 'Others') {
+                targetInput.show().attr('required', true).val('');
+            } else {
+                targetInput.hide().attr('required', false).val(selectedValue);
+            }
+        });
+
+        // Trigger perubahan saat halaman dimuat untuk menampilkan input yang sudah terisi
+        $('.language-select').trigger('change');
+    });
+</script>
+

@@ -36,7 +36,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{route('addHrjob')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            @if(Auth::user()->role !== 'recruiter')
+                <a href="{{route('addHrjob')}}" class="btn btn-sm" style="background-color: #72A28A; color: white;"><i class="fas fa-plus"></i> Add </a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">

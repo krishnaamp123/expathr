@@ -3,10 +3,21 @@
     <label class="kaem-text">Add the language you speak!</label>
         <div class="form-group">
             <label for="language" class="kaem-subheading">Language</label>
-            <input name="language" type="text" class="form-control kaem-sub form-control-user"
-                id="exampleInputLanguageName">
+            <select name="language" id="language-select" class="form-control select2">
+                <option value="">Select Language</option>
+                <option value="English">English</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Mandarin">Mandarin</option>
+                <option value="Korean">Korean</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Italian">Italian</option>
+                <option value="Others">Others</option>
+            </select>
+            <input name="language" type="text" class="form-control kaem-sub form-control-user mt-2"
+                   id="language-other" placeholder="Type your language" style="display: none;">
             @error('language')
-                <div class="text-danger">{{$message}}</div>
+                <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
@@ -27,3 +38,23 @@
 
     <button type="submit" class="btn btn-primary kaem-subheading">Add</button>
 </form>
+
+<script>
+    $(document).ready(function() {
+        // Inisialisasi Select2
+        $('#language-select').select2();
+
+        // Event Listener untuk perubahan di Select2
+        $('#language-select').on('change', function() {
+            const selectedValue = $(this).val();
+            const otherInput = $('#language-other');
+
+            if (selectedValue === 'Others') {
+                otherInput.show().attr('required', true).val('');
+            } else {
+                otherInput.hide().attr('required', false).val(selectedValue);
+            }
+        });
+    });
+</script>
+

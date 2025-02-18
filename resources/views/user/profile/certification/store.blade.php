@@ -3,7 +3,7 @@
 
     <label class="kaem-text">Add any certifications or training you have taken that are related to the job you want!</label>
         <div class="form-group">
-            <label for="lisence_name" class="kaem-subheading">Lisence Name</label>
+            <label for="lisence_name" class="kaem-subheading">License Name</label>
             <input name="lisence_name" type="text" class="form-control kaem-sub form-control-user"
                 id="exampleInputLisenceName">
             @error('lisence_name')

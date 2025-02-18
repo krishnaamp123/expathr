@@ -12,7 +12,10 @@
                         @foreach ($volunteer as $volunteerr)
                         <li class="list-group-item city-item position-relative">
                                     <span class="kaem-heading">{{ $volunteerr->organization ?? 'Unknown Volunteer' }}</span><br>
-                                    <span class="kaem-subheading">{{ $volunteerr->role }} - {{ $volunteerr->issue }}</span><br>
+                                    <span class="kaem-subheading">{{ $volunteerr->role }}</span><br>
+                                    @if (!empty($volunteerr->issue))
+                                    <span class="kaem-subheading">{{ $volunteerr->issue }}</span><br>
+                                    @endif
                                     @if (!empty($volunteerr->description))
                                     <span class="kaem-text">{{ $volunteerr->description }}</span><br>
                                     @endif
@@ -79,8 +82,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="issue" class="kaem-subheading">Issue</label>
-                        <input type="text" class="form-control kaem-sub" id="issue" name="issue"  value="{{ $volunteerr->issue }}" required>
+                        <label for="issue" class="kaem-subheading">Certificate Number</label>
+                        <input type="text" class="form-control kaem-sub" id="issue" name="issue"  value="{{ $volunteerr->issue }}">
                         @error('issue')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

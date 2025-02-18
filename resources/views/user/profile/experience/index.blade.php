@@ -134,8 +134,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="job_report" class="kaem-subheading">Job Report</label>
-                        <textarea name="job_report" class="form-control kaem-sub" id="job_report" rows="5" required>{{ $experiencee->job_report }}</textarea>
+                        <label for="job_report" class="kaem-subheading">Reporting To</label>
+                        <textarea name="job_report" class="form-control kaem-sub" id="job_report" rows="1" required>{{ $experiencee->job_report }}</textarea>
                         @error('job_report')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

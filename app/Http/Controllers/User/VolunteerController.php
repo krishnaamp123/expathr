@@ -23,7 +23,7 @@ class VolunteerController extends Controller
         $validated = $request->validate([
             'organization' => 'required|string|max:255',
             'role' => 'required|string|max:255',
-            'issue' => 'required|string|max:255',
+            'issue' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
             'end_date' => 'nullable',
@@ -67,7 +67,7 @@ class VolunteerController extends Controller
         $validated = $request->validate([
             'organization' => 'required|string|max:255',
             'role' => 'required|string|max:255',
-            'issue' => 'required|string|max:255',
+            'issue' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
             'start_date' => 'required',
             'end_date' => 'nullable',
