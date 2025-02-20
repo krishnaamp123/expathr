@@ -139,6 +139,7 @@
                             <th>Location</th>
                             <th>Link</th>
                             <th>Confirmed</th>
+                            <th>Interview Process</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th>Rating</th>
@@ -176,6 +177,13 @@
                                     <i class="fas fa-times-circle text-danger"></i> <!-- Silang Merah -->
                                 @endif
                             </td>
+                            <td data-field="interviewed">
+                                @if ($row->interviewed === 'yes')
+                                    <i class="fas fa-check-circle text-success"></i>
+                                @elseif ($row->interviewed === 'no' || is_null($row->interviewed))
+                                    <i class="fas fa-times-circle text-danger"></i>
+                                @endif
+                            </td>
                             <td data-field="created_at">{{ $row->created_at->format('d-m-Y H:i:s') }}</td>
                             <td data-field="updated_at">{{ $row->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td data-field="rating">{{ $row->rating ?? 'No Rating' }}</td>
@@ -190,21 +198,23 @@
                                 @endif
                             </td>
                             <td>
-                                <button
-                                    type="button"
-                                    class="btn btn-sm my-1"
-                                    style="background-color: #969696; color: white;"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editInterviewModal{{ $row->id }}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
+                                @if(Auth::user()->role !== 'interviewer')
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm my-1"
+                                        style="background-color: #969696; color: white;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editInterviewModal{{ $row->id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
 
-                                @include('admin.interview.updatemodal', [
-                                    'id' => $row->id,
-                                    'interview' => $row,
-                                    'userhrjobs' => $userhrjobs,
-                                    'users' => $users,
-                                ])
+                                    @include('admin.interview.updatemodal', [
+                                        'id' => $row->id,
+                                        'interview' => $row,
+                                        'userhrjobs' => $userhrjobs,
+                                        'users' => $users,
+                                    ])
+                                @endif
 
                                 <button
                                     type="button"
@@ -219,7 +229,8 @@
                                 @include('admin.interview.ratingsmmodal', [
                                     'id' => $row->id,
                                     'rating' => $row->rating,
-                                    'comment' => $row->comment
+                                    'comment' => $row->comment,
+                                    'interviewed' => $row->interviewed
                                 ])
 
                                 <form method="POST">

@@ -550,6 +550,7 @@
                                 <th>Location</th>
                                 <th>Link</th>
                                 <th>Confirmed</th>
+                                <th>Interview Process</th>
                                 <th>Updated At</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
@@ -560,6 +561,7 @@
                                 <th>Location</th>
                                 <th>Link</th>
                                 <th>Confirmed</th>
+                                <th>Interview Process</th>
                                 <th>Updated At</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
@@ -649,6 +651,15 @@
                                                 <i class="fas fa-times-circle text-danger"></i>
                                             @endif
                                         </td>
+                                        <td data-field="interviewed">
+                                            @if ($row->interviews->isNotEmpty() && $row->interviews->first()->interviewed === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            @elseif ($row->interviews->isNotEmpty() && ($row->interviews->first()->interviewed === 'no' || is_null($row->interviews->first()->interviewed)))
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @else
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @endif
+                                        </td>
                                         <td data-field="updated_at">
                                             {{ $row->interviews && $row->interviews->first() && $row->interviews->first()->updated_at
                                                 ? $row->interviews->first()->updated_at->format('d-m-Y H:i:s')
@@ -685,21 +696,23 @@
                                             @endphp
 
                                             @if ($interview && $interview->id)
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-sm my-1"
-                                                    style="background-color: #969696; color: white;"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editInterviewModal{{ $interview->id }}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
+                                                @if(Auth::user()->role !== 'interviewer')
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-sm my-1"
+                                                        style="background-color: #969696; color: white;"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editInterviewModal{{ $interview->id }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
 
-                                                @include('admin.interview.updatemodal', [
-                                                    'id' => $interview->id,
-                                                    'interview' => $interview,
-                                                    'userhrjobs' => $userhrjobss,
-                                                    'users' => $users,
-                                                ])
+                                                    @include('admin.interview.updatemodal', [
+                                                        'id' => $interview->id,
+                                                        'interview' => $interview,
+                                                        'userhrjobs' => $userhrjobss,
+                                                        'users' => $users,
+                                                    ])
+                                                @endif
                                                 <button
                                                     type="button"
                                                     class="btn btn-sm my-1"
@@ -713,7 +726,8 @@
                                                 @include('admin.interview.ratingmodal', [
                                                     'id' => $interview->id,
                                                     'rating' => $interview->rating,
-                                                    'comment' => $interview->comment
+                                                    'comment' => $interview->comment,
+                                                    'interviewed' => $interview->interviewed
                                                 ])
                                                 <form method="POST">
                                                     @csrf
@@ -778,6 +792,15 @@
                                                 <i class="fas fa-times-circle text-danger"></i>
                                             @endif
                                         </td>
+                                        <td data-field="interviewed">
+                                            @if ($row->userinterviews->isNotEmpty() && $row->userinterviews->first()->interviewed === 'yes')
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            @elseif ($row->userinterviews->isNotEmpty() && ($row->userinterviews->first()->interviewed === 'no' || is_null($row->userinterviews->first()->interviewed)))
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @else
+                                                <i class="fas fa-times-circle text-danger"></i>
+                                            @endif
+                                        </td>
                                         <td data-field="updated_at">
                                             {{ $row->userinterviews && $row->userinterviews->first() && $row->userinterviews->first()->updated_at
                                                 ? $row->userinterviews->first()->updated_at->format('d-m-Y H:i:s')
@@ -814,21 +837,23 @@
                                             @endphp
 
                                             @if ($userinterview && $userinterview->id)
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-sm my-1"
-                                                    style="background-color: #969696; color: white;"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editUserInterviewModal{{ $userinterview->id }}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
+                                                @if(Auth::user()->role !== 'interviewer')
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-sm my-1"
+                                                        style="background-color: #969696; color: white;"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editUserInterviewModal{{ $userinterview->id }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
 
-                                                @include('admin.userinterview.updatemodal', [
-                                                    'id' => $userinterview->id,
-                                                    'userinterview' => $userinterview,
-                                                    'userhrjobs' => $userhrjobss,
-                                                    'users' => $users,
-                                                ])
+                                                    @include('admin.userinterview.updatemodal', [
+                                                        'id' => $userinterview->id,
+                                                        'userinterview' => $userinterview,
+                                                        'userhrjobs' => $userhrjobss,
+                                                        'users' => $users,
+                                                    ])
+                                                @endif
 
                                                 <button
                                                     type="button"
@@ -843,7 +868,8 @@
                                                 @include('admin.userinterview.ratingmodal', [
                                                     'id' => $userinterview->id,
                                                     'rating' => $userinterview->rating,
-                                                    'comment' => $userinterview->comment
+                                                    'comment' => $userinterview->comment,
+                                                    'interviewed' => $userinterview->interviewed
                                                 ])
                                                 <form method="POST">
                                                     @csrf

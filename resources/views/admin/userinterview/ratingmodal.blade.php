@@ -40,6 +40,18 @@
                         @enderror
                     </div>
 
+                    <div class="form-group">
+                        <label>Interview Process</label>
+                        <select name="interviewed" class="form-control select2 inside-modal">
+                            <option value="">Select Interview Process</option>
+                            <option value="yes" {{ old('interviewed', $interviewed) == 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('interviewed', $interviewed) == 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+                        @error('interviewed')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <!-- Buttons -->
                     <div class="d-flex justify-content">
                         <!-- Save Button -->

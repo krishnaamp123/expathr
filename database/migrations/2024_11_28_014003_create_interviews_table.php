@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->string('link')->nullable();
             $table->enum('arrival',['yes','no'])->nullable();
+            $table->enum('interviewed',['yes','no'])->default('no');
             $table->timestamps();
 
             $table->foreign('id_user_job')->references('id')->on('user_hrjobs')->onDelete('cascade');

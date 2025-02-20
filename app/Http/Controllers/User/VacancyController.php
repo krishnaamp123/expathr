@@ -69,11 +69,16 @@ class VacancyController extends Controller
 
     public function storeVacancy(Request $request)
     {
-        $validated = $request->validate([
-            'id_job' => 'required|exists:hrjobs,id',
-            'salary_expectation' => 'required|numeric',
-            'availability' => 'required|in:immediately,<1_month_notice,1_month_notice,>1_month_notice',
-        ]);
+        try {
+            $validated = $request->validate([
+                'id_job' => 'required|exists:hrjobs,id',
+                'salary_expectation' => 'required|numeric',
+                'availability' => 'required|in:immediately,<1_month_notice,1_month_notice,>1_month_notice',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->route('getVacancy')
+                ->with('error', implode( $e->validator->errors()->all())); // Gabungkan semua error
+        }
 
         $userId = auth()->id();
 
@@ -101,7 +106,7 @@ class VacancyController extends Controller
             'availability' => $validated['availability'],
         ]);
 
-        return redirect()->route('getVacancy')->with('message', 'Job application submitted successfully.');
+        return redirect()->route('getMyVacancy')->with('message', 'Job application successfully submitted, please fill in the required assessment to proceed.');
     }
 
     public function storeMyAnswer(Request $request)

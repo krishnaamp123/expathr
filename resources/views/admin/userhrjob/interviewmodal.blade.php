@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         <label>Interview Date</label>
-                        <input type="text" name="interview_date" class="form-control datepicker datepicker-input">
+                        <input type="text" name="interview_date" class="form-control datepicker datepicker-input" required>
                         @error('interview_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

@@ -36,7 +36,20 @@
                         <label for="comment">Comment</label>
                         <textarea name="comment" class="form-control" id="comment" rows="5">{{ old('comment', $comment) }}</textarea>
                         @error('comment')
-                            <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Interview Process -->
+                    <div class="form-group">
+                        <label>Interview Process</label>
+                        <select name="interviewed" class="form-control select2 inside-modal">
+                            <option value="">Select Interview Process</option>
+                            <option value="yes" {{ old('interviewed', $interviewed) == 'yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="no" {{ old('interviewed', $interviewed) == 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+                        @error('interviewed')
+                            <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
 

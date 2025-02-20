@@ -64,21 +64,24 @@ class UserHrjobAdminController extends Controller
                     })
                     ->orWhereHas('userinterviews.user_interviewers', function ($subQuery) {
                         $subQuery->where('id_user', Auth::id());
-                    })
-                    ->orWhereDoesntHave('interviews') // Tampilkan data tanpa relasi interviews
-                    ->orWhereDoesntHave('userinterviews'); // Tampilkan data tanpa userinterviews
+                    });
+                    // ->orWhereDoesntHave('interviews') // Tampilkan data tanpa relasi interviews
+                    // ->orWhereDoesntHave('userinterviews'); // Tampilkan data tanpa userinterviews
 
                     if ($status) {
                         $query->where('status', $status);
                     }
                 });
         } elseif (Auth::user()->role === 'interviewer') {
-            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews', 'userinterviews.user_interviewers', 'userAnswer',
+            $userhrjobs = UserHrjob::with('hrjob', 'user', 'interviews.interviewers', 'userinterviews.user_interviewers', 'userAnswer',
             'userAnswer.question.form',
             'userAnswer.question.answers',
             'userAnswer.answer')
                 ->where(function ($query) use ($status) {
                     $query->whereHas('userinterviews.user_interviewers', function ($subQuery) {
+                        $subQuery->whereNotIn('role', ['super_admin', 'hiring_manager', 'recruiter']);
+                    })
+                    ->orWhereHas('interviews.interviewers', function ($subQuery) {
                         $subQuery->whereNotIn('role', ['super_admin', 'hiring_manager', 'recruiter']);
                     });
 
@@ -87,6 +90,9 @@ class UserHrjobAdminController extends Controller
                     }
                 })
                 ->whereHas('userinterviews.user_interviewers', function ($subQuery) {
+                    $subQuery->where('id_user', Auth::id());
+                })
+                ->orWhereHas('interviews.interviewers', function ($subQuery) {
                     $subQuery->where('id_user', Auth::id());
                 });
         } else {
@@ -113,6 +119,8 @@ class UserHrjobAdminController extends Controller
 
         $userhrjobs = $userhrjobs->get();
 
+        $hrjobss = Hrjob::whereIn('id', $userhrjobs->pluck('id_job')->unique())->get();
+
         // Tampilkan ke view dengan semua status untuk digunakan di topbar
         $statuses = [
             'applicant', 'shortlist', 'phone_screen', 'hr_interview',
@@ -121,7 +129,7 @@ class UserHrjobAdminController extends Controller
         ];
 
         $userhrjobss = UserHrJob::with('user', 'hrjob')->get();
-        $hrjobss = Hrjob::all();
+        // $hrjobss = Hrjob::all();
         $userss = User::where('role', '=', 'applicant')->get();
         $users = User::where('role', '!=', 'applicant')->get();
         $userIds = $userhrjobss->pluck('id_user')->unique();

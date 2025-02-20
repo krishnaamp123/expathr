@@ -19,6 +19,7 @@ class Interview extends Model
         'location',
         'link',
         'arrival',
+        'interviewed',
     ];
 
     public function userHrjob()

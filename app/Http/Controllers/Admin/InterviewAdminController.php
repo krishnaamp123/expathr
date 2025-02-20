@@ -203,6 +203,7 @@ class InterviewAdminController extends Controller
                 'location' => 'nullable',
                 'link' => 'nullable',
                 'arrival' => 'nullable',
+                'interviewed' => 'nullable',
                 'rating' => 'nullable|integer|min:1|max:5',
                 'comment' => 'nullable|string|max:1000',
                 'interviewers' => 'required|array',
@@ -216,6 +217,7 @@ class InterviewAdminController extends Controller
                 'location' => $request->location,
                 'link' => $request->link,
                 'arrival' => $request->arrival,
+                'interviewed' => $request->interviewed,
                 'rating' => $request->rating,
                 'comment' => $request->comment,
             ]);
@@ -233,6 +235,7 @@ class InterviewAdminController extends Controller
                     'location' => $interview->location,
                     'link' => $interview->link,
                     'arrival' => $interview->arrival,
+                    'interviewed' => $interview->interviewed,
                     'rating' => $interview->rating,
                     'comment' => $interview->comment,
                     'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
@@ -268,6 +271,7 @@ class InterviewAdminController extends Controller
             $validated = $request->validate([
                 'rating' => 'nullable|integer|min:1|max:5',
                 'comment' => 'nullable|string|max:1000',
+                'interviewed' => 'nullable',
             ]);
 
             // \Log::info('Button action received: ' . $request->button_action);
@@ -275,6 +279,7 @@ class InterviewAdminController extends Controller
             // Perbarui rating dan komentar di tabel Interview
             $interview->rating = $validated['rating'];
             $interview->comment = $validated['comment'];
+            $interview->interviewed = $validated['interviewed'];
             $interview->save();
 
             // Perbarui status di tabel UserHrjob
@@ -291,6 +296,7 @@ class InterviewAdminController extends Controller
                         'id' => $interview->id,
                         'rating' => $interview->rating,
                         'comment' => $interview->comment,
+                        'interviewed' => $interview->interviewed,
                         'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
                     ],
                 ]);
@@ -310,6 +316,7 @@ class InterviewAdminController extends Controller
                         'id' => $interview->id,
                         'rating' => $interview->rating,
                         'comment' => $interview->comment,
+                        'interviewed' => $interview->interviewed,
                         'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
                     ],
                 ]);
@@ -321,6 +328,7 @@ class InterviewAdminController extends Controller
                         'id' => $interview->id,
                         'rating' => $interview->rating,
                         'comment' => $interview->comment,
+                        'interviewed' => $interview->interviewed,
                         'updated_at' => $interview->updated_at->format('Y-m-d H:i:s'),
                     ],
                 ]);
@@ -407,6 +415,7 @@ class InterviewAdminController extends Controller
         $sheet->setCellValue('K1', 'Applicant Phone');
         $sheet->setCellValue('L1', 'Whatsapp Link');
         $sheet->setCellValue('M1', 'Confirm Attendance');
+        $sheet->setCellValue('M1', 'Interview Process');
 
         // Membuat header bold
         $headerRange = 'A1:M1';
@@ -437,6 +446,7 @@ class InterviewAdminController extends Controller
             $sheet->setCellValue('J' . $rowNumber, $link);
             $sheet->setCellValue('K' . $rowNumber, $phone);
             $sheet->setCellValue('M' . $rowNumber, $interview->arrival ?? 'No Confirm');
+            $sheet->setCellValue('M' . $rowNumber, $interview->interviewed ?? 'Not Interviewed');
 
             // Tambahkan formula HYPERLINK di kolom J
             $whatsappMessage = "Halo {$applicantName},
@@ -511,6 +521,7 @@ Expat. Roasters";
         $sheet->setCellValue('K1', 'Applicant Phone');
         $sheet->setCellValue('L1', 'Whatsapp Link');
         $sheet->setCellValue('M1', 'Confirm Attendance');
+        $sheet->setCellValue('M1', 'Interview Process');
 
         // Membuat header bold
         $headerRange = 'A1:M1'; // Range dari header
@@ -541,6 +552,7 @@ Expat. Roasters";
             $sheet->setCellValue('J' . $rowNumber, $link);
             $sheet->setCellValue('K' . $rowNumber, $phone);
             $sheet->setCellValue('M' . $rowNumber, $interview->arrival ?? 'No Confirm');
+            $sheet->setCellValue('M' . $rowNumber, $interview->interviewed ?? 'Not Interviewed');
 
             // Tambahkan formula HYPERLINK di kolom J
             $whatsappMessage = "Halo {$applicantName},
