@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <label>Interviewers</label>
-                        <select name="user_interviewers[]" class="form-control select2 inside-modal" multiple>
+                        <select name="user_interviewers[]" class="form-control select2 inside-modal" multiple required>
                             <option value="">Select Interviewers</option>
                             @foreach($users as $userinterviewer)
                                 <option value="{{ $userinterviewer->id }}">{{ $userinterviewer->fullname }}</option>
@@ -42,28 +42,28 @@
                     </div>
                     <div class="form-group">
                         <label>Interview Date</label>
-                        <input type="text" name="interview_date" class="form-control datepicker datepicker-input">
+                        <input type="text" name="interview_date" class="form-control datepicker datepicker-input" required>
                         @error('interview_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Time</label>
-                        <input type="time" name="time" class="form-control">
+                        <input type="time" name="time" class="form-control" required>
                         @error('time')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Location</label>
-                        <input type="text" name="location" class="form-control">
+                        <input type="text" name="location" class="form-control" required>
                         @error('location')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Link</label>
-                        <input type="text" name="link" class="form-control">
+                        <input type="text" name="link" class="form-control" required>
                         @error('link')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

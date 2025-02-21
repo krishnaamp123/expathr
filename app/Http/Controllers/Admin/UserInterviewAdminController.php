@@ -452,7 +452,7 @@ Location: {$location}
 Link: {$link}
 
 Please confirm your attendance via our website on the following page:
-http://127.0.0.1:8000/user/myjob/get?status=user_interview
+https://recruitment.expatroasters.com/user/myjob/get
 
 Regards,
 
@@ -552,18 +552,18 @@ Expat. Roasters";
 
 Thank you for applying to Expat. Roasters. Let us introduce ourselves as HR Expat. Roasters. We would like to invite you to join the User Interview process for the position of {$jobName} ($city) at:
 
-    Date: {$date}
-    Time: {$time} WITA
-    Location: {$location}
-    Link: {$link}
+Date: {$date}
+Time: {$time} WITA
+Location: {$location}
+Link: {$link}
 
-    Please confirm your attendance via our website on the following page:
-    http://127.0.0.1:8000/user/myjob/get?status=user_interview
+Please confirm your attendance via our website on the following page:
+https://recruitment.expatroasters.com/user/myjob/get
 
-    Regards,
+Regards,
 
-    HR
-    Expat. Roasters";
+HR
+Expat. Roasters";
             $whatsappLink = "https://api.whatsapp.com/send?phone=62{$phone}&text=" . urlencode($whatsappMessage);
 
             $sheet->setCellValue('L' . $rowNumber, "=HYPERLINK(\"{$whatsappLink}\", \"WHATSAPP\")");

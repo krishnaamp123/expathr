@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <label>Interviewers</label>
-                        <select name="interviewers[]" class="form-control select2 inside-modal" multiple>
+                        <select name="interviewers[]" class="form-control select2 inside-modal" multiple required>
                             <option value="">Select Interviewers</option>
                             @foreach($users as $interviewer)
                                 <option value="{{ $interviewer->id }}">{{ $interviewer->fullname }}</option>
@@ -49,21 +49,21 @@
                     </div>
                     <div class="form-group">
                         <label>Time</label>
-                        <input type="time" name="time" class="form-control">
+                        <input type="time" name="time" class="form-control" required>
                         @error('time')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Location</label>
-                        <input type="text" name="location" class="form-control">
+                        <input type="text" name="location" class="form-control" required>
                         @error('location')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>Link</label>
-                        <input type="text" name="link" class="form-control">
+                        <input type="text" name="link" class="form-control" required>
                         @error('link')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -74,4 +74,3 @@
         </div>
     </div>
 </div>
-

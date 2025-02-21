@@ -459,7 +459,7 @@ Location: {$location}
 Link: {$link}
 
 Please confirm your attendance via our website on the following page:
-http://127.0.0.1:8000/user/myjob/get?status=hr_interview
+https://recruitment.expatroasters.com/user/myjob/get
 
 Regards,
 
@@ -565,7 +565,7 @@ Location: {$location}
 Link: {$link}
 
 Please confirm your attendance via our website on the following page:
-http://127.0.0.1:8000/user/myjob/get?status=hr_interview
+https://recruitment.expatroasters.com/user/myjob/get
 
 Regards,
 

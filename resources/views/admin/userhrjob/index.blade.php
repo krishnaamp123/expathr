@@ -1621,7 +1621,10 @@
                                         : '{{ route("getPhoneScreenModal") }}';
 
                                     loadModal(modalId, modalUrl, (modalElement) => {
-                                        const modalInstance = new bootstrap.Modal(modalElement);
+                                        const modalInstance = new bootstrap.Modal(modalElement, {
+                                            backdrop: 'static',
+                                            keyboard: false
+                                        });
 
                                         // Isi data modal
                                         const modalUserJobName = modalElement.querySelector('#modalUserJobName');
@@ -1836,7 +1839,10 @@
                                             : '{{ route("getPhoneScreenModal") }}';
 
                                     loadModal(modalId, modalUrl, (modalElement) => {
-                                        const modalInstance = new bootstrap.Modal(modalElement);
+                                        const modalInstance = new bootstrap.Modal(modalElement, {
+                                            backdrop: 'static',
+                                            keyboard: false
+                                        });
 
                                         // Isi data modal
                                         const modalUserJobName = modalElement.querySelector('#modalUserJobName');

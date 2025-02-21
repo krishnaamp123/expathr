@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <label>Phone Screen Date</label>
-                        <input type="text" name="phonescreen_date" class="form-control datepicker datepicker-input">
+                        <input type="text" name="phonescreen_date" class="form-control datepicker datepicker-input" required>
                         @error('phonescreen_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -38,7 +38,7 @@
 
                     <div class="form-group">
                         <label>Phone Screen Time</label>
-                        <input type="time" name="time" class="form-control">
+                        <input type="time" name="time" class="form-control" required>
                         @error('time')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

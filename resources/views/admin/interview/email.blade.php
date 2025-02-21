@@ -12,6 +12,7 @@
         <li>Time: {{ $time }} WITA</li>
         <li>Location: {{ $location }}</li>
         <li>Link: {{ $link }}</li>
+        <li>Please Click <a href="https://recruitment.expatroasters.com/user/myjob/get">Here</a> to Confirm Your Attendance.</li>
     </ul>
     <p>Thank you.</p>
     <p>Regards,</p>
